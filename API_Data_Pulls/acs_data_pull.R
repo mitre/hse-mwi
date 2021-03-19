@@ -30,7 +30,14 @@ acs_data <- get_acs(
     
     # Presence and Types of Internet Subscriptions in Household
     "B28002_001E", # Estimate!!Total:	
-    "B28002_004E" #Estimate!!Total:!!With an Internet subscription!!Broadband of any type	
+    "B28002_004E", #Estimate!!Total:!!With an Internet subscription!!Broadband of any type	
+    
+    # Employment Status
+    "S2301_C04_001E", # Estimate!!Unemployment rate!!Population 16 years and over	
+    
+    # Poverty Status in the Past 12 Months
+    "S1701_C01_001E", # Estimate!!Total!!Population for whom poverty status is determined
+    "S1701_C01_042E" # S1701_C01_042E	Estimate!!Total!!Population for whom poverty status is determined!!ALL INDIVIDUALS WITH INCOME BELOW THE FOLLOWING POVERTY RATIOS!!200 percent of poverty level
   ),
   year = 2019,
   output = "wide"
@@ -38,7 +45,7 @@ acs_data <- get_acs(
 
 acs_subject_data <- get_acs(
   "zcta",
-  survey = "acs5/subject",
+  survey = "acs5",
   year = 2019,
   output = "wide",
   variables = c(
