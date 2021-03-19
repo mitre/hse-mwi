@@ -43,20 +43,7 @@ acs_data <- get_acs(
   output = "wide"
 )
 
-acs_subject_data <- get_acs(
-  "zcta",
-  survey = "acs5",
-  year = 2019,
-  output = "wide",
-  variables = c(
-    # Employment Status
-    "S2301_C04_001E", # Estimate!!Unemployment rate!!Population 16 years and over	
-    
-    # Poverty Status in the Past 12 Months
-    "S1701_C01_001E", # Estimate!!Total!!Population for whom poverty status is determined
-    "S1701_C01_042E" # S1701_C01_042E	Estimate!!Total!!Population for whom poverty status is determined!!ALL INDIVIDUALS WITH INCOME BELOW THE FOLLOWING POVERTY RATIOS!!200 percent of poverty level
-  )
-)
+
 # remove margin columns
 acs_data <- as.data.frame(acs_data)
 acs_data <- acs_data[, c(T,T,!grepl("M", colnames(acs_data)[-c(1:2)]))]
