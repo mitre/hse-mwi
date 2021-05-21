@@ -143,4 +143,10 @@ acs_data <- acs_data[, c(T,T,!grepl("M", colnames(acs_data)[-c(1:2)]))]
 
 # write out ----
 
-write.csv(acs_data, file = file.path("..", "ACS_API_Data.csv"), row.names = F)
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Preprocessed")
+
+write.csv(acs_data, file = file.path(data_folder,
+                                     "ACS_API_Data.csv"), row.names = F)
