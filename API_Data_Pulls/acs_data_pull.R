@@ -15,36 +15,54 @@ acs_data <- get_acs(
   "zcta",
   variables = c(
     
+    # educational attainment ----
     # Place of Birth by Educational Attainment
     "B06009_001E", # Estimate!!Total:	
     "B06009_002E", # Estimate!!Total:!!Less than high school graduate
     "B06009_004E", # Estimate!!Total:!!Some college or associate's degree
-    # Sex by Educational Attainment
+    # Sex by Educational Attainment - black
     "C15002B_001", # Estimate!!Total: (black/african american alone)
     "C15002B_003", # Estimate!!Total:!!Male:!!Less than high school diploma (black alone)
     "C15002B_008", # Estimate!!Total:!!Female:!!Less than high school diploma (black alone)
     "C15002B_005", # Estimate!!Total:!!Male:!!Some college or associate's degree (black alone)
     "C15002B_010", # Estimate!!Total:!!Female:!!Some college or associate's degree (black alone)
     
-    # Ratio of Income to Poverty Level in the past 12 months - NO RACE AVAILABLE
-    "B05010_001E", # Estimate!!Total:	
-    "B05010_018E", # Estimate!!Total:!!2.00 and over: (ratio of income to poverty level)
-    # WHAT IS AVAILABLE: Income in the past 12 months below poverty level:
+    # income below poverty level ----
     
-    # Household Size by Vehicles Available - NO RACE 
-    "B08201_001E", # Estimate!!Total:	
-    "B08201_002E", # Estimate!!Total:!!No vehicle available	
+    # Ratio of Income to Poverty Level in the past 12 months - NO RACE AVAILABLE
+    # "B05010_001E", # Estimate!!Total:	
+    # "B05010_018E", # Estimate!!Total:!!2.00 and over: (ratio of income to poverty level)
+    
+    # WHAT IS AVAILABLE: Income in the past 12 months below poverty level:
+    # (calculated below)
+    
+    # vehicles available ----
+    
+    # # Household Size by Vehicles Available - NO RACE 
+    # "B08201_001E", # Estimate!!Total:	
+    # "B08201_002E", # Estimate!!Total:!!No vehicle available
+    
     # WHAT IS AVAILABLE: MEANS OF TRANSPORTATION TO WORK (BLACK OR AFRICAN AMERICAN ALONE)
     
-    # Presence and Types of Internet Subscriptions in Household - NO RACE
-    "B28002_001E", # Estimate!!Total:	
-    "B28002_004E", #Estimate!!Total:!!With an Internet subscription!!Broadband of any type	
+    # Means of transportation to work -- OWN A CAR TO USE
+    "B08006_001", # 	Estimate!!Total:
+    "B08006_003", # Estimate!!Total:!!Car, truck, or van:!!Drove alone
+    "B08105B_001",# B08105B_001 (black or african american alone)
+    "B08105B_002", # Estimate!!Total:!!Car, truck, or van - drove alone (black or african american alone)
+    
+    # internet ----
+    
+    # # Presence and Types of Internet Subscriptions in Household - NO RACE
+    # "B28002_001E", # Estimate!!Total:	
+    # "B28002_004E", #Estimate!!Total:!!With an Internet subscription!!Broadband of any type	
     
     # PRESENCE OF A COMPUTER AND TYPE OF INTERNET SUBSCRIPTION IN HOUSEHOLD
     "B28003_001", #Estimate!!Total:
     "B28003_004", # Estimate!!Total:!!Has a computer:!!With a broadband Internet subscription
     "B28009B_001", # Estimate!!Total: (black alone)
     "B28009B_004", # Estimate!!Total:!!Has a computer:!!With a broadband Internet subscription (black alone)
+    
+    # unemployment ----
     
     # Employment Status
     "S2301_C04_001E", # Estimate!!Unemployment rate!!Population 16 years and over	
@@ -63,14 +81,20 @@ acs_data <- get_acs(
     "C23002B_024", # Estimate!!Total:!!Female:!!65 years and over:!!In labor force:
     "C23002B_026", # Estimate!!Total:!!female:!!65 years and over:!!In labor force:!!Unemployed
     
-    # Poverty Status in the Past 12 Months
-    "S1701_C01_001E", # Estimate!!Total!!Population for whom poverty status is determined
-    "S1701_C01_042E", # S1701_C01_042E	Estimate!!Total!!Population for whom poverty status is determined!!ALL INDIVIDUALS WITH INCOME BELOW THE FOLLOWING POVERTY RATIOS!!200 percent of poverty level
+    # poverty status ----
+    
+    # 200% below is not available for black
+    # # Poverty Status in the Past 12 Months
+    # "S1701_C01_001E", # Estimate!!Total!!Population for whom poverty status is determined
+    # "S1701_C01_042E", # S1701_C01_042E	Estimate!!Total!!Population for whom poverty status is determined!!ALL INDIVIDUALS WITH INCOME BELOW THE FOLLOWING POVERTY RATIOS!!200 percent of poverty level
+    
     # Poverty Status -- Income in past 12 months below poverty level
     "B17021_001", # Estimate!!Total:
     "B17021_002", # Estimate!!Total:!!Income in the past 12 months below poverty level:
     "B17010B_001", # Estimate!!Total: (black alone)
     "B17010B_002", # Estimate!!Total:!!Income in the past 12 months below poverty level:
+    
+    # veteran status ----
     
     # Veteran Status
     "B21001_001", # Estimate!!Total:
@@ -82,6 +106,8 @@ acs_data <- get_acs(
     "C21001B_011", # Estimate!!Total:!!Female:!!18 to 64 years:!!Veteran (black)
     "C21001B_014", # Estimate!!Total:!!Female:!!65 years and over:!!Veteran (black)
     
+    # disability status ----
+    
     # Disability Status
     "B23024_001", # Estimate!!Total:
     "B23024_003", # Estimate!!Total:!!Income in the past 12 months below poverty level:!!With a disability:
@@ -91,6 +117,8 @@ acs_data <- get_acs(
     "B18101B_003", # Estimate!!Total:!!Under 18 years:!!With a disability
     "B18101B_006", # Estimate!!Total:!!18 to 64 years:!!With a disability
     "B18101B_009", # Estimate!!Total:!!65 years and over:!!With a disability
+    
+    # health insurance coverage -----
     
     # Health insurance coverage status
     "B27020_001", # Estimate!!Total:
