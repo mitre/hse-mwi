@@ -24,7 +24,8 @@ Refer to and update this document when additional measures are finalized.
 
 ## Pulling Data
 
-Add data pulled from an API or directly downloaded from a website into either:
+Add data pulled from an API or directly downloaded from a website will fall into
+one of the two folders:
 
 -   `Teams` \> `BHN Score` \> `Data` \>`Raw`
 
@@ -40,10 +41,18 @@ Add data pulled from an API or directly downloaded from a website into either:
 
     -   file extension is .csv only
 
-## Measure Registration 
+    -   **Note:** For any data pulled from an API (tidycensus, etc.), perform
+        any pre-processing tasks and write data directly to `Preprocessed`
+        folder.
+
+When pulling data, make sure to fill out relevant columns in the
+`Measure-Tracking.xlsx` and / or `Metadata.xlsx` files.
+
+## Measure Registration
 
 Measure Registration document in `Teams` \> `BHN Score` \>`Data` \>
-`Metadata.xslx`
+`Metadata.xslx` . This document provides information required for batch
+processing / batch analysis from Pre-Processed data to Clean data.
 
 ### Pre-Processed Data
 
@@ -55,8 +64,8 @@ data, including:
 
 -   Measure directionality aligned (higher values indicate higher need)
 
--    Scaling aligned (fractions to percents 0.1 -\> 10(%), prevalence
-    adjustments (per 1000 people), etc.)
+-   Scaling aligned (fractions to percents 0.1 -\> 10(%), prevalence adjustments
+    (per 1000 people), etc.)
 
 ### Cleaned Data
 
@@ -79,7 +88,7 @@ With Combined Measure files, we will perform the following analyses:
 
 -   Cross-Validation with other composite measures (COI, UNS, CHR, SVI, etc.)
 
-### Documentation 
+### Documentation
 
 Measure documentation can be found in `Teams` \> `BHN Score` \>`Documentation`
 folder
