@@ -136,10 +136,52 @@ acs_data <- get_acs(
   output = "wide"
 )
 
-
 # remove margin columns
 acs_data <- as.data.frame(acs_data)
 acs_data <- acs_data[, c(T,T,!grepl("M", colnames(acs_data)[-c(1:2)]))]
+
+# add columns for a total output ----
+
+# we want to add certain columns for a "total output"
+# we're going to do this by hand
+# column title naming convention: varnamecategory_(varname_)(denom_)(pop OR black)
+cname_map <- list(
+  "educationalattainment_denom_pop" = c("B06009_001E"),
+  "educationalattainment_lessthanhighschool_pop" = c("B06009_002E"),
+  "educationalattainment_somecollege_pop" = c("B06009_004E"),
+  "educationalattainment_denom_black" = c("C15002B_001"),
+  "educationalattainment_lessthanhighschool_black" = c("C15002B_003", "C15002B_003"),
+  "educationalattainment_somecollege_black" = c("C15002B_005", "C15002B_010"),
+  "worktransportation_denom_pop" = c("B08006_001"),
+  "worktransportation_caralone_pop" = c("B08006_003"),
+  "worktransportation_denom_black" = c("B08105B_001"),
+  "worktransportation_carlone_black" = c("B08105B_002"),
+  "computerinternet_denom_pop" = c("B28003_001"),
+  "computerinternet_computerandbroadband_pop" = c("B28003_004"),
+  "computerinternet_denom_black" = c("B28009B_001"),
+  "computerinternet_computerandbroadband_black" = c("B28009B_004"),
+  "unemployment_denom_pop" = c("C18120_002"),
+  "unemployment_unemployed_pop" = c("C18120_006"),
+  "unemployment_denom_black" = c("C23002B_004", "C23002B_011", "C23002B_017", "C23002B_024"),
+  "unemployment_unemployed_black" = c("C23002B_008", "C23002B_013","C23002B_021", "C23002B_026"),
+  "povertystatus_denom_pop" = c("B17021_001"),
+  "povertystatus_belowpovertylevel_pop" = c("B17021_002"),
+  "povertystatus_denom_black" = c("B17010B_001"),
+  "povertystatus_belowpovertylevel_black" = c("B17010B_002"),
+  "veteranstatus_denom_pop" = c("B21001_001"),
+  "veteranstatus_veteran_pop" = c("B21001_002"),
+  "veteranstatus_denom_black" = c("C21001B_001"),
+  "veteranstatus_veteran_black" = c("C21001B_004","C21001B_007","C21001B_011","C21001B_014"),
+  "disabilitystatus_denom_pop" = c("B23024_001"),
+  "disabilitystatus_disability_pop" = c("B23024_003", "B23024_018"),
+  "disabilitystatus_denom_black" = c("B18101B_001"),
+  "disabilitystatus_disability_black" = c("B18101B_003", "B18101B_006", "B18101B_009"),
+  "healthinsurance_denom_pop" = c("B27020_001"),
+  "healthinsurance_nohealthinsurance_pop" = c("B27020_006", "B27020_012", "B27020_017"),
+  "healthinsurance_denom_pop" = c("C27001B_001"),
+  "healthinsurance_nohealthinsurance_pop" = c("C27001B_004", "C27001B_007","C27001B_010")
+)
+
 
 # write out ----
 
