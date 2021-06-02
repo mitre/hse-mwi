@@ -1,73 +1,112 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
 # HSE Behavioral Health Needs Score
 
-This processes and cleans data to create the Behavioral Health Needs Score.
+## Data Pipeline
 
-data is in BSE Score > Data > 
-  Raw = raw data
-  Cleaned = cleaned measures
+![](assets/Data%20Pipeline.png)
 
-# finalize measures
+## Set-Up
 
-measures to add
-START WITH:
-- unemployment (ACS)
-- no high school diploma (ACS)
-- associate's degree or higher (ACS)
-- below 200% FPL (ACS)
+Sync Microsoft Teams BHN Score Creation folder into your local The MITRE
+Corporation (One-Drive) folder
 
-# pulling data 
+## Finalize Measures
 
-either: download from site OR api
+Measure Tracking document located in `Teams` \> `BHN Score` \>
+`Measure-Tracking.xslx`
 
-# registration (classifying metadata)
+Refer to and update this document when additional measures are finalized.
 
-defini all
-- define the orginal geo level
-- define the directionality of score (high v low)
-- range of data (perc, prevalence, etc.) - values what they take
-- "Source", - data source
-"Measure", - name of measure
-"Column", - which column in measure files
-"Geography", - geo level
-"Orientation", - firectionality of score +/- 1
-"Scale", - counts v percent
-"Minimum", - min num
-"Maximum", - max num
-"Filename", - file name
-"Formula", - if data needs to be processed (i.e. ICE), manipulation w/in file
-"Created", - date created?
-"Notes", - notes
-"Values", - number of data states
-"Selection",
-"Race Stratification" - y/n
-"Which Races" - which races specified by
-"Ethnicity Stratification" - y/n
-"Which Ethnicity" - which races specified by
-"include" t/f
+## Pulling Data
 
-IN FUTURE: VALIDATE
+Add data pulled from an API or directly downloaded from a website will fall into
+one of the two folders:
 
-# processing
+-   `Teams` \> `BHN Score` \> `Data` \>`Raw`
 
-go through all data files in registry and process according formula
-NOTE: what to do with NAs
-NOTE: suppress score for < 50 people -- zctas you don't want to consider
+    -   if any measure calculation needs to be completed (i.e. point geography
+        to container geography, prevalence calculations, etc.)
 
-write script:
-- county -> zcta
-- zip code -> zcta
-- census tract -> zcta
+    -   file extension is can also be .xlsx, .csv, .dta, etc
 
-(parens do here)
--> row is a zcta, column is ALL measures (percentile scaled and oriented correctly -- high score = higher need)
+-   `Teams` \> `BHN Score` \> `Data` \>`Preprocessed`
 
-# create weights
+    -   if data falls into a format where each row is a geographic container
+        (i.e. Census Tract, County, ZIP Code, etc.)
 
-create weight file (we'll divide evenly and change later)
-NOTE: naming conventions
-note: documentation - measure definitions and provenance
-NOTES: what to do with NAs -- vary denominator
+    -   file extension is .csv only
 
-# score creation
+    -   **Note:** For any data pulled from an API (tidycensus, etc.), perform
+        any pre-processing tasks and write data directly to `Preprocessed`
+        folder.
 
-weights and processed file -> multiply, sum, rescale from 0 to 100
+When pulling data, make sure to fill out relevant columns in the
+`Measure-Tracking.xlsx` and / or `Metadata.xlsx` files.
+
+## Measure Registration
+
+Measure Registration document in `Teams` \> `BHN Score` \>`Data` \>
+`Metadata.xslx` . This document provides information required for batch
+processing / batch analysis from Pre-Processed data to Clean data.
+
+### Pre-Processed Data
+
+This file contains information on all **pre-processed** measures and informs any
+additional transformations that need to occur between pre-processing and cleaned
+data, including:
+
+-   Any geographic level -\> ZCTA level only
+
+-   Measure directionality aligned (higher values indicate higher need)
+
+-   Scaling aligned (fractions to percents 0.1 -\> 10(%), prevalence adjustments
+    (per 1000 people), etc.)
+
+### Cleaned Data
+
+Once data is cleaned, they will be merged into the Combined Measures file. There
+will be two version:
+
+-   Original combined measures file
+
+-   Percentile Scaled combined measures file
+
+### Analysis
+
+With Combined Measure files, we will perform the following analyses:
+
+-   Covariance analysis (flagging and managing variable sets with high
+    multi-collinearity)
+
+-   Missingness analysis (identifying measures with high multiple missing
+    values, identifying ZCTAs with multiple missing measures)
+
+-   Cross-Validation with other composite measures (COI, UNS, CHR, SVI, etc.)
+
+### Documentation
+
+Measure documentation can be found in `Teams` \> `BHN Score` \>`Documentation`
+folder
+
+## Weights
+
+We will create 3 sets of weights files:
+
+-   Parsimonious weighting (All equal weights)
+
+-   Child Opportunity Index weighting determination method
+
+-   County Health Rankings weighting
+
+## Score Creation
+
+Final scores for each ZCTA will be created by combining the weights and combined
+measures file. Measures and measure weights are multiplied together, summed for
+each ZCTA, and then re-scaled from 0 to 100.
+
+# 
