@@ -149,4 +149,4 @@ data_folder <- file.path(
   "Data", "Preprocessed")
 
 write.csv(acs_data, file = file.path(data_folder,
-                                     "ACS_API_Data.csv"), row.names = F)
+                                     "ACS_API_Data.csv"), row.names = F, na = "")
