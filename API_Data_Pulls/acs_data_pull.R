@@ -136,10 +136,61 @@ acs_data <- get_acs(
   output = "wide"
 )
 
-
 # remove margin columns
 acs_data <- as.data.frame(acs_data)
 acs_data <- acs_data[, c(T,T,!grepl("M", colnames(acs_data)[-c(1:2)]))]
+
+# add columns for a total output ----
+
+# we want to add certain columns for a "total output"
+# we're going to do this by hand
+# column title naming convention: varnamecategory_(varname_)(denom_)(pop OR black)
+cname_map <- list(
+  "educationalattainment_denom_pop" = c("B06009_001E"),
+  "educationalattainment_lessthanhighschool_pop" = c("B06009_002E"),
+  "educationalattainment_somecollege_pop" = c("B06009_004E"),
+  "educationalattainment_denom_black" = c("C15002B_001E"),
+  "educationalattainment_lessthanhighschool_black" = c("C15002B_003E", "C15002B_003E"),
+  "educationalattainment_somecollege_black" = c("C15002B_005E", "C15002B_010E"),
+  "worktransportation_denom_pop" = c("B08006_001E"),
+  "worktransportation_caralone_pop" = c("B08006_003E"),
+  "worktransportation_denom_black" = c("B08105B_001E"),
+  "worktransportation_carlone_black" = c("B08105B_002E"),
+  "computerinternet_denom_pop" = c("B28003_001E"),
+  "computerinternet_computerandbroadband_pop" = c("B28003_004E"),
+  "computerinternet_denom_black" = c("B28009B_001E"),
+  "computerinternet_computerandbroadband_black" = c("B28009B_004E"),
+  "unemployment_denom_pop" = c("C18120_002E"),
+  "unemployment_unemployed_pop" = c("C18120_006E"),
+  "unemployment_denom_black" = c("C23002B_004E", "C23002B_011E", "C23002B_017E", "C23002B_024E"),
+  "unemployment_unemployed_black" = c("C23002B_008E", "C23002B_013E","C23002B_021E", "C23002B_026E"),
+  "povertystatus_denom_pop" = c("B17021_001E"),
+  "povertystatus_belowpovertylevel_pop" = c("B17021_002E"),
+  "povertystatus_denom_black" = c("B17010B_001E"),
+  "povertystatus_belowpovertylevel_black" = c("B17010B_002E"),
+  "veteranstatus_denom_pop" = c("B21001_001E"),
+  "veteranstatus_veteran_pop" = c("B21001_002E"),
+  "veteranstatus_denom_black" = c("C21001B_001E"),
+  "veteranstatus_veteran_black" = c("C21001B_004E","C21001B_007E","C21001B_011E","C21001B_014E"),
+  "disabilitystatus_denom_pop" = c("B23024_001E"),
+  "disabilitystatus_disability_pop" = c("B23024_003E", "B23024_018E"),
+  "disabilitystatus_denom_black" = c("B18101B_001E"),
+  "disabilitystatus_disability_black" = c("B18101B_003E", "B18101B_006E", "B18101B_009E"),
+  "healthinsurance_denom_pop" = c("B27020_001E"),
+  "healthinsurance_nohealthinsurance_pop" = c("B27020_006E", "B27020_012E", "B27020_017E"),
+  "healthinsurance_denom_black" = c("C27001B_001E"),
+  "healthinsurance_nohealthinsurance_black" = c("C27001B_004E", "C27001B_007E","C27001B_010E")
+)
+
+# preallocate -- we're going to just keep the geoid and name columns
+acs_final <- acs_data[, c("GEOID", "NAME")]
+for (cn in 1:length(cname_map)){
+  acs_final[, names(cname_map)[cn]] <- 
+    rowSums(acs_data[,cname_map[[cn]], drop = F], na.rm = T)
+  # if all na, we want to leave as NA
+  acs_final[rowSums(is.na(acs_data[,cname_map[[cn]], drop = F]), na.rm = T) ==
+              length(cname_map[[cn]]), names(cname_map)[cn]] <- NA
+}
 
 # write out ----
 
@@ -148,5 +199,5 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Preprocessed")
 
-write.csv(acs_data, file = file.path(data_folder,
+write.csv(acs_final, file = file.path(data_folder,
                                      "ACS_API_Data.csv"), row.names = F, na = "")
