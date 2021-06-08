@@ -130,8 +130,37 @@ acs_data <- get_acs(
     "C27001B_004", # Estimate!!Total:!!Under 19 years:!!No health insurance coverage
 
     "C27001B_007", # Estimate!!Total:!!19 to 64 years:!!No health insurance coverage
-    "C27001B_010" #Estimate!!Total:!!65 years and over:!!No health insurance coverage
-  ),
+    "C27001B_010", #Estimate!!Total:!!65 years and over:!!No health insurance coverage,
+    
+    # ICE variables -----
+    
+    # Index of Concentration at the Extremes for Black / White Income
+    # HOUSEHOLD INCOME IN THE PAST 12 MONTHS (IN 2019 INFLATION-ADJUSTED DOLLARS)
+    "B19001_001", # Estimate!!Total:
+    
+    # All, Less than $25k
+    "B19001_002", # Estimate!!Total:!!Less than $10,000
+    "B19001_003", # Estimate!!Total:!!$10,000 to $14,999
+    "B19001_004", # Estimate!!Total:!!$15,000 to $19,999
+    "B19001_005", # Estimate!!Total:!!$20,000 to $24,999
+    
+    # # White Non-Hispanic, Less than $25k
+    "B19001H_002", # Estimate!!Total:!!Less than $10,000
+    "B19001H_003", # Estimate!!Total:!!$10,000 to $14,999
+    "B19001H_004", # Estimate!!Total:!!$15,000 to $19,999
+    "B19001H_005", # Estimate!!Total:!!$20,000 to $24,999
+    
+    # Black or African American, Less than $25k
+    "B19001B_002", # Estimate!!Total:!!Less than $10,000
+    "B19001B_003", # Estimate!!Total:!!$10,000 to $14,999
+    "B19001B_004", # Estimate!!Total:!!$15,000 to $19,999
+    "B19001B_005", # Estimate!!Total:!!$20,000 to $24,999
+    
+    # White Non-Hispanic, Greater than $125k
+    "B19001H_015", # Estimate!!Total:!!$125,000 to $249,999
+    "B19001H_016", # Estimate!!Total:!!$150,000 to $199,999
+    "B19001H_017"  # Estimate!!Total:!!$200,000 or more
+  ), 
   year = 2019,
   output = "wide"
 )
@@ -191,6 +220,43 @@ for (cn in 1:length(cname_map)){
   acs_final[rowSums(is.na(acs_data[,cname_map[[cn]], drop = F]), na.rm = T) ==
               length(cname_map[[cn]]), names(cname_map)[cn]] <- NA
 }
+
+# ice pre-calculations ----
+
+## Formula ICE (black/white) = (High Income White - Low Income Black) / Total Pop
+
+acs_final$ice_numerator_black <-
+  # high income white
+  rowSums(acs_data[, c("B19001H_015E",
+                       "B19001H_016E",
+                       "B19001H_017E")]) -
+  # low income black
+  rowSums(acs_data[, c("B19001B_002E",
+                       "B19001B_003E",
+                       "B19001B_004E",
+                       "B19001B_005E")])
+
+acs_final$ice_denom_black <- acs_data$B19001_001E
+
+## Formula ICE (nonwhite/white) = (High Income White - Low Income Nonwhite) / Total Pop
+
+acs_final$ice_numerator_pop <-
+  # high income white
+  rowSums(acs_data[, c("B19001H_015E",
+                       "B19001H_016E",
+                       "B19001H_017E")]) -
+  # low income all
+  (rowSums(acs_data[, c("B19001_002E",
+                       "B19001_003E",
+                       "B19001_004E",
+                       "B19001_005E")]) -
+  # low income white
+  rowSums(acs_data[, c("B19001H_002E",
+                     "B19001H_003E",
+                     "B19001H_004E",
+                     "B19001H_005E")]))
+
+acs_final$ice_denom_pop <- acs_data$B19001_001E
 
 # write out ----
 
