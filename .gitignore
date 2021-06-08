@@ -3,4 +3,4 @@
 .RData
 .Ruserdata
 hse-bhn-score.Rproj
-.Rproj*
+*.Rproj
