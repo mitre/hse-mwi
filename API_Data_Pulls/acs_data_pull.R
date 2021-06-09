@@ -229,12 +229,12 @@ acs_final$ice_numerator_black <-
   # high income white
   rowSums(acs_data[, c("B19001H_015E",
                        "B19001H_016E",
-                       "B19001H_017E")]) -
+                       "B19001H_017E")], na.rm = T) -
   # low income black
   rowSums(acs_data[, c("B19001B_002E",
                        "B19001B_003E",
                        "B19001B_004E",
-                       "B19001B_005E")])
+                       "B19001B_005E")], na.rm = T)
 
 acs_final$ice_denom_black <- acs_data$B19001_001E
 
@@ -244,17 +244,17 @@ acs_final$ice_numerator_pop <-
   # high income white
   rowSums(acs_data[, c("B19001H_015E",
                        "B19001H_016E",
-                       "B19001H_017E")]) -
+                       "B19001H_017E")], na.rm = T) -
   # low income all
   (rowSums(acs_data[, c("B19001_002E",
                        "B19001_003E",
                        "B19001_004E",
-                       "B19001_005E")]) -
+                       "B19001_005E")], na.rm = T) -
   # low income white
   rowSums(acs_data[, c("B19001H_002E",
                      "B19001H_003E",
                      "B19001H_004E",
-                     "B19001H_005E")]))
+                     "B19001H_005E")], na.rm = T))
 
 acs_final$ice_denom_pop <- acs_data$B19001_001E
 
