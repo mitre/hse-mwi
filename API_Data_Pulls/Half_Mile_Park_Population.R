@@ -10,7 +10,7 @@ raw_data <-
 # Clean the Data: delete unnecessary variables and rename included variables
 data <- raw_data %>%
   select(c(displayValue, parentGeoAbbreviation, geoId)) %>%
-  rename("Pop_Half_Mile_Park" = displayValue,
+  rename("environment_withinhalfmilepark_pop" = displayValue,
          Census_Tract = geoId, State = parentGeoAbbreviation)
 
 # Export CSV to our shared OneDrive
