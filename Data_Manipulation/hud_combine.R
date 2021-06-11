@@ -23,8 +23,16 @@ housing_stress <- df %>%
   # (lacks kitchen or plumbing, more than 1 person per room, or cost burden greater than 30%)
   # T1_est2: All Owner Occupied
   # T1_est126: All Renter Occupied
-  mutate(housing_stress = (T1_est3 + T1_est127)/(T1_est2 + T1_est126) * 100) %>%
-  select(geoid, housing_stress)
+  mutate(housing_stress_pop = (T1_est3 + T1_est127)/(T1_est2 + T1_est126) * 100,
+         
+         housing_stress_black = (
+           # Owner Occupied - has 1 or more of 4 housing unit problems - Black or African American - All household incomes
+           T1_est6 + T1_est14 + T1_est22 + T1_est30 + T1_est38 +
+           # Renter Occupied - has 1 or more of 4 housing unit problems - Black or African American - All household incomes
+           T1_est130 + T1_est138 + T1_est146 + T1_est154 + T1_est162) /
+          
+           (T1_est2 + T1_est126) * 100) %>%
+  select(geoid, housing_stress_pop, housing_stress_black)
   
 
 # write out ----
