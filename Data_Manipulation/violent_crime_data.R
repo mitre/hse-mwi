@@ -2,7 +2,7 @@
 # By Emily Pantalone
 # Originated on: 6/14/2021
 
-# Set working directory, load data and packages
+# Load data, read csv, and call packages
 
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
@@ -10,29 +10,25 @@ data_folder <- file.path(
   "Data", "Raw")
 
 vc_data <- read_csv(file.path(data_folder,"analytic_data2020_0.csv"))
-#change document 
 
 library(readr)
 library(data.table)
 library(tidyverse)
 library(ggplot2)
-vc_data <- read_csv("~/OneDrive - The MITRE Corporation/Health and Social Equity - SJP - BHN Score Creation/Data/Raw/analytic_data2020_0.csv")
-
-vc_data <- read_csv("C:/Users/epantalone/The MITRE Corporation/Health and Social Equity - SJP - BHN Score Creation/Data/Raw/analytic_data2020_0.csv")
 
 #explore data dimensions
-dim(vc_data)m 
+dim(vc_data)
 colnames(vc_data)
-unique(vc_data$source)
-unique(vc_data$sumlevel)
-unique(vc_data$name)
+unique(vc_data$`State Abbreviation`)
 
-# START OVER, SET DATA THROUGH ONEDRIVE
-data_folder <- file.path(
-  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
-  "Health and Social Equity - SJP - BHN Score Creation",
-  "Data", "Raw")
-vc_data <- read_csv("analytic_data2020_0.csv")
+#delete first two rows (they are aggregate, not county-specific)
+vc_data <- vc_data[-c(1,2),]
+
+#delete unneeded columns
+vc_data <- vc_data[-c()]
+
+#rename columns
+
 
 
 
