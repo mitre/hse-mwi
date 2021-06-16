@@ -1,8 +1,12 @@
-# Exploring Violent Crime Data (Community Violence)
+# Preprocessing Violent Crime Data (Community Violence)
 # By Emily Pantalone
 # Originated on: 6/14/2021
 
-# Load data, read csv, and call packages
+# Load data, read csv, call packages
+library(readr)
+library(data.table)
+library(tidyverse)
+library(ggplot2)
 
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
@@ -10,11 +14,6 @@ data_folder <- file.path(
   "Data", "Raw")
 
 vc_data <- read_csv(file.path(data_folder,"analytic_data2020_0.csv"))
-
-library(readr)
-library(data.table)
-library(tidyverse)
-library(ggplot2)
 
 #explore data dimensions
 dim(vc_data)
@@ -25,7 +24,7 @@ unique(vc_data$`State Abbreviation`)
 vc_data <- vc_data[-c(1,2),]
 
 #delete unneeded columns
-vc_data <- vc_data[-c()]
+vc_data <- vc_data[c(1,2,3,4,5,6,7,233,234,235)]
 
 #rename columns
 
