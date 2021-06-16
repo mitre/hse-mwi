@@ -6,7 +6,6 @@
 library(readr)
 library(data.table)
 library(tidyverse)
-library(ggplot2)
 
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
@@ -18,13 +17,12 @@ vc_data <- read_csv(file.path(data_folder,"analytic_data2020_0.csv"))
 #explore data dimensions
 dim(vc_data)
 colnames(vc_data)
-unique(vc_data$`State Abbreviation`)
 
 #delete first two rows (they are aggregate, not county-specific)
 vc_data <- vc_data[-c(1,2),]
 
 #delete unneeded columns
-vc_data <- vc_data[c(1,2,3,4,5,7,233,234,235)]
+vc_data <- vc_data[c(1,2,3,4,5,233,234,235)]
 
 #remove state aggregate rows
 vc_data <- vc_data[vc_data$'County FIPS Code' != '000', ] 
