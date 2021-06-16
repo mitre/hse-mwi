@@ -40,12 +40,12 @@ names(vc_data)[names(vc_data) == "Violent crime raw value"] <- "violent_crime_va
 #remove state aggregate rows
 vc_data <- vc_data[vc_data$county_FIPS != '000', ] 
 
-#change violent crime numbers to integers (currently is a character)
+#change violent crime values to numbers (currently is a character)
 vc_data$violent_crime_num <- as.numeric(vc_data$violent_crime_num)
 vc_data$violent_crime_denom <- as.numeric(vc_data$violent_crime_denom)
 vc_data$violent_crime_value <- as.numeric(vc_data$violent_crime_value)
 
-#create column with raw integer of violent crimes per population (num/denom), 
+#create column with raw ratio of violent crimes per population (num/denom), 
 # not per 100,000 population as violent_crime_value currently indicates
 vc_data$violent_crime_ratio <- vc_data$violent_crime_num/vc_data$violent_crime_denom
 
@@ -61,7 +61,6 @@ summary(vc_data$violent_crime_value)
 
 # There are 23 values that are > 100 that could be clipped, out of 3142 values (0.7%)
 # There are 191 NAs out of 3142 possible values (6% missing)
-
 
 
 # write out ----
