@@ -6,15 +6,20 @@
 
 # load libraries and data ----
 
+cw_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Resources")
+
 # load crosswalk files
-county_cw <- read.csv(file.path("Crosswalk_Files", "zcta_county_rel_10.txt"),
+county_cw <- read.csv(file.path(cw_folder, "zcta_county_rel_10.txt"),
                       colClasses = c(
                         "ZCTA5" = "character",
                         "STATE" = "character",
                         "COUNTY" = "character",
                         "GEOID" = "character"
                       ))
-ct_cw <- read.csv(file.path("Crosswalk_Files", "zcta_tract_rel_10.txt"),
+ct_cw <- read.csv(file.path(cw_folder, "zcta_tract_rel_10.txt"),
                   colClasses = c(
                     "ZCTA5" = "character",
                     "STATE" = "character",
@@ -22,10 +27,17 @@ ct_cw <- read.csv(file.path("Crosswalk_Files", "zcta_tract_rel_10.txt"),
                     "TRACT" = "character",
                     "GEOID" = "character"
                   ))
+zip_cw <- read.csv(file.path(cw_folder, "Zip_to_zcta_crosswalk_2020.csv"),
+                   colClasses = c(
+                     "ZIP_CODE" = "character",
+                     "ZCTA" = "character"
+                   ))
 # filter out territories
 territories <- c(60, 66, 72, 78)
 county_cw <- county_cw[!county_cw$STATE %in% territories,]
 ct_cw <- ct_cw[!ct_cw$STATE %in% territories,]
+territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR")
+zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
 
 # also keep all unique zctas to generate a file
 all_zctas <- unique(county_cw$ZCTA5)
@@ -86,7 +98,7 @@ county_to_zcta <- function(df, geoid_col, meas_col){
 
 # census tract to zcta function ----
 
-# function that converts county data to zcta
+# function that converts census tract data to zcta
 # input:
 # df: dataframe with a geoid column for census tracts and a measure column
 # geoid_col: column name corresponding to geoid
@@ -136,3 +148,5 @@ ct_to_zcta <- function(df, geoid_col, meas_col){
   
   return(zcta_df)
 }
+
+# zip code to zcta function ----
