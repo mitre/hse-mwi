@@ -10,6 +10,20 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Raw")
 
+# Get population denominators
+pop <- get_acs(geography = "zcta",
+               output = "wide",
+               year = 2019,
+               survey = "acs5",
+               variables = "B01001_001",
+               geometry = F
+)
+
+# Crosswalk Data
+zip_to_zcta <- read.csv(paste0(data_folder, "/Resources/zip_to_zcta_2019.csv")) %>%
+  mutate(ZIP_CODE = str_pad(ZIP_CODE, 5, "left", "0"))
+
+
 # Load in CBP data
 cbp <- read.csv(paste0(data_folder, "/CBP_zbp18detail.txt"))
 
@@ -19,6 +33,8 @@ bwl <- cbp %>%
   filter(naics == 445310) %>%
   mutate(zip = str_pad(zip, width = 5, side = "left", pad = "0")) %>%
   select(zip, est)
+
+
 
 
 # write out ----
