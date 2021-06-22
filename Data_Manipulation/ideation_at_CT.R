@@ -87,7 +87,7 @@ ideations_some_tracts <- left_join(raw_tract, raw_ideations,
             "sbstfg16", "outcome", "age_group", "years", "sbst16n",
             "ci_lower", "ci_upper", "state_name", "county")) %>%
   relocate("tract", "estimate") %>%
-  rename("ideation_percent" = "estimate", "census_tract" = "tract")
+  rename("suicideideation_pop" = "estimate", "census_tract" = "tract")
 
 # Download All US Census Tracts & Create County Variable
 census_tracts <- get_acs(geography = "tract",
@@ -104,7 +104,7 @@ ideation_tract <- left_join(census_tracts,
                             by = c("county" = "county_FIP")) %>%
   select(-c("NAME", "variable", "estimate", "moe", "substate_region", "state_name", "county")) %>%
   select(c("GEOID", "ideation_percent")) %>%
-  rename("census_tract" = "GEOID") 
+  rename("census_tract" = "GEOID", "suicideideation_pop" = "ideation_percent") 
 
 # Merge Data for all 50 states + DC
 NSDUH_CT_suicideideation <- rbind(ideation_tract, ideations_some_tracts)
