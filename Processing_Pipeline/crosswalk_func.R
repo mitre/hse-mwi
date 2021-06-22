@@ -158,9 +158,11 @@ ct_to_zcta <- function(df, geoid_col, meas_col){
 # df: dataframe with a geoid column for census tracts and a measure column
 # geoid_col: column name corresponding to geoid
 # meas_col: a vector of measure column names
+# use_mean: TRUE by default, use a mean for combining ZIP codes; otherwise, use 
+#   a sum for combination 
 # output:
 # zcta_df: measures converted for each zcta
-zip_to_zcta <- function(df, geoid_col, meas_col){
+zip_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
   # first, preallocate the result
   zcta_df <- data.frame("ZCTA" = all_zctas)
   zcta_df[, meas_col] <- NA
@@ -194,7 +196,11 @@ zip_to_zcta <- function(df, geoid_col, meas_col){
       # remove NAs and missing tracts
       zcta_df[z, meas_col] <- 
         sapply(meas_col, function(x){
-          mean(df_sub[,x], na.rm = T)
+          if (use_mean){
+            mean(df_sub[,x], na.rm = T)
+          } else {
+            sum(df_sub[,x], na.rm = T)
+          }
         })
     }
   }
