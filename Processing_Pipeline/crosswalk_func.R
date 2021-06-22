@@ -158,7 +158,7 @@ ct_to_zcta <- function(df, geoid_col, meas_col){
 # meas_col: a vector of measure column names
 # output:
 # zcta_df: measures converted for each zcta
-ct_to_zcta <- function(df, geoid_col, meas_col){
+zip_to_zcta <- function(df, geoid_col, meas_col){
   # first, preallocate the result
   zcta_df <- data.frame("ZCTA" = all_zctas)
   zcta_df[, meas_col] <- NA
