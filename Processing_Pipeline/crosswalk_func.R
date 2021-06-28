@@ -82,6 +82,16 @@ check_geoid <- function(df, geoid_col, type){
 # output:
 # zcta_df: measures converted for each zcta
 county_to_zcta <- function(df, geoid_col, meas_col){
+  print(paste0(Sys.time(), ": Converting county to ZCTA"))
+  
+  print(paste0(
+    Sys.time(), ": ",
+    signif(sum(!df[,geoid_col] %in% county_cw$GEOID)/nrow(df)*100, 4),
+    "% (",
+    sum(!df[,geoid_col] %in% county_cw$GEOID),
+    ") of counties not found in master crosswalk"
+  ))
+  
   # first, preallocate the result
   zcta_df <- data.frame("ZCTA" = all_zctas)
   zcta_df[, meas_col] <- NA
@@ -124,6 +134,14 @@ county_to_zcta <- function(df, geoid_col, meas_col){
     }
   }
   
+  for (mc in meas_col){
+    print(paste0(
+      Sys.time(), ": Mapped ", mc, " to ZCTA, ", 
+      signif(sum(is.na(zcta_df[, mc]))/nrow(zcta_df)*100,4), "% (",
+      sum(is.na(zcta_df[, mc])), ") missing/not mapped"
+    ))
+  }
+  
   return(zcta_df)
 }
 
@@ -137,6 +155,16 @@ county_to_zcta <- function(df, geoid_col, meas_col){
 # output:
 # zcta_df: measures converted for each zcta
 ct_to_zcta <- function(df, geoid_col, meas_col){
+  print(paste0(Sys.time(), ": Converting census tract to ZCTA"))
+  
+  print(paste0(
+    Sys.time(), ": ",
+    signif(sum(!df[,geoid_col] %in% ct_cw$GEOID)/nrow(df)*100, 4),
+    "% (",
+    sum(!df[,geoid_col] %in% ct_cw$GEOID),
+    ") of census tracts not found in master crosswalk"
+  ))
+  
   # first, preallocate the result
   zcta_df <- data.frame("ZCTA" = all_zctas)
   zcta_df[, meas_col] <- NA
@@ -178,6 +206,14 @@ ct_to_zcta <- function(df, geoid_col, meas_col){
     }
   }
   
+  for (mc in meas_col){
+    print(paste0(
+      Sys.time(), ": Mapped ", mc, " to ZCTA, ", 
+      signif(sum(is.na(zcta_df[, mc]))/nrow(zcta_df)*100, 4), "% (",
+      sum(is.na(zcta_df[, mc])), ") missing/not mapped"
+    ))
+  }
+  
   return(zcta_df)
 }
 
@@ -193,6 +229,16 @@ ct_to_zcta <- function(df, geoid_col, meas_col){
 # output:
 # zcta_df: measures converted for each zcta
 zip_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
+  print(paste0(Sys.time(), ": Converting ZIP code to ZCTA"))
+  
+  print(paste0(
+    Sys.time(), ": ",
+    signif(sum(!df[,geoid_col] %in% zip_cw$ZIP_CODE)/nrow(df)*100, 4),
+    "% (",
+    sum(!df[,geoid_col] %in% zip_cw$ZIP_CODE),
+    ") of ZIP codes not found in master crosswalk"
+  ))
+  
   # first, preallocate the result
   zcta_df <- data.frame("ZCTA" = all_zctas)
   zcta_df[, meas_col] <- NA
@@ -233,6 +279,15 @@ zip_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
           }
         })
     }
+  }
+  
+  
+  for (mc in meas_col){
+    print(paste0(
+      Sys.time(), ": Mapped ", mc, " to ZCTA, ", 
+      signif(sum(is.na(zcta_df[, mc]))/nrow(zcta_df)*100, 4), "% (",
+      sum(is.na(zcta_df[, mc])), ") missing/not mapped"
+    ))
   }
   
   return(zcta_df)
