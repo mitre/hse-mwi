@@ -6,6 +6,8 @@
 
 # load libraries and data ----
 
+library(stringr)
+
 cw_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
   "Health and Social Equity - SJP - BHN Score Creation",
@@ -41,6 +43,34 @@ zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
 
 # also keep all unique zctas to generate a file
 all_zctas <- unique(county_cw$ZCTA5)
+
+# data quality function ----
+
+# function to check whether or not geoids are the correct character length 
+# (have dropped leading zeros)
+# input:
+# df: dataframe with a geoid column for counties and a measure column
+# geoid_col: column name corresponding to geoid
+# type: ZCTA, County, ZIP Code, or Census Tract
+# output:
+# df, with geoid_col as a character with padded leading 0s
+check_geoid <- function(df, geoid_col, type){
+  # first, convert to character
+  df[,geoid_col] <- as.character(df[,geoid_col])
+  
+  # map for each type
+  len_map <- c(
+    "ZCTA" = 5,
+    "County" = 5,
+    "ZIP Code" = 5,
+    "Census Tract" = 11
+  )
+  
+  # pad with leading 0s if needed
+  df[, geoid_col] <- str_pad(df[, geoid_col], len_map[type], pad = "0")
+  
+  return(df)
+}
 
 # county to zcta function ----
 
