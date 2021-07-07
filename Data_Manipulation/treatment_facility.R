@@ -4,6 +4,8 @@ library(readxl)
 library(tidycensus)
 library(cdlTools)
 library(sp)
+library(sf)
+library(tigris)
 
 # Import Datasets
 # SSACD to County FIPS Crosswalk
@@ -70,18 +72,21 @@ mh_fac <- mh_fac %>%
 sa_fac <- sa_fac %>%
   select(name1, zip, county, latitude, longitude, type_facility)
 
+# Insert Census Tract Associated with Each Facility
+# Pull Census Tract Data State by State
+poly <- get_decennial(geography = "tract", state = 01,
+                      variables = "P012001", year = 2010, geometry = T)
+
 # Convert point data into workable column
 sa_fac <- sa_fac %>%
   sf::st_as_sf(coords = c("latitude", "longitude"),
                crs = sf::st_crs(census_tracts))
 mh_fac <- mh_fac %>%
-  sf::st_as_sf(coords = c("latitude", "longitude"),
-               crs = sf::st_crs(census_tracts))
+  st_as_sf(coords = c("longitude", "latitude"),
+           crs = st_crs(poly))
 
-# Overlay Points with Polygons?
+# Add Census Tracts to Facility Dataset
+mh_fac <- st_join(mh_fac, poly)
 
-
-
-# Create Threshold time for each Census Tract per each Facility?
 
 
