@@ -3,6 +3,7 @@ library(tidyverse)
 library(readxl)
 library(tidycensus)
 library(cdlTools)
+library(sp)
 
 # Import Datasets
 # SSACD to County FIPS Crosswalk
@@ -40,7 +41,8 @@ sa_fac <- read_csv(file.path(data_folder,
 states <- c(1:2, 4:6, 8:9, 10:13, 15:42, 44:51, 53:56, 72)
 census_tracts <- get_acs(geography = "tract",
                          variable = "B19013_001",
-                         state = c(as.numeric(states))) %>%
+                         state = c(as.numeric(states)),
+                         geometry = TRUE) %>%
   mutate(county = substr(GEOID, 1, 5))
 
 # Create Census Tract Variable for Thresholds & add missing Alaska Census Tract
@@ -68,19 +70,18 @@ mh_fac <- mh_fac %>%
 sa_fac <- sa_fac %>%
   select(name1, zip, county, latitude, longitude, type_facility)
 
+# Convert point data into workable column
+sa_fac <- sa_fac %>%
+  sf::st_as_sf(coords = c("latitude", "longitude"),
+               crs = sf::st_crs(census_tracts))
+mh_fac <- mh_fac %>%
+  sf::st_as_sf(coords = c("latitude", "longitude"),
+               crs = sf::st_crs(census_tracts))
+
+# Overlay Points with Polygons?
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+# Create Threshold time for each Census Tract per each Facility?
 
 
