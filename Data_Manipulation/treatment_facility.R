@@ -6,6 +6,7 @@ library(cdlTools)
 library(sp)
 library(sf)
 library(tigris)
+options(tigris_use_cache = TRUE)
 
 # Import Datasets
 # SSACD to County FIPS Crosswalk
@@ -72,21 +73,25 @@ mh_fac <- mh_fac %>%
 sa_fac <- sa_fac %>%
   select(name1, zip, county, latitude, longitude, type_facility)
 
-# Insert Census Tract Associated with Each Facility
-# Pull Census Tract Data State by State
-poly <- get_decennial(geography = "tract", state = 01,
-                      variables = "P012001", year = 2010, geometry = T)
-
-# Convert point data into workable column
-sa_fac <- sa_fac %>%
-  sf::st_as_sf(coords = c("latitude", "longitude"),
-               crs = sf::st_crs(census_tracts))
+# Convert point data into workable column for MH Facilities
 mh_fac <- mh_fac %>%
   st_as_sf(coords = c("longitude", "latitude"),
-           crs = st_crs(poly))
+           crs = st_crs(census_tracts))
 
-# Add Census Tracts to Facility Dataset
+# Establish polygons for each census tract
+# Save as .rds <- wrap line in if statement (if rds file exists, )
+poly <- get_decennial(geography = "tract", state = states,
+                      variables = "P012001", year = 2010, geometry = T)
+
+# Add Census Tracts to MH Facility Dataset
 mh_fac <- st_join(mh_fac, poly)
+
+# Return rows with no Census tracts
+mh_fac[is.na(mh_fac$GEOID.y),]
+
+
+
+
 
 
 
