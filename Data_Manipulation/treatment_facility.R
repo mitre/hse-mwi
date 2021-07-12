@@ -87,11 +87,47 @@ poly <- get_decennial(geography = "tract", state = states,
 mh_fac <- st_join(mh_fac, poly)
 
 # Return rows with no Census tracts
-mh_fac[is.na(mh_fac$GEOID.y),]
+mh_fac[is.na(mh_fac$GEOID),]
 
+# Determine which rows contain NA values for the GEOID
+which(is.na(mh_fac$GEOID), arr.ind=TRUE)
+ 
+# Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
+mh_fac[10552, 6] <- "02016000200" # One for Alaska
+mh_fac[10583, 6] <- "15007040300" # One for Hawaii
 
+# Remove irrelevant variables and incomplete cases
+mh_fac <- mh_fac %>%
+  select(c("name1", "zip", "county", "type_facility", "GEOID")) %>%
+  rename("tract" = "GEOID")
 
+mh_fac <- mh_fac[complete.cases(mh_fac$tract),]
 
+# Convert point data into workable column for SA Facilities
+sa_fac <- sa_fac %>%
+  st_as_sf(coords = c("longitude", "latitude"),
+           crs = st_crs(census_tracts))
 
+# Add Census Tracts to SA Facility Dataset
+sa_fac <- st_join(sa_fac, poly)
 
+# Return rows with no Census tracts
+sa_fac[is.na(sa_fac$GEOID),]
 
+# Determine which rows contain NA values for the GEOID
+which(is.na(sa_fac$GEOID), arr.ind=TRUE)
+
+# Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
+sa_fac[6657, 6] <- "26033970600" # One for Michigan 
+sa_fac[12045, 6] <- "06037800506" # One for California
+sa_fac[13896, 6] <- "41007950300" # One for Oregon
+sa_fac[14114, 6] <- "02016000100" # One for Alaska
+sa_fac[14161, 6] <- "15009030902" # One for Hawaii
+sa_fac[14169, 6] <- "15009031700" # Another for Hawaii
+
+# Remove irrelevant variables and incomplete cases
+sa_fac <- sa_fac %>%
+  select(c("name1", "zip", "county", "type_facility", "GEOID")) %>%
+  rename("tract" = "GEOID")
+
+sa_fac <- sa_fac[complete.cases(sa_fac$tract),]
