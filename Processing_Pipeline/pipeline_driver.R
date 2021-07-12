@@ -15,6 +15,9 @@ data_folder <- file.path(
 # folder where all the preprocessed data is
 preprocessed_folder <- file.path(data_folder, "Preprocessed")
 
+# folder where all the cleaned/output data goes
+cleaned_folder <- file.path(data_folder, "Cleaned")
+
 # load measure registry -- first sheet
 m_reg <- read_excel(file.path(data_folder, "Metadata.xlsx"), sheet = 1)
 # remove everything that doesn't have a numerator
@@ -37,6 +40,8 @@ geo_levels <- c(
 # first, go through and load/collate data ----
 
 # TODO: use data tables?
+
+print(paste0("[", Sys.time(), "]: Loading and collating data"))
 
 # where we're going to put all the data
 level_data <- list()
@@ -79,3 +84,47 @@ for (gl in geo_levels){
   # add to full list
   level_data[[gl]] <- comb_df
 }
+
+# get/output variable information ----
+
+print(paste0("[", Sys.time(), "]: Calculating variable information"))
+
+# preallocate output data
+info_dat <- as.data.frame(
+  m_reg[, c("Measure", "Measure Type", "Source", "Numerator", 
+            "Is Preprocessed", "Race Stratification", "Geographic Level")]
+)
+# add additional information
+info_dat[, c("Is_Numeric", "Minimum", "Maximum", "Missing", "Number_Rows")] <-
+  NA
+# duplicate rows that are race stratified
+info_dat <- rbind(info_dat, info_dat[m_reg$`Race Stratification`,])
+# add pop for ones that are preprocessed but not duplicated
+info_dat$Numerator[
+  info_dat$`Is Preprocessed` & !duplicated(info_dat$Numerator)
+  ] <-
+  paste0(info_dat$Numerator[
+    info_dat$`Is Preprocessed` & !duplicated(info_dat$Numerator)
+  ], "_pop")
+# add black for ones that are preprocessed and are not pop
+info_dat$Numerator[
+  info_dat$`Is Preprocessed` & !grepl("_pop", info_dat$Numerator)
+] <-
+  paste0(info_dat$Numerator[
+    info_dat$`Is Preprocessed` & !grepl("_pop", info_dat$Numerator)
+  ], "_black")
+rownames(info_dat) <- info_dat$Numerator
+
+# where we're going to put all the data
+level_data <- list()
+for (gl in geo_levels){
+  # subset to the data at the specific geographic level
+  m_reg_sub <- m_reg[m_reg$`Geographic Level` == gl,]
+  info_dat_sub <- info_dat[info_dat$`Geographic Level` == gl,]
+  
+  # we'll go through each column and compute information for each
+  level_data[[gl]][, info_dat_sub$Numerator]
+  # STOP HERE -- need to fix data mistakes
+}
+
+# convert data to zcta ----
