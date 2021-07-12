@@ -41,7 +41,7 @@ geo_levels <- c(
 
 # TODO: use data tables?
 
-print(paste0("[", Sys.time(), "]: Loading and collating data"))
+cat(paste0("[", Sys.time(), "]: Loading and collating data\n"))
 
 # where we're going to put all the data
 level_data <- list()
@@ -87,7 +87,9 @@ for (gl in geo_levels){
 
 # get/output variable information ----
 
-print(paste0("[", Sys.time(), "]: Calculating variable information"))
+# TODO: ADD TRYCATCH/DATA QUALITY FILTERING
+
+cat(paste0("[", Sys.time(), "]: Calculating data information\n"))
 
 # preallocate output data
 info_dat <- as.data.frame(
@@ -116,15 +118,47 @@ info_dat$Numerator[
 rownames(info_dat) <- info_dat$Numerator
 
 # where we're going to put all the data
-level_data <- list()
 for (gl in geo_levels){
   # subset to the data at the specific geographic level
-  m_reg_sub <- m_reg[m_reg$`Geographic Level` == gl,]
   info_dat_sub <- info_dat[info_dat$`Geographic Level` == gl,]
   
-  # we'll go through each column and compute information for each
-  level_data[[gl]][, info_dat_sub$Numerator]
-  # STOP HERE -- need to fix data mistakes
+  if (nrow(info_dat_sub) > 0){
+    # we'll go through each column and compute information for each
+    info_dat[info_dat_sub$Numerator, "Is_Numeric"] <- 
+      sapply(level_data[[gl]][, info_dat_sub$Numerator],
+             is.numeric)
+    info_dat[info_dat_sub$Numerator, "Minimum"] <- 
+      sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+             function(x){min(x, na.rm = T)})
+    info_dat[info_dat_sub$Numerator, "Maximum"] <- 
+      sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+             function(x){max(x, na.rm = T)})
+    info_dat[info_dat_sub$Numerator, "Missing"] <- 
+      sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+             function(x){sum(is.na(x))})
+    info_dat[info_dat_sub$Numerator, "Number_Rows"] <- 
+      sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+             function(x){sum(!is.na(x))})
+    
+    # output statistics about data
+    for (num in info_dat_sub$Numerator){
+      cat(paste0("Statistics for ", num, ":\n"))
+      for (cn in c("Is_Numeric", "Minimum", "Maximum", "Missing" , 
+                   "Number_Rows")){
+        cat(paste0("\t", gsub("_", " ", cn),":", 
+                   info_dat[num, cn]), "\n")
+      }
+    }
+  }
 }
+
+# write out data information
+cat(paste0("[", Sys.time(), "]: Writing out data information\n"))
+
+write.csv(info_dat, 
+          file.path(cleaned_folder,
+                    "HSE_BHN_Data_Information.csv"),
+          na = "",
+          row.names = F)
 
 # convert data to zcta ----
