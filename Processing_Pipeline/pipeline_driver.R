@@ -91,9 +91,9 @@ for (gl in geo_levels){
 
 cat(paste0("[", Sys.time(), "]: Calculating data information\n"))
 
-# preallocate output data
+# preallocate output data -- this will also be useful later
 info_dat <- as.data.frame(
-  m_reg[, c("Measure", "Measure Type", "Source", "Numerator", 
+  m_reg[, c("Measure", "Measure Type", "Source", "Numerator", "Denominator",
             "Is Preprocessed", "Race Stratification", "Geographic Level")]
 )
 # add additional information
@@ -102,19 +102,23 @@ info_dat[, c("Is_Numeric", "Minimum", "Maximum", "Missing", "Number_Rows")] <-
 # duplicate rows that are race stratified
 info_dat <- rbind(info_dat, info_dat[m_reg$`Race Stratification`,])
 # add pop for ones that are preprocessed but not duplicated
-info_dat$Numerator[
-  info_dat$`Is Preprocessed` & !duplicated(info_dat$Numerator)
-  ] <-
-  paste0(info_dat$Numerator[
-    info_dat$`Is Preprocessed` & !duplicated(info_dat$Numerator)
-  ], "_pop")
+is_preprocessed <- info_dat$`Is Preprocessed`
+not_dup_num <- !duplicated(info_dat$Numerator)
+not_dup_den <- !duplicated(info_dat$Denominator) & !is.na(info_dat$Denominator)
+info_dat$Numerator[is_preprocessed & not_dup_num] <-
+  paste0(info_dat$Numerator[is_preprocessed & not_dup_num], "_pop")
+info_dat$Denominator[is_preprocessed & not_dup_den] <-
+  paste0(info_dat$Denominator[is_preprocessed & not_dup_den], "_pop")
+
 # add black for ones that are preprocessed and are not pop
-info_dat$Numerator[
-  info_dat$`Is Preprocessed` & !grepl("_pop", info_dat$Numerator)
-] <-
-  paste0(info_dat$Numerator[
-    info_dat$`Is Preprocessed` & !grepl("_pop", info_dat$Numerator)
-  ], "_black")
+not_pop_num <- !grepl("_pop", info_dat$Numerator)
+not_pop_den <- !grepl("_pop", info_dat$Denominator) & 
+  !is.na(info_dat$Denominator)
+info_dat$Numerator[is_preprocessed & not_pop_num] <-
+  paste0(info_dat$Numerator[is_preprocessed & not_pop_num], "_black")
+info_dat$Denominator[is_preprocessed & not_pop_den] <-
+  paste0(info_dat$Denominator[is_preprocessed & not_pop_den], "_black")
+
 rownames(info_dat) <- info_dat$Numerator
 
 # where we're going to put all the data
@@ -162,3 +166,68 @@ write.csv(info_dat,
           row.names = F)
 
 # convert data to zcta ----
+
+cat(paste0("[", Sys.time(), "]: Converting data to ZCTA level\n"))
+
+# first, preallocate
+zcta_df <-
+  if (nrow(level_data[["ZCTA"]]) > 0){
+    level_data[["ZCTA"]][, c(
+      "GEOID",
+      info_dat$Numerator[info_dat$`Geographic Level` == "ZCTA"],
+      info_dat$Denominator[!is.na(info_dat$Denominator) &
+        info_dat$`Geographic Level` == "ZCTA"]
+      )
+    ]
+  } else {
+    # use the data that was loaded in the crosswalk_func script
+    data.frame(
+      "GEOID" = as.character(all_zctas)
+    )
+  }
+# set the rownames to be the zctas
+rownames(zcta_df) <- zcta_df$GEOID
+
+# now go through the rest of the geolevels and convert them to ZCTA
+for (gl in geo_levels[geo_levels != "ZCTA"]){
+  # subset to the data at the specific geographic level
+  info_dat_sub <- info_dat[info_dat$`Geographic Level` == gl,]
+  
+  if (nrow(info_dat_sub) > 0){
+    zcta_conversion <- 
+      if (gl == "County"){
+        county_to_zcta(
+          level_data[[gl]], 
+          "GEOID", 
+          c(info_dat_sub$Numerator, 
+            info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)])
+          )  
+      } else if (gl == "Census Tract"){
+        ct_to_zcta(
+          level_data[[gl]], 
+          "GEOID", 
+          c(info_dat_sub$Numerator, 
+            info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)])
+        )  
+      } else if (gl == "ZIP Code"){
+        ct_to_zcta(
+          level_data[[gl]], 
+          "GEOID", 
+          c(info_dat_sub$Numerator, 
+            info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)]),
+          use_mean = T
+        )  
+      }
+    
+    # add to main
+    zcta_df[zcta_conversion$ZCTA, 
+            colnames(zcta_conversion)[colnames(zcta_conversion) != "ZCTA"]] <-
+      zcta_conversion[, colnames(zcta_conversion) != "ZCTA"]
+    # reupdate the rownames
+    rownames(zcta_df) <- zcta_df$GEOID
+    
+  }
+}
+
+# need to filter out ZCTAs not in US -- filtered out in crosswalk file
+zcta_df <- zcta_df[!zcta_df$GEOID %in% all_zctas,]
