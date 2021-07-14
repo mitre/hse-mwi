@@ -82,10 +82,10 @@ check_geoid <- function(df, geoid_col, type){
 # output:
 # zcta_df: measures converted for each zcta
 county_to_zcta <- function(df, geoid_col, meas_col){
-  print(paste0(Sys.time(), ": Converting county to ZCTA"))
+  cat(paste0("[", Sys.time(), "]: Converting county to ZCTA"))
   
-  print(paste0(
-    Sys.time(), ": ",
+  cat(paste0(
+    "[", Sys.time(), "]: ",
     signif(sum(!df[,geoid_col] %in% county_cw$GEOID)/nrow(df)*100, 4),
     "% (",
     sum(!df[,geoid_col] %in% county_cw$GEOID),
@@ -135,8 +135,8 @@ county_to_zcta <- function(df, geoid_col, meas_col){
   }
   
   for (mc in meas_col){
-    print(paste0(
-      Sys.time(), ": Mapped ", mc, " to ZCTA, ", 
+    cat(paste0(
+      "[", Sys.time(), "]: Mapped ", mc, " to ZCTA, ", 
       signif(sum(is.na(zcta_df[, mc]))/nrow(zcta_df)*100,4), "% (",
       sum(is.na(zcta_df[, mc])), ") missing/not mapped"
     ))
@@ -155,10 +155,10 @@ county_to_zcta <- function(df, geoid_col, meas_col){
 # output:
 # zcta_df: measures converted for each zcta
 ct_to_zcta <- function(df, geoid_col, meas_col){
-  print(paste0(Sys.time(), ": Converting census tract to ZCTA"))
+  cat(paste0("[", Sys.time(), "]: Converting census tract to ZCTA"))
   
-  print(paste0(
-    Sys.time(), ": ",
+  cat(paste0(
+    "[", Sys.time(), "]: ",
     signif(sum(!df[,geoid_col] %in% ct_cw$GEOID)/nrow(df)*100, 4),
     "% (",
     sum(!df[,geoid_col] %in% ct_cw$GEOID),
@@ -207,8 +207,8 @@ ct_to_zcta <- function(df, geoid_col, meas_col){
   }
   
   for (mc in meas_col){
-    print(paste0(
-      Sys.time(), ": Mapped ", mc, " to ZCTA, ", 
+    cat(paste0(
+      "[", Sys.time(), "]: Mapped ", mc, " to ZCTA, ", 
       signif(sum(is.na(zcta_df[, mc]))/nrow(zcta_df)*100, 4), "% (",
       sum(is.na(zcta_df[, mc])), ") missing/not mapped"
     ))
@@ -229,10 +229,10 @@ ct_to_zcta <- function(df, geoid_col, meas_col){
 # output:
 # zcta_df: measures converted for each zcta
 zip_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
-  print(paste0(Sys.time(), ": Converting ZIP code to ZCTA"))
+  cat(paste0("[", Sys.time(), "]: Converting ZIP code to ZCTA"))
   
-  print(paste0(
-    Sys.time(), ": ",
+  cat(paste0(
+    "[", Sys.time(), "]: ",
     signif(sum(!df[,geoid_col] %in% zip_cw$ZIP_CODE)/nrow(df)*100, 4),
     "% (",
     sum(!df[,geoid_col] %in% zip_cw$ZIP_CODE),
@@ -283,8 +283,8 @@ zip_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
   
   
   for (mc in meas_col){
-    print(paste0(
-      Sys.time(), ": Mapped ", mc, " to ZCTA, ", 
+    cat(paste0(
+      "[", Sys.time(), "]: Mapped ", mc, " to ZCTA, ", 
       signif(sum(is.na(zcta_df[, mc]))/nrow(zcta_df)*100, 4), "% (",
       sum(is.na(zcta_df[, mc])), ") missing/not mapped"
     ))
