@@ -28,6 +28,12 @@ m_reg <- m_reg[!is.na(m_reg$Numerator),]
 # load crosswalk functions and information
 source(file.path("Processing_Pipeline", "crosswalk_func.R"))
 
+# note -- we ignore missing data when doing ranking
+# function to compute percentile ranking
+perc.rank <- function(x) {
+  return(rank(x, na.last = "keep")/length(x[!is.na(x)])*100)
+}
+
 # allocate overarching variables ----
 
 geo_levels <- c(
@@ -231,6 +237,8 @@ zcta_df <- zcta_df[zcta_df$GEOID %in% all_zctas,]
 
 # scale and combine each measure ----
 
+cat(paste0("[", Sys.time(), "]: Combining and scaling measures\n"))
+
 # TODO: CLEAN UP ENVIRONMENT
 # TODO: ADD CHECKS
 
@@ -246,7 +254,17 @@ meas_df[, info_dat$Numerator[!is.na(info_dat$Denominator)]] <-
 meas_df[, info_dat$Numerator] <- 
   sweep(meas_df[, info_dat$Numerator], MARGIN = 2, info_dat$Scale, `*`)
 
+cat(paste0("[", Sys.time(), "]: Write out converted, scaled data\n"))
+
+write.csv(meas_df, 
+          file.path(cleaned_folder,
+                    "HSE_BHN_ZCTA_Converted_Measures.csv"),
+          na = "",
+          row.names = F)
+
 # directionality and percentile scaling ----
+
+cat(paste0("[", Sys.time(), "]: Percentile ranking measures\n"))
 
 # allocate the percentile scaled dataframe
 perc_meas_df <- meas_df
@@ -259,11 +277,13 @@ perc_meas_df[, info_dat$Numerator] <-
         info_dat$Directionality, 
         `*`)
 
-# note -- we ignore missing data when doing ranking
-# function to compute percentile ranking
-perc.rank <- function(x) {
-  return(rank(x, na.last = "keep")/length(x[!is.na(x)])*100)
-}
-
 # do percentile ranking
 perc_meas_df[,-1] <- apply(perc_meas_df[,-1], MARGIN = 2, perc.rank)
+
+cat(paste0("[", Sys.time(), "]: Write out percentile ranked data\n"))
+
+write.csv(perc_meas_df, 
+          file.path(cleaned_folder,
+                    "HSE_BHN_ZCTA_Percentile_Ranked_Measures.csv"),
+          na = "",
+          row.names = F)
