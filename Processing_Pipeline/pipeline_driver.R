@@ -248,7 +248,22 @@ meas_df[, info_dat$Numerator] <-
 
 # directionality and percentile scaling ----
 
+# allocate the percentile scaled dataframe
+perc_meas_df <- meas_df
+
 # then we want to put them in the correct directionality
 # (higher score == higher need)
-meas_df[, info_dat$Numerator] <- 
-  sweep(meas_df[, info_dat$Numerator], MARGIN = 2, info_dat$Directionality, `*`)
+perc_meas_df[, info_dat$Numerator] <- 
+  sweep(perc_meas_df[, info_dat$Numerator], 
+        MARGIN = 2, 
+        info_dat$Directionality, 
+        `*`)
+
+# note -- we ignore missing data when doing ranking
+# function to compute percentile ranking
+perc.rank <- function(x) {
+  return(rank(x, na.last = "keep")/length(x[!is.na(x)])*100)
+}
+
+# do percentile ranking
+perc_meas_df[,-1] <- apply(perc_meas_df[,-1], MARGIN = 2, perc.rank)
