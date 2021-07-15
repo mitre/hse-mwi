@@ -40,26 +40,19 @@ mh_fac <- read_csv(file.path(data_folder,
 sa_fac <- read_csv(file.path(data_folder,
                              "SAMHSA_Locator/Substance_Use_Treament_Facility_listing_2021_05_18_134647.csv"))
 
-# Download All Census Tracts
-states <- c(1:2, 4:6, 8:9, 10:13, 15:42, 44:51, 53:56, 72)
-
-census_tracts <- get_acs(geography = "tract",
-                         variable = "B19013_001",
-                         state = c(as.numeric(states)),
-                         geometry = TRUE) %>%
-  mutate(county = substr(GEOID, 1, 5))
-
 # Establish census tracts & polygons
+states <- c(1:2, 4:6, 8:9, 10:13, 15:42, 44:51, 53:56)
 poly <- get_decennial(geography = "tract", state = states,
                       variables = "P012001", year = 2010, geometry = T) %>%
   mutate(county = substr(GEOID, 1, 5))
 
-# Create Census Tract Variable for Thresholds & add missing Alaska Census Tract
+# Create Census Tract Variable for Thresholds 
 thresh <- thresh %>%
   left_join(poly, by = c("FIPS County Code" = "county")) 
 
-thresh$GEOID <- thresh$GEOID %>%
-  replace_na("02270000100")
+# Remove NAs created by Puerto Rico and one South Dakota county. The SD county
+# is redundant of Fall River County
+thresh <- na.omit(thresh)
 
 # Create Census Tract FIP Variable and Select/Remove Relevant Variables 
 ct <- ct %>%
@@ -84,10 +77,6 @@ mh_fac <- mh_fac %>%
   st_as_sf(coords = c("longitude", "latitude"),
            crs = st_crs(poly))
 
-# Establish census tracts & polygons
-poly <- get_decennial(geography = "tract", state = states,
-                      variables = "P012001", year = 2010, geometry = T)
-
 # Add Census Tracts to MH Facility Dataset
 mh_fac <- st_join(mh_fac, poly)
 
@@ -104,7 +93,7 @@ mh_fac[10583, 6] <- "15007040300" # One for Hawaii
 # Remove irrelevant variables and incomplete cases
 mh_fac <- mh_fac %>%
   select(c("name1", "zip", "county.y", "type_facility", "GEOID")) %>%
-  rename("tract" = "GEOID")
+  rename("tract" = "GEOID", "county" = "county.y")
 
 mh_fac <- mh_fac[complete.cases(mh_fac$tract),]
 
@@ -133,15 +122,32 @@ sa_fac[14169, 6] <- "15009031700" # Another for Hawaii
 # Remove irrelevant variables and incomplete cases
 sa_fac <- sa_fac %>%
   select(c("name1", "zip", "county.y", "type_facility", "GEOID")) %>%
-  rename("tract" = "GEOID")
+  rename("tract" = "GEOID", "county" = "county.y")
 
 sa_fac <- sa_fac[complete.cases(sa_fac$tract),]
 
-# Merge Distance Threshold into SA and MH Datasets
+# Merge Distance Threshold into MH Dataset
 mh_fac <- left_join(mh_fac, ct, by = "tract")
 
-# Return rows with no Distance Thresholds
-mh_fac[is.na(mh_fac$Distance),]
-
-# Determine which rows contain NA values for the Distance Thresholds
+# Determine which rows contain NA values for the Distance Thresholds/Population
 which(is.na(mh_fac$Distance), arr.ind=TRUE)
+
+# Remove sole row with missing distance/population - this census tract or FIPS
+# county code (51515) was not available in the distance/population dataset
+mh_fac <- mh_fac[complete.cases(mh_fac$Distance),]
+
+# Merge Distance Threshold into SA Dataset
+sa_fac <- left_join(sa_fac, ct, by = "tract")
+
+# Return rows with no Distance Thresholds/Population Variable
+sa_fac[is.na(sa_fac$Distance),]
+
+# Determine which rows contain NA values for the GEOID
+which(is.na(sa_fac$Distance), arr.ind=TRUE)
+
+# Manually add in Distance and Population values
+# Determined from US Census & Distance Thresholds of other CTs in same county
+sa_fac[3371, 9] <- 14177 # Population Value for Shannon County
+sa_fac[3371, 10] <- 60 # Distance Threshold for Shannon County
+
+
