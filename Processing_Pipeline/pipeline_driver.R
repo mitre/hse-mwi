@@ -92,10 +92,7 @@ for (gl in geo_levels){
 cat(paste0("[", Sys.time(), "]: Calculating data information\n"))
 
 # preallocate output data -- this will also be useful later
-info_dat <- as.data.frame(
-  m_reg[, c("Measure", "Measure Type", "Source", "Numerator", "Denominator",
-            "Is Preprocessed", "Race Stratification", "Geographic Level")]
-)
+info_dat <- as.data.frame(m_reg)
 # add additional information
 info_dat[, c("Is_Numeric", "Minimum", "Maximum", "Missing", "Number_Rows")] <-
   NA
@@ -230,4 +227,28 @@ for (gl in geo_levels[geo_levels != "ZCTA"]){
 }
 
 # need to filter out ZCTAs not in US -- filtered out in crosswalk file
-zcta_df <- zcta_df[!zcta_df$GEOID %in% all_zctas,]
+zcta_df <- zcta_df[zcta_df$GEOID %in% all_zctas,]
+
+# scale and combine each measure ----
+
+# TODO: CLEAN UP ENVIRONMENT
+# TODO: ADD CHECKS
+
+# first, allocate with only numerators
+meas_df <- zcta_df[, !colnames(zcta_df) %in% info_dat$Denominator]
+
+# then, we want to divide by denominators (if they have one)
+meas_df[, info_dat$Numerator[!is.na(info_dat$Denominator)]] <-
+  meas_df[, info_dat$Numerator[!is.na(info_dat$Denominator)]]/
+  zcta_df[, info_dat$Denominator[!is.na(info_dat$Denominator)]]
+
+# then we want to scale all of them (should have a scale)
+meas_df[, info_dat$Numerator] <- 
+  sweep(meas_df[, info_dat$Numerator], MARGIN = 2, info_dat$Scale, `*`)
+
+# directionality and percentile scaling ----
+
+# then we want to put them in the correct directionality
+# (higher score == higher need)
+meas_df[, info_dat$Numerator] <- 
+  sweep(meas_df[, info_dat$Numerator], MARGIN = 2, info_dat$Directionality, `*`)
