@@ -28,6 +28,12 @@ m_reg <- m_reg[!is.na(m_reg$Numerator),]
 # load crosswalk functions and information
 source(file.path("Processing_Pipeline", "crosswalk_func.R"))
 
+# load population totals
+all_pop_df <- read.csv(
+  file.path(data_folder, "Resources", "ACS_ZCTA_Total_Populations.csv"),
+  colClasses = c("GEOID" = "character")
+)
+
 # note -- we ignore missing data when doing ranking
 # function to compute percentile ranking
 perc.rank <- function(x) {
@@ -36,8 +42,9 @@ perc.rank <- function(x) {
 
 # function to get the final score for a given set of measures
 # pm: percentile-ranked measure data frame, with GEOID as the first column
+# type: "pop" or "black" is it full population or race stratified
 # returns final score, combined with weightes
-get_final_score <- function(pm){
+get_final_score <- function(pm, type = "pop"){
   # now created the weighted measures
   # NOTE: weights are equal right now
   weighted_meas <- sweep(
@@ -47,9 +54,16 @@ get_final_score <- function(pm){
     `/`)
   # preliminary score is weighted limited score
   prelim_score <- rowSums(weighted_meas, na.rm = T)
+  # remove score for places under some threshold
+  # NOTE: now, the place has to have at least 1 person
+  prelim_score[
+    pm$GEOID %in% 
+      all_pop_df$GEOID[all_pop_df[,paste0("total_", type)] < 1]
+    ] <- NA
+  
   # then we rescale the score -- using 5% and 99.5%
-  low_score <- quantile(prelim_score, probs = .005)
-  high_score <- quantile(prelim_score, probs = .995)
+  low_score <- quantile(prelim_score, probs = .005, na.rm = T)
+  high_score <- quantile(prelim_score, probs = .995, na.rm = T)
   rescale_score <- 
     (prelim_score - low_score)/(high_score - low_score)*100
   # everything outside those percentiles goes to the edges
@@ -279,6 +293,18 @@ meas_df[, info_dat$Numerator[!is.na(info_dat$Denominator)]] <-
 meas_df[, info_dat$Numerator] <- 
   sweep(meas_df[, info_dat$Numerator], MARGIN = 2, info_dat$Scale, `*`)
 
+# for all data, if the population is 0, mark as missing
+# if not already in missing
+rownames(meas_df) <- as.character(meas_df$GEOID)
+meas_df[all_pop_df$GEOID[all_pop_df$total_black < 1],
+        !grepl("_pop", colnames(meas_df)) & 
+          colnames(meas_df) %in% 
+          info_dat$Numerator[info_dat$`Race Stratification`]] <- NA
+meas_df[all_pop_df$GEOID[all_pop_df$total_pop < 1],
+        grepl("_pop", colnames(meas_df)) | 
+          colnames(meas_df) %in% 
+          info_dat$Numerator[!info_dat$`Race Stratification`]] <- NA
+
 cat(paste0("[", Sys.time(), "]: Write out converted, scaled data\n"))
 
 write.csv(meas_df, 
@@ -325,12 +351,8 @@ black_pm <-
                  info_dat$Numerator[!info_dat$`Race Stratification`]]
 
 # get final, scaled scores
-pop_score <- get_final_score(pop_pm)
-black_score <- get_final_score(black_pm)
-
-# add the score the total data
-pop_pm$Score <- pop_score
-black_pm$Score <- black_score
+pop_pm$Score  <- get_final_score(pop_pm, type = "pop")
+black_pm$Score  <- get_final_score(black_pm, type = "black")
 
 # reorder columns, for ease of reading
 pop_pm <- pop_pm[,c(
