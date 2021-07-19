@@ -65,7 +65,9 @@ ct <- ct %>%
 ct <- ct %>%
   inner_join(thresh, by = c("tract" = "GEOID")) %>%
   select(c("tract", "POPULATION", "LATITUDE", "LONGITUDE", "Distance")) %>%
-  relocate(c("tract", "LATITUDE", "LONGITUDE", "POPULATION", "Distance"))
+  relocate(c("tract", "LATITUDE", "LONGITUDE", "POPULATION", "Distance")) %>%
+  st_as_sf(coords = c("LONGITUDE", "LATITUDE"),
+           crs = st_crs(poly))
 
 # Select/Remove Relevant Variables in Facility Data
 mh_fac <- mh_fac %>%
@@ -156,9 +158,12 @@ sa_fac[3371, 10] <- 60 # Distance Threshold for Shannon County
 # that are < distance threshold for the CT that the facility is in
 
 # Compute distance in miles between two points
-geosphere::distHaversine(c(mh_fac[1, 8]$LONGITUDE, mh_fac[1, 7]$LATITUDE),
+distHaversine(c(mh_fac[1, 8]$LONGITUDE, mh_fac[1, 7]$LATITUDE),
                          c(mh_fac[60, 8]$LONGITUDE,
-                           mh_fac[60, 7]$LATITUDE))*.0006213712
+                           mh_fac[60, 7]$LATITUDE))*.0006213712 # Convert meters to miles
+
+# Return CT centroids within threshold distance of each facility
+
 
 # Sum all of those centroids populations
 
