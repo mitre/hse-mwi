@@ -34,6 +34,31 @@ perc.rank <- function(x) {
   return(rank(x, na.last = "keep")/length(x[!is.na(x)])*100)
 }
 
+# function to get the final score for a given set of measures
+# pm: percentile-ranked measure data frame, with GEOID as the first column
+# returns final score, combined with weightes
+get_final_score <- function(pm){
+  # now created the weighted measures
+  # NOTE: weights are equal right now
+  weighted_meas <- sweep(
+    pm[, colnames(pm) != "GEOID"], 
+    MARGIN = 1,
+    rowSums(!is.na(pm[, colnames(pm) != "GEOID"])), 
+    `/`)
+  # preliminary score is weighted limited score
+  prelim_score <- rowSums(weighted_meas, na.rm = T)
+  # then we rescale the score -- using 5% and 99.5%
+  low_score <- quantile(prelim_score, probs = .005)
+  high_score <- quantile(prelim_score, probs = .995)
+  rescale_score <- 
+    (prelim_score - low_score)/(high_score - low_score)*100
+  # everything outside those percentiles goes to the edges
+  rescale_score[prelim_score <= low_score] <- 0
+  rescale_score[prelim_score >= high_score] <- 100
+  
+  return(rescale_score)
+}
+
 # allocate overarching variables ----
 
 geo_levels <- c(
@@ -285,5 +310,46 @@ cat(paste0("[", Sys.time(), "]: Write out percentile ranked data\n"))
 write.csv(perc_meas_df, 
           file.path(cleaned_folder,
                     "HSE_BHN_ZCTA_Percentile_Ranked_Measures.csv"),
+          na = "",
+          row.names = F)
+
+# create final scores for population and black ----
+
+cat(paste0("[", Sys.time(), "]: Create final scores\n"))
+
+# now is where we separate out the population/black/both measures
+pop_pm <- perc_meas_df[, !grepl("_black", colnames(perc_meas_df))]
+black_pm <- 
+  perc_meas_df[, !grepl("_pop", colnames(perc_meas_df)) | 
+                 colnames(perc_meas_df) %in% 
+                 info_dat$Numerator[!info_dat$`Race Stratification`]]
+
+# get final, scaled scores
+pop_score <- get_final_score(pop_pm)
+black_score <- get_final_score(black_pm)
+
+# add the score the total data
+pop_pm$Score <- pop_score
+black_pm$Score <- black_score
+
+# reorder columns, for ease of reading
+pop_pm <- pop_pm[,c(
+  "GEOID", "Score", 
+  colnames(pop_pm)[!colnames(pop_pm) %in% c("GEOID", "Score")])]
+black_pm <- black_pm[,c(
+  "GEOID", "Score", 
+  colnames(black_pm)[!colnames(black_pm) %in% c("GEOID", "Score")])]
+
+cat(paste0("[", Sys.time(), "]: Write out final scores\n"))
+
+write.csv(pop_pm, 
+          file.path(cleaned_folder,
+                    "HSE_BHN_ZCTA_Score_Population.csv"),
+          na = "",
+          row.names = F)
+
+write.csv(black_pm, 
+          file.path(cleaned_folder,
+                    "HSE_BHN_ZCTA_Score_Black.csv"),
           na = "",
           row.names = F)
