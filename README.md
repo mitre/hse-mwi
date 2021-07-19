@@ -70,11 +70,13 @@ data, including:
 ### Cleaned Data
 
 Once data is cleaned, they will be merged into the Combined Measures file. There
-will be two version:
+will be two versions:
 
--   Original combined measures file
+-   Original combined measures file: `Teams` \> `BHN Score` \>`Data` \> `Cleaned` \> `HSE_ZCTA_Converted_Measures.csv`
 
--   Percentile Scaled combined measures file
+-   Percentile Scaled combined measures file: `Teams` \> `BHN Score` \>`Data` \> `Cleaned` \> `HSE_ZCTA_Percentile_Ranked_Measures.csv`
+
+In addition, information about data (amount missing, number of nonmissing rows, etc.) is generated and appears in: `Teams` \> `BHN Score` \>`Data` \> `Cleaned` \> `HSE_BHN_Data_Information.csv`.
 
 ### Analysis
 
@@ -91,7 +93,7 @@ With Combined Measure files, we will perform the following analyses:
 ### Documentation
 
 Measure documentation can be found in `Teams` \> `BHN Score` \>`Documentation`
-folder
+folder.
 
 ## Weights
 
@@ -107,6 +109,10 @@ We will create 3 sets of weights files:
 
 Final scores for each ZCTA will be created by combining the weights and combined
 measures file. Measures and measure weights are multiplied together, summed for
-each ZCTA, and then re-scaled from 0 to 100.
+each ZCTA, and then re-scaled from 0 to 100. Scores appear (with percentile ranked measures) in `Teams` \> `BHN Score` \>`Data` \> `Cleaned`:
+
+- Total Population Score: `HSE_BHN_ZCTA_Score_Black.csv`
+
+- Black Population Score: `HSE_BHN_ZCTA_Score_Population.csv`
 
 # 
