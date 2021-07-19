@@ -1,5 +1,6 @@
 # Library Download
 library(tidyverse)
+library(geosphere) # Computing distances between point data
 library(readxl)
 library(tidycensus)
 library(cdlTools)
@@ -149,5 +150,33 @@ which(is.na(sa_fac$Distance), arr.ind=TRUE)
 # Determined from US Census & Distance Thresholds of other CTs in same county
 sa_fac[3371, 9] <- 14177 # Population Value for Shannon County
 sa_fac[3371, 10] <- 60 # Distance Threshold for Shannon County
+
+# Search for CT centroids within +/- 1 degree of latitude and longitude from
+# where treatment facility is located and return populations of those centroids
+# that are < distance threshold for the CT that the facility is in
+
+# Compute distance in miles between two points
+geosphere::distHaversine(c(mh_fac[1, 8]$LONGITUDE, mh_fac[1, 7]$LATITUDE),
+                         c(mh_fac[60, 8]$LONGITUDE,
+                           mh_fac[60, 7]$LATITUDE))*.0006213712
+
+# Sum all of those centroids populations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
