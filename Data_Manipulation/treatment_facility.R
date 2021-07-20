@@ -162,6 +162,10 @@ distHaversine(c(mh_fac[1, 8]$LONGITUDE, mh_fac[1, 7]$LATITUDE),
                          c(mh_fac[60, 8]$LONGITUDE,
                            mh_fac[60, 7]$LATITUDE))*.0006213712 # Convert meters to miles
 
+# Create matrix of distances between point data
+# First 10 facilities and first 20 CT centroids
+raster::pointDistance(mh_fac[1:10,], ct[1:20,], lonlat=TRUE) * .0006213712
+
 # Return CT centroids within threshold distance of each facility
 
 
