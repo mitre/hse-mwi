@@ -157,19 +157,20 @@ sa_fac[3371, 10] <- 60 # Distance Threshold for Shannon County
 # where treatment facility is located and return populations of those centroids
 # that are < distance threshold for the CT that the facility is in
 
-# Compute distance in miles between two points
-distHaversine(c(mh_fac[1, 8]$LONGITUDE, mh_fac[1, 7]$LATITUDE),
-                         c(mh_fac[60, 8]$LONGITUDE,
-                           mh_fac[60, 7]$LATITUDE))*.0006213712 # Convert meters to miles
+# Manually Add r value for first facility
+# Compute Distances from first facility to every CT centroid in miles
+dist1 <- raster::pointDistance(mh_fac[1,], ct, lonlat = T) * .0006213712
 
-# Create matrix of distances between point data
-# First 10 facilities and first 20 CT centroids
-raster::pointDistance(mh_fac[1:10,], ct[1:20,], lonlat=TRUE) * .0006213712
+# Combine Distances with CT Threshold and Population information
+c1 <- cbind(ct, dist1)
 
-# Return CT centroids within threshold distance of each facility
+# Create r column
+mh_fac <- mh_fac %>%
+  add_column(r = 0)
 
+# Manually Input r value into facility dataset for first facility
+mh_fac[1,]$r <- 1/sum(filter(c1, Distance < 10)$POPULATION)
 
-# Sum all of those centroids populations
 
 
 
