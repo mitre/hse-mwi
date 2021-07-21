@@ -158,13 +158,16 @@ sa_fac[3371, 10] <- 60 # Distance Threshold for Shannon County
 # that are < distance threshold for the CT that the facility is in
 
 # Manually Add r value for first facility
+
 # Compute Distances from first facility to every CT centroid in miles
 dist1 <- raster::pointDistance(mh_fac[1,], ct, lonlat = T) * .0006213712
 
-# Combine Distances with CT Threshold and Population information
-c1 <- cbind(ct, dist1)
 
-# Create r column
+
+# Combine Distances with CT Threshold and Population information
+c1 <- cbind(ct, dist1) # filter/subset distances < than the distance threshold for that county
+
+# Create r column --> create before computing r value
 mh_fac <- mh_fac %>%
   add_column(r = 0)
 
@@ -178,7 +181,12 @@ mh_fac[1,]$r <- 1/sum(filter(c1, Distance < 10)$POPULATION)
 
 
 
-
+# Backup - How to Subset by point data within +/- .5 lat/long
+ct[sapply(ct$geometry, "[[", 2) < sapply(mh_fac$geometry, "[[", 2) +.5 &
+     sapply(ct$geometry, "[[", 2) > sapply(mh_fac$geometry, "[[", 2) -.5 &
+     sapply(ct$geometry, "[[", 1) < sapply(mh_fac$geometry, "[[", 1) +.5 &
+     sapply(ct$geometry, "[[", 1) > sapply(mh_fac$geometry, "[[", 1) -.5
+   ,] 
 
 
 
