@@ -162,8 +162,6 @@ sa_fac[3371, 10] <- 60 # Distance Threshold for Shannon County
 # Compute Distances from first facility to every CT centroid in miles
 dist1 <- raster::pointDistance(mh_fac[1,], ct, lonlat = T) * .0006213712
 
-
-
 # Combine Distances with CT Threshold and Population information
 c1 <- cbind(ct, dist1) # filter/subset distances < than the distance threshold for that county
 
@@ -174,7 +172,10 @@ mh_fac <- mh_fac %>%
 # Manually Input r value into facility dataset for first facility
 mh_fac[1,]$r <- 1/sum(filter(c1, Distance < 10)$POPULATION)
 
-
+# Create for loop to create r values for first 1000 MH treatment centers
+for (i in 1:1000) {
+  
+}
 
 
 
