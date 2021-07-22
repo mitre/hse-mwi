@@ -169,18 +169,19 @@ rename(geometry = "geometry.x") %>%
 dist1 <- raster::pointDistance(mh_fac[1,], ct, lonlat = T) * .0006213712
 
 # Combine Distances with CT Threshold and Population information
-c1 <- cbind(ct, dist1) # filter/subset distances < than the distance threshold for that county
+c1 <- subset(cbind(ct, dist1), dist1 <10) # filter/subset distances < than the distance threshold for that county
 
 # Create r column --> create before computing r value
 mh_fac <- mh_fac %>%
   add_column(r = 0)
 
 # Manually Input r value into facility dataset for first facility
-mh_fac[1,]$r <- 1/sum(filter(c1, Distance < 10)$POPULATION)
+mh_fac[1,]$r <- 1/sum(c1$POPULATION)
 
-# Create for loop to create r values for first 1000 MH treatment centers
-for (i in 1:1000) {
-  
+# Build a for loop to create r values for first 1000 MH treatment centers
+for (i in 2:5) {
+  mh_fac[i,]$r <- 
+  raster::pointDistance(mh_fac[i,], ct, lonlat = T) * .0006213712
 }
 
 
