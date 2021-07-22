@@ -130,17 +130,19 @@ sa_fac <- sa_fac %>%
 sa_fac <- sa_fac[complete.cases(sa_fac$tract),]
 
 # Merge Distance Threshold into MH Dataset
-mh_fac <- left_join(mh_fac, ct, by = "tract")
+mh_fac <- left_join(mh_fac, as.data.frame(ct), by = "tract")
 
 # Determine which rows contain NA values for the Distance Thresholds/Population
 which(is.na(mh_fac$Distance), arr.ind=TRUE)
 
 # Remove sole row with missing distance/population - this census tract or FIPS
 # county code (51515) was not available in the distance/population dataset
-mh_fac <- mh_fac[complete.cases(mh_fac$Distance),]
+mh_fac <- mh_fac[complete.cases(mh_fac$Distance),] %>%
+  rename(geometry = "geometry.x") %>%
+  select(-c("geometry.y"))
 
 # Merge Distance Threshold into SA Dataset
-sa_fac <- left_join(sa_fac, ct, by = "tract")
+sa_fac <- left_join(sa_fac, as.data.frame(ct), by = "tract")
 
 # Return rows with no Distance Thresholds/Population Variable
 sa_fac[is.na(sa_fac$Distance),]
@@ -150,8 +152,12 @@ which(is.na(sa_fac$Distance), arr.ind=TRUE)
 
 # Manually add in Distance and Population values
 # Determined from US Census & Distance Thresholds of other CTs in same county
-sa_fac[3371, 9] <- 14177 # Population Value for Shannon County
-sa_fac[3371, 10] <- 60 # Distance Threshold for Shannon County
+sa_fac[3371, 7] <- 14177 # Population Value for Shannon County
+sa_fac[3371, 8] <- 60 # Distance Threshold for Shannon County
+
+sa_fac <- sa_fac %>%
+rename(geometry = "geometry.x") %>%
+  select(-c("geometry.y"))
 
 # Search for CT centroids within +/- 1 degree of latitude and longitude from
 # where treatment facility is located and return populations of those centroids
