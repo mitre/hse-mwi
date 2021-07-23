@@ -159,12 +159,7 @@ sa_fac <- sa_fac %>%
 rename(geometry = "geometry.x") %>%
   select(-c("geometry.y"))
 
-# Search for CT centroids within +/- 1 degree of latitude and longitude from
-# where treatment facility is located and return populations of those centroids
-# that are < distance threshold for the CT that the facility is in
-
 # Manually Add r value for first facility
-
 # Compute Distances from first facility to every CT centroid in miles
 dist1 <- raster::pointDistance(mh_fac[1,], ct, lonlat = T) * .0006213712
 
@@ -178,16 +173,16 @@ mh_fac <- mh_fac %>%
 # Manually Input r value into facility dataset for first facility
 mh_fac[1,]$r <- 1/sum(c1$POPULATION)
 
-# Build a for loop to create r values for first 1000 MH treatment centers
-for (i in 2:5) {
-  mh_fac[i,]$r <- 
-  raster::pointDistance(mh_fac[i,], ct, lonlat = T) * .0006213712
+# Build a for loop to create r values for first 5 MH treatment centers
+for (i in 1:1000) {
+  mh_fac[i,]$r <- 1/sum(subset(cbind(ct,
+                                  raster::pointDistance(mh_fac[i,],
+                                                        ct,
+                                                        lonlat = T) * .0006213712),
+                            raster::pointDistance(mh_fac[i,],
+                                                  ct,
+                                                  lonlat = T) * .0006213712 < mh_fac$Distance[[i]])$POPULATION)
 }
-
-
-
-
-
 
 # Backup - How to Subset by point data within +/- .5 lat/long
 ct[sapply(ct$geometry, "[[", 2) < sapply(mh_fac$geometry, "[[", 2) +.5 &
