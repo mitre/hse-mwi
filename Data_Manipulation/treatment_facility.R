@@ -160,11 +160,16 @@ rename(geometry = "geometry.x") %>%
   select(-c("geometry.y"))
 
 # Manually Add r value for first facility
-# Compute Distances from first facility to every CT centroid in miles
-dist1 <- raster::pointDistance(mh_fac[1,], ct, lonlat = T) * .0006213712
+# Compute Distances from first facility to CTs
+# within +/- 1 lat/long of facility point data
+dist1 <- raster::pointDistance(mh_fac[1,], ct[sapply(ct$geometry, "[[", 2) < mh_fac$geometry[[1]][[2]] + 1 &
+                                                sapply(ct$geometry, "[[", 2) > mh_fac$geometry[[1]][[2]] - 1 &
+                                                sapply(ct$geometry, "[[", 1) < mh_fac$geometry[[1]][[1]] + 1 &
+                                                sapply(ct$geometry, "[[", 1) > mh_fac$geometry[[1]][[1]] - 1
+                                              , ], lonlat = T) * .0006213712
 
 # Combine Distances with CT Threshold and Population information
-c1 <- subset(cbind(ct, dist1), dist1 <10) # filter/subset distances < than the distance threshold for that county
+c1 <- subset(cbind(ct, dist1), dist1 < 10) # filter/subset distances < than the distance threshold for that ct
 
 # Create r column --> create before computing r value
 mh_fac <- mh_fac %>%
@@ -183,21 +188,6 @@ for (i in 1:1000) {
                                                   ct,
                                                   lonlat = T) * .0006213712 < mh_fac$Distance[[i]])$POPULATION)
 }
-
-# Backup - How to Subset by point data within +/- .5 lat/long
-ct[sapply(ct$geometry, "[[", 2) < sapply(mh_fac$geometry, "[[", 2) +.5 &
-     sapply(ct$geometry, "[[", 2) > sapply(mh_fac$geometry, "[[", 2) -.5 &
-     sapply(ct$geometry, "[[", 1) < sapply(mh_fac$geometry, "[[", 1) +.5 &
-     sapply(ct$geometry, "[[", 1) > sapply(mh_fac$geometry, "[[", 1) -.5
-   ,] 
-
-
-
-
-
-
-
-
 
 
 
