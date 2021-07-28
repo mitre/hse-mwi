@@ -159,34 +159,48 @@ sa_fac <- sa_fac %>%
 rename(geometry = "geometry.x") %>%
   select(-c("geometry.y"))
 
-# Manually Add r value for first facility
-# Compute Distances from first facility to CTs that are
-# within +/- 1 lat/long of facility point data
-dist1 <- raster::pointDistance(mh_fac[1,], ct[sapply(ct$geometry, "[[", 2) < mh_fac$geometry[[1]][[2]] + 1 &
-                                                sapply(ct$geometry, "[[", 2) > mh_fac$geometry[[1]][[2]] - 1 &
-                                                sapply(ct$geometry, "[[", 1) < mh_fac$geometry[[1]][[1]] + 1 &
-                                                sapply(ct$geometry, "[[", 1) > mh_fac$geometry[[1]][[1]] - 1
-                                              , ], lonlat = T) * .0006213712
-
-# index + know what each index refers to?
-
-# Combine Distances with CT Threshold and Population information
-c1 <- subset(cbind(ct, dist1), dist1 < 10) # filter/subset distances < than the distance threshold for that ct
-
-# Create r column --> create before computing r value
+# Build a for loop to create r values for first 1000 MH treatment centers
+# Create r column in MH Facility data set
 mh_fac <- mh_fac %>%
   add_column(r = 0)
 
-# Manually Input r value into facility dataset for first facility
-mh_fac[1,]$r <- 1/sum(c1$POPULATION)
-
-# Build a for loop to create r values for first 5 MH treatment centers
-for (i in 1:5) {
-  mh_fac[i,]$r <- 1/sum(subset(cbind(ct,
-                                  raster::pointDistance(mh_fac[i,],
+# Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
+for (i in 1:1000) {
+  mh_fac_man[i,]$r <- 1/sum(subset(cbind(ct,
+                                  raster::pointDistance(mh_fac_man[i,],
                                                         ct,
                                                         lonlat = T) * .0006213712),
-                            raster::pointDistance(mh_fac[i,],
+                            raster::pointDistance(mh_fac_man[i,],
                                                   ct,
-                                                  lonlat = T) * .0006213712 < mh_fac$Distance[[i]])$POPULATION)
+                                                  lonlat = T) * .0006213712 < mh_fac_man$Distance[[i]])$POPULATION)
+}
+
+# Build a for loop while subseting by proximity - only look at CT centroids
+# within +/- 1 lat/long of facility
+# Create for loop
+for (i in 1:1000) {
+ct_for <- ct %>%
+  add_column(d = as.numeric(NA))
+# Compute distances between facility and CT centroids within +/-1 proximity
+# for first 1000 MH treatment centers
+ct_for[sapply(ct_for$geometry, "[[", 2) < mh_fac$geometry[[i]][[2]] + 1 &
+      sapply(ct_for$geometry, "[[", 2) > mh_fac$geometry[[i]][[2]] - 1 &
+      sapply(ct_for$geometry, "[[", 1) < mh_fac$geometry[[i]][[1]] + 1 &
+      sapply(ct_for$geometry, "[[", 1) > mh_fac$geometry[[i]][[1]] - 1
+    , ]$d <- raster::pointDistance(mh_fac[i,], ct_for[sapply(ct_for$geometry, "[[",
+                                                             2) < mh_fac$geometry[[i]][[2]] + 1 &
+                                                  sapply(ct_for$geometry, "[[",
+                                                         2) > mh_fac$geometry[[i]][[2]] - 1 &
+                                                  sapply(ct_for$geometry, "[[",
+                                                         1) < mh_fac$geometry[[i]][[1]] + 1 &
+                                                  sapply(ct_for$geometry, "[[",
+                                                         1) > mh_fac$geometry[[i]][[1]] - 1
+                                                  , ], lonlat = T) * .0006213712
+# Calculate the r value
+# Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
+mh_fac[i,]$r <- 1/sum(filter(ct_for, d < mh_fac$Distance[[i]])$POPULATION)
+
+# Delete the distance column so each iteration only sums correct population values
+ct_for <- ct_for %>%
+  select(-c(d))
 }
