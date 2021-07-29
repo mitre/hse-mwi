@@ -183,10 +183,10 @@ for (i in 1:1000) {
 # within +/- 1 lat/long of facility
 # Create for loop
 # NOTE: do you need ct_for here? why not use ct (uses up more memory)
-ct_for <- ct %>%
+ct <- ct %>%
   add_column(d = as.numeric(NA))
 # NOTE: keep the coordinates as well (no need to compute too many times)
-ct_coord <- st_coordinates(ct_for)
+ct_coord <- st_coordinates(ct)
 mh_fac_coord <- st_coordinates(mh_fac)
 start <- Sys.time()
 for (i in 1:1000) {
@@ -195,27 +195,24 @@ for (i in 1:1000) {
     print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
   }
   
-  # Compute distances between facility and CT centroids within +/-1 proximity
-  # for first 1000 MH treatment centers
-  # NOTE: keep the logical so it only has to be done once
-  prox_log <- ct_coord[,2] < mh_fac_coord[i,2] + 1 &
-    ct_coord[,2] > mh_fac_coord[i,2] - 1 &
-    ct_coord[,1] < mh_fac_coord[i,1] + 1 &
-    ct_coord[,1] > mh_fac_coord[i,1] - 1
+# Compute distances between facility and CT centroids within +/-1 proximity
+# for first 1000 MH treatment centers
+# NOTE: keep the logical so it only has to be done once
+prox_log <- ct_coord[,2] < mh_fac_coord[i,2] + 1 &
+  ct_coord[,2] > mh_fac_coord[i,2] - 1 &
+  ct_coord[,1] < mh_fac_coord[i,1] + 1 &
+  ct_coord[,1] > mh_fac_coord[i,1] - 1
   
-  ct_for$d[prox_log] <- 
-    raster::pointDistance(
-      mh_fac[i,], 
-      ct_for[prox_log, ], lonlat = T) * .0006213712
-  # Calculate the r value
-  # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
-  mh_fac$r[i] <- 1/sum(filter(ct_for, d < mh_fac$Distance[i])$POPULATION)
+ct$d[prox_log] <- 
+  raster::pointDistance(
+    mh_fac[i,], 
+    ct[prox_log, ], lonlat = T) * .0006213712
+# Calculate the r value
+# Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
+  mh_fac$r[i] <- 1/sum(filter(ct, d < mh_fac$Distance[i])$POPULATION)
   
-  # NOTE: you should preallocate and just reuse -- not delete and reallocate
-  ct_for$d[prox_log] <- NA
-  # Delete the distance column so each iteration only sums correct population values
-  # ct_for <- ct_for %>%
-  #   select(-c(d))
+# NOTE: you should preallocate and just reuse -- not delete and reallocate
+  ct$d[prox_log] <- NA
 }
 end <- Sys.time()
 print(end - start)
