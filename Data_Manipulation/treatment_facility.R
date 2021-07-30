@@ -160,6 +160,7 @@ rename(geometry = "geometry.x") %>%
   select(-c("geometry.y"))
 
 # Build a for loop to create r values for first 1000 MH treatment centers
+# without taking proximity into account
 # Create r column in MH Facility data set
 mh_fac <- mh_fac %>%
   add_column(r = 0)
@@ -182,7 +183,6 @@ for (i in 1:1000) {
 # Build a for loop while subseting by proximity - only look at CT centroids
 # within +/- 1 lat/long of facility
 # Create for loop
-# NOTE: do you need ct_for here? why not use ct (uses up more memory)
 ct <- ct %>%
   add_column(d = as.numeric(NA))
 # NOTE: keep the coordinates as well (no need to compute too many times)
@@ -197,7 +197,7 @@ for (i in 1:1000) {
   
 # Compute distances between facility and CT centroids within +/-1 proximity
 # for first 1000 MH treatment centers
-# NOTE: keep the logical so it only has to be done once
+# Keeping the logical so it only has to be done once
 prox_log <- ct_coord[,2] < mh_fac_coord[i,2] + 1 &
   ct_coord[,2] > mh_fac_coord[i,2] - 1 &
   ct_coord[,1] < mh_fac_coord[i,1] + 1 &
@@ -211,7 +211,7 @@ ct$d[prox_log] <-
 # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
   mh_fac$r[i] <- 1/sum(filter(ct, d < mh_fac$Distance[i])$POPULATION)
   
-# NOTE: you should preallocate and just reuse -- not delete and reallocate
+# Preallocate and reuse distance values
   ct$d[prox_log] <- NA
 }
 end <- Sys.time()
