@@ -221,3 +221,5 @@ step_1 <- function (x) {
   x
 }
 
+# Create R values for MH dataset
+mh_fac <- step_1(mh_fac)
