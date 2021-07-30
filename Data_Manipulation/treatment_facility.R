@@ -270,3 +270,6 @@ step_2 <- function (x) {
   names(ct)[names(ct) == "a"] <- paste0("a", "_", deparse(substitute(x)))
   ct
 }
+
+# Create A values using MH dataset
+ct <- step_2(mh_fac)
