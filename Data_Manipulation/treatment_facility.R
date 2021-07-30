@@ -227,7 +227,7 @@ mh_fac <- step_1(mh_fac)
 # Create R values for SA dataset
 sa_fac <- step_1(sa_fac)
 
-# Build a Function to Calculate a value
+# Build a Function to Calculate A value
 # Build a function for Step 2 of the 2 Step FCA Method
 step_2 <- function (x) {
   # Build a for loop while subseting by proximity - only look at facilities
@@ -248,23 +248,23 @@ step_2 <- function (x) {
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
     # Keeping the logical so it only has to be done once
-    prox_log <- ct_coord[1,2] < fac_coord[,2] + 1 &
-      ct_coord[1,2] > fac_coord[,2] - 1 &
-      ct_coord[1,1] < fac_coord[,1] + 1 &
-      ct_coord[1,1] > fac_coord[,1] - 1
+    prox_log <- ct_coord[i,2] < fac_coord[,2] + 1 &
+      ct_coord[i,2] > fac_coord[,2] - 1 &
+      ct_coord[i,1] < fac_coord[,1] + 1 &
+      ct_coord[i,1] > fac_coord[,1] - 1
     
     x$d[prox_log] <- 
       raster::pointDistance(
         x[prox_log,], 
-        ct[1, ], lonlat = T) * .0006213712
+        ct[i, ], lonlat = T) * .0006213712
     # Calculate the r value
     # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
-    ct$a[1] <- sum(filter(x, d < ct$Distance[1])$r)
+    ct$a[i] <- sum(filter(x, d < ct$Distance[i])$r)
     
     # Preallocate and reuse distance values
     x$d[prox_log] <- NA
   }
   end <- Sys.time()
   print(end - start)
-  x
+  ct
 }
