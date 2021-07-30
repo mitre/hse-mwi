@@ -227,7 +227,6 @@ mh_fac <- step_1(mh_fac)
 # Create R values for SA dataset
 sa_fac <- step_1(sa_fac)
 
-
 # Build a function for Step 2 of the 2 Step FCA Method (calculate A value)
 step_2 <- function (x) {
   # Build a for loop while subseting by proximity - only look at facilities
@@ -237,7 +236,7 @@ step_2 <- function (x) {
     add_column(d = as.numeric(NA))
   # Keep the coordinates as well (no need to compute too many times)
   ct_coord <- st_coordinates(ct)
-  fac_coord <- st_coordinates(mh_fac)
+  fac_coord <- st_coordinates(x)
   start <- Sys.time()
   for (i in 1:1000) {
     # print every 50, so you know it's doing something :)
@@ -273,3 +272,6 @@ step_2 <- function (x) {
 
 # Create A values using MH dataset
 ct <- step_2(mh_fac)
+
+# Create A values using SA dataset
+ct <- step_2(sa_fac)
