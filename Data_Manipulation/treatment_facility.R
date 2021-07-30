@@ -180,39 +180,44 @@ for (i in 1:1000) {
         lonlat = T) * .0006213712 < mh_fac_man$Distance[[i]])$POPULATION)
 }
 
-# Build a for loop while subseting by proximity - only look at CT centroids
-# within +/- 1 lat/long of facility
-# Create for loop
-ct <- ct %>%
-  add_column(d = as.numeric(NA))
-# NOTE: keep the coordinates as well (no need to compute too many times)
-ct_coord <- st_coordinates(ct)
-mh_fac_coord <- st_coordinates(mh_fac)
-start <- Sys.time()
-for (i in 1:1000) {
-  # print every 50, so you know it's doing something :)
-  if (i %% 50 == 0){
-    print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
+# Build a function for Step 1 of the 2 Step FCA Method
+step_1 <- function (x) {
+  # Build a for loop while subseting by proximity - only look at CT centroids
+  # within +/- 1 lat/long of facility
+  # Create for loop
+  ct <- ct %>%
+    add_column(d = as.numeric(NA))
+  # Keep the coordinates as well (no need to compute too many times)
+  ct_coord <- st_coordinates(ct)
+  fac_coord <- st_coordinates(x)
+  start <- Sys.time()
+  for (i in 1:1000) {
+    # print every 50, so you know it's doing something :)
+    if (i %% 50 == 0){
+      print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
+    }
+    
+    # Compute distances between facility and CT centroids within +/-1 proximity
+    # for first 1000 MH treatment centers
+    # Keeping the logical so it only has to be done once
+    prox_log <- ct_coord[,2] < fac_coord[i,2] + 1 &
+      ct_coord[,2] > fac_coord[i,2] - 1 &
+      ct_coord[,1] < fac_coord[i,1] + 1 &
+      ct_coord[,1] > fac_coord[i,1] - 1
+    
+    ct$d[prox_log] <- 
+      raster::pointDistance(
+        x[i,], 
+        ct[prox_log, ], lonlat = T) * .0006213712
+    # Calculate the r value
+    # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
+    x$r[i] <- 1/sum(filter(ct, d < x$Distance[i])$POPULATION)
+    
+    # Preallocate and reuse distance values
+    ct$d[prox_log] <- NA
   }
-  
-# Compute distances between facility and CT centroids within +/-1 proximity
-# for first 1000 MH treatment centers
-# Keeping the logical so it only has to be done once
-prox_log <- ct_coord[,2] < mh_fac_coord[i,2] + 1 &
-  ct_coord[,2] > mh_fac_coord[i,2] - 1 &
-  ct_coord[,1] < mh_fac_coord[i,1] + 1 &
-  ct_coord[,1] > mh_fac_coord[i,1] - 1
-  
-ct$d[prox_log] <- 
-  raster::pointDistance(
-    mh_fac[i,], 
-    ct[prox_log, ], lonlat = T) * .0006213712
-# Calculate the r value
-# Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
-  mh_fac$r[i] <- 1/sum(filter(ct, d < mh_fac$Distance[i])$POPULATION)
-  
-# Preallocate and reuse distance values
-  ct$d[prox_log] <- NA
+  end <- Sys.time()
+  print(end - start)
+  x
 }
-end <- Sys.time()
-print(end - start)
+
