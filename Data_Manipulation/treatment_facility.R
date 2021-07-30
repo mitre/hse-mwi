@@ -223,3 +223,6 @@ step_1 <- function (x) {
 
 # Create R values for MH dataset
 mh_fac <- step_1(mh_fac)
+
+# Create R values for SA dataset
+sa_fac <- step_1(sa_fac)
