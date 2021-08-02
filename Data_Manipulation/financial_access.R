@@ -6,6 +6,18 @@
 
 library(censusapi)
 
+resource_folder <-file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Resources")
+
+# load all zip codes
+zip_cw <- read.csv(file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
+                   colClasses = c("ZIP_CODE" = "character"))
+# filter out territories
+territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
+zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
+
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
   "Health and Social Equity - SJP - BHN Score Creation",
@@ -42,19 +54,23 @@ naics_codes <- read.csv(file.path(
 
 # can't pull multiple naics codes at once
 # preallocate full alternative services 
-alt_service <- data.frame()
+alt_service <- data.frame("ZIP_CODE" = zip_cw$ZIP_CODE, "Num_Alt_Services" = 0)
+rownames(alt_service) <- alt_service$ZIP_CODE
 for (nc in unique(naics_codes$NAICS_2017)){
   # grab the services for all zip codes
   zbp_service <- getCensus(
     name = "cbp",
-    vars = c("ESTAB", "GEO_ID"), 
+    vars = c("ESTAB"), 
     vintage = 2019,
     region = "zipcode:*",
-    show_call = T,
+    show_call = F,
     NAICS2017 = nc
   )
   
-  if (nrow(tmp) > 0){
-    # STOP HERE
+  # if there are zip codes with some amount of services, add to the total count
+  if (nrow(zbp_service) > 0){
+    alt_service[as.character(zbp_service$zip_code), "Num_Alt_Services"] <- 
+      alt_service[as.character(zbp_service$zip_code), "Num_Alt_Services"] +
+      zbp_service$ESTAB
   }
 }
