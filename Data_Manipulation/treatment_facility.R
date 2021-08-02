@@ -187,19 +187,19 @@ step_1 <- function (x) {
   # Create for loop
   ct <- ct %>%
     add_column(d = as.numeric(NA))
-  # Keep the coordinates as well (no need to compute too many times)
+  # Keep the coordinates 
   ct_coord <- st_coordinates(ct)
   fac_coord <- st_coordinates(x)
   start <- Sys.time()
   for (i in 1:1000) {
-    # print every 50, so you know it's doing something :)
+    # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
     }
     
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 MH treatment centers
-    # Keeping the logical so it only has to be done once
+    # Keep the logical 
     prox_log <- ct_coord[,2] < fac_coord[i,2] + 1 &
       ct_coord[,2] > fac_coord[i,2] - 1 &
       ct_coord[,1] < fac_coord[i,1] + 1 &
@@ -234,19 +234,19 @@ step_2 <- function (x) {
   # Create for loop
   x <- x %>%
     add_column(d = as.numeric(NA))
-  # Keep the coordinates as well (no need to compute too many times)
+  # Keep coordinates
   ct_coord <- st_coordinates(ct)
   fac_coord <- st_coordinates(x)
   start <- Sys.time()
   for (i in 1:1000) {
-    # print every 50, so you know it's doing something :)
+    # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
     }
     
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
-    # Keeping the logical so it only has to be done once
+    # Keep the logical
     prox_log <- ct_coord[i,2] < fac_coord[,2] + 1 &
       ct_coord[i,2] > fac_coord[,2] - 1 &
       ct_coord[i,1] < fac_coord[,1] + 1 &
@@ -266,7 +266,9 @@ step_2 <- function (x) {
   end <- Sys.time()
   print(end - start)
   # Set A variable name based on dataset being used in function
-  names(ct)[names(ct) == "a"] <- paste0("a", "_", deparse(substitute(x)))
+  colnames(ct)[which(names(ct) == "a")] <- paste0("a",
+                                                   "_",
+                                                   deparse(deparse(x)))
   ct
 }
 
