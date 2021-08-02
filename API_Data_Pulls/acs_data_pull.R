@@ -132,6 +132,23 @@ acs_data <- get_acs(
     "C27001B_007", # Estimate!!Total:!!19 to 64 years:!!No health insurance coverage
     "C27001B_010", #Estimate!!Total:!!65 years and over:!!No health insurance coverage,
     
+    # Early Childhood Education -----
+    
+    # Numerator: School enrollment by detailed level of school for the population 3 years and older
+    "B14007_003", # Estimate!!Total:!!Enrolled in school:!!Enrolled in nursery school, preschool
+    "B14007_004", # Estimate!!Total:!!Enrolled in school:!!Enrolled in kindergarten
+    
+    "B14007B_003", # Estimate!!Total:!!Enrolled in school:!!Enrolled in nursery school, preschool (Black or African American Alone)
+    "B14007B_004", # Estimate!!Total:!!Enrolled in school:!!Enrolled in kindergarten (Black or African American Alone)
+    
+    # Denominator: Under 5 population
+    "B01001_003", # Estimate!!Total:!!Male:!!Under 5 years
+    "B01001_027", # Estimate!!Total:!!Female:!!Under 5 years
+    
+    "B01001B_003", # Estimate!!Total:!!Male:!!Under 5 years (Black or African American Alone)
+    "B01001B_018", # Estimate!!Total:!!Female:!!Under 5 years (Black or African American Alone)
+    
+    
     # ICE variables -----
     
     # Index of Concentration at the Extremes for Black / White Income
@@ -208,7 +225,11 @@ cname_map <- list(
   "healthinsurance_denom_pop" = c("B27020_001E"),
   "healthinsurance_nohealthinsurance_pop" = c("B27020_006E", "B27020_012E", "B27020_017E"),
   "healthinsurance_denom_black" = c("C27001B_001E"),
-  "healthinsurance_nohealthinsurance_black" = c("C27001B_004E", "C27001B_007E","C27001B_010E")
+  "healthinsurance_nohealthinsurance_black" = c("C27001B_004E", "C27001B_007E","C27001B_010E"),
+  "earlychildhoodeducation_denom_pop" = c("B01001_003", "B01001_027"),
+  "earlychildhoodeducation_enrolled_pop" = c("B14007_003", "B14007_004"),
+  "earlychildhoodeducation_denom_black" = c("B01001B_003", "B01001B_018"),
+  "earlychildhoodeducation_enrolled_black" = c("B14007B_003", "B14007B_004"),
 )
 
 # preallocate -- we're going to just keep the geoid and name columns
