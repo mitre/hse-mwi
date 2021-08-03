@@ -236,10 +236,12 @@ step_1 <- function (x) {
 }
 
 # Create R values for MH dataset
-mh_fac <- step_1(mh_fac)
+mh_fac <- step_1(mh_fac) %>%
+  relocate(r, .after = POPULATION)
 
 # Create R values for SA dataset
-sa_fac <- step_1(sa_fac)
+sa_fac <- step_1(sa_fac) %>%
+  relocate(r, .after = POPULATION)
 
 # Build a function for Step 2 of the 2 Step FCA Method (calculate A value)
 step_2 <- function (x) {
