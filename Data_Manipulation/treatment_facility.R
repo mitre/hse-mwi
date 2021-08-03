@@ -78,7 +78,8 @@ sa_fac <- sa_fac %>%
 # Convert point data into workable column for MH Facilities
 mh_fac <- mh_fac %>%
   st_as_sf(coords = c("longitude", "latitude"),
-           crs = st_crs(poly))
+           crs = st_crs(poly)) %>%
+  relocate(geometry, .after = type_facility)
 
 # Add Census Tracts to MH Facility Dataset
 mh_fac <- st_join(mh_fac, poly)
@@ -90,12 +91,13 @@ mh_fac[is.na(mh_fac$GEOID),]
 which(is.na(mh_fac$GEOID), arr.ind=TRUE)
  
 # Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
-mh_fac[10552, 6] <- "02016000200" # One for Alaska
-mh_fac[10583, 6] <- "15007040300" # One for Hawaii
+mh_fac[10552, 174] <- "02016000200" # One for Alaska
+mh_fac[10583, 174] <- "15007040300" # One for Hawaii
 
 # Remove irrelevant variables and incomplete cases
 mh_fac <- mh_fac %>%
-  select(c("name1", "zip", "county.y", "type_facility", "GEOID")) %>%
+  select(c("name1", "zip", "county.y", "type_facility", "GEOID", "geometry"),
+         c(6:173)) %>%
   rename("tract" = "GEOID", "county" = "county.y")
 
 mh_fac <- mh_fac[complete.cases(mh_fac$tract),]
@@ -103,7 +105,8 @@ mh_fac <- mh_fac[complete.cases(mh_fac$tract),]
 # Convert point data into workable column for SA Facilities
 sa_fac <- sa_fac %>%
   st_as_sf(coords = c("longitude", "latitude"),
-           crs = st_crs(poly))
+           crs = st_crs(poly)) %>%
+  relocate(geometry, .after = type_facility)
 
 # Add Census Tracts to SA Facility Dataset
 sa_fac <- st_join(sa_fac, poly)
@@ -115,16 +118,17 @@ sa_fac[is.na(sa_fac$GEOID),]
 which(is.na(sa_fac$GEOID), arr.ind=TRUE)
 
 # Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
-sa_fac[6657, 6] <- "26033970600" # One for Michigan 
-sa_fac[12045, 6] <- "06037800506" # One for California
-sa_fac[13896, 6] <- "41007950300" # One for Oregon
-sa_fac[14114, 6] <- "02016000100" # One for Alaska
-sa_fac[14161, 6] <- "15009030902" # One for Hawaii
-sa_fac[14169, 6] <- "15009031700" # Another for Hawaii
+sa_fac[6657, 226] <- "26033970600" # One for Michigan 
+sa_fac[12045, 226] <- "06037800506" # One for California
+sa_fac[13896, 226] <- "41007950300" # One for Oregon
+sa_fac[14114, 226] <- "02016000100" # One for Alaska
+sa_fac[14161, 226] <- "15009030902" # One for Hawaii
+sa_fac[14169, 226] <- "15009031700" # Another for Hawaii
 
 # Remove irrelevant variables and incomplete cases
 sa_fac <- sa_fac %>%
-  select(c("name1", "zip", "county.y", "type_facility", "GEOID")) %>%
+  select(c("name1", "zip", "county.y", "type_facility", "GEOID", "geometry"),
+         c(6:225)) %>%
   rename("tract" = "GEOID", "county" = "county.y")
 
 sa_fac <- sa_fac[complete.cases(sa_fac$tract),]
@@ -139,8 +143,10 @@ which(is.na(mh_fac$Distance), arr.ind=TRUE)
 # county code (51515) was not available in the distance/population dataset
 mh_fac <- mh_fac[complete.cases(mh_fac$Distance),] %>%
   rename(geometry = "geometry.x") %>%
-  select(-c("geometry.y"))
-
+  select(-c("geometry.y")) %>%
+  relocate(POPULATION, .after = geometry) %>%
+  relocate(Distance, .after = geometry)
+           
 # Merge Distance Threshold into SA Dataset
 sa_fac <- left_join(sa_fac, as.data.frame(ct), by = "tract")
 
@@ -152,12 +158,14 @@ which(is.na(sa_fac$Distance), arr.ind=TRUE)
 
 # Manually add in Distance and Population values
 # Determined from US Census & Distance Thresholds of other CTs in same county
-sa_fac[3371, 7] <- 14177 # Population Value for Shannon County
-sa_fac[3371, 8] <- 60 # Distance Threshold for Shannon County
+sa_fac[3371, 227] <- 14177 # Population Value for Shannon County
+sa_fac[3371, 228] <- 60 # Distance Threshold for Shannon County
 
 sa_fac <- sa_fac %>%
 rename(geometry = "geometry.x") %>%
-  select(-c("geometry.y"))
+  select(-c("geometry.y")) %>%
+  relocate(POPULATION, .after = geometry) %>%
+  relocate(Distance, .after = geometry)
 
 # Build a for loop to create r values for first 1000 MH treatment centers
 # without taking proximity into account
