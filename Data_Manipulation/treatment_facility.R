@@ -71,9 +71,9 @@ ct <- ct %>%
 
 # Select/Remove Relevant Variables in Facility Data
 mh_fac <- mh_fac %>%
-  select(name1, zip, county, latitude, longitude, type_facility)
+  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:186))
 sa_fac <- sa_fac %>%
-  select(name1, zip, county, latitude, longitude, type_facility)
+  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:238))
 
 # Convert point data into workable column for MH Facilities
 mh_fac <- mh_fac %>%
