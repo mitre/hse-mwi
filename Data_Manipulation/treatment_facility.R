@@ -165,7 +165,8 @@ sa_fac <- sa_fac %>%
 rename(geometry = "geometry.x") %>%
   select(-c("geometry.y")) %>%
   relocate(POPULATION, .after = geometry) %>%
-  relocate(Distance, .after = geometry)
+  relocate(Distance, .after = geometry) %>%
+  rename(c("ct_" = "ct")) # rename variable to avoid confusion with dataset
 
 # Add 1 to all weights in MH dataset
 mh_fac[, 9:176] <- 1
@@ -241,10 +242,12 @@ mh_fac <- step_1(mh_fac) %>%
 
 # Create R values for SA dataset
 sa_fac <- step_1(sa_fac) %>%
-  relocate(r, .after = POPULATION)
+  relocate(r, .after = POPULATION) 
 
 # Build a function for Step 2 of the 2 Step FCA Method (calculate A value)
-step_2 <- function (x) {
+# X is the facility dataset
+# facil is the type of facility (MH, SA, etc) in character format
+step_2 <- function (x, facil) {
   # Build a for loop while subseting by proximity - only look at facilities
   # within +/- 1 lat/long of CT Centroids
   # Create for loop
@@ -275,7 +278,7 @@ step_2 <- function (x) {
     # Calculate the A value
     # Step 2 of 2 for the Floating Catchment Area (FCA) Methodology
     # Sum all r values within the distance threshold for each CT
-    ct$a[i] <- sum(filter(x, d < ct$Distance[i])$r)
+    ct$a[i] <- sum(filter(x, d < ct[["Distance"]][i])$r)
     # Preallocate and reuse distance values
     x$d[prox_log] <- NA
   }
@@ -284,12 +287,12 @@ step_2 <- function (x) {
   # Set A variable name based on dataset being used in function
   colnames(ct)[which(names(ct) == "a")] <- paste0("a",
                                                    "_",
-                                                   deparse(deparse(x)))
+                                                   facil)
   ct
 }
 
 # Create A values using MH dataset
-ct <- step_2(mh_fac)
+ct <- step_2(mh_fac, "mh")
 
 # Create A values using SA dataset
-ct <- step_2(sa_fac)
+ct <- step_2(sa_fac, "sa")
