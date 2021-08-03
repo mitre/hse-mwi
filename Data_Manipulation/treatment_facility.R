@@ -167,6 +167,12 @@ rename(geometry = "geometry.x") %>%
   relocate(POPULATION, .after = geometry) %>%
   relocate(Distance, .after = geometry)
 
+# Add 1 to all weights in MH dataset
+mh_fac[, 9:176] <- 1
+
+# Add 1 to all weights in SH dataset
+sa_fac[, 9:228] <- 1
+
 # Build a for loop to create r values for first 1000 MH treatment centers
 # without taking proximity into account
 # Create r column in MH Facility data set
