@@ -91,7 +91,8 @@ step_1_fca <- function (data, geo) {
     geo$d[prox_log] <- NA
   }
   end <- Sys.time()
-  print(end - start)
+  print(paste0("[", Sys.time(), "] Step 1 of the FCA took ", print(end - start),
+               " seconds"))
   data
 }
 
@@ -141,7 +142,8 @@ step_2_fca <- function (data, geo, facil) {
     data$d[prox_log] <- NA
   }
   end <- Sys.time()
-  print(end - start)
+  print(paste0("[", Sys.time(), "] Step 2 of the FCA took ", print(end - start),
+               " seconds"))
   # Set A variable name based on dataset being used in function
   colnames(geo)[which(names(geo) == "A")] <- paste0("A",
                                                     "_",
