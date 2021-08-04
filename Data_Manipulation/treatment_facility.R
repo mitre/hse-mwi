@@ -137,7 +137,7 @@ step_2_fca <- function (data, geo, facil) {
         geo[i, ], lonlat = T) * .0006213712
     # Calculate the A value
     # Sum all r values within the distance threshold for each CT
-    geo$A[i] <- sum(filter(data, d < geo[["Distance"]][i])$r)
+    geo$A[i] <- sum(filter(data, d < geo[["Distance"]][i])$R)
     # Preallocate and reuse distance values
     data$d[prox_log] <- NA
   }
