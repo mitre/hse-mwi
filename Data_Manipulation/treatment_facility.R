@@ -288,7 +288,7 @@ sa_fac <- step_1_fca(sa_fac, ct) %>%
   relocate(R, .after = POPULATION) 
 
 # Create A values using MH dataset
-ct <- step_2(mh_fac, ct, "mh")
+ct <- step_2_fca(mh_fac, ct, "mh")
 
 # Create A values using SA dataset
-ct <- step_2(sa_fac, ct, "sa")
+ct <- step_2_fca(sa_fac, ct, "sa")
