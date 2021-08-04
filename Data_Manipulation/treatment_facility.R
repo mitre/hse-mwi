@@ -176,23 +176,6 @@ sa_fac <- add_column(sa_fac, weights = 1, .before = "dt")
 # Build a Function to Calculate R value
 # For each treatment center, search all CTs within the CT distance threshold
 # and sum their populations to compute the treatment-to-popuation ratio (R)
-mh_fac <- mh_fac %>%
-  add_column(r = 0)
-
-# Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
-for (i in 1:1000) {
-  mh_fac_man[i,]$r <- 
-    1/sum(subset(cbind(
-      ct,
-      raster::pointDistance(
-        mh_fac_man[i,],
-        ct,
-        lonlat = T) * .0006213712),
-      raster::pointDistance(
-        mh_fac_man[i,],
-        ct,
-        lonlat = T) * .0006213712 < mh_fac_man$Distance[[i]])$POPULATION)
-}
 
 # Build a function for Step 1 of the 2 Step FCA Method
 # Inputs
