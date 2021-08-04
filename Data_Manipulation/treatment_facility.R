@@ -295,3 +295,23 @@ ct <- step_2_fca(mh_fac, ct, "mh")
 
 # Create A values using SA dataset
 ct <- step_2_fca(sa_fac, ct, "sa")
+
+# Distribution of R value for MH 
+ggplot(mh_fac[1:1000,], aes(R)) + 
+  geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
+  geom_density(alpha = .2, fill = "#FF6666") 
+
+# Distribution of R value for SA
+ggplot(sa_fac[1:1000,], aes(R)) + 
+  geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
+  geom_density(alpha = .2, fill = "#FF6666") 
+
+# Distribution of A value for MH
+ggplot(ct[1:1000,], aes(A_mh)) + 
+  geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
+  geom_density(alpha = .2, fill = "#FF6666") 
+
+# Distribution of A value for SA
+ggplot(ct[1:1000,], aes(A_sa)) + 
+  geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
+  geom_density(alpha = .2, fill = "#FF6666") 
