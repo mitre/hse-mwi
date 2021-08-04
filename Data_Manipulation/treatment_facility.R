@@ -85,7 +85,8 @@ step_1_fca <- function (data, geo) {
         geo[prox_log, ], lonlat = T) * .0006213712
     # Calculate the r value
     # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
-    data$R[i] <- 1/sum(filter(geo, d < data$Distance[i])$POPULATION)
+    data$R[i] <- 1/sum(filter(geo,
+                              d < data$Distance[i])$POPULATION) * data$weights[i]
     
     # Preallocate and reuse distance values
     geo$d[prox_log] <- NA
