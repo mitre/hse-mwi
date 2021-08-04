@@ -173,9 +173,9 @@ mh_fac <- add_column(mh_fac, weights = 1, .before = "psy")
 sa_fac <- add_column(sa_fac, weights = 1, .before = "dt")
 
 # Step 1 of Floating Catchment Area (FCA) Methodology----
-# Build a for loop to create r values for first 1000 MH treatment centers
-# without taking proximity into account
-# Create r column in MH Facility data set
+# Build a Function to Calculate R value
+# For each treatment center, search all CTs within the CT distance threshold
+# and sum their populations to compute the treatment-to-popuation ratio (R)
 mh_fac <- mh_fac %>%
   add_column(r = 0)
 
@@ -195,16 +195,21 @@ for (i in 1:1000) {
 }
 
 # Build a function for Step 1 of the 2 Step FCA Method
+# Inputs
+#   data: dataset of facilities with specified point data
+#   geo: dataset of geographical points
+# Output  
+#   Returns R value for each facility within the dataset of facilities
 
-step_1 <- function (x) {
+step_1_fca <- function (data, geo) {
   # Build a for loop while subseting by proximity - only look at CT centroids
   # within +/- 1 lat/long of facility
   # Create for loop
-  ct <- ct %>%
+  geo <- geo %>%
     add_column(d = as.numeric(NA))
   # Keep the coordinates 
-  ct_coord <- st_coordinates(ct)
-  fac_coord <- st_coordinates(x)
+  geo_coord <- st_coordinates(geo)
+  fac_coord <- st_coordinates(data)
   start <- Sys.time()
   for (i in 1:1000) {
     # print every 50
@@ -215,87 +220,93 @@ step_1 <- function (x) {
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 MH treatment centers
     # Keep the logical 
-    prox_log <- ct_coord[,2] < fac_coord[i,2] + 1 &
-      ct_coord[,2] > fac_coord[i,2] - 1 &
-      ct_coord[,1] < fac_coord[i,1] + 1 &
-      ct_coord[,1] > fac_coord[i,1] - 1
+    prox_log <- geo_coord[,2] < fac_coord[i,2] + 1 &
+      geo_coord[,2] > fac_coord[i,2] - 1 &
+      geo_coord[,1] < fac_coord[i,1] + 1 &
+      geo_coord[,1] > fac_coord[i,1] - 1
     
-    ct$d[prox_log] <- 
+    geo$d[prox_log] <- 
       raster::pointDistance(
-        x[i,], 
-        ct[prox_log, ], lonlat = T) * .0006213712
+        data[i,], 
+        geo[prox_log, ], lonlat = T) * .0006213712
     # Calculate the r value
     # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
-    x$r[i] <- 1/sum(filter(ct, d < x$Distance[i])$POPULATION)
+    data$R[i] <- 1/sum(filter(geo, d < data$Distance[i])$POPULATION)
     
     # Preallocate and reuse distance values
-    ct$d[prox_log] <- NA
+    geo$d[prox_log] <- NA
   }
   end <- Sys.time()
   print(end - start)
-  x
+  data
 }
 
 # Create R values for MH dataset
-mh_fac <- step_1(mh_fac) %>%
-  relocate(r, .after = POPULATION)
+mh_fac <- step_1_fca(mh_fac, ct) %>%
+  relocate(R, .after = POPULATION)
 
 # Create R values for SA dataset
-sa_fac <- step_1(sa_fac) %>%
-  relocate(r, .after = POPULATION) 
+sa_fac <- step_1_fca(sa_fac, ct) %>%
+  relocate(R, .after = POPULATION) 
 
 # Step 2 of FCA Methodology----
-# Build a function for Step 2 of the 2 Step FCA Method (calculate A value)
-# X is the facility dataset
-# facil is the type of facility (MH, SA, etc) in character format
-step_2 <- function (x, facil) {
+
+# Build a function to Calculate A value
+# Search all treatment centers that are within the distance threshold from 
+# each CT and sum their r values per each CT 
+
+# Inputs
+#   data: dataset of faciltiies with specified r values
+#   geo: dataset of geographical points
+#   facil: the type of facility (MH, SA, etc) in character format
+# Output  
+#   Returns A value for each geography within the dataset of geographical points
+
+step_2_fca <- function (data, geo, facil) {
   # Build a for loop while subseting by proximity - only look at facilities
   # within +/- 1 lat/long of CT Centroids
-  # Create for loop
-  x <- x %>%
+  data <- data %>%
     add_column(d = as.numeric(NA))
   # Keep coordinates
-  ct_coord <- st_coordinates(ct)
-  fac_coord <- st_coordinates(x)
+  geo_coord <- st_coordinates(geo)
+  fac_coord <- st_coordinates(data)
   start <- Sys.time()
   for (i in 1:1000) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
     }
-    
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
     # Keep the logical
-    prox_log <- ct_coord[i,2] < fac_coord[,2] + 1 &
-      ct_coord[i,2] > fac_coord[,2] - 1 &
-      ct_coord[i,1] < fac_coord[,1] + 1 &
-      ct_coord[i,1] > fac_coord[,1] - 1
+    prox_log <- geo_coord[i,2] < fac_coord[,2] + 1 &
+      geo_coord[i,2] > fac_coord[,2] - 1 &
+      geo_coord[i,1] < fac_coord[,1] + 1 &
+      geo_coord[i,1] > fac_coord[,1] - 1
     
-    x$d[prox_log] <- 
+    data$d[prox_log] <- 
       raster::pointDistance(
-        x[prox_log,], 
-        ct[i, ], lonlat = T) * .0006213712
+        data[prox_log,], 
+        geo[i, ], lonlat = T) * .0006213712
     # Calculate the A value
-    # Step 2 of 2 for the Floating Catchment Area (FCA) Methodology
     # Sum all r values within the distance threshold for each CT
-    ct$a[i] <- sum(filter(x, d < ct[["Distance"]][i])$r)
+    geo$A[i] <- sum(filter(data, d < geo[["Distance"]][i])$r)
     # Preallocate and reuse distance values
-    x$d[prox_log] <- NA
+    data$d[prox_log] <- NA
   }
   end <- Sys.time()
   print(end - start)
   # Set A variable name based on dataset being used in function
-  colnames(ct)[which(names(ct) == "a")] <- paste0("a",
+  colnames(geo)[which(names(geo) == "A")] <- paste0("A",
                                                    "_",
                                                    facil)
-  ct
+  geo
 }
 
 # Create A values using MH dataset
-ct <- step_2(mh_fac, "mh")
+ct <- step_2(mh_fac, ct, "mh")
 
 # Create A values using SA dataset
-ct <- step_2(sa_fac, "sa")
+ct <- step_2(sa_fac, ct, "sa")
 
 # Results----
