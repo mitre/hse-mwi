@@ -104,5 +104,18 @@ fin_access[cu_count$Var1, "Num_Mainstream_Services"] <-
   cu_count$Freq
 
 # create financial accessibility score
-fin_access$Financial_Accessibility <- 
+fin_access$Financial_Accessibility_Ratio <- 
   fin_access$Num_Alt_Services/fin_access$Num_Mainstream_Services
+
+# write out score ----
+
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Preprocessed")
+
+write.csv(fin_access, 
+          file = file.path(data_folder,
+                           "New_America_Financial_Accessibility.csv"), 
+          row.names = F, 
+          na = "")
