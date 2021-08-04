@@ -1,15 +1,11 @@
-# Library Download
+# Load Libraries----
 library(tidyverse)
-library(geosphere) # Computing distances between point data
 library(readxl)
-library(tidycensus)
-library(cdlTools)
-library(sp)
-library(sf)
-library(tigris)
-options(tigris_use_cache = TRUE)
+library(tidycensus) 
+library(sf) 
+library(geosphere) 
 
-# Import Datasets
+# Import and Crosswalk Data----
 # SSACD to County FIPS Crosswalk
 cw <- read_csv("https://data.nber.org/ssa-fips-state-county-crosswalk/2018/xwalk2018.csv")
 
@@ -33,20 +29,21 @@ thresh <- thresh[!is.na(thresh$`FIPS County Code`), ] %>%
   select(COUNTY, ST, "FIPS County Code", Distance) %>%
   relocate(COUNTY, ST, "FIPS County Code", Distance) 
 
-# Mental Health Facility Treatment Centers
+# Import Mental Health Facility Treatment Centers
 mh_fac <- read_csv(file.path(data_folder,
                                "SAMHSA_Locator/Mental_Health_Treament_Facility_listing_2021_05_18_134835.csv"))
 
-# Substance Abuse Facility Treatment Centers
+# Import Substance Abuse Facility Treatment Centers
 sa_fac <- read_csv(file.path(data_folder,
                              "SAMHSA_Locator/Substance_Use_Treament_Facility_listing_2021_05_18_134647.csv"))
 
-# Establish census tracts & polygons
+# Import census tracts & establish polygons
 states <- c(1:2, 4:6, 8:9, 10:13, 15:42, 44:51, 53:56)
 poly <- get_decennial(geography = "tract", state = states,
                       variables = "P012001", year = 2010, geometry = T) %>%
   mutate(county = substr(GEOID, 1, 5))
 
+# Wrangle and Merge Data for Usability----
 # Create Census Tract Variable for Thresholds 
 thresh <- thresh %>%
   left_join(poly, by = c("FIPS County Code" = "county")) 
@@ -62,6 +59,7 @@ ct <- ct %>%
   relocate(tract, POPULATION, LATITUDE, LONGITUDE)
 
 # Merge CT Population Variable with CT Distance Thresholds
+# Convert coordinates to sf object
 ct <- ct %>%
   inner_join(thresh, by = c("tract" = "GEOID")) %>%
   select(c("tract", "POPULATION", "LATITUDE", "LONGITUDE", "Distance")) %>%
@@ -174,6 +172,7 @@ mh_fac[, 9:176] <- 1
 # Add 1 to all weights in SH dataset
 sa_fac[, 9:228] <- 1
 
+# Step 1 of Floating Catchment Area (FCA) Methodology----
 # Build a for loop to create r values for first 1000 MH treatment centers
 # without taking proximity into account
 # Create r column in MH Facility data set
@@ -196,6 +195,7 @@ for (i in 1:1000) {
 }
 
 # Build a function for Step 1 of the 2 Step FCA Method
+
 step_1 <- function (x) {
   # Build a for loop while subseting by proximity - only look at CT centroids
   # within +/- 1 lat/long of facility
@@ -244,6 +244,7 @@ mh_fac <- step_1(mh_fac) %>%
 sa_fac <- step_1(sa_fac) %>%
   relocate(r, .after = POPULATION) 
 
+# Step 2 of FCA Methodology----
 # Build a function for Step 2 of the 2 Step FCA Method (calculate A value)
 # X is the facility dataset
 # facil is the type of facility (MH, SA, etc) in character format
@@ -296,3 +297,5 @@ ct <- step_2(mh_fac, "mh")
 
 # Create A values using SA dataset
 ct <- step_2(sa_fac, "sa")
+
+# Results----
