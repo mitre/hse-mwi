@@ -167,10 +167,10 @@ rename(geometry = "geometry.x") %>%
   rename(c("ct_" = "ct")) # rename variable to avoid confusion with dataset
 
 # Add 1 to all weights in MH dataset
-mh_fac[, 9:176] <- 1
+mh_fac <- add_column(mh_fac, weights = 1, .before = "psy")
 
 # Add 1 to all weights in SH dataset
-sa_fac[, 9:228] <- 1
+sa_fac <- add_column(sa_fac, weights = 1, .before = "dt")
 
 # Step 1 of Floating Catchment Area (FCA) Methodology----
 # Build a for loop to create r values for first 1000 MH treatment centers
