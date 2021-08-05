@@ -324,3 +324,9 @@ ggplot(ct[1:n,], aes(A_mh)) +
 ggplot(ct[1:n,], aes(A_sa)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
+
+# Export Facility Access Dataset
+# write.csv(ct,
+#           file = file.path(data_folder,
+#                            "SAMHSA_CT_treatmentfacilityaccess.csv"),
+#           row.names = F, na = "")
