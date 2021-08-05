@@ -55,6 +55,9 @@ poly <- get_decennial(geography = "tract", state = states,
 # Output  
 #   Returns R value for each facility within the dataset of facilities
 
+# Set the amount of rows to be iterated
+n <- 1000
+
 step_1_fca <- function (data, geo) {
   # Build a for loop while subseting by proximity - only look at CT centroids
   # within +/- 1 lat/long of facility
@@ -65,7 +68,7 @@ step_1_fca <- function (data, geo) {
   geo_coord <- st_coordinates(geo)
   fac_coord <- st_coordinates(data)
   start <- Sys.time()
-  for (i in 1:1000) {
+  for (i in 1:n) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
@@ -119,7 +122,7 @@ step_2_fca <- function (data, geo, facil) {
   geo_coord <- st_coordinates(geo)
   fac_coord <- st_coordinates(data)
   start <- Sys.time()
-  for (i in 1:1000) {
+  for (i in 1:n) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
@@ -297,21 +300,21 @@ ct <- step_2_fca(mh_fac, ct, "mh")
 ct <- step_2_fca(sa_fac, ct, "sa")
 
 # Distribution of R value for MH 
-ggplot(mh_fac[1:1000,], aes(R)) + 
+ggplot(mh_fac[1:n,], aes(R)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of R value for SA
-ggplot(sa_fac[1:1000,], aes(R)) + 
+ggplot(sa_fac[1:n,], aes(R)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of A value for MH
-ggplot(ct[1:1000,], aes(A_mh)) + 
+ggplot(ct[1:n,], aes(A_mh)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of A value for SA
-ggplot(ct[1:1000,], aes(A_sa)) + 
+ggplot(ct[1:n,], aes(A_sa)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
