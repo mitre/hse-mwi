@@ -146,7 +146,7 @@ step_2_fca <- function (data, geo, facil) {
   print(paste0("[", Sys.time(), "] Step 2 of the FCA took ", print(end - start),
                " seconds"))
   # Set A variable name based on dataset being used in function
-  colnames(geo)[which(names(geo) == "A")] <- paste0("A",
+  colnames(geo)[names(geo) == "A"] <- paste0("A",
                                                     "_",
                                                     facil)
   geo
