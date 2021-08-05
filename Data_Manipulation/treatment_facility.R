@@ -97,7 +97,7 @@ step_1_fca <- function (data, geo) {
   end <- Sys.time()
   print(paste0("[", Sys.time(), "] Step 1 of the FCA took ", print(end - start),
                " seconds"))
-  data
+  return(data)
 }
 
 # Step 2 of FCA Methodology----
@@ -152,7 +152,7 @@ step_2_fca <- function (data, geo, facil) {
   colnames(geo)[names(geo) == "A"] <- paste0("A",
                                                     "_",
                                                     facil)
-  geo
+  return(geo)
 }
 
 # Wrangle and Merge Data for Usability----
