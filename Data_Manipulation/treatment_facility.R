@@ -299,6 +299,12 @@ ct <- step_2_fca(mh_fac, ct, "mh")
 # Create A values using SA dataset
 ct <- step_2_fca(sa_fac, ct, "sa")
 
+# Populate non-calculated R and A values as 0
+mh_fac$R[-c(1:n)] <- 0
+sa_fac$R[-c(1:n)] <- 0
+ct$A_mh[-c(1:n)] <- 0
+ct$A_sa[-c(1:n)] <- 0
+
 # Distribution of R value for MH 
 ggplot(mh_fac[1:n,], aes(R)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
