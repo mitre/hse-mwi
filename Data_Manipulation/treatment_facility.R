@@ -130,10 +130,10 @@ step_2_fca <- function (data, geo, facil) {
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
     # Keep the logical
-    prox_log <- geo_coord[i,2] < fac_coord[,2] + 1 &
-      geo_coord[i,2] > fac_coord[,2] - 1 &
-      geo_coord[i,1] < fac_coord[,1] + 1 &
-      geo_coord[i,1] > fac_coord[,1] - 1
+    prox_log <- fac_coord[,2] < geo_coord[i,2] + 1 &
+      fac_coord[,2] > geo_coord[i,2] - 1 &
+      fac_coord[,1] < geo_coord[i,1] + 1 &
+      fac_coord[,1] > geo_coord[i,1] - 1
     
     data$d[prox_log] <- 
       raster::pointDistance(
