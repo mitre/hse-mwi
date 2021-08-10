@@ -209,14 +209,75 @@ fin_access$Num_Mainstream_Services_City <-
   agg_services[fin_access$City_State, "Num_Mainstream_Services"]
 
 # create raw financial accessibility score
-fin_access$Financial_Access_Ratio_City <-
+fin_access$Financial_Accessibility_Ratio_City <-
   fin_access$Unprocessed_Fin_Access <- 
   fin_access$Num_Alt_Services_City/fin_access$Num_Mainstream_Services_City
 
-# clean up -- remove city/state
-fin_access <- fin_access[, !colnames(fin_access) %in% "City_State"]
+# adjust financial accessibility ratio edges ----
+
+# make some changes to edges to have the correct ranking
+eps <- 1e-5 # some epsilon
+# first, deal with 0 -- some mainstream services, no alternative
+# will be evenly distributed from:
+# [ min - .5 min, min - eps]
+min_val <- 
+  min(fin_access$Unprocessed_Fin_Access[fin_access$Unprocessed_Fin_Access > 0], 
+      na.rm = T)
+# divide range evenly by number of services
+only_main <- fin_access$Unprocessed_Fin_Access == 0 & 
+  !is.na(fin_access$Unprocessed_Fin_Access)
+max_serv <- 
+  max(fin_access$Num_Mainstream_Services_City[only_main])
+range_map <- data.frame(
+  "new" = seq(min_val - .5*min_val, min_val - eps, length.out = max_serv),
+  "old" = seq(max_serv, 1, by = -1)
+)
+# map the new values accordingly:
+fin_access$Financial_Accessibility_Ratio_City[only_main] <-
+  range_map$new[
+    match(
+      fin_access$Num_Mainstream_Services_City[only_main],
+      range_map$old
+    )]
+
+# then, deal with Inf -- some alternative services, no mainstream
+# will be evenly distributed from:
+# [ max + eps, max + .5 max]
+max_val <- 
+  max(fin_access$Unprocessed_Fin_Access[fin_access$Unprocessed_Fin_Access < Inf], 
+      na.rm = T)
+# divide range evenly by number of services
+only_alt <- fin_access$Unprocessed_Fin_Access == Inf & 
+  !is.na(fin_access$Unprocessed_Fin_Access)
+max_serv <- 
+  max(fin_access$Num_Alt_Services_City[only_alt])
+range_map <- data.frame(
+  "new" = seq(max_val + eps, max_val + .5*max_val, length.out = max_serv),
+  "old" = seq(1, max_serv, by = 1)
+)
+# map the new values accordingly:
+fin_access$Financial_Accessibility_Ratio_City[only_alt] <-
+  range_map$new[
+    match(
+      fin_access$Num_Alt_Services_City[only_alt],
+      range_map$old
+    )]
+
+# lastly, deal with NaN -- the worst, no access at all
+# -- put that one "unit" above highest Inf
+fin_access$Financial_Accessibility_Ratio_City[
+  is.nan(fin_access$Unprocessed_Fin_Access)]  <-
+  max(fin_access$Financial_Accessibility_Ratio_City[
+    !is.nan(fin_access$Unprocessed_Fin_Access)]) + max(diff(range_map$new))
+
+# now, log the score
+fin_access$log_Financial_Accessibility_Ratio_City  <-
+  log(fin_access$Financial_Accessibility_Ratio_City)
 
 # write out score ----
+
+# clean up -- remove city/state
+fin_access <- fin_access[, !colnames(fin_access) %in% "City_State"]
 
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
