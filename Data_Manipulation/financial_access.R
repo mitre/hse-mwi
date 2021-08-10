@@ -271,7 +271,7 @@ fin_access$Financial_Accessibility_Ratio_City[
     !is.nan(fin_access$Unprocessed_Fin_Access)]) + max(diff(range_map$new))
 
 # now, log the score
-fin_access$log_Financial_Accessibility_Ratio_City  <-
+fin_access$financialaccessibility_logratio_pop  <-
   log(fin_access$Financial_Accessibility_Ratio_City)
 
 # write out score ----
