@@ -226,10 +226,12 @@ cname_map <- list(
   "healthinsurance_nohealthinsurance_pop" = c("B27020_006E", "B27020_012E", "B27020_017E"),
   "healthinsurance_denom_black" = c("C27001B_001E"),
   "healthinsurance_nohealthinsurance_black" = c("C27001B_004E", "C27001B_007E","C27001B_010E"),
+
   "earlychildhoodeducation_denom_pop" = c("B01001_003E", "B01001_027E"),
   "earlychildhoodeducation_enrolled_pop" = c("B14007_003E", "B14007_004E"),
   "earlychildhoodeducation_denom_black" = c("B01001B_003E", "B01001B_018E"),
-  "earlychildhoodeducation_enrolled_black" = c("B14007B_003E", "B14007B_004")
+  "earlychildhoodeducation_enrolled_black" = c("B14007B_003E", "B14007B_004E")
+
 )
 
 # preallocate -- we're going to just keep the geoid and name columns
