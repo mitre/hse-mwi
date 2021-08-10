@@ -55,6 +55,13 @@ us_cities <- read_zips(
 us_cities <- us_cities[!duplicated(us_cities$postal.code),]
 rownames(us_cities) <- us_cities$postal.code
 
+# load additional US cities
+addl_us_cities <- read_zips(
+  file.path(resource_folder, "Additional_ZIP_US_Cities.csv"),
+  "ZIP_CODE" 
+)
+rownames(addl_us_cities) <- addl_us_cities$ZIP_CODE
+
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
   "Health and Social Equity - SJP - BHN Score Creation",
@@ -171,11 +178,43 @@ fin_access[is.na(fin_access)] <- 0
 
 # add city and state names
 fin_access$City <- us_cities[fin_access$ZIP_CODE, "place.name"]
-fin_access$State <- us_cities[fin_access$ZIP_CODE, "state.name"]
+fin_access$State <- us_cities[fin_access$ZIP_CODE, "state.code"]
+# add additional US cities -- manually done from ZIP lookup
+fin_access$City[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE] <- 
+  addl_us_cities[
+    fin_access$ZIP_CODE[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE], 
+    "City"]
+fin_access$State[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE] <- 
+  addl_us_cities[
+    fin_access$ZIP_CODE[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE], 
+    "State"]
 
-# create financial accessibility score
-fin_access$Financial_Accessibility_Ratio <- 
-  fin_access$Num_Alt_Services/fin_access$Num_Mainstream_Services
+# get rid of everything else without a state -- not in US
+fin_access <- fin_access[!is.na(fin_access$State),]
+
+# aggregate by city and state
+fin_access$City_State <- paste0(fin_access$City, "///", fin_access$State)
+# count alt services and mainstream
+agg_services <- aggregate(Num_Alt_Services ~ City_State, fin_access, sum)
+agg_services <- cbind(
+  agg_services,
+  "Num_Mainstream_Services" = 
+    aggregate(Num_Mainstream_Services ~ City_State, fin_access, sum)[,2]
+)
+# propegate out to the ZIP codes
+rownames(agg_services) <- agg_services$City_State
+fin_access$Num_Alt_Services_City <- 
+  agg_services[fin_access$City_State, "Num_Alt_Services"]
+fin_access$Num_Mainstream_Services_City <- 
+  agg_services[fin_access$City_State, "Num_Mainstream_Services"]
+
+# create raw financial accessibility score
+fin_access$Financial_Access_Ratio_City <-
+  fin_access$Unprocessed_Fin_Access <- 
+  fin_access$Num_Alt_Services_City/fin_access$Num_Mainstream_Services_City
+
+# clean up -- remove city/state
+fin_access <- fin_access[, !colnames(fin_access) %in% "City_State"]
 
 # write out score ----
 
