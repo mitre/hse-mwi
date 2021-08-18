@@ -108,9 +108,14 @@ county_to_zcta <- function(df, geoid_col, meas_col){
   # add the results to the main dataframe
   zcta_df[cty_sub$ZCTA5, meas_col] <- cty_sub[, meas_col]
   
+  # now subset to census tracts that are in the dataset at all
+  cty_sub <- county_cw[county_cw$GEOID %in% df[, geoid_col],]
+  zcta_iter <- zcta_df$ZCTA[
+    rowSums(is.na(zcta_df[,meas_col,drop = F])) == length(meas_col) & 
+      zcta_df$ZCTA %in% cty_sub$ZCTA5]
+  
   # now get a value for zctas with multiple mappings
-  for (z in zcta_df$ZCTA[rowSums(is.na(zcta_df[,meas_col,drop = F])) == 
-                         length(meas_col)]){
+  for (z in zcta_iter){
     # get the sub crosswalk value, must be in both
     cty_sub <- county_cw[county_cw$ZCTA5 == z & 
                            county_cw$GEOID %in% df[,geoid_col],]
@@ -183,9 +188,14 @@ ct_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
   # add the results to the main dataframe
   zcta_df[ct_sub$ZCTA5, meas_col] <- ct_sub[, meas_col]
   
+  # now subset to census tracts that are in the dataset at all
+  ct_sub <- ct_cw[ct_cw$GEOID %in% df[, geoid_col],]
+  zcta_iter <- zcta_df$ZCTA[
+    rowSums(is.na(zcta_df[,meas_col,drop = F])) == length(meas_col) & 
+      zcta_df$ZCTA %in% ct_sub$ZCTA5]
+  
   # now get a value for zctas with multiple mappings
-  for (z in zcta_df$ZCTA[rowSums(is.na(zcta_df[,meas_col,drop = F])) == 
-                         length(meas_col)]){
+  for (z in zcta_iter){
     # get the sub crosswalk value, make sure exists in both
     ct_sub <- ct_cw[ct_cw$ZCTA5 == z & ct_cw$GEOID %in% df[,geoid_col],]
     # get the corresponding census tracts
@@ -260,9 +270,14 @@ zip_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
   # add the results to the main dataframe
   zcta_df[zip_sub$ZCTA, meas_col] <- zip_sub[, meas_col]
   
+  # now subset to census tracts that are in the dataset at all
+  zip_sub <- zip_cw[zip_cw$ZIP_CODE %in% df[, geoid_col],]
+  zcta_iter <- zcta_df$ZCTA[
+    rowSums(is.na(zcta_df[,meas_col,drop = F])) == length(meas_col) & 
+      zcta_df$ZCTA %in% zip_sub$ZIP_CODE]
+  
   # now get a value for zctas with multiple mappings
-  for (z in zcta_df$ZCTA[rowSums(is.na(zcta_df[,meas_col,drop = F])) == 
-                         length(meas_col)]){
+  for (z in zcta_iter){
     # get the sub crosswalk value, make sure exists in both
     zip_sub <- zip_cw[zip_cw$ZCTA == z & zip_cw$ZIP_CODE %in% df[,geoid_col],]
     # get the corresponding zip codes
@@ -285,7 +300,6 @@ zip_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
         })
     }
   }
-  
   
   for (mc in meas_col){
     print(paste0(
