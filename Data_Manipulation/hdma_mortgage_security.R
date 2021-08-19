@@ -7,6 +7,9 @@
 # may also need to install bit64
 library(data.table)
 
+# import crosswalk functions
+source(file.path("Processing_Pipeline", "crosswalk_func.R"))
+
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
   "Health and Social Equity - SJP - BHN Score Creation",
@@ -21,6 +24,10 @@ mort_df <- fread(file.path(
   "hmda_2020_state_AK.csv"
 ),
 colClasses = c("census_tract" = "character"))
+# make sure the census tracts are correct
+mort_df <- as.data.table(
+  check_geoid(as.data.frame(mort_df), "census_tract", "Census Tract")
+)
 
 # only keep relevant columns
 selected_cols <- c(
@@ -64,17 +71,39 @@ mort_df[is.na(is_black), is_black := F]
 mort_pop <-
   aggregate(cbind(all_results, approved, denied) ~ census_tract, 
             mort_df, FUN = sum)
-mort_pop$approval_rate <- mort_pop$approved/mort_pop$all_results
 colnames(mort_pop)[-1] <- paste0(colnames(mort_pop)[-1], "_pop")
 # aggregate for black applicants
 mort_black <- 
   aggregate(cbind(all_results, approved, denied) ~ census_tract, 
           mort_df, FUN = sum, subset = mort_df$is_black)
-mort_black$approval_rate <- mort_black$approved/mort_black$all_results
 colnames(mort_black)[-1] <- paste0(colnames(mort_black)[-1], "_black")
 
 # merge outcomes together
 mort_out <- merge(mort_pop, mort_black, by = "census_tract", all = T)
 
-# NOTE: we might just want to aggregate this up to the zip code before we 
-# propose these percentages (since they'll be averaged, not summed)
+# aggregate up to ZCTA
+mort_out <- ct_to_zcta(mort_out, "census_tract", colnames(mort_out)[-c(1,5,9)], 
+                       use_mean = F)
+
+# create approval ratings
+mort_out$approval_rate_pop <- 
+  mort_out$approved_pop/mort_out$all_results_pop*100
+mort_out$approval_rate_black <- 
+  mort_out$approved_black/mort_out$all_results_black*100
+mort_out$approval_difference <- 
+  mort_out$approval_rate_black - mort_out$approval_rate_pop
+
+# subset to rows where there is some data
+mort_out <- mort_out[!is.na(mort_out$all_results_pop),]
+
+# write out result ----
+
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Preprocessed")
+
+# write.csv(mort_out, 
+#           file = file.path(data_folder,
+#                            "HMDA_Mortgage_Approval_2020.csv"), 
+#           row.names = F, na = "")
