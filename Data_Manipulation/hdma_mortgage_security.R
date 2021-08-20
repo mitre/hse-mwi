@@ -65,7 +65,18 @@ mort_df[, is_black :=
           `applicant_race-4` == 3 |
           `applicant_race-5` == 3 
         ]
+# to get nonwhite, we're going to get white
+# there are no duplicates in race columns, so we only need to look at the first
+# if they're only white
+mort_df[, is_white_or_NA := 
+          (`applicant_race-1` == 5 & `applicant_ethnicity-1` == 2) |
+          (`applicant_race-1` == 5 & `applicant_ethnicity-1` == 3) |
+          (`applicant_race-1` == 7 & `applicant_ethnicity-1` == 4) |
+          (`applicant_race-1` == 6 & `applicant_ethnicity-1` == 3) 
+]
 mort_df[is.na(is_black), is_black := F]
+mort_df[is.na(is_white_or_NA), is_white_or_NA := F]
+mort_df[, is_nonwhite := !is_white_or_NA]
 
 # aggregate all outcome measures
 mort_pop <-
@@ -77,21 +88,38 @@ mort_black <-
   aggregate(cbind(all_results, approved, denied) ~ census_tract, 
           mort_df, FUN = sum, subset = mort_df$is_black)
 colnames(mort_black)[-1] <- paste0(colnames(mort_black)[-1], "_black")
+#aggregate for all nonwhite applicants
+mort_nonwhite <- 
+  aggregate(cbind(all_results, approved, denied) ~ census_tract, 
+            mort_df, FUN = sum, subset = mort_df$is_nonwhite)
+colnames(mort_nonwhite)[-1] <- paste0(colnames(mort_nonwhite)[-1], "_nonwhite")
 
 # merge outcomes together
-mort_out <- merge(mort_pop, mort_black, by = "census_tract", all = T)
+mort_out <- merge(
+  merge(mort_pop, mort_black, by = "census_tract", all = T),
+  mort_nonwhite, by = "census_tract", all = T
+)
 
 # aggregate up to ZCTA
-mort_out <- ct_to_zcta(mort_out, "census_tract", colnames(mort_out)[-c(1,5,9)], 
+mort_out <- ct_to_zcta(mort_out, "census_tract", colnames(mort_out)[-1], 
                        use_mean = F)
 
 # create approval ratings
+# population: reference rating
 mort_out$approval_rate_pop <- 
   mort_out$approved_pop/mort_out$all_results_pop*100
+
+# black: difference between population and black
 mort_out$approval_rate_black <- 
   mort_out$approved_black/mort_out$all_results_black*100
-mort_out$approval_difference <- 
+mort_out$approval_difference_black <- 
   mort_out$approval_rate_black - mort_out$approval_rate_pop
+
+# population: difference between population and nonwhite
+mort_out$approval_rate_nonwhite <- 
+  mort_out$approved_nonwhite/mort_out$all_results_nonwhite*100
+mort_out$approval_difference_pop <- 
+  mort_out$approval_rate_nonwhite - mort_out$approval_rate_pop
 
 # subset to rows where there is some data
 mort_out <- mort_out[!is.na(mort_out$all_results_pop),]
