@@ -30,9 +30,6 @@ mort_df <- fread(file.path(
 ),
 colClasses = c("census_tract" = "character"))
 # make sure the census tracts are correct
-mort_df <- as.data.table(
-  check_geoid(as.data.frame(mort_df), "census_tract", "Census Tract")
-)
 mort_df[, census_tract := str_pad(census_tract, 11, pad = "0")]
 
 # only keep relevant columns
@@ -90,40 +87,36 @@ mort_out <- mort_df[, .(
   all_results_pop = sum(all_results),
   approved_pop = sum(approved)
   ), by = census_tract]
-# STOP HERE -- aggregating
-# https://stackoverflow.com/questions/32826352/use-data-table-to-count-and-aggregate-summarize-a-column
-# https://stackoverflow.com/questions/27955491/r-data-table-conditional-aggregation
-# https://stackoverflow.com/questions/50938441/merging-two-data-tables-with-common-id-but-different-columns
-mort_df[, `:=` (
-  all_results_black = sum(all_results),
-  approved_black = sum(approved)
-), by = census_tract]
 
-
-mort_pop <-
-  aggregate(cbind(all_results, approved, denied) ~ census_tract, 
-            mort_df, FUN = sum)
-colnames(mort_pop)[-1] <- paste0(colnames(mort_pop)[-1], "_pop")
-# aggregate for black applicants
-mort_black <- 
-  aggregate(cbind(all_results, approved, denied) ~ census_tract, 
-          mort_df, FUN = sum, subset = mort_df$is_black)
-colnames(mort_black)[-1] <- paste0(colnames(mort_black)[-1], "_black")
-#aggregate for all nonwhite applicants
-mort_nonwhite <- 
-  aggregate(cbind(all_results, approved, denied) ~ census_tract, 
-            mort_df, FUN = sum, subset = mort_df$is_nonwhite)
-colnames(mort_nonwhite)[-1] <- paste0(colnames(mort_nonwhite)[-1], "_nonwhite")
-
-# merge outcomes together
+# add black
 mort_out <- merge(
-  merge(mort_pop, mort_black, by = "census_tract", all = T),
-  mort_nonwhite, by = "census_tract", all = T
+  mort_out,
+  mort_df[, .(
+    all_results_black = sum(all_results[is_black]),
+    approved_black = sum(approved[is_black])
+  ), by = census_tract],
+  all = T
 )
+# add nonwhite
+mort_out <- merge(
+  mort_out,
+  # calculate nonwhite
+  mort_df[, .(
+    all_results_nonwhite = sum(all_results[is_nonwhite]),
+    approved_nonwhite = sum(approved[is_nonwhite])
+  ), by = census_tract],
+  all = T
+)
+# get rid of "total" row
+mort_out <- mort_out[!is.na(census_tract),]
+
+# remove mort_df, as we don't need it and it's huge
+rm(mort_df)
 
 # aggregate up to ZCTA
-mort_out <- ct_to_zcta(mort_out, "census_tract", colnames(mort_out)[-1], 
-                       use_mean = F)
+mort_out <- ct_to_zcta(
+  as.data.frame(mort_out), "census_tract", colnames(mort_out)[-1], 
+  use_mean = F)
 
 # create approval ratings
 # population: reference rating
@@ -152,7 +145,7 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Preprocessed")
 
-# write.csv(mort_out, 
-#           file = file.path(data_folder,
-#                            "HMDA_Mortgage_Approval_2020.csv"), 
-#           row.names = F, na = "")
+write.csv(mort_out,
+          file = file.path(data_folder,
+                           "HMDA_Mortgage_Approval_2020.csv"),
+          row.names = F, na = "")
