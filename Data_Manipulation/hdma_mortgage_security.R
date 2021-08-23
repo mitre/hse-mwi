@@ -10,6 +10,10 @@ library(data.table)
 # import crosswalk functions
 source(file.path("Processing_Pipeline", "crosswalk_func.R"))
 
+# save space, don't load things that we don't need
+rm(county_cw)
+rm(zip_cw)
+
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
   "Health and Social Equity - SJP - BHN Score Creation",
@@ -21,13 +25,15 @@ data_folder <- file.path(
 mort_df <- fread(file.path(
   data_folder,
   "HMDA",
-  "hmda_2020_state_AK.csv"
+  # "hmda_2020_state_AK.csv" # alaska, testing
+  "HDMA_actions_taken_2-3-6-7-8_year_2020.csv" # national
 ),
 colClasses = c("census_tract" = "character"))
 # make sure the census tracts are correct
 mort_df <- as.data.table(
   check_geoid(as.data.frame(mort_df), "census_tract", "Census Tract")
 )
+mort_df[, census_tract := str_pad(census_tract, 11, pad = "0")]
 
 # only keep relevant columns
 selected_cols <- c(
@@ -56,7 +62,7 @@ mort_df <- mort_df[action_taken %in% c(2,3,6,7,8),]
 
 # add columns to aggregate/decide on
 mort_df[, approved := action_taken %in% c(2,6,8)]
-mort_df[, denied := action_taken %in% c(3,7)]
+# mort_df[, denied := action_taken %in% c(3,7)] # we don't need denied
 mort_df[, all_results := T]
 mort_df[, is_black := 
           `applicant_race-1` == 3 |
@@ -79,6 +85,21 @@ mort_df[is.na(is_white_or_NA), is_white_or_NA := F]
 mort_df[, is_nonwhite := !is_white_or_NA]
 
 # aggregate all outcome measures
+# population
+mort_out <- mort_df[, .(
+  all_results_pop = sum(all_results),
+  approved_pop = sum(approved)
+  ), by = census_tract]
+# STOP HERE -- aggregating
+# https://stackoverflow.com/questions/32826352/use-data-table-to-count-and-aggregate-summarize-a-column
+# https://stackoverflow.com/questions/27955491/r-data-table-conditional-aggregation
+# https://stackoverflow.com/questions/50938441/merging-two-data-tables-with-common-id-but-different-columns
+mort_df[, `:=` (
+  all_results_black = sum(all_results),
+  approved_black = sum(approved)
+), by = census_tract]
+
+
 mort_pop <-
   aggregate(cbind(all_results, approved, denied) ~ census_tract, 
             mort_df, FUN = sum)
