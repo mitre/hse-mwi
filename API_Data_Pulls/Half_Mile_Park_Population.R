@@ -1,5 +1,5 @@
-# Download packages: tidyverse for Cleaning and jsonlite for importing via API.
-library(tidyverse)
+# Download packages: dplyr for Cleaning and jsonlite for importing via API.
+library(dplyr)
 library(jsonlite)
 
 # Import the Data 
@@ -11,7 +11,9 @@ raw_data <-
 data <- raw_data %>%
   select(c(displayValue, parentGeoAbbreviation, geoId)) %>%
   rename("environment_withinhalfmilepark_pop" = displayValue,
-         Census_Tract = geoId, State = parentGeoAbbreviation)
+         Census_Tract = geoId, State = parentGeoAbbreviation) %>%
+  mutate(environment_withinhalfmilepark_pop = 
+           as.numeric(gsub("%","",environment_withinhalfmilepark_pop)))
 
 # Export CSV to our shared OneDrive
 data_folder <- file.path(
