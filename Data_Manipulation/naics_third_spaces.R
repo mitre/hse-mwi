@@ -9,4 +9,6 @@ data_folder <- file.path(
   "Data", "Raw", "Third_Spaces")
 
 naics_codes <- 
-  read.csv(file.path(data_folder, "NAICS_Third_Places_aggregation.csv"))
+  read.csv(file.path(data_folder, "NAICS_Third_Places_aggregation.csv")) %>%
+  rename("Code" = "X2017.NAICS.Code",
+         "Business_Type" = "X2017.NAICS.Title")
