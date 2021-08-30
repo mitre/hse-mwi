@@ -1,3 +1,7 @@
+# Generate Number of Business per NAICS Code
+# By Mitch Strahlman
+# Originated on: 8/30/2021
+
 # Library Load----
 library(censusapi)
 library(tidyverse)
