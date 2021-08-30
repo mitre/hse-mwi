@@ -29,7 +29,6 @@ read_zips <- function(fn, zip_cn){
   return(zip_df)
 }
 
-
 # Load data----
 # Read in NAICS codes
 data_folder <- file.path(
