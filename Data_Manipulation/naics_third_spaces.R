@@ -41,7 +41,8 @@ data_folder <- file.path(
 naics_codes <- 
   read.csv(file.path(data_folder, "NAICS_Third_Places_aggregation.csv")) %>%
   rename("Code" = "X2017.NAICS.Code",
-         "Business_Type" = "X2017.NAICS.Title")
+         "Business_Type" = "X2017.NAICS.Title") %>%
+  filter(Code %in% c(71, 445, 8134, 522110, 722, 51912, 812, 8131, 451))
 
 # Read in all zip codes
 resource_folder <- file.path(
