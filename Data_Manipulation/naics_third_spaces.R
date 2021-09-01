@@ -67,4 +67,6 @@ naics_codes_columns <- naics_codes %>%
   select(-1) 
 naics_codes_columns[1:9] <- c("")
 
+# Merge Columns into Zipcode Data
+zip <- cbind(zip, naics_codes_columns)
   
