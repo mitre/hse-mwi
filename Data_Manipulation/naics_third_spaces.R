@@ -1,10 +1,11 @@
-# Generate Number of Business per NAICS Code
+# Generate Number of Business per 3rd Space NAICS Code
 # By Mitch Strahlman
 # Originated on: 8/30/2021
 
 # Library Load----
 library(censusapi)
-library(tidyverse)
+library(dplyr)
+library(readr)
 
 # Supporting Function ----
 # Read in and clean zip code according to common mistakes
