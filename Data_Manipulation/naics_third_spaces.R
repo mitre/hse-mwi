@@ -7,6 +7,7 @@ library(censusapi)
 library(dplyr)
 library(readr)
 library(stringr)
+library(reshape2)
 
 # Supporting Function ----
 # Read in and clean zip code according to common mistakes
@@ -58,3 +59,12 @@ zip <- read_zips(
 # Filter out Territories
 territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip <- zip[!zip$STATE %in% territories, ]
+
+# Clean Data----
+# Create NAICS columns
+naics_codes_columns <- naics_codes %>%
+  dcast(Business_Type ~ Code) %>%
+  select(-1) 
+naics_codes_columns[1:9] <- c("")
+
+  
