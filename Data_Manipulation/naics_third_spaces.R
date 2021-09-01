@@ -6,6 +6,7 @@
 library(censusapi)
 library(dplyr)
 library(readr)
+library(stringr)
 
 # Supporting Function ----
 # Read in and clean zip code according to common mistakes
