@@ -63,7 +63,7 @@ zip <- zip[!zip$STATE %in% territories, ]
 # Clean Data----
 # Create NAICS columns
 naics_codes_columns <- naics_codes %>%
-  dcast(Business_Type ~ Code) %>%
+  dcast(Code ~ Business_Type) %>%
   select(-1) 
 naics_codes_columns[1:9] <- c("")
 
