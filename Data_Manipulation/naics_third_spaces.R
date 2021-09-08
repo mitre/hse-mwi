@@ -70,11 +70,13 @@ naics_codes_columns[1:9] <- c("")
 # Merge Columns into Zipcode Data
 zip <- cbind(zip, naics_codes_columns)
   
-# Pull Count of Businesses
-getCensus(name = "cbp",
-          vars = c("ESTAB"), 
-          vintage = 2019,
-          region = "zipcode:*",
-          show_call = F,
-          NAICS2017 = codes
-)
+# Pull Count of Businesses in Each Zip Code
+for (i in 1:9){
+  getCensus(name = "cbp",
+            vars = c("ESTAB"), 
+            vintage = 2019,
+            region = "zipcode:*",
+            show_call = F,
+            NAICS2017 = naics_codes$Code[i]
+  )
+}
