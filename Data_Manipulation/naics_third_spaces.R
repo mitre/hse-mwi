@@ -65,3 +65,4 @@ zip <- zip[!zip$STATE %in% territories, ]
 # Trim White Space from Character Values
 naics_codes$Business_Type <- trimws(naics_codes$Business_Type)
 
+# Merge business count data into zipcode data
