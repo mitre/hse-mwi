@@ -67,12 +67,16 @@ naics_codes_columns <- naics_codes %>%
   select(-1) 
 naics_codes_columns[1:9] <- c("")
 
+# Trim White Space from Character Values
+naics_codes$Business_Type <- trimws(naics_codes$Business_Type)
+colnames(zip)[7:15] <- trimws(colnames(zip)[7:15])
+
 # Merge Columns into Zipcode Data
 zip <- cbind(zip, naics_codes_columns)
   
 # Pull Count of Businesses in Each Zip Code
-for (i in 1:9) {
-  x[i] <- getCensus(name = "cbp",
+for (i in colnames(zip)[7:15]) {
+  zip[i] <- getCensus(name = "cbp",
             vars = c("ESTAB"), 
             vintage = 2019,
             region = "zipcode:*",
