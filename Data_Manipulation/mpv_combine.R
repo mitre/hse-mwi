@@ -1,4 +1,5 @@
 # Combining Mapping Police Violence Data
+  # Using Harmonic means, uniform weights between ZCTA and County
 # By Karen Jiang
 # Originated on: 6/11/21
 
@@ -6,7 +7,7 @@ library(tidyverse)
 library(tidycensus)
 library(lubridate)
 
-
+source()
 # Read in datasets ----
 
 # Set data folder to One Drive Path
@@ -89,7 +90,24 @@ zcta_to_county$GEOID <- str_pad(zcta_to_county$GEOID,
   ## Method 4: Inclusion of aggregated data collected at larger spatial or temporal scales
   ## https://lib.dr.iastate.edu/cgi/viewcontent.cgi?article=1060&context=stat_las_pubs
 
-
+  # Count number of events per zip code per year in MPV
+  all_counts <- mpv %>%
+    group_by(ZCTA, County, State, year) %>%
+    count()
+  
+  # Count number of events per zip code per year for Black Victims in MPV
+  black_counts <- mpv %>%
+    filter(`Victim's race` == "Black") %>%
+    group_by(ZCTA, County, State, year) %>%
+    count()
+  
+  
+  # Join ACS Population denominators to MPV data
+  
+  data <- left_join(pop_data_years, all_counts, by = c("year", "ZCTA"))
+  
+  data_b <- left_join(pop_data_years, black_counts, by = c("year", "ZCTA"))
+  
 
 
 # Write out ----
