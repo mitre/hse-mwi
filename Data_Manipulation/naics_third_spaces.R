@@ -61,26 +61,7 @@ territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip <- zip[!zip$STATE %in% territories, ]
 
 # Clean Data----
-# Create NAICS columns
-naics_codes_columns <- naics_codes %>%
-  dcast(Code ~ Business_Type) %>%
-  select(-1) 
-naics_codes_columns[1:9] <- c("")
 
 # Trim White Space from Character Values
 naics_codes$Business_Type <- trimws(naics_codes$Business_Type)
-colnames(zip)[7:15] <- trimws(colnames(zip)[7:15])
 
-# Merge Columns into Zipcode Data
-zip <- cbind(zip, naics_codes_columns)
-  
-# Pull Count of Businesses in Each Zip Code
-for (i in colnames(zip)[7:15]) {
-  zip[i] <- getCensus(name = "cbp",
-            vars = c("ESTAB"), 
-            vintage = 2019,
-            region = "zipcode:*",
-            show_call = F,
-            NAICS2017 = naics_codes$Code[i]
-  )
-}
