@@ -85,7 +85,7 @@ zip[is.na(zip)] <- 0
 
 # Remove Unnecessary Columns
 zip <- zip %>%
-  select(-c(1:4, 6))
+  select(-c(2:6))
 
 # Export Data Frame----
 
