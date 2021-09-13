@@ -79,3 +79,10 @@ zip <- merge(zip, x, by.x = "ZIP_CODE", by.y = "zip_code", all = T) %>%
   select(-c( "NAICS2017")) 
 colnames(zip)[colnames(zip) == "ESTAB"] <- paste(naics_codes$Business_Type[i])
 }
+
+# Replace NAs with 0s
+zip[is.na(zip)] <- 0
+
+# Remove Unnecessary Columns
+zip <- zip %>%
+  select(-c(1:4, 6))
