@@ -86,3 +86,16 @@ zip[is.na(zip)] <- 0
 # Remove Unnecessary Columns
 zip <- zip %>%
   select(-c(1:4, 6))
+
+# Export Data Frame----
+
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Preprocessed")
+
+write.csv(zip, 
+          file = file.path(data_folder,
+                           "NAICS_Third_Spaces.csv"), 
+          row.names = F, 
+          na = "")
