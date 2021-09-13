@@ -56,11 +56,11 @@ zip <- read_zips(
   file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
   "ZIP_CODE")
 
+# Clean Data----
+
 # Filter out Territories
 territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip <- zip[!zip$STATE %in% territories, ]
-
-# Clean Data----
 
 # Trim White Space from Character Values
 naics_codes$Business_Type <- trimws(naics_codes$Business_Type)
