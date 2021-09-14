@@ -201,7 +201,7 @@ cname_map <- list(
   "worktransportation_denom_pop" = c("B08006_001E"),
   "worktransportation_caralone_pop" = c("B08006_003E"),
   "worktransportation_denom_black" = c("B08105B_001E"),
-  "worktransportation_carlone_black" = c("B08105B_002E"),
+  "worktransportation_caralone_black" = c("B08105B_002E"),
   "computerinternet_denom_pop" = c("B28003_001E"),
   "computerinternet_computerandbroadband_pop" = c("B28003_004E"),
   "computerinternet_denom_black" = c("B28009B_001E"),
@@ -289,4 +289,5 @@ data_folder <- file.path(
   "Data", "Preprocessed")
 
 write.csv(acs_final, file = file.path(data_folder,
-                                     "ACS_API_Data.csv"), row.names = F, na = "")
+                                     "ACS_API_Data.csv"), 
+          row.names = F, na = "")
