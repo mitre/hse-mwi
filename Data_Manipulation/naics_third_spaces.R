@@ -57,6 +57,10 @@ zip <- read_zips(
   file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
   "ZIP_CODE")
 
+# Load Zipcode Populations
+zip_pop <- zip_code_db %>%
+  select("zipcode", "population")
+
 # Clean Data----
 
 # Filter out Territories
