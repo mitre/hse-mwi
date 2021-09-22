@@ -91,10 +91,11 @@ zip <- left_join(zip, zip_pop, by = c("ZIP_CODE" = "zipcode"))
 # Replace NAs with 0s
 zip[is.na(zip)] <- 0
 
-# Remove Unnecessary Columns
+# Remove Unnecessary Columns & Add Population/100k variable
 zip <- zip %>%
+  mutate(thirdspaces_pop = rowSums(.[7:15])/population) %>%
   select(-c(2:6))
-
+  
 # Export Data Frame----
 
 data_folder <- file.path(
