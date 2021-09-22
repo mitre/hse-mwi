@@ -8,6 +8,7 @@ library(dplyr)
 library(readr)
 library(stringr)
 library(reshape2)
+library(zipcodeR)
 
 # Supporting Function ----
 # Read in and clean zip code according to common mistakes
