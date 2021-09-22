@@ -85,6 +85,9 @@ zip <- merge(zip, x, by.x = "ZIP_CODE", by.y = "zip_code", all = T) %>%
 colnames(zip)[colnames(zip) == "ESTAB"] <- paste(naics_codes$Business_Type[i])
 }
 
+# Merge zipcode populations data into business count data
+zip <- left_join(zip, zip_pop, by = c("ZIP_CODE" = "zipcode"))
+
 # Replace NAs with 0s
 zip[is.na(zip)] <- 0
 
