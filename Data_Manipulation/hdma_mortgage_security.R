@@ -26,7 +26,7 @@ mort_df <- fread(file.path(
   data_folder,
   "HMDA",
   # "hmda_2020_state_AK.csv" # alaska, testing
-  "HDMA_actions_taken_2-3-6-7-8_year_2020.csv" # national
+  "HMDA_actions_taken_2-3-6-7-8_year_2020.csv" # national
 ),
 colClasses = c("census_tract" = "character"))
 # make sure the census tracts are correct
