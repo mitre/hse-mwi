@@ -19,13 +19,10 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Raw")
 
-# there's an API, but it's probably easier to download and use?
 # load mortgage data
-# using alaska for ease of processing, will use national data in the end
 mort_df <- fread(file.path(
   data_folder,
   "HMDA",
-  # "hmda_2020_state_AK.csv" # alaska, testing
   "HMDA_actions_taken_2-3-6-7-8_year_2020.csv" # national
 ),
 colClasses = c("census_tract" = "character"))
@@ -43,9 +40,6 @@ selected_cols <- c(
 mort_df <- mort_df[, ..selected_cols]
 
 # calculate mortgage outcomes ----
-
-# some questions: for black, do we want black alone? the only race? 
-# do we not want hispanic/latino?
 
 # i guess I don't need to match up beginning and end -- I just need to tally the outcome
 # Action Taken:     
