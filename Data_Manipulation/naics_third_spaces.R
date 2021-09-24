@@ -93,9 +93,10 @@ zip[is.na(zip)] <- 0
 
 # Remove Unnecessary Columns & Add Population/100k variable
 zip <- zip %>%
-  mutate(thirdspaces_pop = rowSums(.[7:15])/population) %>%
+  mutate(thirdspaces_pop = rowSums(.[7:15])/(population/100000)) %>%
   select(-c(2:6, "population")) %>%
-  relocate(thirdspaces_pop, .after = ZIP_CODE) 
+  relocate(thirdspaces_pop, .after = ZIP_CODE) %>%
+  mutate(thirdspaces_pop = replace(thirdspaces_pop, is.nan(thirdspaces_pop), 0))
   
 # Export Data Frame----
 
