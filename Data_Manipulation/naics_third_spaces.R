@@ -80,9 +80,9 @@ for (i in 1:9) {
     show_call = F,
     NAICS2017 = naics_codes$Code[i]
   )
-zip <- merge(zip, x, by.x = "ZIP_CODE", by.y = "zip_code", all = T) %>%
-  select(-c( "NAICS2017")) 
-colnames(zip)[colnames(zip) == "ESTAB"] <- paste(naics_codes$Business_Type[i])
+  zip <- merge(zip, x, by.x = "ZIP_CODE", by.y = "zip_code", all = T) %>%
+    select(-c( "NAICS2017")) 
+  colnames(zip)[colnames(zip) == "ESTAB"] <- paste(naics_codes$Business_Type[i])
 }
 
 # Merge zipcode populations data into business count data
@@ -100,7 +100,7 @@ zip <- zip %>%
 
 # Some zipcodes have no population and third spaces, leading to an Inf value
 # 
-  
+
 # Export Data Frame----
 
 data_folder <- file.path(
