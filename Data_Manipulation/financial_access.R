@@ -31,7 +31,7 @@ read_zips <- function(fn, zip_cn){
   return(zip_df)
 }
 
-# load data ----
+# load supporting data ----
 
 resource_folder <-file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
@@ -82,6 +82,8 @@ county_cw <- county_cw[!duplicated(county_cw$GEOID),]
 # load county names to fips codes -- taken from usmap library
 county_fips <- read.csv(file.path(resource_folder, "county_name_to_fips.csv"),
                         colClasses = c("fips" = "character"))
+
+# load mainstream services data ----
 
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
@@ -188,7 +190,8 @@ naics_codes <- read.csv(file.path(
   data_folder, 
   "Alternative_Financial_Institutions_2017_NAICS_Codes.csv"))
 
-# pull county business practices data
+# pull county business practices data ----
+
 # locations of alternative financial services
 # 14 classifications from the North American Industry Classification System (NAICS)
 # payday, installment, and other alternative loans (52229107, 52229111, 52229813)
@@ -313,6 +316,12 @@ fin_access[is.na(fin_access)] <- 0
 # fin_access$Num_Mainstream_Services_City <- 
 #   agg_services[fin_access$City_State, "Num_Mainstream_Services"]
 
+# fin_access$Financial_Accessibility_Ratio_City <-
+#   fin_access$Unprocessed_Fin_Access <- 
+#   fin_access$Num_Alt_Services_City/fin_access$Num_Mainstream_Services_City
+
+# aggregate up to county level and create score ----
+
 # create raw financial accessibility score (subtract)
 # negative == bad, positive == good
 fin_access$Financial_Accessibility_County <-
@@ -323,73 +332,6 @@ fin_access$Financial_Accessibility_County[
   fin_access$Num_Alt_Services == 0 & 
     fin_access$Num_Mainstream_Services == 0
 ] <- min(fin_access$Financial_Accessibility_County) - 1
-
-# fin_access$Financial_Accessibility_Ratio_City <-
-#   fin_access$Unprocessed_Fin_Access <- 
-#   fin_access$Num_Alt_Services_City/fin_access$Num_Mainstream_Services_City
-
-# adjust financial accessibility ratio edges ----
-
-# may delete depending on outcome
-
-# # make some changes to edges to have the correct ranking
-# eps <- 1e-5 # some epsilon
-# # first, deal with 0 -- some mainstream services, no alternative
-# # will be evenly distributed from:
-# # [ min - .5 min, min - eps]
-# min_val <- 
-#   min(fin_access$Unprocessed_Fin_Access[fin_access$Unprocessed_Fin_Access > 0], 
-#       na.rm = T)
-# # divide range evenly by number of services
-# only_main <- fin_access$Unprocessed_Fin_Access == 0 & 
-#   !is.na(fin_access$Unprocessed_Fin_Access)
-# max_serv <- 
-#   max(fin_access$Num_Mainstream_Services_City[only_main])
-# range_map <- data.frame(
-#   "new" = seq(min_val - .5*min_val, min_val - eps, length.out = max_serv),
-#   "old" = seq(max_serv, 1, by = -1)
-# )
-# # map the new values accordingly:
-# fin_access$Financial_Accessibility_Ratio_City[only_main] <-
-#   range_map$new[
-#     match(
-#       fin_access$Num_Mainstream_Services_City[only_main],
-#       range_map$old
-#     )]
-# 
-# # then, deal with Inf -- some alternative services, no mainstream
-# # will be evenly distributed from:
-# # [ max + eps, max + .5 max]
-# max_val <- 
-#   max(fin_access$Unprocessed_Fin_Access[fin_access$Unprocessed_Fin_Access < Inf], 
-#       na.rm = T)
-# # divide range evenly by number of services
-# only_alt <- fin_access$Unprocessed_Fin_Access == Inf & 
-#   !is.na(fin_access$Unprocessed_Fin_Access)
-# max_serv <- 
-#   max(fin_access$Num_Alt_Services_City[only_alt])
-# range_map <- data.frame(
-#   "new" = seq(max_val + eps, max_val + .5*max_val, length.out = max_serv),
-#   "old" = seq(1, max_serv, by = 1)
-# )
-# # map the new values accordingly:
-# fin_access$Financial_Accessibility_Ratio_City[only_alt] <-
-#   range_map$new[
-#     match(
-#       fin_access$Num_Alt_Services_City[only_alt],
-#       range_map$old
-#     )]
-# 
-# # lastly, deal with NaN -- the worst, no access at all
-# # -- put that one "unit" above highest Inf
-# fin_access$Financial_Accessibility_Ratio_City[
-#   is.nan(fin_access$Unprocessed_Fin_Access)]  <-
-#   max(fin_access$Financial_Accessibility_Ratio_City[
-#     !is.nan(fin_access$Unprocessed_Fin_Access)]) + max(diff(range_map$new))
-# 
-# # now, log the score
-# fin_access$financialaccessibility_logratio_pop  <-
-#   log(fin_access$Financial_Accessibility_Ratio_City)
 
 # write out score ----
 
