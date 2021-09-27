@@ -38,29 +38,50 @@ resource_folder <-file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Resources")
 
-# load all zip codes
-zip_cw <- read_zips(
-  file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
-  "ZIP_CODE")
-# filter out territories
-territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
-zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
-
-# load all us cities
-us_cities <- read_zips(
+# NOTE: commenting out zip code related ideas for future
+# # load all zip codes
+# zip_cw <- read_zips(
+#   file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
+#   "ZIP_CODE")
+# # filter out territories
+# territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
+# zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
+# 
+# # load all us cities
+us_cities <- read.csv(
   file.path(resource_folder, "US_cities.csv"),
-  "postal.code" 
+  colClasses = c(
+    "postal.code" = "character",
+    "county.code" = "character"
+  )
 )
+us_cities$county.code <- str_pad(us_cities$county.code, 3, pad = "0")
+us_cities$postal.code <- str_pad(us_cities$postal.code, 5, pad = "0")
 # remove duplicates (US cities) and add rownames
 us_cities <- us_cities[!duplicated(us_cities$postal.code),]
 rownames(us_cities) <- us_cities$postal.code
+# 
+# # load additional US cities
+# addl_us_cities <- read_zips(
+#   file.path(resource_folder, "Additional_ZIP_US_Cities.csv"),
+#   "ZIP_CODE" 
+# )
+# rownames(addl_us_cities) <- addl_us_cities$ZIP_CODE
 
-# load additional US cities
-addl_us_cities <- read_zips(
-  file.path(resource_folder, "Additional_ZIP_US_Cities.csv"),
-  "ZIP_CODE" 
-)
-rownames(addl_us_cities) <- addl_us_cities$ZIP_CODE
+# load county crosswalk
+county_cw <- read.csv(file.path(resource_folder, "zcta_county_rel_10.txt"),
+                      colClasses = c(
+                        "ZCTA5" = "character",
+                        "STATE" = "character",
+                        "COUNTY" = "character",
+                        "GEOID" = "character"
+                      ))
+# remove duplicated counties -- this is for a list of all counties
+county_cw <- county_cw[!duplicated(county_cw$GEOID),]
+
+# load county names to fips codes -- taken from usmap library
+county_fips <- read.csv(file.path(resource_folder, "county_name_to_fips.csv"),
+                        colClasses = c("fips" = "character"))
 
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
@@ -72,6 +93,8 @@ fed_banks <- read_zips(
   file.path(data_folder, "FDIC_Institutions_7_29_2021.csv"),
   "ZIP"
 )
+# also pad state and county number
+fed_banks$STCNTY <- str_pad(fed_banks$STCNTY, 5, pad = "0")
 
 # credit unions
 cu_banks <- read_zips(
@@ -80,6 +103,85 @@ cu_banks <- read_zips(
     "NCUA_Credit_Union_Branch_Information_03_2021.csv"),
   "PhysicalAddressPostalCode"
 )
+# filter out anything not in the 50 states
+cu_banks <- cu_banks[
+  cu_banks$PhysicalAddressStateCode != "" &
+    !cu_banks$PhysicalAddressStateCode %in% 
+    c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI"),
+  ]
+# add county number 
+cu_banks$STCNTY <-
+  sapply(1:nrow(cu_banks), function(x){
+    st_code <- tolower(cu_banks$PhysicalAddressStateCode[x])
+    cty_name <- tolower(gsub(
+      "Saint ", "St. ", gsub("St ", "St. ", 
+                             cu_banks$PhysicalAddressCountyName[x])
+    ))
+    
+    poss_fips <- county_fips$fips[grepl(st_code, 
+                                        tolower(county_fips$abbr)) &
+                                    grepl(cty_name,
+                                          tolower(county_fips$county))]
+    
+    # if multiple come up, we want the closest 
+    if (length(poss_fips) > 1){
+      cty_suffix <- if (st_code == "la"){
+        "parish"
+      } else {
+        "county"
+      }
+      
+      # don't add county suffix if it's a city
+      cty_check <- if (!grepl("city", cty_name)){
+        paste0(cty_name, " ", cty_suffix)
+      } else {
+        cty_name
+      }
+      
+      poss_fips <- poss_fips[which.min(
+        c(adist(cty_check,
+                tolower(county_fips$county[county_fips$fips %in% poss_fips])))
+      )]
+    } else if (length(poss_fips) == 0){
+      # name is coded slightly wrong
+      wrong_name_map <- c(
+        "Prince Georges" = "Prince George's",
+        "De Kalb" = "DeKalb",
+        "La Porte" = "LaPorte",
+        "St. Marys" = "St. Mary's",
+        "Matanuska Susitna" = "Matanuska-Susitna",
+        "Prince Of Wales Hyder" = "Prince Of Wales-Hyder",
+        "Hoonah Angoon" = "Hoonah-Angoon",
+        "Obrien" = "O'Brien",
+        "De Soto" = "DeSoto",
+        "De Witt" = "DeWitt",
+        "La Salle" = "LaSalle"
+      )
+      names(wrong_name_map) <- tolower(names(wrong_name_map))
+      wrong_name_map <- tolower(wrong_name_map)
+      
+      
+      poss_fips <- county_fips$fips[grepl(st_code, 
+                                          tolower(county_fips$abbr)) &
+                                      grepl(wrong_name_map[cty_name],
+                                            tolower(county_fips$county))]
+    }
+    
+    return(poss_fips)
+  } )
+# for all the empty county names, find by the zip code
+cu_banks$STCNTY[cu_banks$PhysicalAddressCountyName == ""] <-
+  sapply(1:sum(cu_banks$PhysicalAddressCountyName == ""), function(x){
+    zip_search <- 
+      us_cities$postal.code ==
+      cu_banks$PhysicalAddressPostalCode[
+        cu_banks$PhysicalAddressCountyName == ""][x]
+    
+    paste0(
+      fips(us_cities$state.code[zip_search]),
+      us_cities$county.code[zip_search]
+    )
+  })
 
 # naics_codes
 naics_codes <- read.csv(file.path(
@@ -99,33 +201,34 @@ naics_codes <- read.csv(file.path(
 # can't pull multiple naics codes at once
 # preallocate full alternative services 
 alt_service <- data.frame(
-  "ZIP_CODE" = zip_cw$ZIP_CODE, 
+  "STCNTY" = county_cw$GEOID, 
   "Num_Alt_Services" = 0
 )
-rownames(alt_service) <- alt_service$ZIP_CODE
+rownames(alt_service) <- alt_service$STCNTY
 for (nc in unique(naics_codes$NAICS_2017)){
   # grab the services for all zip codes
-  zbp_service <- getCensus(
+  cbp_service <- getCensus(
     name = "cbp",
-    vars = c("ESTAB"), 
+    vars = c("ESTAB", "STATE", "COUNTY"), 
     vintage = 2019,
-    region = "zipcode:*",
+    region = "county:*",
     show_call = F,
     NAICS2017 = nc
   )
+  cbp_service$STCNTY <- paste0(cbp_service$STATE, cbp_service$COUNTY)
   
-  # if there are zip codes with some amount of services, add to the total count
-  if (nrow(zbp_service) > 0){
-    in_df <- zbp_service$zip_code %in% alt_service
+  # if there are counties with some amount of services, add to the total count
+  if (nrow(cbp_service) > 0){
+    in_df <- cbp_service$STCNTY %in% alt_service$STCNTY
     
     # first add ZIP codes that already exist
-    alt_service[as.character(zbp_service$zip_code[in_df]), "Num_Alt_Services"] <- 
-      alt_service[as.character(zbp_service$zip_code[in_df]), "Num_Alt_Services"] +
-      zbp_service$ESTAB[in_df]
+    alt_service[as.character(cbp_service$STCNTY[in_df]), "Num_Alt_Services"] <- 
+      alt_service[as.character(cbp_service$STCNTY[in_df]), "Num_Alt_Services"] +
+      cbp_service$ESTAB[in_df]
     
-    alt_service[as.character(zbp_service$zip_code[!in_df]), "Num_Alt_Services"] <- 
-      zbp_service$ESTAB[!in_df]
-    alt_service$ZIP_CODE <- as.character(rownames(alt_service))
+    alt_service[as.character(cbp_service$STCNTY[!in_df]), "Num_Alt_Services"] <- 
+      cbp_service$ESTAB[!in_df]
+    alt_service$STCNTY <- as.character(rownames(alt_service))
   }
 }
 
@@ -138,7 +241,7 @@ fin_access <- alt_service
 # preallocate mainstream services
 fin_access$Num_Mainstream_Services <- 0
 # count and add FDIC banks
-fdic_count <- as.data.frame(table(as.character(fed_banks$ZIP)), 
+fdic_count <- as.data.frame(table(as.character(fed_banks$STCNTY)), 
                             stringsAsFactors = F)
 in_df <- fdic_count$Var1 %in% fin_access
 # first add the ones that do exist
@@ -148,11 +251,11 @@ fin_access[fdic_count$Var1[in_df], "Num_Mainstream_Services"] <-
 # then add the ones that don't
 fin_access[fdic_count$Var1[!in_df], "Num_Mainstream_Services"] <-
   fdic_count$Freq[!in_df]
-fin_access$ZIP_CODE <- as.character(rownames(fin_access))
+fin_access$STCNTY <- as.character(rownames(fin_access))
 
 # count and add credit unions
 cu_count <- as.data.frame(
-  table(as.character(cu_banks$PhysicalAddressPostalCode)), 
+  table(as.character(cu_banks$STCNTY)), 
   stringsAsFactors = F
 )
 in_df <- cu_count$Var1 %in% fin_access
@@ -163,61 +266,63 @@ fin_access[cu_count$Var1[in_df], "Num_Mainstream_Services"] <-
 # then add the ones that don't
 fin_access[cu_count$Var1[!in_df], "Num_Mainstream_Services"] <-
   cu_count$Freq[!in_df]
-fin_access$ZIP_CODE <- as.character(rownames(fin_access))
+fin_access$STCNTY <- as.character(rownames(fin_access))
 
-# do some clean-up
-# remove zip 99999 -- doesn't exist
-fin_access <- fin_access[fin_access$ZIP_CODE != "99999",]
-# remove the ones that aren't in america (non numeric)
-fin_access <- 
-  fin_access[!is.na(suppressWarnings(as.numeric(fin_access$ZIP_CODE))),]
+# # do some clean-up
+# # remove zip 99999 -- doesn't exist
+# fin_access <- fin_access[fin_access$ZIP_CODE != "99999",]
+# # remove the ones that aren't in america (non numeric)
+# fin_access <- 
+#   fin_access[!is.na(suppressWarnings(as.numeric(fin_access$ZIP_CODE))),]
 # make sure all na's are 0
 fin_access[is.na(fin_access)] <- 0
 
 # aggregate up to the city level ----
 
-# add city and state names
-fin_access$City <- us_cities[fin_access$ZIP_CODE, "place.name"]
-fin_access$State <- us_cities[fin_access$ZIP_CODE, "state.code"]
-# add additional US cities -- manually done from ZIP lookup
-fin_access$City[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE] <- 
-  addl_us_cities[
-    fin_access$ZIP_CODE[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE], 
-    "City"]
-fin_access$State[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE] <- 
-  addl_us_cities[
-    fin_access$ZIP_CODE[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE], 
-    "State"]
+# NOTE: KEEPING COMMENTED OUT FOR FUTURE CITY EXPANSION
 
-# get rid of everything else without a state -- not in US
-fin_access <- fin_access[!is.na(fin_access$State),]
-
-# aggregate by city and state
-fin_access$City_State <- paste0(fin_access$City, "///", fin_access$State)
-# count alt services and mainstream
-agg_services <- aggregate(Num_Alt_Services ~ City_State, fin_access, sum)
-agg_services <- cbind(
-  agg_services,
-  "Num_Mainstream_Services" = 
-    aggregate(Num_Mainstream_Services ~ City_State, fin_access, sum)[,2]
-)
-# propegate out to the ZIP codes
-rownames(agg_services) <- agg_services$City_State
-fin_access$Num_Alt_Services_City <- 
-  agg_services[fin_access$City_State, "Num_Alt_Services"]
-fin_access$Num_Mainstream_Services_City <- 
-  agg_services[fin_access$City_State, "Num_Mainstream_Services"]
+# # add city and state names
+# fin_access$City <- us_cities[fin_access$ZIP_CODE, "place.name"]
+# fin_access$State <- us_cities[fin_access$ZIP_CODE, "state.code"]
+# # add additional US cities -- manually done from ZIP lookup
+# fin_access$City[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE] <- 
+#   addl_us_cities[
+#     fin_access$ZIP_CODE[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE], 
+#     "City"]
+# fin_access$State[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE] <- 
+#   addl_us_cities[
+#     fin_access$ZIP_CODE[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE], 
+#     "State"]
+# 
+# # get rid of everything else without a state -- not in US
+# fin_access <- fin_access[!is.na(fin_access$State),]
+# 
+# # aggregate by city and state
+# fin_access$City_State <- paste0(fin_access$City, "///", fin_access$State)
+# # count alt services and mainstream
+# agg_services <- aggregate(Num_Alt_Services ~ City_State, fin_access, sum)
+# agg_services <- cbind(
+#   agg_services,
+#   "Num_Mainstream_Services" = 
+#     aggregate(Num_Mainstream_Services ~ City_State, fin_access, sum)[,2]
+# )
+# # propegate out to the ZIP codes
+# rownames(agg_services) <- agg_services$City_State
+# fin_access$Num_Alt_Services_City <- 
+#   agg_services[fin_access$City_State, "Num_Alt_Services"]
+# fin_access$Num_Mainstream_Services_City <- 
+#   agg_services[fin_access$City_State, "Num_Mainstream_Services"]
 
 # create raw financial accessibility score (subtract)
 # negative == bad, positive == good
-fin_access$Financial_Accessibility_City <-
-  fin_access$Num_Mainstream_Services_City - fin_access$Num_Alt_Services_City
+fin_access$Financial_Accessibility_County <-
+  fin_access$Num_Mainstream_Services - fin_access$Num_Alt_Services
 
 # for 0/0, they have the worst financial access -- make them lowest number - 1
-fin_access$Financial_Accessibility_City[
-  fin_access$Num_Alt_Services_City == 0 & 
-    fin_access$Num_Mainstream_Services_City == 0
-] <- min(fin_access$Financial_Accessibility_City) - 1
+fin_access$Financial_Accessibility_County[
+  fin_access$Num_Alt_Services == 0 & 
+    fin_access$Num_Mainstream_Services == 0
+] <- min(fin_access$Financial_Accessibility_County) - 1
 
 # fin_access$Financial_Accessibility_Ratio_City <-
 #   fin_access$Unprocessed_Fin_Access <- 
@@ -288,8 +393,8 @@ fin_access$Financial_Accessibility_City[
 
 # write out score ----
 
-# clean up -- remove city/state
-fin_access <- fin_access[, !colnames(fin_access) %in% "City_State"]
+# # clean up -- remove city/state
+# fin_access <- fin_access[, !colnames(fin_access) %in% "City_State"]
 
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
