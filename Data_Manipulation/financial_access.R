@@ -38,16 +38,7 @@ resource_folder <-file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Resources")
 
-# NOTE: commenting out zip code related ideas for future
-# # load all zip codes
-# zip_cw <- read_zips(
-#   file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
-#   "ZIP_CODE")
-# # filter out territories
-# territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
-# zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
-# 
-# # load all us cities
+# load all us cities
 us_cities <- read.csv(
   file.path(resource_folder, "US_cities.csv"),
   colClasses = c(
@@ -60,13 +51,6 @@ us_cities$postal.code <- str_pad(us_cities$postal.code, 5, pad = "0")
 # remove duplicates (US cities) and add rownames
 us_cities <- us_cities[!duplicated(us_cities$postal.code),]
 rownames(us_cities) <- us_cities$postal.code
-# 
-# # load additional US cities
-# addl_us_cities <- read_zips(
-#   file.path(resource_folder, "Additional_ZIP_US_Cities.csv"),
-#   "ZIP_CODE" 
-# )
-# rownames(addl_us_cities) <- addl_us_cities$ZIP_CODE
 
 # load county crosswalk
 county_cw <- read.csv(file.path(resource_folder, "zcta_county_rel_10.txt"),
@@ -271,54 +255,8 @@ fin_access[cu_count$Var1[!in_df], "Num_Mainstream_Services"] <-
   cu_count$Freq[!in_df]
 fin_access$STCNTY <- as.character(rownames(fin_access))
 
-# # do some clean-up
-# # remove zip 99999 -- doesn't exist
-# fin_access <- fin_access[fin_access$ZIP_CODE != "99999",]
-# # remove the ones that aren't in america (non numeric)
-# fin_access <- 
-#   fin_access[!is.na(suppressWarnings(as.numeric(fin_access$ZIP_CODE))),]
 # make sure all na's are 0
 fin_access[is.na(fin_access)] <- 0
-
-# aggregate up to the city level ----
-
-# NOTE: KEEPING COMMENTED OUT FOR FUTURE CITY EXPANSION
-
-# # add city and state names
-# fin_access$City <- us_cities[fin_access$ZIP_CODE, "place.name"]
-# fin_access$State <- us_cities[fin_access$ZIP_CODE, "state.code"]
-# # add additional US cities -- manually done from ZIP lookup
-# fin_access$City[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE] <- 
-#   addl_us_cities[
-#     fin_access$ZIP_CODE[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE], 
-#     "City"]
-# fin_access$State[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE] <- 
-#   addl_us_cities[
-#     fin_access$ZIP_CODE[fin_access$ZIP_CODE %in% addl_us_cities$ZIP_CODE], 
-#     "State"]
-# 
-# # get rid of everything else without a state -- not in US
-# fin_access <- fin_access[!is.na(fin_access$State),]
-# 
-# # aggregate by city and state
-# fin_access$City_State <- paste0(fin_access$City, "///", fin_access$State)
-# # count alt services and mainstream
-# agg_services <- aggregate(Num_Alt_Services ~ City_State, fin_access, sum)
-# agg_services <- cbind(
-#   agg_services,
-#   "Num_Mainstream_Services" = 
-#     aggregate(Num_Mainstream_Services ~ City_State, fin_access, sum)[,2]
-# )
-# # propegate out to the ZIP codes
-# rownames(agg_services) <- agg_services$City_State
-# fin_access$Num_Alt_Services_City <- 
-#   agg_services[fin_access$City_State, "Num_Alt_Services"]
-# fin_access$Num_Mainstream_Services_City <- 
-#   agg_services[fin_access$City_State, "Num_Mainstream_Services"]
-
-# fin_access$Financial_Accessibility_Ratio_City <-
-#   fin_access$Unprocessed_Fin_Access <- 
-#   fin_access$Num_Alt_Services_City/fin_access$Num_Mainstream_Services_City
 
 # aggregate up to county level and create score ----
 
@@ -334,9 +272,6 @@ fin_access$Financial_Accessibility_County[
 ] <- min(fin_access$Financial_Accessibility_County) - 1
 
 # write out score ----
-
-# # clean up -- remove city/state
-# fin_access <- fin_access[, !colnames(fin_access) %in% "City_State"]
 
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
