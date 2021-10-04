@@ -98,8 +98,8 @@ zip <- zip %>%
   relocate(thirdspaces_pop, .after = ZIP_CODE) %>%
   mutate(thirdspaces_pop = replace(thirdspaces_pop, is.nan(thirdspaces_pop), 0))
 
-# Some zipcodes have no population and third spaces, leading to an Inf value
-# 
+# Replace Inf with NA
+zip$thirdspaces_pop[is.infinite(zip$thirdspaces_pop)] <- NA
 
 # Export Data Frame----
 
