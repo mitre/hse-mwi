@@ -92,7 +92,7 @@ data_folder <- file.path(
 
 # federal banking institutions
 fed_banks <- read_zips(
-  file.path(data_folder, "FDIC_Institutions_7_29_2021.csv"),
+  file.path(data_folder, "FDIC_locations_10_4_2021.csv"),
   "ZIP"
 )
 # also pad state and county number
