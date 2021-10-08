@@ -40,7 +40,7 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Raw", "Third_Spaces")
 
-# Codes that Hannah Highlighted in xlsx doc
+# Codes that Hannah Highlighted in xlsx doc (prevents doublecounting)
 naics_codes <- 
   read.csv(file.path(data_folder, "NAICS_Third_Places_aggregation.csv")) %>%
   rename("Code" = "X2017.NAICS.Code",
