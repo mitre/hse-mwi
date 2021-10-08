@@ -40,11 +40,14 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Raw", "Third_Spaces")
 
+# Codes that Hannah Highlighted in xlsx doc
 naics_codes <- 
   read.csv(file.path(data_folder, "NAICS_Third_Places_aggregation.csv")) %>%
   rename("Code" = "X2017.NAICS.Code",
          "Business_Type" = "X2017.NAICS.Title") %>%
-  filter(Code %in% c(71, 445, 8134, 522110, 722, 51912, 812, 8131, 451))
+  filter(Code %in% c(4451, 4452, 451, 51912, 51919, 7111, 7112, 712, 7131,
+                     7139, 72233, 7224, 7225, 8121, 81221, 81222, 81231,
+                     81232, 81291, 81292, 81299, 813, 8134))
 
 # Read in all zip codes
 resource_folder <- file.path(
