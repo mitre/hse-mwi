@@ -10,6 +10,7 @@ library(stringr)
 library(reshape2)
 library(zipcodeR)
 
+# Load crosswalks
 source("Processing_Pipeline/crosswalk_func.R")
 
 # Supporting Function ----
@@ -51,6 +52,9 @@ naics_codes <-
                      7139, 72233, 7224, 7225, 8121, 81221, 81222, 81231,
                      81232, 81291, 81292, 81299, 813, 8134))
 
+# Trim White Space from Character Values
+naics_codes$Business_Type <- trimws(naics_codes$Business_Type)
+
 # Read in all zip codes
 resource_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
@@ -62,25 +66,11 @@ zip <- read_zips(
   file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
   "ZIP_CODE")
 
-# Convert zip to zcta
-zip_to_zcta(data.frame(zip), 
-            geoid_col = "ZIP_CODE", 
-            meas_col = "ESTAB", 
-            use_mean = F)
-
-# Load Zipcode Populations
-
-
-# Clean Data----
-
 # Filter out Territories
 territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip <- zip[!zip$STATE %in% territories, ]
 
-# Trim White Space from Character Values
-naics_codes$Business_Type <- trimws(naics_codes$Business_Type)
-
-# Merge business count data into zipcode data
+# Load in CBP data
 for (i in 1:23) {
   x <- getCensus(
     name = "cbp",
@@ -90,10 +80,30 @@ for (i in 1:23) {
     show_call = F,
     NAICS2017 = naics_codes$Code[i]
   )
-  zip <- merge(zip, x, by.x = "ZIP_CODE", by.y = "zip_code", all = T) %>%
-    select(-c( "NAICS2017")) 
-  colnames(zip)[colnames(zip) == "ESTAB"] <- paste(naics_codes$Business_Type[i])
-}
+  }
+
+# Convert zip to zcta
+zip_to_zcta(data.frame(zip), 
+            geoid_col = "ZIP_CODE", 
+            meas_col = "ESTAB", 
+            use_mean = F)
+
+# Load Zipcode Populations
+pop <- get_acs(geography = "zcta",
+               output = "wide",
+               year = 2019,
+               survey = "acs5",
+               variables = "B01001_001",
+               geometry = F
+) %>%
+  select(GEOID, B01001_001E)
+
+
+# Clean Data----
+
+
+# Merge business count data into zipcode data
+
 
 # Merge zipcode populations data into business count data
 zip <- left_join(zip, zip_pop, by = c("ZIP_CODE" = "zipcode"))
