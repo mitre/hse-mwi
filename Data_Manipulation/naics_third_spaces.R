@@ -68,10 +68,8 @@ zip_to_zcta(data.frame(zip),
             meas_col = "ESTAB", 
             use_mean = F)
 
-
 # Load Zipcode Populations
-zip_pop <- zip_code_db %>%
-  select("zipcode", "population")
+
 
 # Clean Data----
 
@@ -83,7 +81,7 @@ zip <- zip[!zip$STATE %in% territories, ]
 naics_codes$Business_Type <- trimws(naics_codes$Business_Type)
 
 # Merge business count data into zipcode data
-for (i in 1:9) {
+for (i in 1:23) {
   x <- getCensus(
     name = "cbp",
     vars = c("ESTAB"), 
