@@ -71,8 +71,9 @@ territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip <- zip[!zip$STATE %in% territories, ]
 
 # Load in CBP data
-for (i in 1:23) {
-  x <- getCensus(
+results <- list()
+for (i in 1:nrow(naics_codes)) {
+  cbp <- getCensus(
     name = "cbp",
     vars = c("ESTAB"), 
     vintage = 2019,
@@ -80,7 +81,9 @@ for (i in 1:23) {
     show_call = F,
     NAICS2017 = naics_codes$Code[i]
   )
+  results[[i]] <- cbp
   }
+cbp <- do.call(rbind, results)
 
 # Convert zip to zcta
 zip_to_zcta(data.frame(zip), 
