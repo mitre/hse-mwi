@@ -88,7 +88,10 @@ cbp <- do.call(rbind, results)
 # Create Column for each NAICS Code
 cbp <- reshape::cast(cbp, zip_code ~ NAICS2017, sum, value = 'ESTAB') %>%
   # Add in the remainder of the zipcodes with 0 third spaces
-  full_join(zip, by = c("zip_code" = "ZIP_CODE"))) %>%
+  full_join(zip, by = c("zip_code" = "ZIP_CODE")) %>%
+  # Remove irrelevant variables
+  select(c(1:24))
+
 # Convert zip to zcta
 zip_to_zcta(data.frame(zip), 
             geoid_col = "ZIP_CODE", 
