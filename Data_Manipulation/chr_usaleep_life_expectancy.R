@@ -104,6 +104,7 @@ cty_le[, c(3,5:ncol(cty_le))] <-
   sapply(cty_le[, c(3,5:ncol(cty_le))],as.numeric)
 # map all the names to geoid numbers
 cty_le$ST_ABBR <- setNames(state.abb, state.name)[cty_le$State]
+cty_le$ST_ABBR[cty_le$State == "District of Columbia"] <- "DC"
 cty_le$CNTY_NUM <- cty_name_map(cty_le, "ST_ABBR", "County")
 
 # read in life expectancy at census tract level
@@ -114,8 +115,7 @@ ct_le <- read.csv(file.path(data_folder,
                                  "CNTY2KX" = "character",
                                  "TRACT2KX" = "character"
                   ))
-
-# STOP HERE
+ct_le$CNTY_NUM <- paste0(ct_le$STATE2KX, ct_le$CNTY2KX)
 
 # extrapolate life expectancy ----
 
@@ -123,8 +123,14 @@ ct_le <- read.csv(file.path(data_folder,
 rownames(cty_le) <- cty_le$CNTY_NUM
 
 # extrapolate life expectancy using county as baseline
-ct_shp$baseline <- cty_le[ct_shp$CNTY_NUM, "County.Value"]
-ct_shp$black_le <- cty_le[ct_shp$CNTY_NUM, "Black"]
-ct_shp$modifier <- ct_shp$black_le/ct_shp$baseline
+ct_le$baseline <- cty_le[ct_le$CNTY_NUM, "County.Value"]
+ct_le$black_le <- cty_le[ct_le$CNTY_NUM, "Black"]
+ct_le$modifier <- ct_le$black_le/ct_le$baseline
 
-ct_shp$Life.Expectancy_black <- ct_shp$Life.Expectancy*ct_shp$modifier
+# create modified life expectancy
+ct_le$Life.Expectancy_black <- ct_le$estimate*ct_le$modifier
+ct_le$Life.Expectancy_pop <- ct_le$estimate
+
+# fill in where the county data is missing with baseline
+ct_le$Life.Expectancy_black[is.na(ct_le$Life.Expectancy_black)] <-
+  ct_le$estimate[is.na(ct_le$Life.Expectancy_black)]
