@@ -134,3 +134,15 @@ ct_le$Life.Expectancy_pop <- ct_le$estimate
 # fill in where the county data is missing with baseline
 ct_le$Life.Expectancy_black[is.na(ct_le$Life.Expectancy_black)] <-
   ct_le$estimate[is.na(ct_le$Life.Expectancy_black)]
+
+# write out ----
+
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Preprocessed")
+
+write.csv(acs_final, 
+          file = file.path(data_folder,
+                           "CHR_USALEEP_Life_Expectancy.csv"), 
+          row.names = F, na = "")
