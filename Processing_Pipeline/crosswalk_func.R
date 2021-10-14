@@ -213,7 +213,7 @@ ct_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
       zcta_df[z, meas_col] <- 
         sapply(meas_col, function(x){
           if (use_mean){
-            weighted.mean(df_sub[,x], ct_sub$ZHUPCT, na.rm = T)
+            weighted.mean(df_sub[,x], ct_sub$ZPOPPCT, na.rm = T)
           } else {
             sum(df_sub[,x], na.rm = T)
           }
