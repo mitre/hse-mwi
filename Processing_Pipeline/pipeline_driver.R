@@ -139,8 +139,55 @@ cat(paste0("[", Sys.time(), "]: Calculating data information\n"))
 # preallocate output data -- this will also be useful later
 info_dat <- as.data.frame(m_reg)
 # add additional information
-info_dat[, c("Is_Numeric", "Minimum", "Maximum", "Missing", "Number_Rows")] <-
+info_dat[, c("Is_Numeric", "Minimum", "Maximum", "Missing", "Number_Rows",
+             "Total_Penalty","Effective_Weights")] <-
   NA
+
+# rescale weights put in "effective_weights"
+# empty weight are 0
+info_dat$Weights[is.na(info_dat$Weights)] <- 0
+info_dat$Effective_Weights <- info_dat$Weights/sum(info_dat$Weights)*100
+# now add overall penalties
+info_dat$Total_Penalty <- 0
+# georgaphic granularity
+geo_pen <- .1
+info_dat$Total_Penalty[!info_dat$`Geographically Granular`] <- 
+  info_dat$Total_Penalty[!info_dat$`Geographically Granular`] + geo_pen
+# no race stratification possible
+race_pen <- .1
+info_dat$Total_Penalty[info_dat$`Race Stratification Not Available`] <- 
+  info_dat$Total_Penalty[info_dat$`Race Stratification Not Available`] + race_pen
+# now update weights with overall penalty
+# first subtract the weight amount
+info_dat$Effective_Weights <- 
+  info_dat$Effective_Weights - info_dat$Effective_Weights*info_dat$Total_Penalty 
+# now we need to rescale back to big bucket weights
+# amounts
+wt_amt <- c(
+  "sdoh" = 60, # SDOH
+  "ha" = 15, # healthcare access
+  "hs" = 25 # health status
+)
+# names
+cat_names <- c(
+  "sdoh" = "Social Determinants of Health",
+  "ha" = "Healthcare Access",
+  "hs" = "Health Status"
+)
+for (cn in names(cat_names)){
+  cn_log <- info_dat$Category == cat_names[cn]
+  
+  # add the penalties
+  info_dat$Effective_Weights[cn_log] <- 
+    info_dat$Effective_Weights[cn_log]-
+    (info_dat$Effective_Weights[cn_log]*info_dat$Total_Penalty[cn_log])
+  
+  # scale the weights to the whole category
+  info_dat$Effective_Weights[cn_log] <- 
+    info_dat$Effective_Weights[cn_log]/
+    sum(info_dat$Effective_Weights[cn_log])*wt_amt[cn]
+}
+
 # duplicate rows that are race stratified
 info_dat <- rbind(info_dat, info_dat[m_reg$`Race Stratification`,])
 # add pop for ones that are preprocessed but not duplicated
