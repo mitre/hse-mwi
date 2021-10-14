@@ -132,6 +132,21 @@ acs_data <- get_acs(
     "C27001B_007", # Estimate!!Total:!!19 to 64 years:!!No health insurance coverage
     "C27001B_010", #Estimate!!Total:!!65 years and over:!!No health insurance coverage,
     
+    # Early Childhood Education -----
+    
+    # Numerator: School enrollment by detailed level of school for the population 3 years and older
+    "B14007_003", # Estimate!!Total:!!Enrolled in school:!!Enrolled in nursery school, preschool
+
+    "B14007B_003", # Estimate!!Total:!!Enrolled in school:!!Enrolled in nursery school, preschool (Black or African American Alone)
+
+    # Denominator: Under 5 population
+    "B01001_003", # Estimate!!Total:!!Male:!!Under 5 years
+    "B01001_027", # Estimate!!Total:!!Female:!!Under 5 years
+    
+    "B01001B_003", # Estimate!!Total:!!Male:!!Under 5 years (Black or African American Alone)
+    "B01001B_018", # Estimate!!Total:!!Female:!!Under 5 years (Black or African American Alone)
+    
+    
     # ICE variables -----
     
     # Index of Concentration at the Extremes for Black / White Income
@@ -184,7 +199,7 @@ cname_map <- list(
   "worktransportation_denom_pop" = c("B08006_001E"),
   "worktransportation_caralone_pop" = c("B08006_003E"),
   "worktransportation_denom_black" = c("B08105B_001E"),
-  "worktransportation_carlone_black" = c("B08105B_002E"),
+  "worktransportation_caralone_black" = c("B08105B_002E"),
   "computerinternet_denom_pop" = c("B28003_001E"),
   "computerinternet_computerandbroadband_pop" = c("B28003_004E"),
   "computerinternet_denom_black" = c("B28009B_001E"),
@@ -208,7 +223,13 @@ cname_map <- list(
   "healthinsurance_denom_pop" = c("B27020_001E"),
   "healthinsurance_nohealthinsurance_pop" = c("B27020_006E", "B27020_012E", "B27020_017E"),
   "healthinsurance_denom_black" = c("C27001B_001E"),
-  "healthinsurance_nohealthinsurance_black" = c("C27001B_004E", "C27001B_007E","C27001B_010E")
+  "healthinsurance_nohealthinsurance_black" = c("C27001B_004E", "C27001B_007E","C27001B_010E"),
+
+  "earlychildhoodeducation_denom_pop" = c("B01001_003E", "B01001_027E"),
+  "earlychildhoodeducation_enrolled_pop" = c("B14007_003E"),
+  "earlychildhoodeducation_denom_black" = c("B01001B_003E", "B01001B_018E"),
+  "earlychildhoodeducation_enrolled_black" = c("B14007B_003E")
+
 )
 
 # preallocate -- we're going to just keep the geoid and name columns
@@ -266,4 +287,5 @@ data_folder <- file.path(
   "Data", "Preprocessed")
 
 write.csv(acs_final, file = file.path(data_folder,
-                                     "ACS_API_Data.csv"), row.names = F, na = "")
+                                     "ACS_API_Data.csv"), 
+          row.names = F, na = "")
