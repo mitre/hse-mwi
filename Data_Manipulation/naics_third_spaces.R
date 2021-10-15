@@ -127,8 +127,7 @@ final <- mutate(final, thirdspaces_pop = rowSums(final[2:24])/B01001_001E,
                                        NA, thirdspaces_pop),
               # Replacing NaNs with 0
               thirdspaces_pop = ifelse(is.nan(thirdspaces_pop),
-                                       0, thirdspaces_pop))
-final <- final %>%
+                                       0, thirdspaces_pop))%>%
   select(ZCTA, thirdspaces_pop)
 
 # NaNs indicated 0 third spaces and a 0 population value
