@@ -84,6 +84,7 @@ for (i in 1:nrow(naics_codes)) {
   }
 cbp <- do.call(rbind, results)
 
+# Data Cleaning----
 # Create Column for each NAICS Code
 cbp <- reshape::cast(cbp, zip_code ~ NAICS2017, sum, value = 'ESTAB') %>%
   # Add in the remainder of the zipcodes with 0 third spaces
@@ -119,6 +120,7 @@ pop <- get_acs(geography = "zcta",
 ) %>%
   select(GEOID, B01001_001E)
 
+# Calculate Measure----
 # Calculating measure value = # third spaces / population in ZCTA
 final <- full_join(cbp_zcta, pop, by = c("ZCTA" = "GEOID")) 
 final <- mutate(final, thirdspaces_pop = rowSums(final[2:24])/B01001_001E,
@@ -134,29 +136,6 @@ final <- mutate(final, thirdspaces_pop = rowSums(final[2:24])/B01001_001E,
 # Inf indicated a non-zero integer for at least one third
 # space and a 0 population value
 
-
-# Clean Data----
-
-
-# Merge business count data into zipcode data
-
-
-# Merge zipcode populations data into business count data
-zip <- left_join(zip, zip_pop, by = c("ZIP_CODE" = "zipcode"))
-
-# Replace NAs with 0s
-zip[is.na(zip)] <- 0
-
-# Remove Unnecessary Columns & Add Population/100k variable
-zip <- zip %>%
-  mutate(thirdspaces_pop = rowSums(.[7:15])/(population/100000)) %>%
-  select(-c(2:6, "population")) %>%
-  relocate(thirdspaces_pop, .after = ZIP_CODE) %>%
-  mutate(thirdspaces_pop = replace(thirdspaces_pop, is.nan(thirdspaces_pop), 0))
-
-# Replace Inf with NA
-zip$thirdspaces_pop[is.infinite(zip$thirdspaces_pop)] <- NA
-
 # Export Data Frame----
 
 data_folder <- file.path(
@@ -164,7 +143,7 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Preprocessed")
 
-write.csv(zip, 
+write.csv(final, 
           file = file.path(data_folder,
                            "NAICS_Third_Spaces.csv"), 
           row.names = F, 
