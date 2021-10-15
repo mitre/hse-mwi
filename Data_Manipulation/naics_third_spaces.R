@@ -99,6 +99,16 @@ cbp_zcta <- zip_to_zcta(cbp,
 # 1 zip code not found in master crosswalk
 # Resulting in 6 ZCTAs missing/not mapped for each category
 
+# Identify how many ZCTAs have 0 third spaces in these categories
+nrow(subset(cbp_zcta, `4451` == 0 & `4452` == 0 & `451` == 0 & `51912` == 0 &
+         `51919` == 0 & `7111` == 0 & `7112` == 0 & `712` == 0 &
+         `7131` == 0 & `7139` == 0 & `72233` == 0 & `7224` == 0 &
+         `7225` == 0 & `8121` == 0 & `81221` == 0 & `81222` == 0 &
+         `81231` == 0 & `81232` == 0 & `81291` == 0 & `81292` == 0 &
+         `81299` == 0 & `813` == 0 & `8134` == 0))
+
+# 13320 ZCTAs have 0 third spaces - this is about 40% of ZCTAs
+
 # Load Zipcode Populations
 pop <- get_acs(geography = "zcta",
                output = "wide",
