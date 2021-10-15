@@ -61,7 +61,6 @@ resource_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Resources")
 
-# Load all zip codes
 zip <- read_zips(
   file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
   "ZIP_CODE")
