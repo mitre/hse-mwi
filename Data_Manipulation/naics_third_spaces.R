@@ -8,7 +8,7 @@ library(dplyr)
 library(readr)
 library(stringr)
 library(reshape2)
-library(zipcodeR)
+library(tidycensus)
 
 # Load crosswalks
 source("Processing_Pipeline/crosswalk_func.R")
@@ -109,7 +109,7 @@ nrow(subset(cbp_zcta, `4451` == 0 & `4452` == 0 & `451` == 0 & `51912` == 0 &
 
 # 13320 ZCTAs have 0 third spaces - this is about 40% of ZCTAs
 
-# Load Zipcode Populations
+# Load ZCTA Populations
 pop <- get_acs(geography = "zcta",
                output = "wide",
                year = 2019,
@@ -118,6 +118,22 @@ pop <- get_acs(geography = "zcta",
                geometry = F
 ) %>%
   select(GEOID, B01001_001E)
+
+# Calculating measure value = # third spaces / population in ZCTA
+final <- full_join(cbp_zcta, pop, by = c("ZCTA" = "GEOID")) 
+final <- mutate(final, thirdspaces_pop = rowSums(final[2:24])/B01001_001E,
+              # Replacing Infs with NAs
+              thirdspaces_pop = ifelse(is.infinite(thirdspaces_pop),
+                                       NA, thirdspaces_pop),
+              # Replacing NaNs with 0
+              thirdspaces_pop = ifelse(is.nan(thirdspaces_pop),
+                                       0, thirdspaces_pop))
+final <- final %>%
+  select(ZCTA, thirdspaces_pop)
+
+# NaNs indicated 0 third spaces and a 0 population value
+# Inf indicated a non-zero integer for at least one third
+# space and a 0 population value
 
 
 # Clean Data----
