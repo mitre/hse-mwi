@@ -92,10 +92,12 @@ cbp <- reshape::cast(cbp, zip_code ~ NAICS2017, sum, value = 'ESTAB') %>%
   select(c(1:24))
 
 # Convert zip to zcta
-zip_to_zcta(data.frame(zip), 
-            geoid_col = "ZIP_CODE", 
-            meas_col = "ESTAB", 
+cbp_zcta <- zip_to_zcta(cbp, 
+            geoid_col = "zip_code", 
+            meas_col = colnames(cbp)[-1], 
             use_mean = F)
+# 1 zip code not found in master crosswalk
+# Resulting in 6 ZCTAs missing/not mapped for each category
 
 # Load Zipcode Populations
 pop <- get_acs(geography = "zcta",
