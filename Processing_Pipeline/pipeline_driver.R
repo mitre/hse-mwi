@@ -43,15 +43,33 @@ perc.rank <- function(x) {
 # function to get the final score for a given set of measures
 # pm: percentile-ranked measure data frame, with GEOID as the first column
 # type: "pop" or "black" is it full population or race stratified
-# returns final score, combined with weightes
+# returns final score, combined with weights
 get_final_score <- function(pm, type = "pop"){
   # now created the weighted measures
-  # NOTE: weights are equal right now
-  weighted_meas <- sweep(
+  # first multiply the original weights
+  tot_weighted_meas <- sweep(
     pm[, colnames(pm) != "GEOID"], 
+    MARGIN = 2,
+    info_dat[colnames(pm)[colnames(pm) != "GEOID"], "Effective_Weights"], 
+    `*`)
+  
+  # create which weights should be included for each row (for missing data)
+  wt_df <- data.frame(
+    matrix(info_dat[colnames(pm)[colnames(pm) != "GEOID"], "Effective_Weights"],
+           ncol = ncol(pm)-1)
+  )
+  wt_df <- rbind(wt_df, wt_df[rep(1, nrow(tot_weighted_meas)-1),])
+  wt_df[is.na(tot_weighted_meas)] <- NA
+  wt_sum <- rowSums(wt_df, na.rm = T)
+  # NOTE: we want to return this scaled in the future
+  
+  # create the appropriately weighted measures
+  weighted_meas <- sweep(
+    tot_weighted_meas, 
     MARGIN = 1,
-    rowSums(!is.na(pm[, colnames(pm) != "GEOID"])), 
+    wt_sum, 
     `/`)
+  
   # preliminary score is weighted limited score
   prelim_score <- rowSums(weighted_meas, na.rm = T)
   # remove score for places under some threshold
@@ -60,6 +78,8 @@ get_final_score <- function(pm, type = "pop"){
     pm$GEOID %in% 
       all_pop_df$GEOID[all_pop_df[,paste0("total_", type)] < 1]
     ] <- NA
+  # remove score for places with over 50% of weights missing 
+  prelim_score[wt_sum < 50] <- NA
   
   # then we rescale the score -- using 5% and 99.5%
   low_score <- quantile(prelim_score, probs = .005, na.rm = T)
