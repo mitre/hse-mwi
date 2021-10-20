@@ -270,7 +270,7 @@ cat(paste0("[", Sys.time(), "]: Writing out data information\n"))
 
 write.csv(info_dat, 
           file.path(cleaned_folder,
-                    "HSE_BHN_Data_Information.csv"),
+                    "HSE_MWI_Data_Information.csv"),
           na = "",
           row.names = F)
 
@@ -376,7 +376,7 @@ cat(paste0("[", Sys.time(), "]: Write out converted, scaled data\n"))
 
 write.csv(meas_df, 
           file.path(cleaned_folder,
-                    "HSE_BHN_ZCTA_Converted_Measures.csv"),
+                    "HSE_MWI_ZCTA_Converted_Measures.csv"),
           na = "",
           row.names = F)
 
@@ -402,7 +402,7 @@ cat(paste0("[", Sys.time(), "]: Write out percentile ranked data\n"))
 
 write.csv(perc_meas_df, 
           file.path(cleaned_folder,
-                    "HSE_BHN_ZCTA_Percentile_Ranked_Measures.csv"),
+                    "HSE_MWI_ZCTA_Percentile_Ranked_Measures.csv"),
           na = "",
           row.names = F)
 
@@ -418,27 +418,27 @@ black_pm <-
                  info_dat$Numerator[!info_dat$`Race Stratification`]]
 
 # get final, scaled scores
-pop_pm$Score  <- get_final_score(pop_pm, type = "pop")
-black_pm$Score  <- get_final_score(black_pm, type = "black")
+pop_pm$Mental_Wellness_Index  <- get_final_score(pop_pm, type = "pop")
+black_pm$Mental_Wellness_Index  <- get_final_score(black_pm, type = "black")
 
 # reorder columns, for ease of reading
 pop_pm <- pop_pm[,c(
-  "GEOID", "Score", 
-  colnames(pop_pm)[!colnames(pop_pm) %in% c("GEOID", "Score")])]
+  "GEOID", "Mental_Wellness_Index", 
+  colnames(pop_pm)[!colnames(pop_pm) %in% c("GEOID", "Mental_Wellness_Index")])]
 black_pm <- black_pm[,c(
-  "GEOID", "Score", 
-  colnames(black_pm)[!colnames(black_pm) %in% c("GEOID", "Score")])]
+  "GEOID", "Mental_Wellness_Index", 
+  colnames(black_pm)[!colnames(black_pm) %in% c("GEOID", "Mental_Wellness_Index")])]
 
-cat(paste0("[", Sys.time(), "]: Write out final scores\n"))
+cat(paste0("[", Sys.time(), "]: Write out final indices\n"))
 
 write.csv(pop_pm, 
           file.path(cleaned_folder,
-                    "HSE_BHN_ZCTA_Score_Population.csv"),
+                    "HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv"),
           na = "",
           row.names = F)
 
 write.csv(black_pm, 
           file.path(cleaned_folder,
-                    "HSE_BHN_ZCTA_Score_Black.csv"),
+                    "HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv"),
           na = "",
           row.names = F)
