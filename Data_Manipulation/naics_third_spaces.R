@@ -121,9 +121,10 @@ pop <- get_acs(geography = "zcta",
   select(GEOID, B01001_001E)
 
 # Calculate Measure----
-# Calculating measure value = # third spaces / population in ZCTA
+# Calculating measure value = # third spaces / 100k population in ZCTA
 final <- full_join(cbp_zcta, pop, by = c("ZCTA" = "GEOID")) 
-final <- mutate(final, thirdspaces_pop = rowSums(final[2:24])/B01001_001E,
+final <- mutate(final,
+                thirdspaces_pop = (rowSums(final[2:24])/B01001_001E)*100000,
               # Replacing Infs with NAs
               thirdspaces_pop = ifelse(is.infinite(thirdspaces_pop),
                                        NA, thirdspaces_pop),
