@@ -1,9 +1,10 @@
-# Behavioral Health Needs App
-# By Hannah De los Santos
-# Originated on: 12/18/2020
+# Mental Wellness Index Tool
+# By HSE Team
+# Originated on: 10/20/2021
 
 # load data and libraries ----
 
+library(readxl)
 library(htmltools)
 library(shiny)
 library(tigris)
@@ -13,72 +14,111 @@ library(sf)
 library(plotly)
 library(ggbeeswarm)
 
-#https://stackoverflow.com/questions/3452086/getting-path-of-an-r-script/35842176#35842176
-# set working directory - only works in RStudio (with rstudioapi)
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# what indices are available?
+index_types <- c("Population" = "pop",
+                 "Black" = "black")
 
-data_folder <- file.path("..", "Data")
+# folder where all the data and information for the pipeline is
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data")
 
-# sanam 
-sanam_orig <- read.csv(file.path(data_folder, "data_measures_and_score.csv"),
-                       colClasses = c("ZCTA" = "character"))
-sanam_colnames <- colnames(
-  read.csv(file.path(data_folder, "data_measures_and_score.csv"), 
-           nrows = 1, check.names = F)
+# load measure registry -- first sheet
+m_reg <- as.data.frame(
+  read_excel(file.path(data_folder, "Metadata.xlsx"), sheet = 1)
 )
-# filter data only to NC and bordering states
-states_filt <- c(
-  "North Carolina" = "NC",
-  "Virginia" = "VA",
-  "Tennessee" = "TN",
-  "Georgia" = "GA",
-  "South Carolina" = "SC"
-  )
+# remove everything that doesn't have a numerator
+m_reg <- m_reg[!is.na(m_reg$Numerator),]
+rownames(m_reg) <- m_reg$Numerator
+
+# load index weighting/output
+info_df <- read.csv(
+  file.path(data_folder, "Cleaned", "HSE_MWI_Data_Information.csv"),
+  row.names = "Numerator"
+)
+
+# load county cw for zcta state county mapping
+county_cw <- read.csv(
+  file.path(data_folder, "Resources", "zcta_county_rel_10.txt"),
+  colClasses = c(
+    "ZCTA5" = "character",
+    "STATE" = "character",
+    "COUNTY" = "character",
+    "GEOID" = "character"
+  ))
+# collapse so that there's one zcta for every row (counties get collapsed by pipe)
+cty_cw <- 
+  aggregate(COUNTY ~ ZCTA5, data = county_cw, 
+            FUN = function(x){paste(x, collapse = "|")})
+# STOP HERE
+
+
+# MWI scores
+# NOTE: may also save as RData for faster reading
+mwi <- list()
+mwi[["pop"]] <- read.csv(
+  file.path(data_folder, "Cleaned", 
+            "HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv"),
+  colClasses = c("ZCTA" = "character")
+)
+mwi[["black"]] <- read.csv(
+  file.path(data_folder, "Cleaned", 
+            "HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv"),
+  colClasses = c("ZCTA" = "character")
+)
+
 # create a pretty set of names for later
-st_abbrev_to_full <- c(names(states_filt), "All States")
-names(st_abbrev_to_full) <- c(states_filt, "All")
-
-sanam <- sanam_orig[sanam_orig$STATE %in% states_filt,]
-sanam$ZCTA <- as.character(sanam$ZCTA)
-
-# also remove data with no weights
-s_wts <- read.csv(
-  file.path(data_folder, 
-            "data_weights_UNS 2.0 Weights Broadband ICE - PR Adjusted.csv")
-)
-sub_names <- sanam_colnames[
-  sanam_colnames %in% c(
-    s_wts$TYPE[s_wts$CATEGORY != "Not using" & !is.na(s_wts$States.DC)],
-    "Limited Access to Healthy Foods",
-    "Foreign Born" #adding a couple that do not fit the mold
-    )
-]
-sanam <- cbind(sanam[,-c(2:122)],
-               sanam[,2:122][, sanam_colnames[2:122] %in% sub_names])
-
-# measure type information
-measure_to_type <- read.csv(file.path(data_folder, "measures_to_type.csv"))
-
-# measure orientation information
-measure_orientation <- 
-  read.csv(file.path(data_folder, "data_measure_registry.csv"))
-# add measure orientation to full data frame
-rownames(measure_orientation) <- measure_orientation$Measure
-s_orientation <- 
-  measure_orientation[sanam_colnames[2:122][sanam_colnames[2:122] %in% sub_names],
-                      c("Orientation", "Measure")]
-s_orientation[,"SANAM_Names"] <- colnames(sanam)[-c(1:11)]
-rownames(s_orientation) <- s_orientation$SANAM_Names
+st_abbrev_to_full <- c(state.name, "District of Columbia", "All States")
+names(st_abbrev_to_full) <- c(state.abb, "DC", "All")
 
 # plotting information ----
 
-# create measure names
-avail_measures <- c("Score", colnames(sanam)[-c(1:11)])
-names(avail_measures) <- 
-  c("Unmet Need Score", sanam_colnames[2:122][sanam_colnames[2:122] %in% sub_names])
+# create measure name to overall category
+meas_col_to_type <- setNames(m_reg$Category, m_reg$Measure)
+meas_col_to_type["Mental Wellness Index"] <- "Mental Wellness Index"
 
-measure_to_names <- names(avail_measures)
-names(measure_to_names) <- avail_measures
+# create measure names
+avail_measures <- measure_to_names <- avail_meas_w_weights <- 
+  list()
+# group into list for display
+avail_meas_list <- m_to_type <- list()
+for (idx in index_types){
+  avail_measures[[idx]] <- colnames(mwi[[idx]])[-1]
+  names(avail_measures[[idx]]) <- 
+    c("Mental Wellness Index", 
+      m_reg[
+        gsub("_pop","",
+             gsub("_black","",colnames(mwi[[idx]])[-c(1:2)])), "Measure"
+      ]
+    )
+  
+  measure_to_names[[idx]] <-
+    setNames(names(avail_measures[[idx]]), avail_measures[[idx]])
+  
+  # group into list for display
+  avail_meas_list[[idx]] <- list()
+  
+  # measure column to type
+  m_to_type[[idx]] <- 
+    meas_col_to_type[measure_to_names[[idx]][avail_measures[[idx]]]]
+  
+  # add the weights to the name
+  avail_meas_w_weights[[idx]] <- avail_measures[[idx]]
+  # rownames(measure_to_type) <- measure_to_type$Name
+  names(avail_meas_w_weights[[idx]]) <- 
+    paste0(names(avail_measures[[idx]]),
+           " (Weight: ", 
+           round(info_df[avail_measures[[idx]], "Effective_Weights"], 2),
+           ")")
+  # unmet need score doesn't have a weight
+  names(avail_meas_w_weights[[idx]])[1] <- names(avail_measures[[idx]])[1]
+  # add them to the list
+  for (t in unique(m_to_type[[idx]])){
+    avail_meas_list[[idx]][[t]] <- 
+      avail_meas_w_weights[[idx]][m_to_type[[idx]] == t]
+  }
+}
 
 # get measure colors
 meas_colors <- c(
@@ -87,66 +127,48 @@ meas_colors <- c(
   "BuPu",
   "RdBu"
 )
-names(meas_colors) <- unique(measure_to_type$Overall.Type)
+names(meas_colors) <- c(unique(m_reg$Category), "Mental Wellness Index")
 
 # get max/min colors for each palette
 meas_max_colors <- sapply(1:length(meas_colors), function(x){
   brewer.pal(3, meas_colors[x])[
-    ifelse(names(meas_colors[x]) == "Unmet Need Score", 1, 3)
+    ifelse(names(meas_colors[x]) == "Mental Wellness Index", 1, 3)
   ]
 })
 meas_min_colors <- sapply(1:length(meas_colors), function(x){
   brewer.pal(3, meas_colors[x])[
-    ifelse(names(meas_colors[x]) == "Unmet Need Score", 3, 1)
+    ifelse(names(meas_colors[x]) == "Mental Wellness Index", 3, 1)
   ]
 })
 names(meas_max_colors) <- names(meas_min_colors) <- names(meas_colors)
 
-# has the pretty names
-meas_col_to_type <- measure_to_type$Overall.Type
-names(meas_col_to_type) <- measure_to_type$Name
 
-# group into list for display
-avail_meas_list <- list()
-m_to_type <- meas_col_to_type[measure_to_names[avail_measures]]
-# add the weights to the name
-avail_meas_w_weights <- avail_measures
-rownames(measure_to_type) <- measure_to_type$Name
-names(avail_meas_w_weights) <- 
-  paste0(names(avail_measures),
-         " (Weight: ", measure_to_type[names(avail_measures), "Weight"],
-         ")")
-# unmet need score doesn't have a weight
-names(avail_meas_w_weights)[1] <- names(avail_measures)[1]
-# add them to the list
-for (t in unique(m_to_type)){
-  avail_meas_list[[t]] <- avail_meas_w_weights[m_to_type == t]
-}
-
-# # get zip code data
-# # NOTE: cb = T will download a generalized file
-# zips <- zctas(
-#   cb = T, 
-#   starts_with = as.character(sanam$ZCTA[sanam$STATE == "NC"])
-# )
-# for (st in states_filt[-1]){
-#   zips <- rbind(
-#     zips,
-#     zctas(
-#       cb = T, 
-#       starts_with = as.character(sanam$ZCTA[sanam$STATE == st])
-#     ))
-# }
+# get zip code data -- ONLY ORIGINAL
+# NOTE: cb = T will download a generalized file
+# zips <- zctas(cb = T)
 # zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
+# save(list = "zips", file = file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
 
-# load zip code data (should be much faster)
-load(file.path(data_folder, "ZCTAS_NC_and_border_states.RData"))
-
+# # load zip code data (should be much faster)
+# load(file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
+# 
 # create the geo data for leaflet
-geodat <- geo_join(zips, sanam, by_sp = "GEOID10", by_df = "ZCTA", how = "left")
+# NOTE: may want to do this ahead of time, if possible, when the base index is done
+geodat <- list()
+for (idx in index_types){
+  geodat[[idx]] <-
+    geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
+  
+  # add state and county (multiple counties for a zcta separated by pipes)
+}
+# saving for now, while things are stable
+save(list = "geodat", file = file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
 
-# get available zctas
-avail_zctas <- geodat$GEOID10
+# load geodat data (should be much faster)
+load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+
+# get available zctas -- both will have the same
+avail_zctas <- geodat[["pop"]]$GEOID10
 names(avail_zctas) <- paste0(geodat$GEOID10, " (State: ", geodat$STATE, ")")
 
 # plot functions ----
