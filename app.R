@@ -47,12 +47,27 @@ county_cw <- read.csv(
     "COUNTY" = "character",
     "GEOID" = "character"
   ))
-# collapse so that there's one zcta for every row (counties get collapsed by pipe)
+# collapse so that there's one zcta for every row (states get collapsed by pipe)
 cty_cw <- 
-  aggregate(COUNTY ~ ZCTA5, data = county_cw, 
+  aggregate(STATE ~ ZCTA5, data = county_cw, 
             FUN = function(x){paste(x, collapse = "|")})
-# STOP HERE
-
+rownames(cty_cw) <- cty_cw$ZCTA5
+# get unique states
+un_st <- lapply(
+  strsplit(cty_cw$STATE, "|", fixed = T), unique)
+# original state will be the first given -- FIX THIS BY GREATEST AREA LATER
+cty_cw$STATE <- sapply(un_st, `[`, 1)
+cty_cw$STATE_2 <- sapply(un_st, `[`, 2)
+# add state name
+data("fips_codes")
+f_st <- setNames(unique(fips_codes$state_name),
+                 unique(fips_codes$state_code))
+cty_cw$STATE_NAME <- f_st[cty_cw$STATE]
+# add all the counties and geoids as well
+cty_cw$COUNTY <- aggregate(COUNTY ~ ZCTA5, data = county_cw, 
+                           FUN = function(x){paste(x, collapse = "|")})[,2]
+cty_cw$GEOID <- aggregate(GEOID ~ ZCTA5, data = county_cw, 
+                           FUN = function(x){paste(x, collapse = "|")})[,2]
 
 # MWI scores
 # NOTE: may also save as RData for faster reading
@@ -67,6 +82,10 @@ mwi[["black"]] <- read.csv(
             "HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv"),
   colClasses = c("ZCTA" = "character")
 )
+for (idx in index_types){
+  mwi[[idx]][, colnames(cty_cw)[-1]] <- 
+    cty_cw[mwi[[idx]]$ZCTA, -1]
+}
 
 # create a pretty set of names for later
 st_abbrev_to_full <- c(state.name, "District of Columbia", "All States")
@@ -154,22 +173,26 @@ names(meas_max_colors) <- names(meas_min_colors) <- names(meas_colors)
 # 
 # create the geo data for leaflet
 # NOTE: may want to do this ahead of time, if possible, when the base index is done
-geodat <- list()
-for (idx in index_types){
-  geodat[[idx]] <-
-    geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
-  
-  # add state and county (multiple counties for a zcta separated by pipes)
-}
-# saving for now, while things are stable
-save(list = "geodat", file = file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+# geodat <- list()
+# for (idx in index_types){
+#   geodat[[idx]] <-
+#     geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
+# 
+#   # sort by state code
+#   geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE),]
+#   
+#   # add state and county (multiple counties for a zcta separated by pipes)
+# }
+# # saving for now, while things are stable
+# save(list = "geodat", file = file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
 
 # load geodat data (should be much faster)
 load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
 
 # get available zctas -- both will have the same
 avail_zctas <- geodat[["pop"]]$GEOID10
-names(avail_zctas) <- paste0(geodat$GEOID10, " (State: ", geodat$STATE, ")")
+names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10, 
+                             " (State: ", geodat[["pop"]]$STATE_NAME, ")")
 
 # plot functions ----
 

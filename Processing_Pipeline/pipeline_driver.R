@@ -432,7 +432,6 @@ black_pm <- black_pm[,c(
 colnames(pop_pm)[1] <- "ZCTA"
 colnames(black_pm)[1] <- "ZCTA"
 
-
 cat(paste0("[", Sys.time(), "]: Write out final indices\n"))
 
 write.csv(pop_pm, 
