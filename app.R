@@ -13,6 +13,7 @@ library(RColorBrewer)
 library(sf)
 library(plotly)
 library(ggbeeswarm)
+library(shinyWidgets)
 
 # what indices are available?
 index_types <- c("Population" = "pop",
@@ -82,10 +83,6 @@ mwi[["black"]] <- read.csv(
             "HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv"),
   colClasses = c("ZCTA" = "character")
 )
-for (idx in index_types){
-  mwi[[idx]][, colnames(cty_cw)[-1]] <- 
-    cty_cw[mwi[[idx]]$ZCTA, -1]
-}
 
 # create a pretty set of names for later
 st_abbrev_to_full <- c(state.name, "District of Columbia", "All States")
@@ -161,6 +158,11 @@ meas_min_colors <- sapply(1:length(meas_colors), function(x){
 })
 names(meas_max_colors) <- names(meas_min_colors) <- names(meas_colors)
 
+# add cities/states to mwi
+for (idx in index_types){
+  mwi[[idx]][, colnames(cty_cw)[-1]] <- 
+    cty_cw[mwi[[idx]]$ZCTA, -1]
+}
 
 # get zip code data -- ONLY ORIGINAL
 # NOTE: cb = T will download a generalized file
@@ -171,8 +173,8 @@ names(meas_max_colors) <- names(meas_min_colors) <- names(meas_colors)
 # # load zip code data (should be much faster)
 # load(file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
 # 
-# create the geo data for leaflet
-# NOTE: may want to do this ahead of time, if possible, when the base index is done
+# # create the geo data for leaflet
+# # NOTE: may want to do this ahead of time, if possible, when the base index is done
 # geodat <- list()
 # for (idx in index_types){
 #   geodat[[idx]] <-
@@ -180,7 +182,7 @@ names(meas_max_colors) <- names(meas_min_colors) <- names(meas_colors)
 # 
 #   # sort by state code
 #   geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE),]
-#   
+# 
 #   # add state and county (multiple counties for a zcta separated by pipes)
 # }
 # # saving for now, while things are stable
@@ -197,7 +199,7 @@ names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10,
 # plot functions ----
 
 # plot the overall map, filled by measure/score (LEAFLET)
-plot_map <- function(fill, geodat, fill_opacity = .7,
+plot_map <- function(fill, geodat, idx, fill_opacity = .7,
                      add_poly = F, us_proxy = NA, zcta_choose = NA){
   # subset map for easy plotting
   gd_map <- geodat[,c(fill, "GEOID10", "STATE", "geometry")]
@@ -205,13 +207,13 @@ plot_map <- function(fill, geodat, fill_opacity = .7,
   
   # create palette
   pal <- colorNumeric(
-    palette = meas_colors[meas_col_to_type[measure_to_names[fill]]],
+    palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
     domain = c(0, gd_map$Fill, 100),
     na.color = "transparent",
     reverse = ifelse(fill == "Score", T, F)
   )
   pal_wo_na <- colorNumeric(
-    palette = meas_colors[meas_col_to_type[measure_to_names[fill]]],
+    palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
     domain = c(0, gd_map$Fill, 100),
     na.color=rgb(0,0,0,0),
     reverse = ifelse(fill == "Score", T, F)
@@ -220,7 +222,7 @@ plot_map <- function(fill, geodat, fill_opacity = .7,
   # labels 
   labels <- 
     paste0(
-      "State: ", gd_map$STATE, "<br>",
+      "State: ", gd_map$STATE_NAME, "<br>",
       "ZCTA: ", gd_map$GEOID10, "<br>", 
       measure_to_names[fill],": ", signif(gd_map$Fill, 4)) %>%
     lapply(htmltools::HTML)
@@ -249,7 +251,7 @@ plot_map <- function(fill, geodat, fill_opacity = .7,
                 values = ~c(0, Fill, 100), 
                 opacity = 0.7, 
                 position = "bottomright",
-                title = unname(measure_to_names[fill])) %>%
+                title = unname(measure_to_names[[idx]][fill])) %>%
       fitBounds(
         lng1 = bounds[1],
         lng2 = bounds[3],
@@ -283,13 +285,13 @@ plot_map <- function(fill, geodat, fill_opacity = .7,
 }
 
 # plot a distribution of the fill value using a beeswarm plot (PLOTLY)
-plot_bee_distr <- function(fill, st, sanam, hl = F, zcta_hl = ""){
+plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
   bee.df <- data.frame(
-    val = sanam[,fill],
-    zcta = sanam$ZCTA,
-    lab = rep("val", nrow(sanam)),
-    focus = rep("val", nrow(sanam)),
-    focus_alpha = rep(1, nrow(sanam))
+    val = mwi[,fill],
+    zcta = mwi$ZCTA,
+    lab = rep("val", nrow(mwi)),
+    focus = rep("val", nrow(mwi)),
+    focus_alpha = rep(1, nrow(mwi))
   )
   # remove all the empty rows
   bee.df <- bee.df[complete.cases(bee.df),]
@@ -301,7 +303,7 @@ plot_bee_distr <- function(fill, st, sanam, hl = F, zcta_hl = ""){
     bee.df$focus_alpha[-row_hl] <- .3
     
     pal <- colorNumeric(
-      palette = meas_colors[meas_col_to_type[measure_to_names[fill]]],
+      palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
       domain = c(0, bee.df$val, 100),
       na.color = "transparent",
       reverse = ifelse(fill == "Score", T, F)
@@ -321,7 +323,7 @@ plot_bee_distr <- function(fill, st, sanam, hl = F, zcta_hl = ""){
     if (hl){
       ggplot(bee.df, aes(val, lab, color = val, size = focus))+
         scale_color_distiller(
-          palette = meas_colors[meas_col_to_type[measure_to_names[fill]]],
+          palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
           direction = ifelse(fill == "Score", -1, 1)
         )+
         # scale_alpha(range = c(0,1))+
@@ -330,7 +332,7 @@ plot_bee_distr <- function(fill, st, sanam, hl = F, zcta_hl = ""){
     } else {
       ggplot(bee.df, aes(val, lab, color = val), size = 1.5)+
         scale_color_distiller(
-          palette = meas_colors[meas_col_to_type[measure_to_names[fill]]],
+          palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
           direction = ifelse(fill == "Score", -1, 1)
         )
     }
@@ -345,7 +347,7 @@ plot_bee_distr <- function(fill, st, sanam, hl = F, zcta_hl = ""){
       )),
       groupOnX = F, alpha = bee.df$focus_alpha)+
     theme_bw()+
-    xlab(measure_to_names[fill])+
+    xlab(measure_to_names[[idx]][fill])+
     theme(
       axis.text.y = element_blank(),
       axis.title.y = element_blank(),
@@ -354,7 +356,7 @@ plot_bee_distr <- function(fill, st, sanam, hl = F, zcta_hl = ""){
       plot.title = element_text(hjust = .5)
     )+
     xlim(-3, 103)+
-    ggtitle(paste0("Distribution of ", measure_to_names[fill], " in ", 
+    ggtitle(paste0("Distribution of ", measure_to_names[[idx]][fill], " in ", 
                    st_abbrev_to_full[st]))+
     NULL
   )
@@ -388,22 +390,31 @@ html_color <- function(meas_color, text){
 # UI ----
 
 ui <- navbarPage(
-  "Unmet Health Needs App",
+  "Mental Wellness Index Tool",
   tabPanel(
     "Explore US",
     sidebarLayout(
       sidebarPanel(
         width = 3,
-        HTML("<b>Welcome to the Unmet Health Needs App!</b> Select any of the options below to get started. <b>If you would like to focus on a specific Zip Code Tabulation Area (ZCTA), click on it in the map to the right or select it from the list below.</b><p>"),
+        HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific Zip Code Tabulation Area (ZCTA), click on it in the map to the right or select it from the list below.</b><p>"),
+        switchInput(
+          inputId = "idx_type",
+          label = "Which population's MWI do you want to view?",
+          value = T,
+          onLabel = "Population",
+          offLabel = "Black"
+        ),
+        # TODO: UPDATE THESE BASED ON POPULATION SELECTED
         selectInput(
           "st_focus",
           "Which state would you like to focus on?",
-          choices = c(states_filt, "All" = "All")
+          choices = c(unname(f_st), "All"),
+          selected = "North Carolina"
         ),
         selectInput(
           "us_map_fill",
           "Which score/measure would you like to explore?",
-          choices = avail_meas_list
+          choices = avail_meas_list[["pop"]]
         ),
         # sliderInput(
         #   "us_map_fill_opacity",
@@ -416,22 +427,22 @@ ui <- navbarPage(
         selectInput(
           "zcta_choose",
           "Which ZCTA would you like to focus on?",
-          choices = c("None" = "", avail_zctas)
+          choices = c("None" = "")#, avail_zctas)
         ),
         actionButton("reset_zcta_click", "Reset ZCTA Focus"),
         hr(),
         HTML("<font size = '2'>"),
         HTML(paste0(
-          "Data and methodology sourced from the Health Resources and Services Administration (HRSA) Service Area Needs Assessment Methodology (SANAM), a methodology that generates a quantitative assessment of unmet need (Unmet Need Score) for primary and preventive health care. ",
-          "More information on SANAM can be found <a href = 'https://bphc.hrsa.gov/programopportunities/strategic-initiatives' target = '_blank'>here</a>.<p><p>"
+          "Data sourced from various publically available data sources.",
+          "More information on methodology can be found in the about tab."
         )),
-        uiOutput("data_info"),
-        HTML(paste0("The Unmet Need Score is the weighted sum of 28 measure values, each weighted according to relative importance of the measure in estimating unmet need.<p><p>"
+        # TODO: FIX INFO HERE
+        # uiOutput("data_info"),
+        HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
         )),
         HTML(paste0(
-          "States currently included are: ", 
-          paste(names(states_filt), collapse = ", "),
-          ". Selecting \"All\" will show all included states. Note that this is slower to render.<p>")),
+          "All states are included.", 
+          "Selecting \"All\" will show all included states. Note that this is slower to render.<p>")),
         HTML("</font>"),
       ),
       mainPanel(
@@ -470,21 +481,38 @@ server <- function(input, output, session) {
   )
   
   st_sub <- reactiveValues(
-    "st" = "NC",
-    "geodat" = geodat[geodat$STATE == "NC",],
-    "sanam" = sanam[sanam$STATE == "NC",]
+    "idx" = "pop",
+    "st" = "North Carolina",
+    "geodat" = geodat[["pop"]][geodat[["pop"]]$STATE_NAME == "North Carolina",],
+    "mwi" = mwi[["pop"]][mwi[["pop"]]$STATE_NAME == "North Carolina",]
   )
   
   us_proxy <- leafletProxy("us_map")
   
   # observe button inputs and clicks ----
   
+  # update measures when the population type changes
+  observeEvent(input$idx_type, {
+    idx <- ifelse(input$idx_type, "pop", "black")
+    
+    updateSelectInput(
+      session = session,
+      "us_map_fill",
+      "Which score/measure would you like to explore?",
+      choices = avail_meas_list[[idx]]
+    )
+  })
+  
   # update the states
   observeEvent(input$st_focus, {
+    idx <- ifelse(input$idx_type, "pop", "black")
+    
+    st_sub$idx <- idx
+    
     if (input$st_focus == "All"){
       st_sub$st <- "All"
-      st_sub$geodat <- geodat
-      st_sub$sanam <- sanam
+      st_sub$geodat <- geodat[[idx]]
+      st_sub$mwi <- mwi[[idx]]
       
       updateSelectInput(session, 
                         "zcta_choose", 
@@ -495,8 +523,8 @@ server <- function(input, output, session) {
       )
     } else {
       st_sub$st <- input$st_focus
-      st_sub$geodat <- geodat[geodat$STATE == input$st_focus,]
-      st_sub$sanam <- sanam[sanam$STATE == input$st_focus,]
+      st_sub$geodat <- geodat[[idx]][geodat[[idx]]$STATE_NAME == input$st_focus,]
+      st_sub$mwi[[idx]] <- mwi[[idx]][mwi[[idx]]$STATE_NAME == input$st_focus,]
       
       updateSelectInput(session, 
                         "zcta_choose", 
@@ -544,6 +572,7 @@ server <- function(input, output, session) {
       
       # add a highlighted polygon
       us_proxy <- plot_map(input$us_map_fill, st_sub$geodat, 
+                           st_sub$idx,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
     } else {
@@ -565,6 +594,7 @@ server <- function(input, output, session) {
       
       # add a highlighted polygon
       us_proxy <- plot_map(input$us_map_fill, st_sub$geodat, 
+                           st_sub$idx,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
     } else {
@@ -578,29 +608,30 @@ server <- function(input, output, session) {
   
   # output plots and information ----
   
-  output$data_info <- renderUI({
-    withProgress(message = "Rendering data information", {
-      full_name <- measure_to_names[input$us_map_fill]
-      
-      HTML(paste0(
-        "<font size = '2'>",
-        
-        "A variety of data sources are used for measures comprising the Unmet Need Score. The data currently pictured for ", 
-        full_name, 
-        " came from ",
-        ifelse(full_name == "Unmet Need Score", 
-               "various sources",
-               measure_orientation[full_name, "Source"]),
-        ".<p>",
-        "</font>"
-      ))
-    })
-  })
+  # output$data_info <- renderUI({
+  #   withProgress(message = "Rendering data information", {
+  #     full_name <- measure_to_names[input$us_map_fill]
+  #     
+  #     HTML(paste0(
+  #       "<font size = '2'>",
+  #       
+  #       "A variety of data sources are used for measures comprising the Unmet Need Score. The data currently pictured for ", 
+  #       full_name, 
+  #       " came from ",
+  #       ifelse(full_name == "Unmet Need Score", 
+  #              "various sources",
+  #              measure_orientation[full_name, "Source"]),
+  #       ".<p>",
+  #       "</font>"
+  #     ))
+  #   })
+  # })
   
   # plot map based on fill
   output$us_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
-      plot_map(input$us_map_fill, st_sub$geodat)
+      plot_map(input$us_map_fill, st_sub$geodat,
+               st_sub$idx)
     })
   })
   
@@ -624,12 +655,12 @@ server <- function(input, output, session) {
   # put an explanation
   output$us_map_expl <- renderUI({
     withProgress(message = "Rendering map explanation", {
-      full_name <- measure_to_names[input$us_map_fill]
+      full_name <- measure_to_names[[st_sub$idx]][input$us_map_fill]
       mc <- meas_max_colors[meas_col_to_type[full_name]]
       lc <- meas_min_colors[meas_col_to_type[full_name]]
       # get the orientation for the measure
       if (input$us_map_fill != "Score"){
-        ori <- s_orientation[input$us_map_fill, "Orientation"]
+        ori <- info_df[input$us_map_fill, "Direction"]
         ori <- ifelse(ori > 0, "higher", "lower")
       } else {
         ori <- "higher"
@@ -639,13 +670,16 @@ server <- function(input, output, session) {
         "A ", 
         html_color(mc, "higher"),
         " value indicates ", 
-        html_color(mc, paste(ori, "need")),
+        html_color(mc, paste(ori, "wellness")),
         "."
       )
       
-      if (input$us_map_fill != "Score"){
-        wt <- measure_to_type$Weight[measure_to_type$Name == full_name]
+      print(input$us_map_fill)
+      
+      if (input$us_map_fill != "Mental_Wellness_Index"){
+        wt <- round(info_df[input$us_map_fill, "Effective_Weights"],2)
         
+        # TODO: COME BACK TO THIS NUMBER
         text <- paste0(
           text,
           " The ", 
@@ -653,7 +687,7 @@ server <- function(input, output, session) {
           " measure has a weight of ", 
           html_color(mc, wt),
           ", indicating a ",
-          html_color(mc, ifelse(wt > 5, "high", "low")),
+          html_color(mc, ifelse(wt > 3, "high", "low")),
           " contribution to the overall unmet need score."
         )
       } else {
@@ -662,7 +696,7 @@ server <- function(input, output, session) {
           " A ", 
           html_color(lc, "lower"),
           " value indicates ", 
-          html_color(lc, "lower need"),
+          html_color(lc, "higher need"),
           "."
         )
       }
@@ -681,7 +715,8 @@ server <- function(input, output, session) {
     withProgress(message = "Rendering ZCTA data distribution", {
       plot_bee_distr(input$us_map_fill, 
                      st = st_sub$st,
-                     sanam = st_sub$sanam,
+                     mwi = st_sub$mwi,
+                     idx = st_sub$idx,
                      hl = focus_info$hl, 
                      zcta_hl = focus_info$ZCTA)
     })
@@ -689,7 +724,7 @@ server <- function(input, output, session) {
   
   output$us_quantile <- renderTable({
     withProgress(message = "Rendering ZCTA data quantiles", {
-      dist_fill <- summary(st_sub$sanam[,input$us_map_fill], digits = 4)
+      dist_fill <- summary(st_sub$mwi[,input$us_map_fill], digits = 4)
       
       data.frame("Quantiles" = names(dist_fill), "Values" = c(dist_fill))
     })
@@ -702,13 +737,13 @@ server <- function(input, output, session) {
   output$us_info <- renderUI({
     withProgress(message = "Rendering ZCTA data distribution explanation", {
       if (focus_info$ZCTA != ""){
-        full_name <- measure_to_names[input$us_map_fill]
+        full_name <- measure_to_names[[st_sub$idx]][input$us_map_fill]
         
         # get scores
         f_val <- 
-          st_sub$sanam[st_sub$sanam$ZCTA == focus_info$ZCTA, input$us_map_fill]
-        all_st_val <- st_sub$sanam[, input$us_map_fill]
-        all_us_val <- sanam[, input$us_map_fill]
+          st_sub$mwi[st_sub$mwi$ZCTA == focus_info$ZCTA, input$us_map_fill]
+        all_st_val <- st_sub$mwi[, input$us_map_fill]
+        all_us_val <- mwi[, input$us_map_fill]
         
         # get colors
         if (input$us_map_fill == "Score"){
