@@ -173,7 +173,7 @@ for (idx in index_types){
 # zips <- zctas(cb = T)
 # zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
 # save(list = "zips", file = file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
-
+# 
 # # load zip code data (should be much faster)
 # load(file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
 # 
@@ -487,7 +487,8 @@ server <- function(input, output, session) {
     "idx" = "pop",
     "st" = "North Carolina",
     "geodat" = geodat[["pop"]][geodat[["pop"]]$STATE_NAME == "North Carolina",],
-    "mwi" = mwi[["pop"]][mwi[["pop"]]$STATE_NAME == "North Carolina",]
+    "mwi" = mwi[["pop"]][mwi[["pop"]]$STATE_NAME == "North Carolina",],
+    "us_map_fill" = "Mental_Wellness_Index"
   )
   
   us_proxy <- leafletProxy("us_map")
@@ -527,7 +528,7 @@ server <- function(input, output, session) {
     } else {
       st_sub$st <- input$st_focus
       st_sub$geodat <- geodat[[idx]][geodat[[idx]]$STATE_NAME == input$st_focus,]
-      st_sub$mwi[[idx]] <- mwi[[idx]][mwi[[idx]]$STATE_NAME == input$st_focus,]
+      st_sub$mwi <- mwi[[idx]][mwi[[idx]]$STATE_NAME == input$st_focus,]
       
       updateSelectInput(session, 
                         "zcta_choose", 
@@ -538,6 +539,15 @@ server <- function(input, output, session) {
                         )
       )
     }
+    
+    st_sub$us_map_fill <- 
+      if (st_sub$idx == "pop" & grepl("_black", input$us_map_fill)){
+        gsub("_black", "_pop", input$us_map_fill)
+      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill)){
+        gsub("_pop", "_black", input$us_map_fill)
+      } else {
+        input$us_map_fill
+      }
     
     focus_info$hl <- F
     focus_info$ZCTA <- ""
@@ -557,6 +567,15 @@ server <- function(input, output, session) {
   
   # reset map click focus
   observeEvent(input$us_map_fill, {
+    st_sub$us_map_fill <- 
+      if (st_sub$idx == "pop" & grepl("_black", input$us_map_fill)){
+        gsub("_black", "_pop", input$us_map_fill)
+      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill)){
+        gsub("_pop", "_black", input$us_map_fill)
+      } else {
+        input$us_map_fill
+      }
+    
     focus_info$hl <- F
     focus_info$ZCTA <- ""
     
@@ -574,7 +593,7 @@ server <- function(input, output, session) {
       us_proxy %>% removeShape("remove_me")
       
       # add a highlighted polygon
-      us_proxy <- plot_map(input$us_map_fill, st_sub$geodat, 
+      us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
                            st_sub$idx,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
@@ -596,7 +615,7 @@ server <- function(input, output, session) {
       us_proxy %>% removeShape("remove_me")
       
       # add a highlighted polygon
-      us_proxy <- plot_map(input$us_map_fill, st_sub$geodat, 
+      us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
                            st_sub$idx,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
@@ -633,7 +652,7 @@ server <- function(input, output, session) {
   # plot map based on fill
   output$us_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
-      plot_map(input$us_map_fill, st_sub$geodat,
+      plot_map(st_sub$us_map_fill, st_sub$geodat,
                st_sub$idx)
     })
   })
@@ -658,12 +677,12 @@ server <- function(input, output, session) {
   # put an explanation
   output$us_map_expl <- renderUI({
     withProgress(message = "Rendering map explanation", {
-      full_name <- measure_to_names[[st_sub$idx]][input$us_map_fill]
+      full_name <- measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
       mc <- meas_max_colors[meas_col_to_type[full_name]]
       lc <- meas_min_colors[meas_col_to_type[full_name]]
       # get the orientation for the measure
-      if (input$us_map_fill != "Score"){
-        ori <- info_df[input$us_map_fill, "Direction"]
+      if (st_sub$us_map_fill != "Score"){
+        ori <- info_df[st_sub$us_map_fill, "Direction"]
         ori <- ifelse(ori > 0, "higher", "lower")
       } else {
         ori <- "higher"
@@ -677,10 +696,10 @@ server <- function(input, output, session) {
         "."
       )
       
-      print(input$us_map_fill)
+      print(st_sub$us_map_fill)
       
-      if (input$us_map_fill != "Mental_Wellness_Index"){
-        wt <- round(info_df[input$us_map_fill, "Effective_Weights"],2)
+      if (st_sub$us_map_fill != "Mental_Wellness_Index"){
+        wt <- round(info_df[st_sub$us_map_fill, "Effective_Weights"],2)
         
         # TODO: COME BACK TO THIS NUMBER
         text <- paste0(
@@ -716,7 +735,7 @@ server <- function(input, output, session) {
   
   output$us_distr <- renderPlotly({
     withProgress(message = "Rendering ZCTA data distribution", {
-      plot_bee_distr(input$us_map_fill, 
+      plot_bee_distr(st_sub$us_map_fill, 
                      st = st_sub$st,
                      mwi = st_sub$mwi,
                      idx = st_sub$idx,
@@ -727,7 +746,7 @@ server <- function(input, output, session) {
   
   output$us_quantile <- renderTable({
     withProgress(message = "Rendering ZCTA data quantiles", {
-      dist_fill <- summary(st_sub$mwi[,input$us_map_fill], digits = 4)
+      dist_fill <- summary(st_sub$mwi[,st_sub$us_map_fill], digits = 4)
       
       data.frame("Quantiles" = names(dist_fill), "Values" = c(dist_fill))
     })
@@ -740,19 +759,19 @@ server <- function(input, output, session) {
   output$us_info <- renderUI({
     withProgress(message = "Rendering ZCTA data distribution explanation", {
       if (focus_info$ZCTA != ""){
-        full_name <- measure_to_names[[st_sub$idx]][input$us_map_fill]
+        full_name <- measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
         
         # get scores
         f_val <- 
-          st_sub$mwi[[st_sub$idx]][
-            st_sub$mwi[[st_sub$idx]]$ZCTA == focus_info$ZCTA, input$us_map_fill]
-        all_st_val <- st_sub$mwi[[st_sub$idx]][, input$us_map_fill]
-        all_us_val <- st_sub$mwi[[st_sub$idx]][, input$us_map_fill]
+          st_sub$mwi[
+            st_sub$mwi$ZCTA == focus_info$ZCTA, st_sub$us_map_fill]
+        all_st_val <- st_sub$mwi[, st_sub$us_map_fill]
+        all_us_val <- st_sub$mwi[, st_sub$us_map_fill]
         
         # get colors
-        if (input$us_map_fill == "Score"){
+        if (st_sub$us_map_fill == "Mental_Wellness_Index"){
           mc <- 
-            if (f_val > 50){
+            if (f_val < 50){
               meas_max_colors[meas_col_to_type[full_name]]
             } else {
               meas_min_colors[meas_col_to_type[full_name]]
