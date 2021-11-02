@@ -2,7 +2,10 @@
 # By HSE Team
 # Originated on: 10/20/2021
 
-# load data and libraries ----
+# NOTE: Styling by Sarah Ober of Case Study for using health equity framework
+# in population health team.
+
+# load libraries ----
 
 library(readxl)
 library(htmltools)
@@ -14,6 +17,25 @@ library(sf)
 library(plotly)
 library(ggbeeswarm)
 library(shinyWidgets)
+library(sass)
+
+# styling ----
+
+# Applies css to rShiny app
+sass(
+  sass_file("www/stylesheets/app.scss"),
+  output = "www/stylesheets/app.css"
+)
+
+# Generates css used on the about page
+# See app.scss file for manual steps needed here
+sass(
+  sass_file("www/stylesheets/app.scss"),
+  output = "about/app.css"
+)
+
+
+# load data ----
 
 # what indices are available?
 index_types <- c("Population" = "pop",
@@ -396,95 +418,124 @@ html_color <- function(meas_color, text){
 
 # UI ----
 
-ui <- navbarPage(
-  "Mental Wellness Index Tool",
+ui <- fluidPage(
+  # Title panel sets text in the browser tab
+  # This is necessary because the navbarPage title is html and not straight text
+  div(
+    titlePanel(
+      title="", windowTitle="Mental Wellness Index Tool"
+    ),
+    style="display:none"
+  ),
   
-  # explore ----
-  tabPanel(
-    "Explore US",
-    sidebarLayout(
-      sidebarPanel(
-        width = 3,
-        HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific Zip Code Tabulation Area (ZCTA), click on it in the map to the right or select it from the list below.</b><p>"),
-        radioButtons(
-          inputId = "idx_type",
-          label = "Which population's MWI do you want to view?",
-          choices = index_types,
-          inline = T
-        ),
-        # TODO: UPDATE THESE BASED ON POPULATION SELECTED
-        selectInput(
-          "st_focus",
-          "Which state would you like to focus on?",
-          choices = c(unname(f_st), "All"),
-          selected = "North Carolina"
-        ),
-        selectInput(
-          "us_map_fill",
-          "Which score/measure would you like to explore?",
-          choices = avail_meas_list[["pop"]]
-        ),
-        # sliderInput(
-        #   "us_map_fill_opacity",
-        #   HTML("<b>What fill opacity (%)?</b> A higher number indicates a more opaque fill."),
-        #   min = 0,
-        #   max = 100,
-        #   value = 70,
-        #   step = 10
-        # ),
-        selectInput(
-          "zcta_choose",
-          "Which ZCTA would you like to focus on?",
-          choices = c("None" = "")#, avail_zctas)
-        ),
-        actionButton("reset_zcta_click", "Reset ZCTA Focus"),
-        hr(),
-        HTML("<font size = '2'>"),
-        HTML(paste0(
-          "Data sourced from various publically available data sources.",
-          "More information on methodology can be found in the about tab."
-        )),
-        # TODO: FIX INFO HERE
-        # uiOutput("data_info"),
-        HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
-        )),
-        HTML(paste0(
-          "All states are included.", 
-          " Selecting \"All\" will show all included states. Note that this is slower to render.<p>")),
-        HTML("</font>"),
+  navbarPage(
+    title=div(
+      a(
+        href="https://www.mitre.org/",
+        img(src="media/MITRE_logo.png", height="30"),
+        target="blank",
       ),
-      mainPanel(
-        width = 9,
-        leafletOutput("us_map", height = 400),
-        HTML("<br>"),
-        uiOutput("us_map_legend"),
-        HTML("<br>"),
-        uiOutput("us_map_expl"),
-        hr(),
-        fluidRow(
-          column(
-            width = 8,
-            plotlyOutput("us_distr")
+      "Mental Wellness Index Tool",
+    ),
+    theme="stylesheets/app.css",
+    
+    # explore ----
+    tabPanel(
+      title = div("Explore", class="explore"),
+      class = "explore-panel",
+      
+      sidebarLayout(
+        sidebarPanel(
+          width = 3,
+          HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific Zip Code Tabulation Area (ZCTA), click on it in the map to the right or select it from the list below.</b><p>"),
+          radioButtons(
+            inputId = "idx_type",
+            label = "Which population's MWI do you want to view?",
+            choices = index_types,
+            inline = T
           ),
-          column(
-            width = 4,
-            tableOutput("us_quantile"),
-            br(),
-            uiOutput("us_info")
+          # TODO: UPDATE THESE BASED ON POPULATION SELECTED
+          selectInput(
+            "st_focus",
+            "Which state would you like to focus on?",
+            choices = c(unname(f_st), "All"),
+            selected = "North Carolina"
+          ),
+          selectInput(
+            "us_map_fill",
+            "Which score/measure would you like to explore?",
+            choices = avail_meas_list[["pop"]]
+          ),
+          # sliderInput(
+          #   "us_map_fill_opacity",
+          #   HTML("<b>What fill opacity (%)?</b> A higher number indicates a more opaque fill."),
+          #   min = 0,
+          #   max = 100,
+          #   value = 70,
+          #   step = 10
+          # ),
+          selectInput(
+            "zcta_choose",
+            "Which ZCTA would you like to focus on?",
+            choices = c("None" = "")#, avail_zctas)
+          ),
+          actionButton("reset_zcta_click", "Reset ZCTA Focus"),
+          hr(),
+          HTML("<font size = '2'>"),
+          HTML(paste0(
+            "Data sourced from various publically available data sources.",
+            "More information on methodology can be found in the about tab."
+          )),
+          # TODO: FIX INFO HERE
+          # uiOutput("data_info"),
+          HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
+          )),
+          HTML(paste0(
+            "All states are included.", 
+            " Selecting \"All\" will show all included states. Note that this is slower to render.<p>")),
+          HTML("</font>"),
+        ),
+        mainPanel(
+          width = 9,
+          leafletOutput("us_map", height = 400),
+          HTML("<br>"),
+          uiOutput("us_map_legend"),
+          HTML("<br>"),
+          uiOutput("us_map_expl"),
+          hr(),
+          fluidRow(
+            column(
+              width = 8,
+              plotlyOutput("us_distr")
+            ),
+            column(
+              width = 4,
+              tableOutput("us_quantile"),
+              br(),
+              uiOutput("us_info")
+            )
           )
         )
       )
+    ),
+    
+    # about ----
+    tabPanel(
+      title = div("About", class="about"),
+      HTML(
+        "Acknowledgements: MIP team, Larke Huang, etc.<br>"
+      ),
+      HTML("Contact: Emilie Gilde (egilde@mitre.org)")
     )
   ),
   
-  # about ----
-  tabPanel(
-    "About",
-    HTML(
-      "Acknowledgements: MIP team, Larke Huang, etc.<br>"
-    ),
-    HTML("Contact: Emilie Gilde (egilde@mitre.org)")
-  )
+  # Copyright footer
+  HTML(paste0(
+    "<span class = 'copyright-footer'>&copy; ",
+    format(Sys.Date(), "%Y"),
+    ", The MITRE Corporation</span>"
+  ))
+  
 )
 
 # SERVER ----
