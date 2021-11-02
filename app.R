@@ -78,11 +78,15 @@ mwi[["pop"]] <- read.csv(
             "HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv"),
   colClasses = c("ZCTA" = "character")
 )
+# remove any empty zcta rows (miswriting?) -- TODO: fix in pipeline
+mwi[["pop"]] <- mwi[["pop"]][mwi[["pop"]]$ZCTA != "",]
 mwi[["black"]] <- read.csv(
   file.path(data_folder, "Cleaned", 
             "HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv"),
   colClasses = c("ZCTA" = "character")
 )
+# remove any empty zcta rows (miswriting?) -- TODO: fix in pipeline
+mwi[["black"]] <- mwi[["black"]][mwi[["black"]]$ZCTA != "",]
 
 # create a pretty set of names for later
 st_abbrev_to_full <- c(state.name, "District of Columbia", "All States")
@@ -224,7 +228,7 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
       "ZCTA: ", gd_map$GEOID10, "<br>", 
-      measure_to_names[fill],": ", signif(gd_map$Fill, 4)) %>%
+      measure_to_names[[idx]][fill],": ", signif(gd_map$Fill, 4)) %>%
     lapply(htmltools::HTML)
   
   # get initial zoom area
@@ -337,7 +341,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
         )
     }
   
-  full_name <- measure_to_names[fill]
+  full_name <- measure_to_names[[idx]][fill]
   p <- suppressWarnings(
     p + 
     geom_quasirandom(
@@ -357,7 +361,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
     )+
     xlim(-3, 103)+
     ggtitle(paste0("Distribution of ", measure_to_names[[idx]][fill], " in ", 
-                   st_abbrev_to_full[st]))+
+                   st))+
     NULL
   )
   
@@ -397,12 +401,11 @@ ui <- navbarPage(
       sidebarPanel(
         width = 3,
         HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific Zip Code Tabulation Area (ZCTA), click on it in the map to the right or select it from the list below.</b><p>"),
-        switchInput(
+        radioButtons(
           inputId = "idx_type",
           label = "Which population's MWI do you want to view?",
-          value = T,
-          onLabel = "Population",
-          offLabel = "Black"
+          choices = index_types,
+          inline = T
         ),
         # TODO: UPDATE THESE BASED ON POPULATION SELECTED
         selectInput(
@@ -493,7 +496,7 @@ server <- function(input, output, session) {
   
   # update measures when the population type changes
   observeEvent(input$idx_type, {
-    idx <- ifelse(input$idx_type, "pop", "black")
+    idx <- input$idx_type
     
     updateSelectInput(
       session = session,
@@ -503,9 +506,9 @@ server <- function(input, output, session) {
     )
   })
   
-  # update the states
-  observeEvent(input$st_focus, {
-    idx <- ifelse(input$idx_type, "pop", "black")
+  # update the data based on state or population change
+  observeEvent(c(input$st_focus, input$idx_type), {
+    idx <- input$idx_type
     
     st_sub$idx <- idx
     
@@ -694,9 +697,9 @@ server <- function(input, output, session) {
         text <- paste0(
           text,
           " A ", 
-          html_color(lc, "lower"),
+          html_color(mc, "lower"),
           " value indicates ", 
-          html_color(lc, "higher need"),
+          html_color(mc, "higher need"),
           "."
         )
       }
@@ -741,9 +744,10 @@ server <- function(input, output, session) {
         
         # get scores
         f_val <- 
-          st_sub$mwi[st_sub$mwi$ZCTA == focus_info$ZCTA, input$us_map_fill]
-        all_st_val <- st_sub$mwi[, input$us_map_fill]
-        all_us_val <- mwi[, input$us_map_fill]
+          st_sub$mwi[[st_sub$idx]][
+            st_sub$mwi[[st_sub$idx]]$ZCTA == focus_info$ZCTA, input$us_map_fill]
+        all_st_val <- st_sub$mwi[[st_sub$idx]][, input$us_map_fill]
+        all_us_val <- st_sub$mwi[[st_sub$idx]][, input$us_map_fill]
         
         # get colors
         if (input$us_map_fill == "Score"){
