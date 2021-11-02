@@ -145,7 +145,7 @@ meas_colors <- c(
   "Greens",
   "Blues",
   "BuPu",
-  "RdBu"
+  "PRGn"
 )
 names(meas_colors) <- c(unique(m_reg$Category), "Mental Wellness Index")
 
@@ -360,7 +360,10 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
       plot.title = element_text(hjust = .5)
     )+
     xlim(-3, 103)+
-    ggtitle(paste0("Distribution of ", measure_to_names[[idx]][fill], " in ", 
+    ggtitle(paste0("Distribution of ", measure_to_names[[idx]][fill], 
+                   " for the ",
+                   ifelse(idx == "black", "Black", ""),
+                   " Population in ", 
                    st))+
     NULL
   )
@@ -395,6 +398,8 @@ html_color <- function(meas_color, text){
 
 ui <- navbarPage(
   "Mental Wellness Index Tool",
+  
+  # explore ----
   tabPanel(
     "Explore US",
     sidebarLayout(
@@ -445,7 +450,7 @@ ui <- navbarPage(
         )),
         HTML(paste0(
           "All states are included.", 
-          "Selecting \"All\" will show all included states. Note that this is slower to render.<p>")),
+          " Selecting \"All\" will show all included states. Note that this is slower to render.<p>")),
         HTML("</font>"),
       ),
       mainPanel(
@@ -470,6 +475,15 @@ ui <- navbarPage(
         )
       )
     )
+  ),
+  
+  # about ----
+  tabPanel(
+    "About",
+    HTML(
+      "Acknowledgements: MIP team, Larke Huang, etc.<br>"
+    ),
+    HTML("Contact: Emilie Gilde (egilde@mitre.org)")
   )
 )
 
@@ -701,12 +715,12 @@ server <- function(input, output, session) {
       text <- paste0(
         "A ", 
         html_color(mc, "higher"),
-        " value indicates ", 
+        " value indicates more ",
+        html_color(mc, "assets"),
+        " supporting mental ", 
         html_color(mc, paste(ori, "wellness")),
         "."
       )
-      
-      print(st_sub$us_map_fill)
       
       if (st_sub$us_map_fill != "Mental_Wellness_Index"){
         wt <- round(info_df[st_sub$us_map_fill, "Effective_Weights"],2)
@@ -720,15 +734,17 @@ server <- function(input, output, session) {
           html_color(mc, wt),
           ", indicating a ",
           html_color(mc, ifelse(wt > 3, "high", "low")),
-          " contribution to the overall unmet need score."
+          " contribution to the overall Mental Wellness Index."
         )
       } else {
         text <- paste0(
           text,
           " A ", 
-          html_color(mc, "lower"),
-          " value indicates ", 
-          html_color(mc, "higher need"),
+          html_color(lc, "lower"),
+          " value indicates more ",
+          html_color(lc, "obstacles"),
+          " to mental ", 
+          html_color(lc, "wellness"),
           "."
         )
       }
@@ -776,7 +792,7 @@ server <- function(input, output, session) {
           st_sub$mwi[
             st_sub$mwi$ZCTA == focus_info$ZCTA, st_sub$us_map_fill]
         all_st_val <- st_sub$mwi[, st_sub$us_map_fill]
-        all_us_val <- st_sub$mwi[, st_sub$us_map_fill]
+        all_us_val <- mwi[[st_sub$idx]][, st_sub$us_map_fill]
         
         # get colors
         if (st_sub$us_map_fill == "Mental_Wellness_Index"){
@@ -808,8 +824,8 @@ server <- function(input, output, session) {
           " percentile for the state.",
           " This is ", 
           html_color(mc, st_comp), " relative to ",
-          st_abbrev_to_full[input$st_focus],", and ",
-          html_color(mc, us_comp), " relative to all included states.",
+          input$st_focus,", and ",
+          html_color(mc, us_comp), " relative to the whole United States.",
           "</font></b></center>"
         ))
       }
