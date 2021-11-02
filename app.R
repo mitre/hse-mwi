@@ -499,11 +499,21 @@ server <- function(input, output, session) {
   observeEvent(input$idx_type, {
     idx <- input$idx_type
     
+    fill <- 
+      if (idx == "pop" & grepl("_black", input$us_map_fill)){
+        gsub("_black", "_pop", input$us_map_fill)
+      } else if (idx == "black" & grepl("_pop", input$us_map_fill)){
+        gsub("_pop", "_black", input$us_map_fill)
+      } else {
+        input$us_map_fill
+      }
+    
     updateSelectInput(
       session = session,
       "us_map_fill",
       "Which score/measure would you like to explore?",
-      choices = avail_meas_list[[idx]]
+      choices = avail_meas_list[[idx]],
+      selected = fill
     )
   })
   
