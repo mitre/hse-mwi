@@ -231,6 +231,9 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
   gd_map <- geodat[,c(fill, "GEOID10", "STATE", "geometry")]
   colnames(gd_map)[1] <- "Fill"
   
+  # get rid of empty polygons
+  gd_map <- gd_map[!is.na(gd_map$GEOID10),]
+  
   # create palette
   pal <- colorNumeric(
     palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
