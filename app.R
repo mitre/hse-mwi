@@ -567,7 +567,8 @@ server <- function(input, output, session) {
     fill <- 
       if (idx == "pop" & grepl("_black", input$us_map_fill)){
         gsub("_black", "_pop", input$us_map_fill)
-      } else if (idx == "black" & grepl("_pop", input$us_map_fill)){
+      } else if (idx == "black" & grepl("_pop", input$us_map_fill) &
+                 !input$us_map_fill %in% colnames(mwi[["black"]])){
         gsub("_pop", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
@@ -618,7 +619,8 @@ server <- function(input, output, session) {
     st_sub$us_map_fill <- 
       if (st_sub$idx == "pop" & grepl("_black", input$us_map_fill)){
         gsub("_black", "_pop", input$us_map_fill)
-      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill)){
+      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill) &
+                 !input$us_map_fill %in% colnames(mwi[["black"]])){
         gsub("_pop", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
@@ -876,7 +878,7 @@ server <- function(input, output, session) {
           " This is ", 
           html_color(mc, st_comp), " relative to ",
           input$st_focus,", and ",
-          html_color(mc, us_comp), " relative to the whole United States.",
+          html_color(mc, us_comp), " relative to the United States.",
           "</font></b></center>"
         ))
       }
