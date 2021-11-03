@@ -164,9 +164,9 @@ for (idx in index_types){
 
 # get measure colors
 meas_colors <- c(
+  "BuPu",
   "Greens",
   "Blues",
-  "BuPu",
   "PRGn"
 )
 names(meas_colors) <- c(unique(m_reg$Category), "Mental Wellness Index")
@@ -463,7 +463,7 @@ ui <- fluidPage(
           ),
           selectInput(
             "us_map_fill",
-            "Which score/measure would you like to explore?",
+            "What would you like to explore?",
             choices = avail_meas_list[["pop"]]
           ),
           # sliderInput(
