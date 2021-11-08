@@ -310,7 +310,7 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
                                      dashArray = "",
                                      fillOpacity = 0.7,
                                      bringToFront = T),
-        label = labels
+        label = labels[gd_map$GEOID10 == zcta_choose]
       )
   }
   
@@ -865,7 +865,7 @@ server <- function(input, output, session) {
         # get colors
         if (st_sub$us_map_fill == "Mental_Wellness_Index"){
           mc <- 
-            if (f_val < 50){
+            if (f_val >= 50){
               meas_max_colors[meas_col_to_type[full_name]]
             } else {
               meas_min_colors[meas_col_to_type[full_name]]
