@@ -173,14 +173,10 @@ names(meas_colors) <- c(unique(m_reg$Category), "Mental Wellness Index")
 
 # get max/min colors for each palette
 meas_max_colors <- sapply(1:length(meas_colors), function(x){
-  brewer.pal(3, meas_colors[x])[
-    ifelse(names(meas_colors[x]) == "Mental Wellness Index", 1, 3)
-  ]
+  brewer.pal(3, meas_colors[x])[3]
 })
 meas_min_colors <- sapply(1:length(meas_colors), function(x){
-  brewer.pal(3, meas_colors[x])[
-    ifelse(names(meas_colors[x]) == "Mental Wellness Index", 3, 1)
-  ]
+  brewer.pal(3, meas_colors[x])[1]
 })
 names(meas_max_colors) <- names(meas_min_colors) <- names(meas_colors)
 
