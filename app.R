@@ -245,11 +245,19 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
   )
   
   # labels 
+  full_name <- measure_to_names[[idx]][fill]
+  if (full_name != "Mental Wellness Index"){
+    full_name <- paste0(
+      ifelse(info_df[fill, "Directionality"] > 0, "Higher ", "Lower "), 
+      full_name, 
+      " Ranking"
+    )
+  }
   labels <- 
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
       "ZCTA: ", gd_map$GEOID10, "<br>", 
-      measure_to_names[[idx]][fill],": ", signif(gd_map$Fill, 4)) %>%
+      full_name,": ", signif(gd_map$Fill, 4)) %>%
     lapply(htmltools::HTML)
   
   # get initial zoom area
@@ -276,7 +284,7 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
                 values = ~c(0, Fill, 100), 
                 opacity = 0.7, 
                 position = "bottomright",
-                title = unname(measure_to_names[[idx]][fill])) %>%
+                title = unname(full_name)) %>%
       fitBounds(
         lng1 = bounds[1],
         lng2 = bounds[3],
@@ -363,6 +371,14 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
     }
   
   full_name <- measure_to_names[[idx]][fill]
+  if (full_name != "Mental Wellness Index"){
+    full_name <- paste0(
+      ifelse(info_df[fill, "Directionality"] > 0, "Higher ", "Lower "), 
+      full_name, 
+      " Ranking"
+    )
+  }
+  
   p <- suppressWarnings(
     p + 
     geom_quasirandom(
@@ -372,7 +388,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
       )),
       groupOnX = F, alpha = bee.df$focus_alpha)+
     theme_bw()+
-    xlab(measure_to_names[[idx]][fill])+
+    xlab(full_name)+
     theme(
       axis.text.y = element_blank(),
       axis.title.y = element_blank(),
@@ -383,8 +399,8 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
     xlim(-3, 103)+
     ggtitle(paste0("Distribution of ", measure_to_names[[idx]][fill], 
                    " for the ",
-                   ifelse(idx == "black", "Black", ""),
-                   " Population in ", 
+                   ifelse(idx == "black", "Black ", ""),
+                   "Population in ", 
                    st))+
     NULL
   )
