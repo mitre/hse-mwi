@@ -266,7 +266,7 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
   if (!add_poly){
     # create map
     mp <- leaflet(data = gd_map) %>%
-      addProviderTiles("OpenStreetMap") %>% #CartoDB
+      addProviderTiles("CartoDB") %>% #OpenStreetMap
       addPolygons(fillColor = ~pal(Fill),
                   weight = 1,
                   opacity = 1,
