@@ -123,16 +123,18 @@ pop <- get_acs(geography = "zcta",
 
 # Calculate Measure----
 # Calculating measure value = # third spaces / 100k population in ZCTA
-final <- full_join(cbp_zcta, pop, by = c("ZCTA" = "GEOID")) 
+final <- full_join(cbp_zcta, pop, by = c("ZCTA" = "GEOID")) %>%
+  rename(population = B01001_001E)
 final <- mutate(final,
-                thirdspaces_pop = (rowSums(final[2:24])/B01001_001E)*100000,
+                thirdspaces_pop = (rowSums(final[2:24])/population)*100000,
               # Replacing Infs with 0s
               thirdspaces_pop = ifelse(is.infinite(thirdspaces_pop),
                                        0, thirdspaces_pop),
               # Replacing NaNs with 0
               thirdspaces_pop = ifelse(is.nan(thirdspaces_pop),
-                                       0, thirdspaces_pop)) %>%
-  select(ZCTA, thirdspaces_pop)
+                                       0, thirdspaces_pop),
+              third_spaces_total = rowSums(final[2:24])) %>%
+  select(ZCTA, third_spaces_total, population, thirdspaces_pop)
 
 # NaNs indicated 0 third spaces and a 0 population value
 # Inf indicated a non-zero integer for at least one third
