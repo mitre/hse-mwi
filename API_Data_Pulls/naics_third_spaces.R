@@ -126,12 +126,12 @@ pop <- get_acs(geography = "zcta",
 final <- full_join(cbp_zcta, pop, by = c("ZCTA" = "GEOID")) 
 final <- mutate(final,
                 thirdspaces_pop = (rowSums(final[2:24])/B01001_001E)*100000,
-              # Replacing Infs with NAs
+              # Replacing Infs with 0s
               thirdspaces_pop = ifelse(is.infinite(thirdspaces_pop),
-                                       NA, thirdspaces_pop),
+                                       0, thirdspaces_pop),
               # Replacing NaNs with 0
               thirdspaces_pop = ifelse(is.nan(thirdspaces_pop),
-                                       0, thirdspaces_pop))%>%
+                                       0, thirdspaces_pop)) %>%
   select(ZCTA, thirdspaces_pop)
 
 # NaNs indicated 0 third spaces and a 0 population value
