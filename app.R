@@ -489,9 +489,9 @@ ui <- fluidPage(
           #   value = 70,
           #   step = 10
           # ),
-          selectInput(
+          selectizeInput(
             "zcta_choose",
-            "Which ZCTA would you like to focus on?",
+            label = "Which ZCTA would you like to focus on?",
             choices = c("None" = "")#, avail_zctas)
           ),
           actionButton("reset_zcta_click", "Reset ZCTA Focus"),
