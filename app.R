@@ -357,7 +357,8 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
       ggplot(bee.df, aes(val, lab, color = val, size = focus))+
         scale_color_distiller(
           palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
-          direction = ifelse(fill == "Score", -1, 1)
+          direction = ifelse(fill == "Score", -1, 1),
+          limits = c(0, 100)
         )+
         # scale_alpha(range = c(0,1))+
         # scale_color_manual(values = hl_pal)+
@@ -366,7 +367,8 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
       ggplot(bee.df, aes(val, lab, color = val), size = 1.5)+
         scale_color_distiller(
           palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
-          direction = ifelse(fill == "Score", -1, 1)
+          direction = ifelse(fill == "Score", -1, 1),
+          limits = c(0, 100)
         )
     }
   
@@ -399,7 +401,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
     xlim(-3, 103)+
     ggtitle(paste0("Distribution of ", measure_to_names[[idx]][fill], 
                    " for the ",
-                   ifelse(idx == "black", "Black ", ""),
+                   ifelse(idx == "black", "Black ", "Overall "),
                    "Population in ", 
                    st))+
     NULL
@@ -466,7 +468,8 @@ ui <- fluidPage(
           radioButtons(
             inputId = "idx_type",
             label = "Which population's MWI do you want to view?",
-            choices = index_types,
+            choiceValues = unname(index_types),
+            choiceNames = c("Overall", "Black"),
             inline = T
           ),
           # TODO: UPDATE THESE BASED ON POPULATION SELECTED
