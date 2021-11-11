@@ -178,6 +178,8 @@ ct <- ct %>%
   relocate(c("tract", "LATITUDE", "LONGITUDE", "POPULATION", "Distance")) %>%
   st_as_sf(coords = c("LONGITUDE", "LATITUDE"),
            crs = st_crs(poly))
+# Remove duplicates from CT dataset
+ct <- ct[!duplicated(ct$tract),]
 
 # Select/Remove Relevant Variables in Facility Data
 mh_fac <- mh_fac %>%
