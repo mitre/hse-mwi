@@ -142,7 +142,7 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Preprocessed")
 
-write.csv(acs_final, 
+write.csv(ct_le, 
           file = file.path(data_folder,
                            "CHR_USALEEP_Life_Expectancy.csv"), 
           row.names = F, na = "")
