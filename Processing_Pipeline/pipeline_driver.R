@@ -428,6 +428,9 @@ pop_pm <- pop_pm[,c(
 black_pm <- black_pm[,c(
   "GEOID", "Mental_Wellness_Index", 
   colnames(black_pm)[!colnames(black_pm) %in% c("GEOID", "Mental_Wellness_Index")])]
+# rename GEOID column to ZCTA
+colnames(pop_pm)[1] <- "ZCTA"
+colnames(black_pm)[1] <- "ZCTA"
 
 cat(paste0("[", Sys.time(), "]: Write out final indices\n"))
 

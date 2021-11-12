@@ -1,0 +1,254 @@
+/**
+  * All style/theme updates MUST be edited in the files imported in this file, 
+  * NOT in the complied .css file.
+  * When the app is run, shiny complies the app.css from this .scss file.
+  *
+  * In order to copy over updated styling to the about page, follow these steps:
+  *   1) Open app.R and run the app (complies this .scss file into necessary css files)
+  *   2) Open about/about.Rmd and knit the files
+  *   3) Copy new about/about.html file into www folder (replace the existing one)
+  *
+  **/
+.container-fluid {
+  padding: 0px;
+}
+
+/* NAVBAR */
+.navbar {
+  margin: 0px;
+}
+
+.navbar-brand {
+  margin: 0px !important;
+  font-weight: 300;
+}
+
+/* EXPLORE PANEL */
+.explore-panel {
+  padding: 20px;
+}
+
+.explore-panel .panel {
+  margin-bottom: 15px !important;
+}
+
+.explore-panel .panel-group {
+  margin-bottom: 0px;
+}
+
+.explore-panel .panel h5 {
+  font-size: 16px;
+}
+
+.explore-panel .plot-title {
+  padding: 15px 0px 5px;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+/* ABOUT PANEL */
+.about-panel {
+  width: 100%;
+  height: calc(100vh - 57px);
+}
+
+.main-container {
+  max-width: 1500px !important;
+}
+
+.tocify {
+  margin-left: 15px !important;
+  max-width: 315px !important;
+}
+
+.tocify-extend-page {
+  display: none;
+}
+
+/* COVARIATE TOGGLES & DROPDOWNS */
+.covariate-toggle, .covariate-dropdown {
+  height: 50px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.covariate-toggle .form-group, .covariate-dropdown .form-group {
+  margin: 0px;
+}
+
+.covariate-dropdown {
+  width: 100%;
+}
+
+.covariate-dropdown > div {
+  width: 100%;
+}
+
+.covariate select {
+  text-overflow: ellipsis;
+}
+
+/* INTROJS TUTORIAL */
+.introjs-tooltip-header {
+  padding: 5px 8px 0px !important;
+}
+
+.introjs-tooltiptext {
+  padding: 10px 20px !important;
+}
+
+.introjs-tooltip.tooltip-width {
+  min-width: 300px !important;
+  max-width: 300px !important;
+}
+
+.introjs-tooltip.tooltip-width-large {
+  min-width: 1020px !important;
+  max-width: 1020px !important;
+  margin-top: -400px !important;
+}
+
+/* APPLY MITRE STYLING ACROSS APP */
+body {
+  color: #0B2338;
+  background-color: #FFFFFF;
+}
+
+body hr {
+  height: 1px;
+  border: none;
+  background-color: #7E8284;
+  opacity: .25;
+}
+
+body a {
+  color: #005B94;
+}
+
+.fa-info-circle {
+  color: #005B94;
+}
+
+.navbar {
+  background-color: #005B94 !important;
+}
+
+.navbar-brand {
+  padding: 10px 15px;
+  color: #FFFFFF !important;
+}
+
+.navbar-brand a {
+  margin-right: 10px;
+}
+
+.navbar-brand a img {
+  margin-bottom: 5px;
+  padding-right: 15px;
+  border-right: 2px solid #F1F3F4;
+}
+
+.navbar-nav li a {
+  color: #FFFFFF !important;
+  background-color: #005B94 !important;
+}
+
+.navbar-nav li a:hover {
+  color: #FFF601 !important;
+}
+
+.navbar-nav li.active > a {
+  color: #FFF601 !important;
+  filter: brightness(90%);
+}
+
+.well {
+  background-color: #F1F3F4;
+  border: 1px solid #D4D4D3;
+}
+
+.panel-heading {
+  background-color: #005B94 !important;
+}
+
+.panel-heading a {
+  color: #FFFFFF !important;
+}
+
+.panel-heading a .fa-info-circle {
+  color: #FFFFFF;
+}
+
+.plot_area li > a {
+  color: #0D2F4F;
+}
+
+.plot_area li > a:hover {
+  color: #0B2338;
+}
+
+.plot_area li.active > a {
+  color: #005B94 !important;
+}
+
+.plot_area .plot-title {
+  color: #0B2338;
+}
+
+.tocify-item.active, .tocify-item.active:hover, .tocify-item.active:focus {
+  background-color: #005B94;
+}
+
+.btn {
+  margin: 0px 3px;
+}
+
+.btn-default {
+  color: #0B2338 !important;
+  background-color: #D4D4D3 !important;
+}
+
+.btn-default:hover {
+  filter: brightness(90%);
+}
+
+.btn-primary {
+  color: #F1F3F4 !important;
+  background-color: #005B94 !important;
+}
+
+.btn-primary:hover {
+  filter: brightness(90%);
+}
+
+.btn-danger {
+  color: #F1F3F4 !important;
+  background-color: #AE132A !important;
+}
+
+.btn-danger:hover {
+  filter: brightness(90%);
+}
+
+.material-switch label:before {
+  background-color: #F1F3F4;
+}
+
+.material-switch label:after {
+  background-color: #D4D4D3;
+  box-shadow: none;
+}
+
+.material-switch .label-primary {
+  background-color: #005B94;
+}
+
+.copyright-footer {
+  font-size: .9em;
+  position: fixed;
+  background-color: #FFFFFF;
+  bottom: 5px;
+  left: 8px;
+  z-index: 501;
+  text-anchor: end;
+}

@@ -1,0 +1,104 @@
+// Shiny applies this class to certain elements (FluidPage, FluidRow, etc.)
+// Remove unecessary padding and apply only in cases where it is needed
+.container-fluid {
+  padding: 0px;
+}
+
+/* NAVBAR */
+.navbar {
+  margin: 0px;
+
+  &-brand {
+    margin: 0px !important;
+    font-weight: 300;
+  }
+}
+
+/* EXPLORE PANEL */
+.explore-panel {
+  padding: 20px;
+  
+  .panel {
+    margin-bottom: 15px !important;
+    
+    &-group {
+      margin-bottom: 0px;
+    }
+    
+    h5 {
+      font-size: 16px;
+    }
+  }
+    
+  .plot-title {
+    padding: 15px 0px 5px;
+    font-size: 1.3em;
+    font-weight: 700;
+  }
+}
+
+/* ABOUT PANEL */
+.about-panel {
+  width: 100%;
+  height: calc(100vh - 57px);
+}
+
+.main-container {
+  max-width: 1500px !important;
+}
+
+.tocify {
+  margin-left: 15px !important;
+  max-width: 315px !important;
+  
+  &-extend-page {
+    display: none;
+  }
+}
+
+/* COVARIATE TOGGLES & DROPDOWNS */
+.covariate {
+  &-toggle, &-dropdown {
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    
+    .form-group {
+      margin: 0px;
+    }
+  }
+  
+  &-dropdown {
+    width: 100%;
+    
+    &>div {
+      width: 100%;
+    }
+  }
+  
+  select {
+    text-overflow: ellipsis;
+  }
+}
+
+/* INTROJS TUTORIAL */
+.introjs-tooltip {
+  &-header {
+    padding: 5px 8px 0px !important;
+  }
+  
+  &text {
+    padding: 10px 20px !important;
+  }
+  
+  &.tooltip-width {
+    min-width: 300px !important;
+    max-width: 300px !important;
+    
+    &-large {
+      min-width: 1020px !important;
+      max-width: 1020px !important;
+      margin-top: -400px !important;
+    }
+  }
+}

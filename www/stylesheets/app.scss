@@ -1,0 +1,14 @@
+/**
+  * All style/theme updates MUST be edited in the files imported in this file, 
+  * NOT in the complied .css file.
+  * When the app is run, shiny complies the app.css from this .scss file.
+  *
+  * In order to copy over updated styling to the about page, follow these steps:
+  *   1) Open app.R and run the app (complies this .scss file into necessary css files)
+  *   2) Open about/about.Rmd and knit the files
+  *   3) Copy new about/about.html file into www folder (replace the existing one)
+  *
+  **/
+
+@import 'layout';
+@import 'mitre';

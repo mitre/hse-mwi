@@ -87,19 +87,19 @@ acs_data <- get_acs(
     # # Poverty Status in the Past 12 Months
     # "S1701_C01_001E", # Estimate!!Total!!Population for whom poverty status is determined
     # "S1701_C01_042E", # S1701_C01_042E	Estimate!!Total!!Population for whom poverty status is determined!!ALL INDIVIDUALS WITH INCOME BELOW THE FOLLOWING POVERTY RATIOS!!200 percent of poverty level
+
+    # Poverty Status -- Income in past 12 months below poverty level
+    "B17021_001", # Estimate!!Total:
+    "B17021_002", # Estimate!!Total:!!Income in the past 12 months below poverty level:
+    "B17010B_001", # Estimate!!Total: (black alone)
+    "B17010B_002", # Estimate!!Total:!!Income in the past 12 months below poverty level:
     
-    # # Poverty Status -- Income in past 12 months below poverty level
-    # "B17021_001", # Estimate!!Total:
-    # "B17021_002", # Estimate!!Total:!!Income in the past 12 months below poverty level:
-    # "B17010B_001", # Estimate!!Total: (black alone)
-    # "B17010B_002", # Estimate!!Total:!!Income in the past 12 months below poverty level:
-    
-    # below 125% poverty level -- subject tables 
-    "S1703_C04_001", # Estimate!!Less than 125 percent of the poverty level!!Population for whom poverty status is determined
-    "S1703_C01_001", # Estimate!!Total!!Population for whom poverty status is determined
-    
-    "S1703_C04_010", # Estimate!!Less than 125 percent of the poverty level!!Population for whom poverty status is determined!!RACE AND HISPANIC OR LATINO ORIGIN!!One race!!Black or African American
-    "S1703_C01_010", # Estimate!!Total!!Population for whom poverty status is determined!!RACE AND HISPANIC OR LATINO ORIGIN!!One race!!Black or African American
+    # # below 125% poverty level -- subject tables -- TOO MUCH MISSINGNESS
+    # "S1703_C04_001", # Estimate!!Less than 125 percent of the poverty level!!Population for whom poverty status is determined
+    # "S1703_C01_001", # Estimate!!Total!!Population for whom poverty status is determined
+    # 
+    # "S1703_C04_010", # Estimate!!Less than 125 percent of the poverty level!!Population for whom poverty status is determined!!RACE AND HISPANIC OR LATINO ORIGIN!!One race!!Black or African American
+    # "S1703_C01_010", # Estimate!!Total!!Population for whom poverty status is determined!!RACE AND HISPANIC OR LATINO ORIGIN!!One race!!Black or African American
     
     # veteran status ----
     
@@ -215,10 +215,10 @@ cname_map <- list(
   "unemployment_unemployed_pop" = c("C18120_006E"),
   "unemployment_denom_black" = c("C23002B_004E", "C23002B_011E", "C23002B_017E", "C23002B_024E"),
   "unemployment_unemployed_black" = c("C23002B_008E", "C23002B_013E","C23002B_021E", "C23002B_026E"),
-  "povertystatus_denom_pop" = c("S1703_C01_001E"),
-  "povertystatus_below125povertylevel_pop" = c("S1703_C04_001E"),
-  "povertystatus_denom_black" = c("S1703_C01_010E"),
-  "povertystatus_below125povertylevel_black" = c("S1703_C04_010E"),
+  "povertystatus_denom_pop" = c("B17021_001E"),
+  "povertystatus_below100povertylevel_pop" = c("B17021_002E"),
+  "povertystatus_denom_black" = c("B17010B_001E"),
+  "povertystatus_below100povertylevel_black" = c("B17010B_002E"),
   "veteranstatus_denom_pop" = c("B21001_001E"),
   "veteranstatus_veteran_pop" = c("B21001_002E"),
   "veteranstatus_denom_black" = c("C21001B_001E"),
