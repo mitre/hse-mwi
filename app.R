@@ -440,7 +440,8 @@ ui <- fluidPage(
   # This is necessary because the navbarPage title is html and not straight text
   div(
     titlePanel(
-      title="", windowTitle="Mental Wellness Index Tool"
+      title="", 
+      windowTitle=HTML(paste0("Mental Wellness Index",tags$sup("TM")," Tool"))
     ),
     style="display:none"
   ),
@@ -452,7 +453,7 @@ ui <- fluidPage(
         img(src="media/MITRE_logo.png", height="30"),
         target="blank",
       ),
-      "Mental Wellness Index Tool",
+      HTML(paste0("Mental Wellness Index",tags$sup("TM")," Tool")),
     ),
     theme="stylesheets/app.css",
     
