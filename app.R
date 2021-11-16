@@ -85,6 +85,10 @@ cty_cw$STATE_2 <- sapply(un_st, `[`, 2)
 data("fips_codes")
 f_st <- setNames(unique(fips_codes$state_name),
                  unique(fips_codes$state_code))
+# subset to 50 states + dc
+f_st <- f_st[f_st %in% c(state.name, "District of Columbia")]
+# swap for the future
+st_to_fips <- setNames(names(f_st), f_st)
 cty_cw$STATE_NAME <- f_st[cty_cw$STATE]
 # add all the counties and geoids as well
 cty_cw$COUNTY <- aggregate(COUNTY ~ ZCTA5, data = county_cw, 
@@ -200,12 +204,11 @@ for (idx in index_types){
 # geodat <- list()
 # for (idx in index_types){
 #   geodat[[idx]] <-
-#     geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
+#     geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "inner")
 # 
-#   # sort by state code
-#   geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE),]
-# 
-#   # add state and county (multiple counties for a zcta separated by pipes)
+#   # sort by state code and zcta
+#   geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
+#                                        geodat[[idx]]$GEOID10),]
 # }
 # # saving for now, while things are stable
 # save(list = "geodat", file = file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
@@ -224,7 +227,7 @@ names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10,
 plot_map <- function(fill, geodat, idx, fill_opacity = .7,
                      add_poly = F, us_proxy = NA, zcta_choose = NA){
   # subset map for easy plotting
-  gd_map <- geodat[,c(fill, "GEOID10", "STATE", "geometry")]
+  gd_map <- geodat[,c(fill, "GEOID10", "STATE", "STATE_NAME", "geometry")]
   colnames(gd_map)[1] <- "Fill"
   
   # get rid of empty polygons
@@ -253,6 +256,7 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
       " Ranking"
     )
   }
+  
   labels <- 
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
@@ -621,16 +625,24 @@ server <- function(input, output, session) {
                           avail_zctas)
       )
     } else {
+      # also include zips from bordering states
+      
       st_sub$st <- input$st_focus
-      st_sub$geodat <- geodat[[idx]][geodat[[idx]]$STATE_NAME == input$st_focus,]
-      st_sub$mwi <- mwi[[idx]][mwi[[idx]]$STATE_NAME == input$st_focus,]
+      st_sub$geodat <- geodat[[idx]][
+        geodat[[idx]]$STATE_NAME == input$st_focus | 
+          geodat[[idx]]$STATE_2 == st_to_fips[input$st_focus] & 
+          !is.na(geodat[[idx]]$STATE_2),]
+      st_sub$mwi <- mwi[[idx]][
+        mwi[[idx]]$STATE_NAME == input$st_focus | 
+          mwi[[idx]]$STATE_2 == st_to_fips[input$st_focus] & 
+          !is.na(mwi[[idx]]$STATE_2),]
       
       updateSelectInput(session, 
                         "zcta_choose", 
                         "Which ZCTA would you like to focus on?",
                         choices = c(
                           "None" = "", 
-                          avail_zctas[grepl(input$st_focus, names(avail_zctas))]
+                          avail_zctas[avail_zctas %in% st_sub$geodat$GEOID10]
                         )
       )
     }
