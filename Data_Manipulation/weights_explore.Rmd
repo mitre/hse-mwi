@@ -1,0 +1,288 @@
+---
+title: "Facility Weights Explore"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(knitr)
+library(readxl)
+library(data.table)
+theme_set(theme_minimal())
+options(scipen = 999)
+
+## Reading in Data Files
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Raw", "SAMHSA_Locator")
+
+weights <- read_xlsx(file.path(data_folder, "Documentation_Behavioral_Health_Treament_Facility_listing_COUNTS_NEW.xlsx"), "Sheet1")
+
+mh <- read.csv(file.path(data_folder, "Mental_Health_Treament_Facility_listing_2021_05_18_134835.csv"))
+su <- read.csv(file.path(data_folder, "Substance_Use_Treament_Facility_listing_2021_05_18_134647.csv"))
+```
+
+```{r}
+# Function to select the weights for each group
+get_weights_codes <- function(subject = c("mh", "sa"),
+                              grouping = c("Access", 
+                                      "Special Groups of Focus", 
+                                      "Continuum of Treatment", 
+                                      "Continuum of Care")){
+  
+  # Conditionals based on whether MH facilities are used or SA 
+  if (subject == "mh") {
+    names <- weights %>%
+      filter(`Proposed Grouping` == grouping,
+             mh_code == TRUE,
+             `Use for MH?` == "Y") %>%
+      select(service_name, service_code, `Grouped ID`, thresh) %>%
+      mutate(service_code = tolower(service_code))
+  } else if (subject == "sa") {
+    names <- weights %>%
+      filter(`Proposed Grouping` == grouping,
+             sa_code == TRUE,
+             `Use for SA?` == "Y") %>%
+      select(service_name, service_code, `Grouped ID`, thresh) %>%
+      mutate(service_code = tolower(service_code))
+  }
+  
+  names
+}
+
+get_weights_codes("mh", "Access")
+
+# Plot distributions based on selected variables
+generate_facility_scores <- function(subject = c("mh", "sa"),
+                                  grouping = c("Access", 
+                                      "Special Groups of Focus", 
+                                      "Continuum of Treatment", 
+                                      "Continuum of Care"),
+                                  printnames = FALSE){
+  
+  # Get the names of the columns for each dimension of quality 
+  names <- get_weights_codes(subject, grouping)
+  
+  if(subject == "mh"){
+    dat <- mh
+  } else if (subject == "sa"){
+    dat <- su
+  }
+  
+  # Creating new columns with for any grouped variables (i.e. offers non-english / non-spanish)
+  for (col in unique(names$`Grouped ID`)) {
+    
+    # Only runs if there are grouped columns 
+    if (!is.na(col)) {
+      cn <- names %>%
+        filter(`Grouped ID` == col) %>%
+        as.data.frame()
+        
+      # If facility provides any of the services listed in the group, facility receives point, otherwise 0.
+      dat[, col] <- ifelse(rowSums(dat[, cn$service_code, drop = F], na.rm = T) >= unique(cn$thresh), 1, 0)
+    }
+  }
+  
+  # Renames service_code value with the Grouped ID
+  names$service_code <- ifelse(is.na(names$`Grouped ID`), 
+                               names$service_code,
+                               names$`Grouped ID`)
+  
+  # Selects columns used to create score
+  facility <- dat %>% 
+    select(unique(names$service_code)) %>%
+    mutate(points = rowSums(., na.rm = T))
+
+  
+  # Return the names of the columns used
+  
+  if (printnames) {
+    return(names %>%
+             select(-`Grouped ID`) %>%
+             arrange(service_code)) 
+  }
+  # Otherwise return the facilities
+  return(facility)
+  
+}
+```
+
+
+```{r} 
+  
+plot_facility_distrib <- function(subject = c("mh", "sa"),
+                                  grouping = c("Access",
+                                               "Special Groups of Focus",
+                                               "Continuum of Treatment",
+                                               "Continuum of Care")) {
+  # Create facility score data
+  facility <- generate_facility_scores(subject, grouping)
+  
+  # Title for plot
+  title <- ifelse(subject == "mh", "Mental Health Facilities", "Substance Use Facilities")
+
+  # Plots distribution
+  facility %>%
+    ggplot(aes(x = factor(points))) +
+    geom_bar(alpha = 0.5) +
+    labs(x = grouping,
+         title = title)
+}
+```
+
+## Plot Distributions of Facilities by Access
+
+```{r}
+generate_facility_scores("mh", "Access", TRUE)
+plot_facility_distrib("mh", "Access")
+
+generate_facility_scores("sa", "Access", TRUE)
+plot_facility_distrib("sa", "Access")
+```
+
+### Mental Health Conditions
+
+```{r}
+generate_facility_scores("sa", "Special Groups of Focus", TRUE)
+plot_facility_distrib("sa", "Special Groups of Focus")
+
+generate_facility_scores("mh", "Special Groups of Focus", TRUE)
+plot_facility_distrib("mh", "Special Groups of Focus")
+```
+
+```{r}
+plot_facility_distrib("sa", "Continuum of Treatment")
+plot_facility_distrib("mh", "Continuum of Treatment")
+
+plot_facility_distrib("sa", "Continuum of Care")
+plot_facility_distrib("mh", "Continuum of Care")
+
+
+```
+
+EMILY'S ADDED CODE
+GOALS:
+# create a score for each facility for each grouping (Continuum of Care etc), between 0-1 
+  #  average scores for total weight
+
+```{r}
+# create a datatable for MENTAL HEALTH facilities each of 4 categories - with Facility name, and weights
+# MH Access
+mh_access <- generate_facility_scores("mh", "Access")
+mh_access$access_weights <- mh_access$points/13
+mh_access$facility <- mh$name1
+mh_access <- mh_access[,c("facility", "access_weights")]
+
+# MH Special Groups
+mh_spgrp <- generate_facility_scores("mh", "Special Groups of Focus")
+mh_spgrp$spgrp_weights <- mh_spgrp$points/10
+mh_spgrp$facility <- mh$name1
+mh_spgrp <- mh_spgrp[,c("facility", "spgrp_weights")]
+
+# MH Continuum of Care
+mh_coc <- generate_facility_scores("mh", "Continuum of Care")
+mh_coc$coc_weights <- mh_coc$points/8
+mh_coc$facility <- mh$name1
+mh_coc <- mh_coc[,c("facility", "coc_weights")]
+
+# MH Continuum of Treatment
+mh_cot <- generate_facility_scores("mh", "Continuum of Treatment")
+mh_cot$cot_weights <- mh_cot$points/5
+mh_cot$facility <- mh$name1
+mh_cot <- mh_cot[,c("facility", "cot_weights")]
+
+#combine MENTAL HEALTH data into single table
+#mh_facility_weights <- merge(mh_cot, mh_coc, mh_spgrp, mh_access)
+mh_facility_weights <- cbind(mh_cot, mh_coc$coc_weights, mh_spgrp$spgrp_weights, mh_access$access_weights)
+names(mh_facility_weights) <- c('MH_Facility', 'Continuum_Treatment', 'Continuum_Care', 'Special_Groups', 'Access')
+mh_facility_weights$Total <- rowSums(mh_facility_weights[,2:5], na.rm = FALSE)/4
+print(mh_facility_weights)
+
+```
+
+```{r}
+# create a datatable for SUBSTANCE USE facilities each of 4 categories - with Facility name, and weights
+# SU Access
+su_access <- generate_facility_scores("sa", "Access")
+su_access$access_weights <- su_access$points/10
+su_access$facility <- su$name1
+su_access <- su_access[,c("facility", "access_weights")]
+
+# SU Special Groups
+su_spgrp <- generate_facility_scores("sa", "Special Groups of Focus")
+su_spgrp$spgrp_weights <- su_spgrp$points/6
+su_spgrp$facility <- su$name1
+su_spgrp <- su_spgrp[,c("facility", "spgrp_weights")]
+
+# SU Continuum of Care
+su_coc <- generate_facility_scores("sa", "Continuum of Care")
+su_coc$coc_weights <- su_coc$points/7
+su_coc$facility <- su$name1
+su_coc <- su_coc[,c("facility", "coc_weights")]
+
+# SU Continuum of Treatment
+su_cot <- generate_facility_scores("sa", "Continuum of Treatment")
+su_cot$cot_weights <- su_cot$points/8
+su_cot$facility <- su$name1
+su_cot <- su_cot[,c("facility", "cot_weights")]
+
+#combine SUBSTANCE USE data into single table
+su_facility_weights <- cbind(su_cot, su_coc$coc_weights, su_spgrp$spgrp_weights, su_access$access_weights)
+names(su_facility_weights) <- c('SU_Facility', 'Continuum_Treatment', 'Continuum_Care', 'Special_Groups', 'Access')
+su_facility_weights$Total <- rowSums(su_facility_weights[,2:5], na.rm = FALSE)/4
+print(su_facility_weights)
+
+```
+
+
+
+#Same as above, except using a function (not environment)
+# Emily hasn't figured this out yet ¯\_(ツ)_/¯
+
+```{r}
+#try creating data table through function
+
+mh_facility_weights_test <- function(subject = "mh",
+                                  grouping = c("Access",
+                                               "Special Groups of Focus",
+                                               "Continuum of Treatment",
+                                               "Continuum of Care")) {
+  dat <- mh
+  
+  #tell data to pull the right grouping denominator for weights
+  
+   if(grouping == "Access"){
+    denominator <- 13
+  } else if (grouping == "Special Groups of Focus"){
+    denominator <- 10
+  } else if (grouping == "Continuum of Treatment"){
+    denominator <- 5
+  } else if (grouping == "Continuum of Care"){
+    denominator <- 8
+  }
+    
+  # Create facility score data
+  facility <- generate_facility_scores(subject, grouping)
+  
+  # Title for plot
+  title <- ifelse(subject == "mh", "Mental Health Facilities", "Substance Use Facilities")
+
+  # Create a Table
+  facility %>%
+    as.data.table(facility) %>%
+    select(points) %>%
+    mutate(weights = points/denominator)
+
+            
+}
+
+mh_facility_weights_test(grouping = "Access")
+mh_facility_weights_test(grouping = "Special Groups of Focus")
+mh_facility_weights_test(grouping = "Continuum of Treatment")
+mh_facility_weights_test(grouping = "Continuum of Care")
+
+```
+
