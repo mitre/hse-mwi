@@ -37,6 +37,25 @@ mh_fac <- read_csv(file.path(data_folder,
 sa_fac <- read_csv(file.path(data_folder,
                              "SAMHSA_Locator/Substance_Use_Treament_Facility_listing_2021_05_18_134647.csv"))
 
+# Weights Folder
+weights_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Raw", "SAMHSA_Locator")
+
+# Download Weights
+mh_weights <- read_csv(file.path(weights_folder,
+                                  "SAMHSA_MHFacility_weights.csv"))
+
+sa_weights <- read_csv(file.path(weights_folder,
+                                 "SAMHSA_SUFacility_weights.csv"))
+
+# Add weights in MH dataset
+mh_fac <- add_column(mh_fac, weights = mh_weights$weight, .before = "psy")
+
+# Add weights in SA dataset
+sa_fac <- add_column(sa_fac, weights = sa_weights$weight, .before = "dt")
+
 # Import census tracts & establish polygons
 states <- c(1:2, 4:6, 8:9, 10:13, 15:42, 44:51, 53:56)
 poly <- get_decennial(geography = "tract", state = states,
@@ -183,9 +202,9 @@ ct <- ct[!duplicated(ct$tract),]
 
 # Select/Remove Relevant Variables in Facility Data
 mh_fac <- mh_fac %>%
-  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:186))
+  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:187))
 sa_fac <- sa_fac %>%
-  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:238))
+  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:239))
 
 # Convert point data into workable column for MH Facilities
 mh_fac <- mh_fac %>%
@@ -203,13 +222,13 @@ mh_fac[is.na(mh_fac$GEOID),]
 which(is.na(mh_fac$GEOID), arr.ind=TRUE)
  
 # Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
-mh_fac[10552, 174] <- "02016000200" # One for Alaska
-mh_fac[10583, 174] <- "15007040300" # One for Hawaii
+mh_fac[10552, 175] <- "02016000200" # One for Alaska
+mh_fac[10583, 175] <- "15007040300" # One for Hawaii
 
 # Remove irrelevant variables and incomplete cases
 mh_fac <- mh_fac %>%
   select(c("name1", "zip", "county.y", "type_facility", "GEOID", "geometry"),
-         c(6:173)) %>%
+         c(6:174)) %>%
   rename("tract" = "GEOID", "county" = "county.y")
 
 mh_fac <- mh_fac[complete.cases(mh_fac$tract),]
@@ -230,17 +249,17 @@ sa_fac[is.na(sa_fac$GEOID),]
 which(is.na(sa_fac$GEOID), arr.ind=TRUE)
 
 # Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
-sa_fac[6657, 226] <- "26033970600" # One for Michigan 
-sa_fac[12045, 226] <- "06037800506" # One for California
-sa_fac[13896, 226] <- "41007950300" # One for Oregon
-sa_fac[14114, 226] <- "02016000100" # One for Alaska
-sa_fac[14161, 226] <- "15009030902" # One for Hawaii
-sa_fac[14169, 226] <- "15009031700" # Another for Hawaii
+sa_fac[6657, 227] <- "26033970600" # One for Michigan 
+sa_fac[12045, 227] <- "06037800506" # One for California
+sa_fac[13896, 227] <- "41007950300" # One for Oregon
+sa_fac[14114, 227] <- "02016000100" # One for Alaska
+sa_fac[14161, 227] <- "15009030902" # One for Hawaii
+sa_fac[14169, 227] <- "15009031700" # Another for Hawaii
 
 # Remove irrelevant variables and incomplete cases
 sa_fac <- sa_fac %>%
   select(c("name1", "zip", "county.y", "type_facility", "GEOID", "geometry"),
-         c(6:225)) %>%
+         c(6:226)) %>%
   rename("tract" = "GEOID", "county" = "county.y")
 
 sa_fac <- sa_fac[complete.cases(sa_fac$tract),]
@@ -270,8 +289,8 @@ which(is.na(sa_fac$Distance), arr.ind=TRUE)
 
 # Manually add in Distance and Population values
 # Determined from US Census & Distance Thresholds of other CTs in same county
-sa_fac[3371, 227] <- 14177 # Population Value for Shannon County
-sa_fac[3371, 228] <- 60 # Distance Threshold for Shannon County
+sa_fac[3371, 228] <- 14177 # Population Value for Shannon County
+sa_fac[3371, 229] <- 60 # Distance Threshold for Shannon County
 
 sa_fac <- sa_fac %>%
 rename(geometry = "geometry.x") %>%
@@ -279,12 +298,6 @@ rename(geometry = "geometry.x") %>%
   relocate(POPULATION, .after = geometry) %>%
   relocate(Distance, .after = geometry) %>%
   rename(c("ct_" = "ct")) # rename variable to avoid confusion with dataset
-
-# Add 1 to all weights in MH dataset
-mh_fac <- add_column(mh_fac, weights = 1, .before = "psy")
-
-# Add 1 to all weights in SH dataset
-sa_fac <- add_column(sa_fac, weights = 1, .before = "dt")
 
 # Results----
 # Create R values for MH dataset
