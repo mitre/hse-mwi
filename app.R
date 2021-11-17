@@ -168,21 +168,51 @@ for (idx in index_types){
 
 # get measure colors
 meas_colors <- c(
-  "BuPu",
-  "Greens",
-  "Blues",
-  "PRGn"
+  "purples", # SDOH
+  "greens", # health status
+  "blues", # healthcare acess
+  "purple_blue_green" # MWI
 )
 names(meas_colors) <- c(unique(m_reg$Category), "Mental Wellness Index")
 
 # get max/min colors for each palette
-meas_max_colors <- sapply(1:length(meas_colors), function(x){
-  brewer.pal(3, meas_colors[x])[3]
-})
-meas_min_colors <- sapply(1:length(meas_colors), function(x){
-  brewer.pal(3, meas_colors[x])[1]
-})
+meas_max_colors <- c(
+  "#5d499e", # SDOH
+  "#70ad47", # health status
+  "#157ba7", # healthcare acess
+  "#00441b" #"#70ad47" # MWI
+)
+  
+#   sapply(1:length(meas_colors), function(x){
+#   brewer.pal(3, meas_colors[x])[3]
+# })
+meas_min_colors <-  c(
+  "#fcfbfd", # SDOH
+  "#f7fcf5", # health status
+  "#f7fbff", # healthcare acess
+  "#3f157d" #"#5d499e" # MWI
+)
+#   sapply(1:length(meas_colors), function(x){
+#   brewer.pal(3, meas_colors[x])[1]
+# })
 names(meas_max_colors) <- names(meas_min_colors) <- names(meas_colors)
+
+# make meas_colors into a color function
+meas_colors <- lapply(1:length(meas_min_colors), function(x){
+  if (x != length(meas_min_colors)){
+    colorRamp(c(meas_min_colors[x], meas_max_colors[x]), interpolate = "linear")
+  } else { # MWI has something in the middle
+    colorRamp(c(meas_min_colors[x], "#f7f7f7", meas_max_colors[x]), interpolate = "linear")
+  }
+})
+meas_colors_pal <- lapply(1:length(meas_min_colors), function(x){
+  if (x != length(meas_min_colors)){
+    colorRampPalette(c(meas_min_colors[x], meas_max_colors[x]), interpolate = "linear")
+  } else { # MWI has something in the middle
+    colorRampPalette(c(meas_min_colors[x], "#f7f7f7", meas_max_colors[x]), interpolate = "linear")
+  }
+})# #c6dbef
+names(meas_colors) <- names(meas_colors_pal) <- names(meas_max_colors)
 
 # add cities/states to mwi
 for (idx in index_types){
@@ -235,13 +265,13 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
   
   # create palette
   pal <- colorNumeric(
-    palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
+    palette = meas_colors[[meas_col_to_type[measure_to_names[[idx]][fill]]]],
     domain = c(0, gd_map$Fill, 100),
     na.color = "transparent",
     reverse = ifelse(fill == "Score", T, F)
   )
   pal_wo_na <- colorNumeric(
-    palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
+    palette = meas_colors[[meas_col_to_type[measure_to_names[[idx]][fill]]]],
     domain = c(0, gd_map$Fill, 100),
     na.color=rgb(0,0,0,0),
     reverse = ifelse(fill == "Score", T, F)
@@ -340,10 +370,9 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
     bee.df$focus_alpha[-row_hl] <- .3
     
     pal <- colorNumeric(
-      palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
+      palette = meas_colors[[meas_col_to_type[measure_to_names[[idx]][fill]]]],
       domain = c(0, bee.df$val, 100),
-      na.color = "transparent",
-      reverse = ifelse(fill == "Score", T, F)
+      na.color = "transparent"
     )
     
     hl_pal <- c(
@@ -359,9 +388,14 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
   p <- 
     if (hl){
       ggplot(bee.df, aes(val, lab, color = val, size = focus))+
-        scale_color_distiller(
-          palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
-          direction = ifelse(fill == "Score", -1, 1),
+        # scale_color_distiller(
+        #   palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
+        #   direction = 1,
+        #   limits = c(0, 100)
+        # )+
+        scale_color_gradientn(
+          colors = 
+            meas_colors_pal[[meas_col_to_type[measure_to_names[[idx]][fill]]]](100),
           limits = c(0, 100)
         )+
         # scale_alpha(range = c(0,1))+
@@ -369,9 +403,9 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
         scale_size_manual(values = hl_size)
     } else {
       ggplot(bee.df, aes(val, lab, color = val), size = 1.5)+
-        scale_color_distiller(
-          palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
-          direction = ifelse(fill == "Score", -1, 1),
+        scale_color_gradientn(
+          colors = 
+            meas_colors_pal[[meas_col_to_type[measure_to_names[[idx]][fill]]]](100),
           limits = c(0, 100)
         )
     }
