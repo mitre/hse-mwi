@@ -6,7 +6,7 @@ The Mental Wellness Index is a framework and dashboard tool that provides a pict
 
 The intent of the Mental Wellness Index is to provide a snapshot of a community's mental wellness so that community leaders, public health officials, and funding entities can understand how they might best direct mental health support to build on a particular community's assets and fill in its gaps.
 
-\*ZIP Code Tabulation Area
+\*ZIP Code Tabulation Area (ZCTA)
 
 ## MWI Domains & Measures
 
@@ -15,6 +15,8 @@ The MWI creates a score for each zip code between 0 and 100, such that:
 -   higher values indicate more **assets** that **support** community mental wellness
 
 -   lower values indicate more **obstacles** that **challenge** community mental wellness
+
+^ indicates measures that are race stratified
 
 ![](www/media/MWI%20Full%20Measures.png)
 

@@ -104,8 +104,6 @@ geo_levels <- c(
 
 # first, go through and load/collate data ----
 
-# TODO: use data tables?
-
 cat(paste0("[", Sys.time(), "]: Loading and collating data\n"))
 
 # where we're going to put all the data
@@ -151,8 +149,6 @@ for (gl in geo_levels){
 }
 
 # get/output variable information ----
-
-# TODO: ADD TRYCATCH/DATA QUALITY FILTERING
 
 cat(paste0("[", Sys.time(), "]: Calculating data information\n"))
 
@@ -344,9 +340,6 @@ zcta_df <- zcta_df[zcta_df$GEOID %in% all_zctas,]
 # scale and combine each measure ----
 
 cat(paste0("[", Sys.time(), "]: Combining and scaling measures\n"))
-
-# TODO: CLEAN UP ENVIRONMENT
-# TODO: ADD CHECKS
 
 # first, allocate with only numerators
 meas_df <- zcta_df[, !colnames(zcta_df) %in% info_dat$Denominator]
