@@ -202,16 +202,16 @@ meas_colors <- lapply(1:length(meas_min_colors), function(x){
   if (x != length(meas_min_colors)){
     colorRamp(c(meas_min_colors[x], meas_max_colors[x]), interpolate = "linear")
   } else { # MWI has something in the middle
-    colorRamp(c(meas_min_colors[x], "#f7f7f7", meas_max_colors[x]), interpolate = "linear")
+    colorRamp(c(meas_min_colors[x], "#c6dbef", meas_max_colors[x]), interpolate = "linear")
   }
 })
 meas_colors_pal <- lapply(1:length(meas_min_colors), function(x){
   if (x != length(meas_min_colors)){
     colorRampPalette(c(meas_min_colors[x], meas_max_colors[x]), interpolate = "linear")
   } else { # MWI has something in the middle
-    colorRampPalette(c(meas_min_colors[x], "#f7f7f7", meas_max_colors[x]), interpolate = "linear")
+    colorRampPalette(c(meas_min_colors[x], "#c6dbef", meas_max_colors[x]), interpolate = "linear")
   }
-})# #c6dbef
+})
 names(meas_colors) <- names(meas_colors_pal) <- names(meas_max_colors)
 
 # add cities/states to mwi
@@ -387,7 +387,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
   
   p <- 
     if (hl){
-      ggplot(bee.df, aes(val, lab, color = val, size = focus))+
+      ggplot(bee.df, aes(lab, val, color = val, size = focus))+
         # scale_color_distiller(
         #   palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
         #   direction = 1,
@@ -402,7 +402,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
         # scale_color_manual(values = hl_pal)+
         scale_size_manual(values = hl_size)
     } else {
-      ggplot(bee.df, aes(val, lab, color = val), size = 1.5)+
+      ggplot(bee.df, aes(lab, val, color = val), size = 1.5)+
         scale_color_gradientn(
           colors = 
             meas_colors_pal[[meas_col_to_type[measure_to_names[[idx]][fill]]]](100),
@@ -426,29 +426,28 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
         "ZCTA: ", zcta, "\n",
         full_name, ": ", signif(val, 4)
       )),
-      groupOnX = F, alpha = bee.df$focus_alpha)+
+      groupOnX = T, alpha = bee.df$focus_alpha)+
     theme_bw()+
-    xlab(full_name)+
+    ylab(full_name)+
     theme(
-      axis.text.y = element_blank(),
-      axis.title.y = element_blank(),
-      axis.ticks.y = element_blank(),
+      axis.text.x = element_blank(),
+      axis.title.x = element_blank(),
+      axis.ticks.x = element_blank(),
       legend.position = "none",
       plot.title = element_text(hjust = .5)
     )+
-    xlim(-3, 103)+
-    ggtitle(paste0("Distribution of ", measure_to_names[[idx]][fill], 
-                   " for the ",
-                   ifelse(idx == "black", "Black ", "Overall "),
-                   "Population in ", 
-                   st))+
+    ylim(-3, 103)+
     NULL
   )
+  print(p)
   
   ggplotly(
     p,
     tooltip = c("text")
-  ) %>% config(displayModeBar = F)
+  ) %>% 
+    layout(margin = list(l = 0, r = 10,
+                         b = 0, t = 0)) %>%
+    config(displayModeBar = F)
 }
 
 # map percentiles to text
@@ -554,24 +553,42 @@ ui <- fluidPage(
         ),
         mainPanel(
           width = 9,
-          leafletOutput("us_map", height = 400),
-          HTML("<br>"),
-          uiOutput("us_map_legend"),
-          HTML("<br>"),
-          uiOutput("us_map_expl"),
-          hr(),
-          fluidRow(
-            column(
-              width = 8,
-              plotlyOutput("us_distr")
-            ),
-            column(
-              width = 4,
+          column(
+            width = 8,
+            leafletOutput("us_map", height = 900)
+          ),
+          # HTML("<br>"),
+          # uiOutput("us_map_legend"),
+          # HTML("<br>"),
+          column(
+            width = 4,
+            uiOutput("us_map_expl"),
+            hr(),
+            uiOutput("us_distr_title"),
+            plotlyOutput("us_distr", height = 500),
+            hr(),
+            conditionalPanel(
+              condition = "!output.focus_on",
               tableOutput("us_quantile"),
-              br(),
+            ),
+            conditionalPanel(
+              condition = "output.focus_on",
               uiOutput("us_info")
             )
-          )
+          ),
+          # hr(),
+          # fluidRow(
+          #   column(
+          #     width = 8,
+          #     plotlyOutput("us_distr")
+          #   ),
+          #   column(
+          #     width = 4,
+          #     tableOutput("us_quantile"),
+          #     br(),
+          #     uiOutput("us_info")
+          #   )
+          # )
         )
       )
     ),
@@ -772,6 +789,12 @@ server <- function(input, output, session) {
   
   # output plots and information ----
   
+  # watch focus_info updating
+  output$focus_on <- reactive({
+    focus_info$ZCTA != ""
+  })
+  outputOptions(output, "focus_on", suspendWhenHidden = FALSE)
+  
   # output$data_info <- renderUI({
   #   withProgress(message = "Rendering data information", {
   #     full_name <- measure_to_names[input$us_map_fill]
@@ -875,6 +898,18 @@ server <- function(input, output, session) {
         "</center>"
       ))
     })
+  })
+  
+  output$us_distr_title <- renderUI({
+    HTML(paste0(
+      "<b><center><font size = '3'>",
+      "Distribution of ", measure_to_names[[st_sub$idx]][st_sub$us_map_fill],
+      " for the ",
+      ifelse(st_sub$idx == "black", "Black ", "Overall "),
+      "Population in ",
+      st_sub$st,
+      "</b></center></font>"
+    ))
   })
   
   output$us_distr <- renderPlotly({
