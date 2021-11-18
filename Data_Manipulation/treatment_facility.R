@@ -87,7 +87,7 @@ step_1_fca <- function (data, geo) {
   geo_coord <- st_coordinates(geo)
   fac_coord <- st_coordinates(data)
   start <- Sys.time()
-  for (i in 1:n) {
+  for (i in 1:nrow(data)) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
@@ -141,7 +141,7 @@ step_2_fca <- function (data, geo, facil) {
   geo_coord <- st_coordinates(geo)
   fac_coord <- st_coordinates(data)
   start <- Sys.time()
-  for (i in 1:n) {
+  for (i in 1:nrow(data)) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
