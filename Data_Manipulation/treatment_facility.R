@@ -92,7 +92,10 @@ step_1_fca <- function (data, geo) {
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
     }
-    
+    # Output every 1000 values
+    if (i %% 1000 == 0){
+      write.csv(data, file = paste0("mh_output", "_", i, ".csv"), row.names = F)
+      }
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 MH treatment centers
     # Keep the logical 
@@ -145,6 +148,10 @@ step_2_fca <- function (data, geo, facil) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
+    }
+    # Output every 1000 values
+    if (i %% 1000 == 0){
+      write.csv(data, file = paste0("sa_output", "_", i, ".csv"), row.names = F)
     }
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
