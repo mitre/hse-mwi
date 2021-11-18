@@ -321,22 +321,22 @@ ct$A_mh[-c(1:n)] <- 0
 ct$A_sa[-c(1:n)] <- 0
 
 # Distribution of R value for MH 
-ggplot(mh_fac[1:n,], aes(R)) + 
+ggplot(mh_fac[1:nrow(mh_fac),], aes(R)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of R value for SA
-ggplot(sa_fac[1:n,], aes(R)) + 
+ggplot(sa_fac[1:nrow(sa_fac),], aes(R)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of A value for MH
-ggplot(ct[1:n,], aes(A_mh)) + 
+ggplot(ct[1:nrow(mh_fac),], aes(A_mh)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of A value for SA
-ggplot(ct[1:n,], aes(A_sa)) + 
+ggplot(ct[1:nrow(sa_fac),], aes(A_sa)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
