@@ -71,13 +71,14 @@ poly <- get_decennial(geography = "tract", state = states,
 # Inputs
 #   data: dataset of facilities with specified point data
 #   geo: dataset of geographical points
+#   facil: the type of facility (MH, SA, etc) in character format
 # Output  
 #   Returns R value for each facility within the dataset of facilities
 
 # Set the amount of rows to be iterated
 n <- 1000
 
-step_1_fca <- function (data, geo) {
+step_1_fca <- function (data, geo, type) {
   # Build a for loop while subseting by proximity - only look at CT centroids
   # within +/- 1 lat/long of facility
   # Create for loop
@@ -94,7 +95,7 @@ step_1_fca <- function (data, geo) {
     }
     # Output every 1000 values
     if (i %% 1000 == 0){
-      write.csv(data, file = paste0("mh_output", "_", i, ".csv"), row.names = F)
+      write.csv(data, file = paste0("step1", facil, "_", i, ".csv"), row.names = F)
       }
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 MH treatment centers
@@ -151,7 +152,7 @@ step_2_fca <- function (data, geo, facil) {
     }
     # Output every 1000 values
     if (i %% 1000 == 0){
-      write.csv(data, file = paste0("sa_output", "_", i, ".csv"), row.names = F)
+      write.csv(data, file = paste0("step1", facil, "_", i, ".csv"), row.names = F)
     }
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
@@ -308,7 +309,7 @@ rename(geometry = "geometry.x") %>%
 
 # Results----
 # Create R values for MH dataset
-mh_fac <- step_1_fca(mh_fac, ct) %>%
+mh_fac <- step_1_fca(mh_fac, ct, "mh") %>%
   relocate(R, .after = POPULATION)
 
 # Create R values for SA dataset
