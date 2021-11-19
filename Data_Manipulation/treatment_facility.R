@@ -313,7 +313,7 @@ mh_fac <- step_1_fca(mh_fac, ct, "mh") %>%
   relocate(R, .after = POPULATION)
 
 # Create R values for SA dataset
-sa_fac <- step_1_fca(sa_fac, ct) %>%
+sa_fac <- step_1_fca(sa_fac, ct, "sa") %>%
   relocate(R, .after = POPULATION) 
 
 # Create A values using MH dataset
