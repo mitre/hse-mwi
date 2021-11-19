@@ -231,7 +231,7 @@ for (idx in index_types){
 # 
 # # create the geo data for leaflet
 # # NOTE: may want to do this ahead of time, if possible, when the base index is done
-# geodat <- list()
+# geodat <- geopts <- list()
 # for (idx in index_types){
 #   geodat[[idx]] <-
 #     geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "inner")
@@ -239,9 +239,12 @@ for (idx in index_types){
 #   # sort by state code and zcta
 #   geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
 #                                        geodat[[idx]]$GEOID10),]
+# 
+#   # convert to points for US visualization -- ignore warnings
+#   geopts[[idx]] <- st_centroid(geodat[[idx]])
 # }
 # # saving for now, while things are stable
-# save(list = "geodat", file = file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+# save(list = c("geodat", "geopts"), file = file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
 
 # load geodat data (should be much faster)
 load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
@@ -254,7 +257,7 @@ names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10,
 # plot functions ----
 
 # plot the overall map, filled by measure/score (LEAFLET)
-plot_map <- function(fill, geodat, idx, fill_opacity = .7,
+plot_map <- function(fill, geodat, idx, is_all = F, fill_opacity = .7,
                      add_poly = F, us_proxy = NA, zcta_choose = NA){
   # subset map for easy plotting
   gd_map <- geodat[,c(fill, "GEOID10", "STATE", "STATE_NAME", "geometry")]
@@ -298,54 +301,95 @@ plot_map <- function(fill, geodat, idx, fill_opacity = .7,
   bounds <- unname(st_bbox(geodat))
   
   if (!add_poly){
-    # create map
-    mp <- leaflet(data = gd_map) %>%
-      addProviderTiles("CartoDB") %>% #OpenStreetMap
-      addPolygons(fillColor = ~pal(Fill),
-                  weight = 1,
-                  opacity = 1,
-                  color = "#b2aeae",
-                  dashArray = "",
-                  fillOpacity = fill_opacity,
-                  layerId = ~GEOID10,
-                  highlight = highlightOptions(weight = 2,
-                                               color = "#666",
-                                               dashArray = "",
-                                               fillOpacity = 0.7,
-                                               bringToFront = T),
-                  label = labels) %>%
-      addLegend(pal = pal_wo_na,
-                values = ~c(0, Fill, 100), 
-                opacity = 0.7, 
-                position = "bottomright",
-                title = unname(full_name)) %>%
-      fitBounds(
-        lng1 = bounds[1],
-        lng2 = bounds[3],
-        lat1 = bounds[2],
-        lat2 = bounds[4]
-      )
+    mp <- 
+      if (!is_all){ # for specific states
+        # create map
+        leaflet(data = gd_map) %>%
+          addProviderTiles("CartoDB") %>% #OpenStreetMap
+          addPolygons(fillColor = ~pal(Fill),
+                      weight = 1,
+                      opacity = 1,
+                      color = "#b2aeae",
+                      dashArray = "",
+                      fillOpacity = fill_opacity,
+                      layerId = ~GEOID10,
+                      highlight = highlightOptions(weight = 2,
+                                                   color = "#666",
+                                                   dashArray = "",
+                                                   fillOpacity = 0.7,
+                                                   bringToFront = T),
+                      label = labels) %>%
+          addLegend(pal = pal_wo_na,
+                    values = ~c(0, Fill, 100), 
+                    opacity = 0.7, 
+                    position = "bottomright",
+                    title = unname(full_name)) %>%
+          fitBounds(
+            lng1 = bounds[1],
+            lng2 = bounds[3],
+            lat1 = bounds[2],
+            lat2 = bounds[4]
+          )
+      } else {
+        leaflet(data = (gd_map)) %>%
+          addProviderTiles("CartoDB") %>% #OpenStreetMap
+          addCircleMarkers(fillColor = ~pal(Fill),
+                           weight = 1,
+                           opacity = 1,
+                           color = ~pal(Fill),
+                           dashArray = "",
+                           fillOpacity = fill_opacity,
+                           layerId = ~GEOID10,
+                           label = labels,
+                           radius = 5) %>%
+          addLegend(pal = pal_wo_na,
+                    values = ~c(0, Fill, 100), 
+                    opacity = 0.7, 
+                    position = "bottomright",
+                    title = unname(full_name)) %>%
+          fitBounds(
+            lng1 = bounds[1],
+            lng2 = bounds[3],
+            lat1 = bounds[2],
+            lat2 = bounds[4]
+          )
+      }
   } else {
     zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
-    
-    mp <- us_proxy %>% 
-      addPolygons(
-        data = zcta_select,
-        fillColor = ~pal(Fill),
-        weight = 4,
-        opacity = 1,
-        color = "#000",
-        dashArray = "",
-        fillOpacity = fill_opacity,
-        layerId = "remove_me",
-        # group = "remove_me",
-        highlight = highlightOptions(weight = 4,
-                                     color = "#000",
-                                     dashArray = "",
-                                     fillOpacity = 0.7,
-                                     bringToFront = T),
-        label = labels[gd_map$GEOID10 == zcta_choose]
-      )
+    mp <- 
+      if (!is_all){
+        us_proxy %>% 
+          addPolygons(
+            data = zcta_select,
+            fillColor = ~pal(Fill),
+            weight = 4,
+            opacity = 1,
+            color = "#000",
+            dashArray = "",
+            fillOpacity = fill_opacity,
+            layerId = "remove_me",
+            # group = "remove_me",
+            highlight = highlightOptions(weight = 4,
+                                         color = "#000",
+                                         dashArray = "",
+                                         fillOpacity = 0.7,
+                                         bringToFront = T),
+            label = labels[gd_map$GEOID10 == zcta_choose]
+          )
+      } else {
+        us_proxy %>% 
+          addCircleMarkers(
+            data = zcta_select,
+            fillColor = ~pal(Fill),
+            weight = 4,
+            opacity = 1,
+            color = "#000",
+            dashArray = "",
+            fillOpacity = 1,
+            layerId = "remove_me",
+            label = labels[gd_map$GEOID10 == zcta_choose],
+            radius = 7)
+      }
   }
   
   return(mp)
@@ -627,7 +671,8 @@ server <- function(input, output, session) {
     "st" = "North Carolina",
     "geodat" = geodat[["pop"]][geodat[["pop"]]$STATE_NAME == "North Carolina",],
     "mwi" = mwi[["pop"]][mwi[["pop"]]$STATE_NAME == "North Carolina",],
-    "us_map_fill" = "Mental_Wellness_Index"
+    "us_map_fill" = "Mental_Wellness_Index",
+    "is_all" = F
   )
   
   us_proxy <- leafletProxy("us_map")
@@ -665,15 +710,16 @@ server <- function(input, output, session) {
     
     if (input$st_focus == "All"){
       st_sub$st <- "All"
-      st_sub$geodat <- geodat[[idx]]
+      st_sub$geodat <- geopts[[idx]]
       st_sub$mwi <- mwi[[idx]]
+      st_sub$is_all <- T
       
       updateSelectInput(session, 
                         "zcta_choose", 
-                        "Which ZCTA would you like to focus on?",
+                        "Which ZCTA would you like to focus on? (Not available for all states.)",
                         choices = c(
-                          "None" = "", 
-                          avail_zctas)
+                          "None" = "")#, 
+                          #avail_zctas)
       )
     } else {
       # also include zips from bordering states
@@ -687,6 +733,7 @@ server <- function(input, output, session) {
         mwi[[idx]]$STATE_NAME == input$st_focus | 
           mwi[[idx]]$STATE_2 == st_to_fips[input$st_focus] & 
           !is.na(mwi[[idx]]$STATE_2),]
+      st_sub$is_all <- F
       
       updateSelectInput(session, 
                         "zcta_choose", 
@@ -712,7 +759,11 @@ server <- function(input, output, session) {
     focus_info$ZCTA <- ""
     
     # remove any previously highlighted polygon
-    us_proxy %>% removeShape("remove_me")
+    if (!st_sub$is_all){
+      us_proxy %>% removeShape("remove_me")
+    } else {
+      us_proxy %>% removeMarker("remove_me")
+    }
   })
   
   # update the ZCTA
@@ -721,7 +772,11 @@ server <- function(input, output, session) {
     focus_info$ZCTA <- ""
     
     # remove any previously highlighted polygon
-    us_proxy %>% removeShape("remove_me")
+    if (!st_sub$is_all){
+      us_proxy %>% removeShape("remove_me")
+    } else {
+      us_proxy %>% removeMarker("remove_me")
+    }
   })
   
   # reset map click focus
@@ -739,7 +794,11 @@ server <- function(input, output, session) {
     focus_info$ZCTA <- ""
     
     # remove any previously highlighted polygon
-    us_proxy %>% removeShape("remove_me")
+    if (!st_sub$is_all){
+      us_proxy %>% removeShape("remove_me")
+    } else {
+      us_proxy %>% removeMarker("remove_me")
+    }
   })
   
   # update the focus
@@ -749,11 +808,16 @@ server <- function(input, output, session) {
       focus_info$ZCTA <- input$us_map_shape_click$id
       
       # remove any previously highlighted polygon
-      us_proxy %>% removeShape("remove_me")
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
       
       # add a highlighted polygon
       us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
                            st_sub$idx,
+                           is_all = st_sub$is_all,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
     } else {
@@ -771,11 +835,16 @@ server <- function(input, output, session) {
       focus_info$ZCTA <- input$zcta_choose
       
       # remove any previously highlighted polygon
-      us_proxy %>% removeShape("remove_me")
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
       
       # add a highlighted polygon
       us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
                            st_sub$idx,
+                           is_all = st_sub$is_all,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
     } else {
@@ -783,7 +852,11 @@ server <- function(input, output, session) {
       focus_info$ZCTA <- ""
       
       # remove any previously highlighted polygon
-      us_proxy %>% removeShape("remove_me")
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
     }
   })
   
@@ -818,7 +891,7 @@ server <- function(input, output, session) {
   output$us_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
       plot_map(st_sub$us_map_fill, st_sub$geodat,
-               st_sub$idx)
+               st_sub$idx, is_all = st_sub$is_all)
     })
   })
   
