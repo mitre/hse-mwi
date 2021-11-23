@@ -87,12 +87,19 @@ acs_data <- get_acs(
     # # Poverty Status in the Past 12 Months
     # "S1701_C01_001E", # Estimate!!Total!!Population for whom poverty status is determined
     # "S1701_C01_042E", # S1701_C01_042E	Estimate!!Total!!Population for whom poverty status is determined!!ALL INDIVIDUALS WITH INCOME BELOW THE FOLLOWING POVERTY RATIOS!!200 percent of poverty level
-    
+
     # Poverty Status -- Income in past 12 months below poverty level
     "B17021_001", # Estimate!!Total:
     "B17021_002", # Estimate!!Total:!!Income in the past 12 months below poverty level:
     "B17010B_001", # Estimate!!Total: (black alone)
     "B17010B_002", # Estimate!!Total:!!Income in the past 12 months below poverty level:
+    
+    # # below 125% poverty level -- subject tables -- TOO MUCH MISSINGNESS
+    # "S1703_C04_001", # Estimate!!Less than 125 percent of the poverty level!!Population for whom poverty status is determined
+    # "S1703_C01_001", # Estimate!!Total!!Population for whom poverty status is determined
+    # 
+    # "S1703_C04_010", # Estimate!!Less than 125 percent of the poverty level!!Population for whom poverty status is determined!!RACE AND HISPANIC OR LATINO ORIGIN!!One race!!Black or African American
+    # "S1703_C01_010", # Estimate!!Total!!Population for whom poverty status is determined!!RACE AND HISPANIC OR LATINO ORIGIN!!One race!!Black or African American
     
     # veteran status ----
     
@@ -131,6 +138,21 @@ acs_data <- get_acs(
 
     "C27001B_007", # Estimate!!Total:!!19 to 64 years:!!No health insurance coverage
     "C27001B_010", #Estimate!!Total:!!65 years and over:!!No health insurance coverage,
+    
+    # Early Childhood Education -----
+    
+    # Numerator: School enrollment by detailed level of school for the population 3 years and older
+    "B14007_003", # Estimate!!Total:!!Enrolled in school:!!Enrolled in nursery school, preschool
+
+    "B14007B_003", # Estimate!!Total:!!Enrolled in school:!!Enrolled in nursery school, preschool (Black or African American Alone)
+
+    # Denominator: Under 5 population
+    "B01001_003", # Estimate!!Total:!!Male:!!Under 5 years
+    "B01001_027", # Estimate!!Total:!!Female:!!Under 5 years
+    
+    "B01001B_003", # Estimate!!Total:!!Male:!!Under 5 years (Black or African American Alone)
+    "B01001B_018", # Estimate!!Total:!!Female:!!Under 5 years (Black or African American Alone)
+    
     
     # ICE variables -----
     
@@ -184,7 +206,7 @@ cname_map <- list(
   "worktransportation_denom_pop" = c("B08006_001E"),
   "worktransportation_caralone_pop" = c("B08006_003E"),
   "worktransportation_denom_black" = c("B08105B_001E"),
-  "worktransportation_carlone_black" = c("B08105B_002E"),
+  "worktransportation_caralone_black" = c("B08105B_002E"),
   "computerinternet_denom_pop" = c("B28003_001E"),
   "computerinternet_computerandbroadband_pop" = c("B28003_004E"),
   "computerinternet_denom_black" = c("B28009B_001E"),
@@ -194,9 +216,9 @@ cname_map <- list(
   "unemployment_denom_black" = c("C23002B_004E", "C23002B_011E", "C23002B_017E", "C23002B_024E"),
   "unemployment_unemployed_black" = c("C23002B_008E", "C23002B_013E","C23002B_021E", "C23002B_026E"),
   "povertystatus_denom_pop" = c("B17021_001E"),
-  "povertystatus_belowpovertylevel_pop" = c("B17021_002E"),
+  "povertystatus_below100povertylevel_pop" = c("B17021_002E"),
   "povertystatus_denom_black" = c("B17010B_001E"),
-  "povertystatus_belowpovertylevel_black" = c("B17010B_002E"),
+  "povertystatus_below100povertylevel_black" = c("B17010B_002E"),
   "veteranstatus_denom_pop" = c("B21001_001E"),
   "veteranstatus_veteran_pop" = c("B21001_002E"),
   "veteranstatus_denom_black" = c("C21001B_001E"),
@@ -208,7 +230,13 @@ cname_map <- list(
   "healthinsurance_denom_pop" = c("B27020_001E"),
   "healthinsurance_nohealthinsurance_pop" = c("B27020_006E", "B27020_012E", "B27020_017E"),
   "healthinsurance_denom_black" = c("C27001B_001E"),
-  "healthinsurance_nohealthinsurance_black" = c("C27001B_004E", "C27001B_007E","C27001B_010E")
+  "healthinsurance_nohealthinsurance_black" = c("C27001B_004E", "C27001B_007E","C27001B_010E"),
+
+  "earlychildhoodeducation_denom_pop" = c("B01001_003E", "B01001_027E"),
+  "earlychildhoodeducation_enrolled_pop" = c("B14007_003E"),
+  "earlychildhoodeducation_denom_black" = c("B01001B_003E", "B01001B_018E"),
+  "earlychildhoodeducation_enrolled_black" = c("B14007B_003E")
+
 )
 
 # preallocate -- we're going to just keep the geoid and name columns
@@ -266,4 +294,5 @@ data_folder <- file.path(
   "Data", "Preprocessed")
 
 write.csv(acs_final, file = file.path(data_folder,
-                                     "ACS_API_Data.csv"), row.names = F, na = "")
+                                     "ACS_API_Data.csv"), 
+          row.names = F, na = "")
