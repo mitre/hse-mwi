@@ -78,7 +78,7 @@ poly <- get_decennial(geography = "tract", state = states,
 # Set the amount of rows to be iterated
 n <- 1000
 
-step_1_fca <- function (data, geo, type) {
+step_1_fca <- function (data, geo, facil) {
   # Build a for loop while subseting by proximity - only look at CT centroids
   # within +/- 1 lat/long of facility
   # Create for loop
@@ -145,14 +145,14 @@ step_2_fca <- function (data, geo, facil) {
   geo_coord <- st_coordinates(geo)
   fac_coord <- st_coordinates(data)
   start <- Sys.time()
-  for (i in 1:nrow(data)) {
+  for (i in 1:nrow(geo)) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
     }
     # Output every 1000 values
     if (i %% 1000 == 0){
-      write.csv(data, file = paste0("step1", facil, "_", i, ".csv"), row.names = F)
+      write.csv(data, file = paste0("step2", facil, "_", i, ".csv"), row.names = F)
     }
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
