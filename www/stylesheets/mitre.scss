@@ -1,0 +1,169 @@
+$mitre-blue: #005B94;
+$mitre-highlighter: #FFF601;
+$dark-navy: #0B2338;
+$navy: #0D2F4F;
+$light-blue: #87DEFF;
+$dark-gray: #7E8284;
+$silver: #D4D4D3;
+$light-silver: #F1F3F4;
+$white: #FFFFFF;
+$brand-danger: #AE132A;
+
+/* APPLY MITRE STYLING ACROSS APP */
+body {
+  color: $dark-navy;
+  background-color: $white;
+  
+  hr {
+    height: 1px;
+    border: none;
+    background-color: $dark-gray;
+    opacity: .25;
+  }
+  
+  a {
+    color: $mitre-blue;
+  }
+}
+
+// Icons
+.fa-info-circle {
+  color: $mitre-blue;
+}
+
+// Navbar
+.navbar {
+  background-color: $mitre-blue !important;
+
+  &-brand {
+    padding: 10px 15px;
+    color: $white !important;
+    
+    a {
+      margin-right: 10px;
+      
+      img {
+        margin-bottom: 5px;
+        padding-right: 15px;
+        border-right: 2px solid $light-silver;
+      }
+    }
+  }
+
+  &-nav li {
+    a {
+      color: $white !important;
+      background-color: $mitre-blue !important;
+
+      &:hover {
+        color: $mitre-highlighter !important;
+      }
+    }
+
+    &.active>a {
+      color: $mitre-highlighter !important;
+      filter: brightness(90%);
+    }
+  }
+}
+
+// Main page
+.well {
+  background-color: $light-silver;
+  border: 1px solid $silver;
+}
+
+.panel-heading {
+    background-color: $mitre-blue !important;
+    
+    a {
+      color: $white !important;
+      .fa-info-circle {
+        color: $white;
+      }
+    }
+  }
+
+.plot_area {
+  li>a {
+    color: $navy;
+    
+    &:hover {
+      color: $dark-navy;
+    }
+  }  
+  
+  li.active>a {
+    color: $mitre-blue !important;
+  }
+  
+  .plot-title {
+    color: $dark-navy;
+  }
+}
+
+.tocify {
+  &-item.active, &-item.active:hover, &-item.active:focus {
+    background-color: $mitre-blue;
+  }
+}
+
+// Buttons
+.btn {
+  margin: 0px 3px;
+  
+  &-default {
+    color: $dark-navy !important;
+    background-color: $silver !important;
+    
+    &:hover {
+      filter: brightness(90%);
+    }
+  }
+  
+  &-primary {
+    color: $light-silver !important;
+    background-color: $mitre-blue !important;
+    
+    &:hover {
+      filter: brightness(90%);
+    }
+  }
+  
+  &-danger {
+    color: $light-silver !important;
+    background-color: $brand-danger !important;
+    
+    &:hover {
+      filter: brightness(90%);
+    }
+  }
+}
+
+// Toggle Switches
+.material-switch {
+  label {
+    &:before {
+      background-color: $light-silver;
+    }
+    &:after {
+      background-color: $silver;
+      box-shadow: none;
+    }
+  }
+  
+  .label-primary {
+    background-color: $mitre-blue; 
+  }
+}
+
+// MITRE Copyright
+.copyright-footer {
+  font-size: .9em;
+  position: fixed;
+  background-color: $white;
+  bottom: 5px;
+  left: 8px;
+  z-index: 501;
+  text-anchor: end;
+}
