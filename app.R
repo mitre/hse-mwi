@@ -564,14 +564,6 @@ ui <- fluidPage(
             "What would you like to explore?",
             choices = avail_meas_list[["pop"]]
           ),
-          # sliderInput(
-          #   "us_map_fill_opacity",
-          #   HTML("<b>What fill opacity (%)?</b> A higher number indicates a more opaque fill."),
-          #   min = 0,
-          #   max = 100,
-          #   value = 70,
-          #   step = 10
-          # ),
           selectizeInput(
             "zcta_choose",
             label = "Which ZCTA would you like to focus on?",
@@ -580,34 +572,33 @@ ui <- fluidPage(
           actionButton("reset_zcta_click", "Reset ZCTA Focus"),
           hr(),
           HTML("<font size = '2'>"),
-          HTML(paste0(
-            "Data sourced from various publically available data sources.",
-            "More information on methodology can be found in the about tab."
-          )),
+          # HTML(paste0(
+          #   "Data sourced from various publically available data sources.",
+          #   "More information on methodology can be found in the about tab."
+          # )),
           # TODO: FIX INFO HERE
-          # uiOutput("data_info"),
+          uiOutput("data_info"),
           HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
           )),
           HTML(paste0(
             "All states are included.", 
-            " Selecting \"All\" will show all included states. Note that this is slower to render.<p>")),
+            " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p>")),
           HTML("</font>"),
         ),
         mainPanel(
           width = 9,
           column(
             width = 8,
-            leafletOutput("us_map", height = 900)
+            withSpinner(leafletOutput("us_map", height = 900),
+                        type = 8, color = "#005B94", hide.ui = F)
           ),
-          # HTML("<br>"),
-          # uiOutput("us_map_legend"),
-          # HTML("<br>"),
           column(
             width = 4,
             uiOutput("us_map_expl"),
             hr(),
             uiOutput("us_distr_title"),
-            plotlyOutput("us_distr", height = 500),
+            withSpinner(plotlyOutput("us_distr", height = 500),
+                        type = 8, color = "#005B94", hide.ui = F),
             hr(),
             conditionalPanel(
               condition = "!output.focus_on",
@@ -617,20 +608,7 @@ ui <- fluidPage(
               condition = "output.focus_on",
               uiOutput("us_info")
             )
-          ),
-          # hr(),
-          # fluidRow(
-          #   column(
-          #     width = 8,
-          #     plotlyOutput("us_distr")
-          #   ),
-          #   column(
-          #     width = 4,
-          #     tableOutput("us_quantile"),
-          #     br(),
-          #     uiOutput("us_info")
-          #   )
-          # )
+          )
         )
       )
     ),
