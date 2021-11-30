@@ -228,7 +228,13 @@ meas_colors_pal <- lapply(1:length(meas_min_colors), function(x){
 })
 names(meas_colors) <- names(meas_colors_pal) <- names(meas_max_colors)
 
-# add cities/states to mwi
+# replace min and max colors for MWI
+meas_max_colors["Mental Wellness Index"] <-
+  meas_colors_pal[["Mental Wellness Index"]](7)[6]
+meas_min_colors["Mental Wellness Index"] <-
+  meas_colors_pal[["Mental Wellness Index"]](7)[2]
+
+# add counties/states to mwi
 for (idx in index_types){
   mwi[[idx]][, colnames(cty_cw)[-1]] <- 
     cty_cw[mwi[[idx]]$ZCTA, -1]
