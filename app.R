@@ -557,7 +557,7 @@ ui <- fluidPage(
             "st_focus",
             "Which state would you like to focus on?",
             choices = c(unname(f_st), "All"),
-            selected = "North Carolina"
+            selected = "Alabama"
           ),
           selectInput(
             "us_map_fill",
@@ -666,9 +666,9 @@ server <- function(input, output, session) {
   
   st_sub <- reactiveValues(
     "idx" = "pop",
-    "st" = "North Carolina",
-    "geodat" = geodat[["pop"]][geodat[["pop"]]$STATE_NAME == "North Carolina",],
-    "mwi" = mwi[["pop"]][mwi[["pop"]]$STATE_NAME == "North Carolina",],
+    "st" = "Alabama",
+    "geodat" = geodat[["pop"]][geodat[["pop"]]$STATE_NAME == "Alabama",],
+    "mwi" = mwi[["pop"]][mwi[["pop"]]$STATE_NAME == "Alabama",],
     "us_map_fill" = "Mental_Wellness_Index",
     "is_all" = F
   )
