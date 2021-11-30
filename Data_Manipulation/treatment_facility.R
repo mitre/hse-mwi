@@ -105,10 +105,12 @@ step_1_fca <- function (data, geo, facil) {
       geo_coord[,1] < fac_coord[i,1] + 1 &
       geo_coord[,1] > fac_coord[i,1] - 1
     
-    geo$d[prox_log] <- 
+    if (sum(prox_log) != 0) {
+      geo$d[prox_log] <- 
       raster::pointDistance(
         data[i,], 
         geo[prox_log, ], lonlat = T) * .0006213712
+    }
     # Calculate the r value
     # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
     data$R[i] <- 1/sum(filter(geo,
@@ -161,11 +163,12 @@ step_2_fca <- function (data, geo, facil) {
       fac_coord[,2] > geo_coord[i,2] - 1 &
       fac_coord[,1] < geo_coord[i,1] + 1 &
       fac_coord[,1] > geo_coord[i,1] - 1
-    
+    if (sum(prox_log) != 0) {
     data$d[prox_log] <- 
       raster::pointDistance(
         data[prox_log,], 
         geo[i, ], lonlat = T) * .0006213712
+    }
     # Calculate the A value
     # Sum all r values within the distance threshold for each CT
     geo$A[i] <- sum(filter(data, d < geo[["Distance"]][i])$R)
@@ -310,11 +313,13 @@ rename(geometry = "geometry.x") %>%
 # Results----
 # Create R values for MH dataset
 mh_fac <- step_1_fca(mh_fac, ct, "mh") %>%
-  relocate(R, .after = POPULATION)
+  relocate(R, .after = POPULATION) %>%
+  mutate(R = ifelse(R < 0,0, R))
 
 # Create R values for SA dataset
 sa_fac <- step_1_fca(sa_fac, ct, "sa") %>%
-  relocate(R, .after = POPULATION) 
+  relocate(R, .after = POPULATION) %>%
+  mutate(R = ifelse(R < 0, 0, R))
 
 # Create A values using MH dataset
 ct <- step_2_fca(mh_fac, ct, "mh")
