@@ -1,9 +1,8 @@
 ---
 title: "The Mental Wellbeing Index"
-author: "Mitch"
-date: "11/30/2021"
-output: html_document:
-  theme: cosmo
+output: 
+  html_document:
+    theme: cosmo
     toc: true
     toc_depth: 4
     toc_float: true
@@ -13,4 +12,5 @@ output: html_document:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## 
+## Introduction
+### 
