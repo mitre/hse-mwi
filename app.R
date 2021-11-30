@@ -94,7 +94,7 @@ cty_cw$STATE_NAME <- f_st[cty_cw$STATE]
 cty_cw$COUNTY <- aggregate(COUNTY ~ ZCTA5, data = county_cw, 
                            FUN = function(x){paste(x, collapse = "|")})[,2]
 cty_cw$GEOID <- aggregate(GEOID ~ ZCTA5, data = county_cw, 
-                           FUN = function(x){paste(x, collapse = "|")})[,2]
+                          FUN = function(x){paste(x, collapse = "|")})[,2]
 
 # MWI scores
 # NOTE: may also save as RData for faster reading
@@ -182,7 +182,7 @@ meas_max_colors <- c(
   "#157ba7", # healthcare acess
   "#00441b" #"#70ad47" # MWI
 )
-  
+
 #   sapply(1:length(meas_colors), function(x){
 #   brewer.pal(3, meas_colors[x])[3]
 # })
@@ -396,7 +396,7 @@ plot_map <- function(fill, geodat, idx, is_all = F, fill_opacity = .7,
 }
 
 # plot a distribution of the fill value using a beeswarm plot (PLOTLY)
-plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
+plot_bee_distr <- function(fill, st, mwi, idx, is_all = F, hl = F, zcta_hl = ""){
   bee.df <- data.frame(
     val = mwi[,fill],
     zcta = mwi$ZCTA,
@@ -432,18 +432,11 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
   p <- 
     if (hl){
       ggplot(bee.df, aes(lab, val, color = val, size = focus))+
-        # scale_color_distiller(
-        #   palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
-        #   direction = 1,
-        #   limits = c(0, 100)
-        # )+
         scale_color_gradientn(
           colors = 
             meas_colors_pal[[meas_col_to_type[measure_to_names[[idx]][fill]]]](100),
           limits = c(0, 100)
         )+
-        # scale_alpha(range = c(0,1))+
-        # scale_color_manual(values = hl_pal)+
         scale_size_manual(values = hl_size)
     } else {
       ggplot(bee.df, aes(lab, val, color = val), size = 1.5)+
@@ -465,25 +458,30 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
   
   p <- suppressWarnings(
     p + 
-    geom_quasirandom(
-      aes(text = paste0(
-        "ZCTA: ", zcta, "\n",
-        full_name, ": ", signif(val, 4)
-      )),
-      groupOnX = T, alpha = bee.df$focus_alpha)+
-    theme_bw()+
-    ylab(full_name)+
-    theme(
-      axis.text.x = element_blank(),
-      axis.title.x = element_blank(),
-      axis.ticks.x = element_blank(),
-      legend.position = "none",
-      plot.title = element_text(hjust = .5)
-    )+
-    ylim(-3, 103)+
-    NULL
+      theme_bw()+
+      ylab(full_name)+
+      theme(
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.position = "none",
+        plot.title = element_text(hjust = .5)
+      )+
+      ylim(-3, 103)+
+      if (!is_all){
+        geom_quasirandom(
+          aes(text = paste0(
+            "ZCTA: ", zcta, "\n",
+            full_name, ": ", signif(val, 4)
+          )),
+          groupOnX = T, alpha = bee.df$focus_alpha)
+      } else {
+        geom_violin(
+          fill = meas_colors_pal[[meas_col_to_type[measure_to_names[[idx]][fill]]]](3)[2],
+          color = meas_colors_pal[[meas_col_to_type[measure_to_names[[idx]][fill]]]](3)[2]
+        )
+      }
   )
-  print(p)
   
   ggplotly(
     p,
@@ -719,7 +717,7 @@ server <- function(input, output, session) {
                         "Which ZCTA would you like to focus on? (Not available for all states.)",
                         choices = c(
                           "None" = "")#, 
-                          #avail_zctas)
+                        #avail_zctas)
       )
     } else {
       # also include zips from bordering states
@@ -991,6 +989,7 @@ server <- function(input, output, session) {
                      st = st_sub$st,
                      mwi = st_sub$mwi,
                      idx = st_sub$idx,
+                     is_all = st_sub$is_all,
                      hl = focus_info$hl, 
                      zcta_hl = focus_info$ZCTA)
     })
