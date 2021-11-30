@@ -61,6 +61,20 @@ info_df <- read.csv(
   row.names = "Numerator"
 )
 
+# load zip codes to zcta
+zip_cw <- read.csv(
+  file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2020.csv"),
+  colClasses = c(
+    "ZIP_CODE" = "character",
+    "ZCTA" = "character"
+  ))
+territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
+zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
+zip_to_zcta <- setNames(zip_cw$ZCTA, zip_cw$ZIP_CODE)
+zcta_to_zip <- aggregate(ZIP_CODE ~ ZCTA, data = zip_cw, 
+                         FUN = function(x){paste(x, collapse = ", ")})
+zcta_to_zip <- setNames(zcta_to_zip$ZIP_CODE, zcta_to_zip$ZCTA)
+
 # load county cw for zcta state county mapping
 county_cw <- read.csv(
   file.path(data_folder, "Resources", "zcta_county_rel_10.txt"),
@@ -293,6 +307,7 @@ plot_map <- function(fill, geodat, idx, is_all = F, fill_opacity = .7,
   labels <- 
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
+      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
       "ZCTA: ", gd_map$GEOID10, "<br>", 
       full_name,": ", signif(gd_map$Fill, 4)) %>%
     lapply(htmltools::HTML)
@@ -472,6 +487,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, is_all = F, hl = F, zcta_hl = "")
         geom_quasirandom(
           aes(text = paste0(
             "ZCTA: ", zcta, "\n",
+            "ZIP Code: ", unname(zcta_to_zip[zcta]), "<br>", 
             full_name, ": ", signif(val, 4)
           )),
           groupOnX = T, alpha = bee.df$focus_alpha)
@@ -544,7 +560,7 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           width = 3,
-          HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific Zip Code Tabulation Area (ZCTA), click on it in the map to the right or select it from the list below.</b><p>"),
+          HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific ZIP Code*, click on it in the map to the right or select it from the list below.</b><p>"),
           radioButtons(
             inputId = "idx_type",
             label = "Which population's MWI do you want to view?",
@@ -564,12 +580,12 @@ ui <- fluidPage(
             "What would you like to explore?",
             choices = avail_meas_list[["pop"]]
           ),
-          selectizeInput(
-            "zcta_choose",
-            label = "Which ZCTA would you like to focus on?",
-            choices = c("None" = "")#, avail_zctas)
+          textInput(
+            "zip_choose",
+            label = "Which ZIP Code would you like to focus on in the selected state?",
+            placeholder = "e.g. 35004, 00501, 20041, etc."
           ),
-          actionButton("reset_zcta_click", "Reset ZCTA Focus"),
+          actionButton("reset_zcta_click", "Reset ZIP Code Focus"),
           hr(),
           HTML("<font size = '2'>"),
           HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
@@ -577,7 +593,9 @@ ui <- fluidPage(
           uiOutput("data_info"),
           HTML(paste0(
             "All states are included.", 
-            " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p>")),
+            " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p><p>")),
+          HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p><p>"
+          )),
           HTML("</font>"),
         ),
         mainPanel(
@@ -663,14 +681,6 @@ server <- function(input, output, session) {
       } else {
         input$us_map_fill
       }
-    
-    updateSelectInput(
-      session = session,
-      "us_map_fill",
-      "Which score/measure would you like to explore?",
-      choices = avail_meas_list[[idx]],
-      selected = fill
-    )
   })
   
   # update the data based on state or population change
@@ -685,13 +695,6 @@ server <- function(input, output, session) {
       st_sub$mwi <- mwi[[idx]]
       st_sub$is_all <- T
       
-      updateSelectInput(session, 
-                        "zcta_choose", 
-                        "Which ZCTA would you like to focus on? (Not available for all states.)",
-                        choices = c(
-                          "None" = "")#, 
-                        #avail_zctas)
-      )
     } else {
       # also include zips from bordering states
       
@@ -705,15 +708,6 @@ server <- function(input, output, session) {
           mwi[[idx]]$STATE_2 == st_to_fips[input$st_focus] & 
           !is.na(mwi[[idx]]$STATE_2),]
       st_sub$is_all <- F
-      
-      updateSelectInput(session, 
-                        "zcta_choose", 
-                        "Which ZCTA would you like to focus on?",
-                        choices = c(
-                          "None" = "", 
-                          avail_zctas[avail_zctas %in% st_sub$geodat$GEOID10]
-                        )
-      )
     }
     
     st_sub$us_map_fill <- 
@@ -800,10 +794,15 @@ server <- function(input, output, session) {
     }
   })
   
-  observeEvent(input$zcta_choose, {
-    if (input$zcta_choose != ""){
+  observeEvent(input$zip_choose, {
+    if (input$zip_choose != "" & 
+        nchar(input$zip_choose) == 5 &
+        !grepl("\\D", input$zip_choose) & # only numbers
+        input$zip_choose %in% names(zip_to_zcta) & # a valid zcta
+        zip_to_zcta[input$zip_choose] %in% st_sub$geodat$GEOID10 # in the state
+    ){
       focus_info$hl <- T
-      focus_info$ZCTA <- input$zcta_choose
+      focus_info$ZCTA <- unname(zip_to_zcta[input$zip_choose])
       
       # remove any previously highlighted polygon
       if (!st_sub$is_all){
@@ -1016,6 +1015,9 @@ server <- function(input, output, session) {
         HTML(paste0(
           "<center><b><font size = '3'>",
           "ZCTA ", html_color(mc, focus_info$ZCTA),
+          " (ZIP Code",
+          ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
+          html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
           " has a ", html_color(mc, full_name), " of ",
           html_color(mc, signif(f_val, 4)),
           ", putting it at the ",
