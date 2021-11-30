@@ -2,7 +2,11 @@
 title: "The Mental Wellbeing Index (MWI) About Page"
 author: "Mitch"
 date: "11/30/2021"
-output: html_document
+output: html_document:
+  theme: cosmo
+    toc: true
+    toc_depth: 4
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
