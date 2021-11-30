@@ -4,4 +4,4 @@
 .Ruserdata
 hse-bhn-score.Rproj
 *.Rproj
-.DS_Store
+**/.DS_Store
