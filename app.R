@@ -572,14 +572,9 @@ ui <- fluidPage(
           actionButton("reset_zcta_click", "Reset ZCTA Focus"),
           hr(),
           HTML("<font size = '2'>"),
-          # HTML(paste0(
-          #   "Data sourced from various publically available data sources.",
-          #   "More information on methodology can be found in the about tab."
-          # )),
-          # TODO: FIX INFO HERE
-          uiOutput("data_info"),
           HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
           )),
+          uiOutput("data_info"),
           HTML(paste0(
             "All states are included.", 
             " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p>")),
@@ -844,24 +839,25 @@ server <- function(input, output, session) {
   })
   outputOptions(output, "focus_on", suspendWhenHidden = FALSE)
   
-  # output$data_info <- renderUI({
-  #   withProgress(message = "Rendering data information", {
-  #     full_name <- measure_to_names[input$us_map_fill]
-  #     
-  #     HTML(paste0(
-  #       "<font size = '2'>",
-  #       
-  #       "A variety of data sources are used for measures comprising the Unmet Need Score. The data currently pictured for ", 
-  #       full_name, 
-  #       " came from ",
-  #       ifelse(full_name == "Unmet Need Score", 
-  #              "various sources",
-  #              measure_orientation[full_name, "Source"]),
-  #       ".<p>",
-  #       "</font>"
-  #     ))
-  #   })
-  # })
+  output$data_info <- renderUI({
+    withProgress(message = "Rendering data information", {
+      full_name <- measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
+
+      HTML(paste0(
+        "<font size = '2'>",
+
+        "A variety of data sources are used for measures comprising the Mental Wellness Index. The data currently pictured for ",
+        full_name,
+        " came from ",
+        ifelse(full_name == "Mental Wellness Index",
+               "various sources",
+               info_df[st_sub$us_map_fill, "Source"]
+        ),
+        ". For more information on data and overall methodology, please see the \"About\" page.<p>",
+        "</font>"
+      ))
+    })
+  })
   
   # plot map based on fill
   output$us_map <- renderLeaflet({
