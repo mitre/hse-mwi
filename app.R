@@ -18,6 +18,7 @@ library(plotly)
 library(ggbeeswarm)
 library(shinyWidgets)
 library(sass)
+library(shinycssloaders)
 
 # styling ----
 
