@@ -688,6 +688,14 @@ server <- function(input, output, session) {
       } else {
         input$us_map_fill
       }
+    
+    updateSelectInput(
+      session = session,
+      "us_map_fill",
+      "Which score/measure would you like to explore?",
+      choices = avail_meas_list[[idx]],
+      selected = fill
+    )
   })
   
   # update the data based on state or population change
@@ -756,7 +764,8 @@ server <- function(input, output, session) {
     st_sub$us_map_fill <- 
       if (st_sub$idx == "pop" & grepl("_black", input$us_map_fill)){
         gsub("_black", "_pop", input$us_map_fill)
-      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill)){
+      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill) &
+                 !input$us_map_fill %in% colnames(mwi[["black"]])){
         gsub("_pop", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
