@@ -22,3 +22,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Components of the MWI Framework
 
+## How to Use the MWI
+
+### How to Use the Tool
+
+### Recommended Uses
+
+## Measures and Data Sources
+
+### Measure Selection Process
+
+### MWI Measures
+
+## Strengths, Limitations, and Challenges
+
+## APPENDIX 
