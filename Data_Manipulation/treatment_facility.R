@@ -354,7 +354,7 @@ ggplot(ct[1:nrow(sa_fac),], aes(A_sa)) +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Export Facility Access Dataset
-# write.csv(ct,
-#           file = file.path(data_folder,
-#                            "SAMHSA_CT_treatmentfacilityaccess.csv"),
-#           row.names = F, na = "")
+write.csv(ct,
+           file = file.path(data_folder,
+                            "SAMHSA_CT_treatmentfacilityaccess.csv"),
+           row.names = F, na = "")
