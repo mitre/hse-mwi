@@ -353,6 +353,10 @@ ggplot(ct[1:nrow(sa_fac),], aes(A_sa)) +
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
+# Remove Geometry
+ct <- ct %>%
+  dplyr::select(-geometry)
+
 # Export Facility Access Dataset
 write.csv(ct,
            file = file.path(data_folder,
