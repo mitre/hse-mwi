@@ -314,8 +314,8 @@ plot_map <- function(fill, geodat, idx, is_all = F, fill_opacity = .7,
   labels <- 
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
-      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
       "ZCTA: ", gd_map$GEOID10, "<br>", 
+      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
       full_name,": ", signif(gd_map$Fill, 4)) %>%
     lapply(htmltools::HTML)
   
@@ -543,7 +543,7 @@ ui <- fluidPage(
   div(
     titlePanel(
       title="", 
-      windowTitle=HTML(paste0("Mental Wellness Index",tags$sup("TM")," Tool"))
+      windowTitle=HTML(paste0("Mental Wellness Index (TM) Tool"))
     ),
     style="display:none"
   ),
