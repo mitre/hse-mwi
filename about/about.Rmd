@@ -13,4 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Introduction
-### 
+
+### What is the MWI
+
+### Purpose of the MWI
+
+### Our Focus on the Black Population
+
+### Components of the MWI Framework
+
