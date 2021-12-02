@@ -32,6 +32,8 @@ Development of the MWI started with the Black population as a priority populatio
 
 ### Components of the MWI Framework
 
+![MWI Framework](images/mwi.png)
+
 #### Domains
 
 The MWI framework contains three domains that impact community wellness:
