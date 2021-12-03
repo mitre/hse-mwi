@@ -78,7 +78,7 @@ poly <- get_decennial(geography = "tract", state = states,
 # Set the amount of rows to be iterated
 n <- 1000
 
-step_1_fca <- function (data, geo, type) {
+step_1_fca <- function (data, geo, facil) {
   # Build a for loop while subseting by proximity - only look at CT centroids
   # within +/- 1 lat/long of facility
   # Create for loop
@@ -105,10 +105,12 @@ step_1_fca <- function (data, geo, type) {
       geo_coord[,1] < fac_coord[i,1] + 1 &
       geo_coord[,1] > fac_coord[i,1] - 1
     
-    geo$d[prox_log] <- 
+    if (sum(prox_log) != 0) {
+      geo$d[prox_log] <- 
       raster::pointDistance(
         data[i,], 
         geo[prox_log, ], lonlat = T) * .0006213712
+    }
     # Calculate the r value
     # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
     data$R[i] <- 1/sum(filter(geo,
@@ -145,14 +147,14 @@ step_2_fca <- function (data, geo, facil) {
   geo_coord <- st_coordinates(geo)
   fac_coord <- st_coordinates(data)
   start <- Sys.time()
-  for (i in 1:nrow(data)) {
+  for (i in 1:nrow(geo)) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
     }
     # Output every 1000 values
     if (i %% 1000 == 0){
-      write.csv(data, file = paste0("step1", facil, "_", i, ".csv"), row.names = F)
+      write.csv(data, file = paste0("step2", facil, "_", i, ".csv"), row.names = F)
     }
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
@@ -161,11 +163,12 @@ step_2_fca <- function (data, geo, facil) {
       fac_coord[,2] > geo_coord[i,2] - 1 &
       fac_coord[,1] < geo_coord[i,1] + 1 &
       fac_coord[,1] > geo_coord[i,1] - 1
-    
+    if (sum(prox_log) != 0) {
     data$d[prox_log] <- 
       raster::pointDistance(
         data[prox_log,], 
         geo[i, ], lonlat = T) * .0006213712
+    }
     # Calculate the A value
     # Sum all r values within the distance threshold for each CT
     geo$A[i] <- sum(filter(data, d < geo[["Distance"]][i])$R)
@@ -310,11 +313,13 @@ rename(geometry = "geometry.x") %>%
 # Results----
 # Create R values for MH dataset
 mh_fac <- step_1_fca(mh_fac, ct, "mh") %>%
-  relocate(R, .after = POPULATION)
+  relocate(R, .after = POPULATION) %>%
+  mutate(R = ifelse(R < 0,0, R))
 
 # Create R values for SA dataset
 sa_fac <- step_1_fca(sa_fac, ct, "sa") %>%
-  relocate(R, .after = POPULATION) 
+  relocate(R, .after = POPULATION) %>%
+  mutate(R = ifelse(R < 0, 0, R))
 
 # Create A values using MH dataset
 ct <- step_2_fca(mh_fac, ct, "mh")
@@ -348,8 +353,12 @@ ggplot(ct[1:nrow(sa_fac),], aes(A_sa)) +
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
+# Remove Geometry
+ct <- ct %>%
+  dplyr::select(-geometry)
+
 # Export Facility Access Dataset
-# write.csv(ct,
-#           file = file.path(data_folder,
-#                            "SAMHSA_CT_treatmentfacilityaccess.csv"),
-#           row.names = F, na = "")
+write.csv(ct,
+           file = file.path(data_folder,
+                            "SAMHSA_CT_treatmentfacilityaccess.csv"),
+           row.names = F, na = "")
