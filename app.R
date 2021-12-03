@@ -1042,7 +1042,7 @@ server <- function(input, output, session) {
         # get colors
         if (st_sub$us_map_fill == "Mental_Wellness_Index"){
           mc <- 
-            if (f_val >= 50){
+            if (is.na(f_val) | f_val >= 50){
               meas_max_colors[meas_col_to_type[full_name]]
             } else {
               meas_min_colors[meas_col_to_type[full_name]]
@@ -1051,31 +1051,46 @@ server <- function(input, output, session) {
           mc <- meas_max_colors[meas_col_to_type[full_name]]
         }
         
-        # get percentiles relative to state and us
-        st_perc <- signif(ecdf(all_st_val)(f_val)*100, 4)
-        us_perc <- signif(ecdf(all_us_val)(f_val)*100, 4)
-        
-        # get text value for percentile: very low/high, low/high
-        st_comp <- quant_map(st_perc)
-        us_comp <- quant_map(us_perc)
-        
-        HTML(paste0(
-          "<center><b><font size = '3'>",
-          "ZCTA ", html_color(mc, focus_info$ZCTA),
-          " (ZIP Code",
-          ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
-          html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
-          " has a ", html_color(mc, full_name), " of ",
-          html_color(mc, signif(f_val, 4)),
-          ", putting it at the ",
-          html_color(mc, st_perc), 
-          " percentile for the state.",
-          " This is ", 
-          html_color(mc, st_comp), " relative to ",
-          input$st_focus,", and ",
-          html_color(mc, us_comp), " relative to the United States.",
-          "</font></b></center>"
-        ))
+        if (!is.na(f_val)){
+          
+          # get percentiles relative to state and us
+          st_perc <- signif(ecdf(all_st_val)(f_val)*100, 4)
+          us_perc <- signif(ecdf(all_us_val)(f_val)*100, 4)
+          
+          # get text value for percentile: very low/high, low/high
+          st_comp <- quant_map(st_perc)
+          us_comp <- quant_map(us_perc)
+          
+          HTML(paste0(
+            "<center><b><font size = '3'>",
+            "ZCTA ", html_color(mc, focus_info$ZCTA),
+            " (ZIP Code",
+            ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
+            html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
+            " has a ", html_color(mc, full_name), " of ",
+            html_color(mc, signif(f_val, 4)),
+            ", putting it at the ",
+            html_color(mc, st_perc), 
+            " percentile for the state.",
+            " This is ", 
+            html_color(mc, st_comp), " relative to ",
+            input$st_focus,", and ",
+            html_color(mc, us_comp), " relative to the United States.",
+            "</font></b></center>"
+          ))
+        } else {
+          HTML(paste0(
+            "<center><b><font size = '3'>",
+            "ZCTA ", html_color(mc, focus_info$ZCTA),
+            " (ZIP Code",
+            ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
+            html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
+            " does not have a value for ", 
+            html_color(mc, full_name),
+            ", indicating missing data or no population in this area.",
+            "</font></b></center>"
+          ))
+        }
       }
     })
   })
