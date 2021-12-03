@@ -19,6 +19,7 @@ library(ggbeeswarm)
 library(shinyWidgets)
 library(sass)
 library(shinycssloaders)
+library(shinyBS)
 
 # styling ----
 
@@ -567,43 +568,60 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           width = 3,
-          HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific ZIP Code*, click on it in the map to the right or select it from the list below.</b><p>"),
-          radioButtons(
-            inputId = "idx_type",
-            label = "Which population's MWI do you want to view?",
-            choiceValues = unname(index_types),
-            choiceNames = c("Overall", "Black"),
-            inline = T
-          ),
-          # TODO: UPDATE THESE BASED ON POPULATION SELECTED
-          selectInput(
-            "st_focus",
-            "Which state would you like to focus on?",
-            choices = c(unname(f_st), "All"),
-            selected = "Alabama"
-          ),
-          selectInput(
-            "us_map_fill",
-            "What would you like to explore?",
-            choices = avail_meas_list[["pop"]]
-          ),
-          textInput(
-            "zip_choose",
-            label = "Which ZIP Code would you like to focus on in the selected state?",
-            placeholder = "e.g. 35004, 00501, 20041, etc."
-          ),
-          actionButton("reset_zcta_click", "Reset ZIP Code Focus"),
-          hr(),
-          HTML("<font size = '2'>"),
-          HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
-          )),
-          uiOutput("data_info"),
-          HTML(paste0(
-            "All states are included.", 
-            " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p><p>")),
-          HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p><p>"
-          )),
-          HTML("</font>"),
+          bsCollapse(
+            multiple = T,
+            open = c("Exploration Options", "About Selected Measure", "About the Mental Wellness Index"),
+            bsCollapsePanel(
+              "Exploration Options",
+              HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific ZIP Code*, click on it in the map to the right or select it from the list below.</b><p>"),
+              radioButtons(
+                inputId = "idx_type",
+                label = "Which population's MWI do you want to view?",
+                choiceValues = unname(index_types),
+                choiceNames = c("Overall", "Black"),
+                inline = T
+              ),
+              # TODO: UPDATE THESE BASED ON POPULATION SELECTED
+              selectInput(
+                "st_focus",
+                "Which state would you like to focus on?",
+                choices = c(unname(f_st), "All"),
+                selected = "Alabama"
+              ),
+              selectInput(
+                "us_map_fill",
+                "What would you like to explore?",
+                choices = avail_meas_list[["pop"]]
+              ),
+              textInput(
+                "zip_choose",
+                label = "Which ZIP Code would you like to focus on in the selected state?",
+                placeholder = "e.g. 35004, 00501, 20041, etc."
+              ),
+              actionButton("reset_zcta_click", "Reset ZIP Code Focus")
+            ),
+            bsCollapsePanel(
+              "About Selected Measure",
+              uiOutput("data_info"),
+              HTML(paste0(
+                "<font size = '2'>",
+                "For more information on data and overall methodology, please see the \"About\" page.",
+                "</font>"
+              ))
+            ),
+            bsCollapsePanel(
+              "About the Mental Wellness Index",
+              HTML("<font size = '2'>"),
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
+              )),
+              HTML(paste0(
+                "All states are included.", 
+                " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p><p>")),
+              HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p><p>"
+              )),
+              HTML("</font>")
+            )
+          )
         ),
         mainPanel(
           width = 9,
@@ -865,10 +883,23 @@ server <- function(input, output, session) {
         full_name,
         " came from ",
         ifelse(full_name == "Mental Wellness Index",
+               "",
+               info_df[st_sub$us_map_fill, "Years"]
+        ),
+        " ",
+        ifelse(full_name == "Mental Wellness Index",
                "various sources",
                info_df[st_sub$us_map_fill, "Source"]
         ),
-        ". For more information on data and overall methodology, please see the \"About\" page.<p>",
+        " data.<p><p>",
+        ifelse(
+          full_name == "Mental Wellness Index",
+          "",
+          paste0(
+            full_name, " Description: ",
+            info_df[st_sub$us_map_fill, "Measure.Description"]
+          )),
+        "<p>",
         "</font>"
       ))
     })
