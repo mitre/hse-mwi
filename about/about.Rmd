@@ -59,6 +59,7 @@ The influence of Community and Cultural Assets can be seen prominently in measur
 Structural Racism influences measures across all domains, contributing to inequality in healthcare access, health status, and social determinants of health. The influence of Structural Racism can be seen prominently in measures such as the Index of Concentration at the Extremes (a proxy for residential segregation), but it impacts measures throughout the framework. Structural racism harms not just Black Americans and other people of color, but society as a whole. The burden of disparity plays out economically, socially, and environmentally. Structural racism creates divisions based on race and ethnicity that can contribute to lack of dialogue between Americans of varying race, perpetuating misunderstanding, “other”ing, and ultimately making it difficult to come together and solve problems with all relevant voices at the table. The 2020 census shows a proportional population-level increase in multiracial and non-white individuals.^[United States Census Bureau. (2021, August 12). Improved Race and Ethnicity Measures Reveal U.S. Population Is Much More Multiracial. The United States Census Bureau. https://www.census.gov/library/stories/2021/08/improved-race-ethnicity-measures-reveal-united-states-population-much-more-multiracial.html]  
 
 ### How is the MWI Calculated?
+
 The MWI is calculated for each ZIP Code Tabulation Area (ZCTA) in the country (except for ZCTAs with too much missing data to calculate a MWI value). ZCTAs are statistical entities developed by the United States Census Bureau and are generalized areal representations of the ZIP Code services areas used by the United States Postal Service (USPS) for mail delivery routes. In most cases the ZCTA code is the same as the USPS ZIP code for an area.
 
 The MWI for a ZCTA is calculated multiplying the percentile ranked value of each of the 28 measures in that ZCTA by the weight assigned to each measure, then summing these resulting values as shown in the equation below where m designates a measure. See the [Weighting Methodology (link)] document for more information about measure weights, including how placeholder weights have been assigned.
@@ -70,6 +71,15 @@ MWI = $\sum_{m = 1}^{28} percentile ranked value_{z,m} * weight_m$
 ## How to Use the MWI
 
 ### How to Use the Tool
+
+- Interactive map and distribution visualizations
+- Select population to view (either Overall population or Black population)
+- Select whether you would like to view the aggregated MWI values themselves, or specific measures that contribute to the MWI. 
+- Select a state to focus on.
+- Select a ZCTA to focus on. 
+- Hover over a ZCTA on the map or distribution to view values for that ZCTA
+- Select measure weights
+- Upload data 
 
 ### Recommended Uses
 
