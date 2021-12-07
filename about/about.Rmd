@@ -113,6 +113,40 @@ The following **measure evaluation and selection criteria** were considered duri
 
 ### MWI Measures
 
+The table below summarizes the measures that are included in the MWI, their domain (and sub-domain), whether stratified data is available, and the data sources. Please see the individual Measure documentation sections for more information about each measure. 
+
+| **Measure Name** | **Domain** | **Sub-Domain** | **Stratification** | **Data Source** |
+|:---:|:---:|:---:|:---:|:---:|
+| Access to Financial Services | SDOH | Financial Access | Not Applicable | New America, Mapping Financial Opportunity Project |
+| Alcohol Outlet Density | SDOH | Built Environment | Not Applicable | CBP |
+|Below 100% Federal Poverty Level|SDOH|Income & Unemployment|Black Population|ACS|
+|Broadband Access|SDOH|Built Environment|Black Population|ACS|
+|Housing Stress|SDOH|Housing|Black Population|HUD CHAS|
+|Living Within a Half-Mile of a Park|SDOH|Built Environment|Not Applicable|CDC Environmental Public Health Tracking Network|
+|Mortgage Acceptance Rate|SDOH|Financial Access|Black Population|HMDA, Consumer Financial Protection Bureau|
+|No High School Diploma|SDOH|Education|Black Population|ACS|
+|Nursery and Preschool Enrollment|SDOH|Education|Black Population|ACS|
+|Police Killings|SDOH|Safety & Community Trauma|Black Population|Mapping Police Violence|
+|Residential Segregation|SDOH|Housing|Black Population|ACS|
+|Third Places|SDOH|Social Capital|Not applicable|CBP|
+|Unemployment|SDOH|Income & Unemployment|Black Population|ACS|
+|Violent Crime|SDOH|Safety & Community Trauma|Not available|County Health Rankings|
+|Voter Participation|SDOH|Social Capital|Not Available|TBD|
+|Mental Health Treatment Facility Access|Healthcare Access|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator
+|Substance Use Treatment Facility Access|Healthcare Access|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator|
+|Uninsured|Healthcare Access|Health Insurance|Black Population|ACS|
+|Adult Binge Drinking|Health Status|Substance Use|Not available|CDC BRFSS, PLACES|
+|Alcohol-Related Mortality|Health Status|Substance Use|Black Population|CDC WONDER
+|Estimated Drug Poisoning|Health Status|Substance Use|Black Population|CDC WONDER|
+|Insufficient Sleep|Health Status|Other Morbidity & Mortality|Not available|CDC BRFSS, PLACES|
+|Life Expectancy|Health Status|Other Morbidity & Mortality|Black Population (extrapolated)|CDC USALEEP, NVSS|
+|Obesity|Health Status|Other Morbidity & Mortality|Not Available|CDC BRFSS, PLACES Data Portal|
+|Poor Mental Health|Health Status|Mental Health|Not Available|CDC BRFSS, PLACES|
+|Smoking Status|Health Status|Substance Use|Not available|CDC BRFSS, PLACES|
+|Suicidal Ideation|Health Status|Mental Health|Not Available|NSDUH|
+|Suicide Mortality|Health Status|Mental Health|Black Population|CDC WONDER|
+
+
 ## Strengths, Limitations, and Challenges
 
 ## APPENDIX 
