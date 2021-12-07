@@ -115,3 +115,9 @@ Final scores for each ZCTA will be created by combining the weights and combined
 -   Total Population Score: `HSE_BHN_ZCTA_Score_Black.csv`
 
 -   Black Population Score: `HSE_BHN_ZCTA_Score_Population.csv`
+
+## Contact and Attribution
+
+For any questions or concerns, please contact socialjustice@mitre.org.
+
+Approved for Public Release; Distribution Unlimited. Public Release Case Number 21-3708. ©2021 The MITRE Corporation. ALL RIGHTS RESERVED.
