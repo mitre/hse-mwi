@@ -83,6 +83,17 @@ MWI = $\sum_{m = 1}^{28} percentile ranked value_{z,m} * weight_m$
 
 ### Recommended Uses
 
+Communities, health departments, and the federal government as well as state and local governments may use findings from the MWI tool to: 
+- Inform decisions about where resources to improve mental wellness may be most impactful
+- Understand the factors that may serve as barriers to mental wellness in an area, and which types of resources may have the greatest impact (ex: new treatment facilities, improved infrastructure, police reform, etc)
+- Enhance community grant applications
+- Focus resources based on objective evaluation of need to support assets improve mental wellness and to remove obstacles to mental wellness. 
+
+The MWI Index and tool should NOT be used to 
+- Shouldn’t be the only tool used to allocate resources 
+- Shouldn’t be used to make decisions on behalf on communities without their input
+- Shouldn’t be used for program evaluation or tracking progress (point in time estimate, not to show progress over time)
+
 ## Measures and Data Sources
 
 ### Measure Selection Process
