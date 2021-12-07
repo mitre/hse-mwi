@@ -187,4 +187,14 @@ Data Sources Acronyms:
 
 ## Strengths, Limitations, and Challenges
 
+__Strengths__ of the MWI include the following:
+
+- <u>There is no existing tool that summarizes the factors influencing mental wellness of communities for the entire nation at a geographically granular level</u> (such as the ZIP code level). The MWI fills this gap. 
+
+- <u>Adjustable and modifiable for various use cases</u>. The MWI allows users to modify the index by either uploading their own local or use-case specific data, and by adjusting the placeholder weights based on their preferences, use case, or priorities. The measures and overall MWI calculation can be viewed for both the Black population and the overall population. 
+
+- <u>Objective, data-based evaluation</u> of the factors that influence mental well-being allows for a like to like comparison of areas and can empower users to best distribute resources for the highest impact, or to advocate for their community. The MWI can provide valuable information to communities, public health practitioners, government agencies, and funders seeking to improve or understand community mental wellness. 
+
+- <u>Consideration of equity</u> throughout the creation of the MWI by focusing on a priority population facing emerging disparities in mental wellbeing, rather than only the overall population. This consideration of equity also guided how measures were selected and constructed. For example, rather than using data that only shows physician presence in an area, we developed novel measures based on SAMHSA treatment facility data that take into consideration payment assistance, language services offered, access to a continuum of treatment and care, and special focus groups that can facilitate better access to care. We also selected not to include various measures where the association with mental wellness is only established for the majority population, but not for our priority population or for other minority populations, or where data is only representative of certain populations. For example, while data on vehicle access data are available, many people use other modes of transportation, so lacking a re
+
 ## APPENDIX 
