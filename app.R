@@ -860,6 +860,19 @@ server <- function(input, output, session) {
   observeEvent(c(input$st_focus, input$idx_type), {
     idx <- input$idx_type
     
+    # if the state is the thing that's changing, reset focus, otherwise no
+    if (idx == st_sub$idx){
+      focus_info$hl <- F
+      focus_info$ZCTA <- ""
+      
+      # remove any previously highlighted polygon
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
+    }
+    
     st_sub$idx <- idx
     
     if (input$st_focus == "All"){
@@ -892,16 +905,6 @@ server <- function(input, output, session) {
       } else {
         input$us_map_fill
       }
-    
-    focus_info$hl <- F
-    focus_info$ZCTA <- ""
-    
-    # remove any previously highlighted polygon
-    if (!st_sub$is_all){
-      us_proxy %>% removeShape("remove_me")
-    } else {
-      us_proxy %>% removeMarker("remove_me")
-    }
   })
   
   # update the ZCTA
@@ -928,16 +931,6 @@ server <- function(input, output, session) {
       } else {
         input$us_map_fill
       }
-    
-    focus_info$hl <- F
-    focus_info$ZCTA <- ""
-    
-    # remove any previously highlighted polygon
-    if (!st_sub$is_all){
-      us_proxy %>% removeShape("remove_me")
-    } else {
-      us_proxy %>% removeMarker("remove_me")
-    }
   })
   
   # update the focus
@@ -964,7 +957,11 @@ server <- function(input, output, session) {
       focus_info$ZCTA <- ""
       
       # remove any previously highlighted polygon
-      us_proxy %>% removeShape("remove_me")
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
     }
   })
   
@@ -1149,8 +1146,19 @@ server <- function(input, output, session) {
   # plot map based on fill
   output$us_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
-      plot_map(st_sub$us_map_fill, st_sub$geodat,
-               st_sub$idx, is_all = st_sub$is_all)
+      us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat,
+                 st_sub$idx, is_all = st_sub$is_all)
+      
+      if (focus_info$hl){
+        # add a highlighted polygon
+        us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
+                             st_sub$idx,
+                             is_all = st_sub$is_all,
+                             add_poly = T, us_proxy = us_proxy, 
+                             zcta_choose = focus_info$ZCTA)
+      }
+      
+      us_proxy
     })
   })
   
