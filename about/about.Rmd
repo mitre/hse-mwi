@@ -151,6 +151,27 @@ The table below summarizes the measures that are included in the MWI, their doma
 |Suicidal Ideation|Health Status|Mental Health|Not Available|NSDUH|
 |Suicide Mortality|Health Status|Mental Health|Black Population|CDC WONDER|
 
+Data Sources Acronyms:
+- ACS – American Community Survey
+
+- BRFSS – Behavioral Risk Factor Surveillance System (BRFSS)
+
+- CDC – Centers for Disease Control 
+
+- CBP – County Business Patterns
+
+- CHAS – Consolidated Planning/Comprehensive Housing Affordability Strategy
+
+- HMDA – Home Mortgage Disclosure Act
+
+- HUD – Housing and Urban Development
+
+- NSDUH – National Survey on Drug Use and Health 
+
+- SAMHSA – Substance Abuse and Mental Health Services Administration
+
+- WONDER – Wide-ranging Online Data for Epidemiologic Research
+
 
 ## Strengths, Limitations, and Challenges
 
