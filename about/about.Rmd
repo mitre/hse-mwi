@@ -98,6 +98,19 @@ The MWI Index and tool should NOT be used to
 
 ### Measure Selection Process
 
+We leveraged existing MITRE projects and work, researched factors associated with mental wellness based on national and community studies, and engaged with external subject matter experts and stakeholders in order to selected measures to include in the MWI, considering equity throughout the lifecycle of the MWI creation. 
+
+**Requirements**: Notably, measures were limited to topics for which nationally available, public data is available at a geographically granular level (ideally the ZCTA level or lower).
+
+Though race stratified data is not available for all measures in the MWI, preference was given in the selection process to measures with data that can stratified by race for the Black population. For data that is stratified by the Black population – the measure is calculated for both the Black population and the overall population. For data that can not be stratified, the overall population values are used for both calculations. 
+
+The following **measure evaluation and selection criteria** were considered during measure selection: 
+- **Equity**: Does the measure capture inequities between populations, value group differences, and build on best science and community experience without introducing bias? Is the measure in line with a “do no harm” approach?
+- **Importance**: Is the measure an important factor contributing to mental wellness, reflective of a high preventable burden (economic, disability, mortality), and is it evidence-based? 
+- **Relevance and Usability**: Is information produced by the measure meaningful, understandable, useful for decision-making? Does it convey a sense of the obligation to act? 
+- **Scientific Soundness**: What is the measure’s sensitivity, specificity, reliability, and validity? 
+- **Feasibility**: What is the collection burden for a measure? Are the data updated frequently and available on a timely basis? 
+
 ### MWI Measures
 
 ## Strengths, Limitations, and Challenges
