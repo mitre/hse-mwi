@@ -37,9 +37,13 @@ Development of the MWI started with the Black population as a priority populatio
 #### Domains
 
 The MWI framework contains three domains that impact community wellness:
+
 - Social Determinants of Health: the social, economic, environmental, and structural conditions that influence a community’s mental wellness and quality of life.
+
 - Healthcare Access: access to healthcare, taking into account quality, financial and geographic accessibility, and other considerations. 
+
 - Health Status: mental health, substance use, and other morbidity and mortality measures that are linked to mental wellness. 
+
 The three domains interact with one another other, for example social determinants of health can impact healthcare access as well as health status, and vice versa. While several measures in the MWI could be considered to fit in multiple domains (for example, is having health insurance a social determinant of health or an aspect of healthcare access?), we have placed each measure in only one domain. However, the user is encouraged to think broadly about how measures may impact mental wellness across domains. 
 
 #### Measures
