@@ -62,7 +62,9 @@ pop <- get_acs(geography = "zcta",
 final <- full_join(cbp, pop, by = c("ZCTA" = "GEOID")) %>%
   mutate(alcoholoutlet_pop = ESTAB/B01001_001E,
          # Replacing NAs with 0s
-         alcoholoutlet_pop = ifelse(is.na(alcoholoutlet_pop), 0, alcoholoutlet_pop)) %>%
+         alcoholoutlet_pop = ifelse(is.na(alcoholoutlet_pop), 0, alcoholoutlet_pop),
+         # Set max for areas with greater than 100 outlets per 100,000 (55 ZCTAs)
+         alcoholoutlet_pop = ifelse(alcoholoutlet_pop > 0.001, 0.001, alcoholoutlet_pop)) %>%
   select(ZCTA, alcoholoutlet_pop)
 
 # write out ----
