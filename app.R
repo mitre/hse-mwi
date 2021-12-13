@@ -318,7 +318,7 @@ plot_map <- function(fill, geodat, idx, is_all = F, is_com = F,
       "State: ", gd_map$STATE_NAME, "<br>",
       "ZCTA: ", gd_map$GEOID10, "<br>", 
       "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
-      full_name,": ", signif(gd_map$Fill, 4)) %>%
+      full_name,": ", trunc(gd_map$Fill)) %>%
     lapply(htmltools::HTML)
   
   # get initial zoom area
@@ -354,7 +354,7 @@ plot_map <- function(fill, geodat, idx, is_all = F, is_com = F,
                     position = "bottomright",
                     title = unname(full_name),
                     labFormat = function(type, cuts, p){
-                      paste0(c("0 (More Challenges)", 
+                      paste0(c("0 (More Obstacles)", 
                                "20", "40", "60",
                                "80", "100 (More Assets)"))
                     }) %>%
@@ -534,7 +534,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, is_all = F, hl = F, zcta_hl = "")
           aes(text = paste0(
             "ZCTA: ", zcta, "\n",
             "ZIP Code: ", unname(zcta_to_zip[zcta]), "<br>", 
-            full_name, ": ", signif(val, 4)
+            full_name, ": ", trunc(val)
           )),
           groupOnX = T, alpha = bee.df$focus_alpha)
       } else {
@@ -663,7 +663,9 @@ ui <- fluidPage(
           width = 9,
           column(
             width = 8,
-            withSpinner(leafletOutput("us_map", height = 900),
+            uiOutput("us_map_legend"),
+            HTML("<br>"),
+            withSpinner(leafletOutput("us_map", height = 850),
                         type = 8, color = "#005B94", hide.ui = F)
           ),
           column(
@@ -753,7 +755,9 @@ ui <- fluidPage(
           width = 9,
           column(
             width = 8,
-            withSpinner(leafletOutput("com_map", height = 900),
+            uiOutput("com_map_legend"),
+            HTML("<br>"),
+            withSpinner(leafletOutput("com_map", height = 850),
                         type = 8, color = "#005B94", hide.ui = F)
           ),
           column(
@@ -1178,14 +1182,28 @@ server <- function(input, output, session) {
   })
   
   # put a legend
-  output$us_map_legend <- renderUI({
+  output$us_map_legend <- output$com_map_legend <- renderUI({
     withProgress(message = "Rendering map legend", {
       HTML(paste0(
         "<center>",
         paste(
           sapply(1:length(meas_max_colors), function(x){
-            paste0("<font color = ", meas_max_colors[x], " size = '3'><b>", 
-                   names(meas_max_colors[x]), "</font></b>")
+            if (names(meas_max_colors[x]) != "Mental Wellness Index"){
+              paste0("<font color = ", meas_max_colors[x], " size = '3'><b>", 
+                     names(meas_max_colors[x]), "</font></b>")
+            } else {
+              paste(
+                sapply(1:nchar(names(meas_max_colors[x])), function(y){
+                  bchar <- strsplit(names(meas_max_colors[x]), "")[[1]][y]
+                  paste0(
+                    "<font color = ", 
+                    meas_colors_pal$`Mental Wellness Index`(nchar("Mental Wellness Index"))[y],
+                    " size = '3'><b>", 
+                    bchar, "</font></b>")
+                }),
+                collapse = ""
+              )
+            }
           }),
           collapse = "<font size = 3'><b> | </b></font>"
         ),
@@ -1243,8 +1261,8 @@ server <- function(input, output, session) {
         html_color(lc, "lower"),
         " value indicates more ",
         html_color(lc, "obstacles"),
-        " to mental ",
-        html_color(lc, "wellness"),
+        " to ",
+        html_color(lc, "mental wellness"),
         "."
       )
       # }
@@ -1322,8 +1340,8 @@ server <- function(input, output, session) {
         if (!is.na(f_val)){
           
           # get percentiles relative to state and us
-          st_perc <- signif(ecdf(all_st_val)(f_val)*100, 4)
-          us_perc <- signif(ecdf(all_us_val)(f_val)*100, 4)
+          st_perc <- trunc(ecdf(all_st_val)(f_val)*100)
+          us_perc <- trunc(ecdf(all_us_val)(f_val)*100)
           
           # get text value for percentile: very low/high, low/high
           st_comp <- quant_map(st_perc)
@@ -1337,7 +1355,7 @@ server <- function(input, output, session) {
             ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
             html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
             " has a ", html_color(mc, full_name), " national ranking of ",
-            html_color(mc, signif(f_val, 4)),
+            html_color(mc, trunc(f_val)),
             ", putting it at the ",
             html_color(mc, st_perc), 
             " percentile for the state.",
@@ -1347,7 +1365,7 @@ server <- function(input, output, session) {
             html_color(mc, us_comp), " relative to the United States.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher ranking indicates more assets and fewer obstacles.</i>",
+            "<i>A higher value indicates more assets supporting mental wellness. A lower value indicates more obstacles to mental wellness.</i>",
             "</font>",
             "</center>"
           ))
@@ -1355,7 +1373,7 @@ server <- function(input, output, session) {
           HTML(paste0(
             "<center>",
             "<font size = '2'>",
-            "<i>A higher ranking indicates more assets and fewer obstacles.</i>",
+            "<i>A higher value indicates more assets supporting mental wellness. A lower value indicates more obstacles to mental wellness.</i>",
             "<p></p>",
             "</font>",
             "<b><font size = '3'>",
@@ -1368,7 +1386,7 @@ server <- function(input, output, session) {
             ", indicating missing data or no population in this area.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher ranking indicates more assets and fewer obstacles.</i>",
+            "<i>A higher value indicates more assets supporting mental wellness. A lower value indicates more obstacles to mental wellness.</i>",
             "</font>",
             "</center>"
           ))
@@ -1495,8 +1513,8 @@ server <- function(input, output, session) {
       if (!is.na(f_val)){
         
         # get percentiles relative to state and us
-        com_perc <- signif(ecdf(all_com_val)(f_val)*100, 4)
-        us_perc <- signif(ecdf(all_us_val)(f_val)*100, 4)
+        com_perc <- trunc(ecdf(all_com_val)(f_val)*100)
+        us_perc <- trunc(ecdf(all_us_val)(f_val)*100)
         
         # get text value for percentile: very low/high, low/high
         com_comp <- quant_map(com_perc)
@@ -1509,7 +1527,7 @@ server <- function(input, output, session) {
           ifelse(nchar(zcta_to_zip[com_sub$ZCTA]) > 5, "s "," "), 
           html_color(mc, zcta_to_zip[com_sub$ZCTA]), ")",
           " has a ", html_color(mc, full_name), " national ranking of ",
-          html_color(mc, signif(f_val, 4)),
+          html_color(mc, trunc(f_val)),
           ", putting it at the ",
           html_color(mc, com_perc), 
           " percentile for the state.",
@@ -1559,7 +1577,7 @@ server <- function(input, output, session) {
         "<b><font size = '3'>",
         html_color(mc, dn),
         ifelse(dn == "Mental Wellness Index", 
-               paste0(": ", signif(mwi_zcta[1, "Mental_Wellness_Index"], 4)),
+               paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
                ""),
         "</b></font>",
         "<br>"
@@ -1577,7 +1595,7 @@ server <- function(input, output, session) {
                 measure_to_names[[com_sub$idx]][cn])),
             ": ",
             "</b>",
-            signif(mwi_zcta[1, cn], 4),
+            trunc(mwi_zcta[1, cn]),
             "<br>"
           )
         }
@@ -1592,7 +1610,7 @@ server <- function(input, output, session) {
     
     HTML(paste0(
       "<font size = '2'>",
-      "<i>A higher ranking indicates more assets and fewer obstacles.</i>",
+      "<i>A higher value indicates more assets supporting mental wellness. A lower value indicates more obstacles to mental wellness.</i>",
       "<p></p>",
       text,
       "</font>"
