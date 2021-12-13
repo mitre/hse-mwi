@@ -113,10 +113,6 @@ We will create 3 sets of weights files:
 Final scores for each ZCTA will be created by combining the weights and combined measures file. Measures and measure weights are multiplied together, summed for each ZCTA, and then re-scaled from 0 to 100. Scores appear (with percentile ranked measures) in `Teams` \> `BHN Score` \>`Data` \> `Cleaned`:
 
 -   Total Population Score: `HSE_BHN_ZCTA_Score_Black.csv`
-<<<<<<< HEAD
-
--   Black Population Score: `HSE_BHN_ZCTA_Score_Population.csv`
-=======
 
 -   Black Population Score: `HSE_BHN_ZCTA_Score_Population.csv`
 
@@ -125,4 +121,3 @@ Final scores for each ZCTA will be created by combining the weights and combined
 For any questions or concerns, please contact socialjustice@mitre.org.
 
 Approved for Public Release; Distribution Unlimited. Public Release Case Number 21-3708. ©2021 The MITRE Corporation. ALL RIGHTS RESERVED.
->>>>>>> f03ff1654f597da03e5f8e1d5ce8461c9234e787
