@@ -1,0 +1,232 @@
+---
+title: "The Mental Wellbeing Index"
+output: 
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+### What is the MWI
+
+The MWI aggregates quantitative measures of the factors that influence community-level mental wellness into a single composite index at the ZIP code* level. The index takes into account that community mental wellness is shaped by many factors; not only health status itself, but also social determinants of health (which can support or provide obstacles to mental wellness), and access to healthcare (which impacts the ability of community members to receive care). The MWI framework also acknowledges the impacts of both community and cultural assets (which can enhance mental wellness) and structural racism (which provides obstacles to mental wellness). The influence of these two factors can be seen throughout the measures used to calculate the index. The MWI is currently available for both the overall population and the Black population. 
+
+<sup>* ZIP Code Tabulation Areas (ZCTAs) are used in the Mental Wellness Index and are represented in maps and plots. ZCTAs are statistical entities that are analogous to ZIP Codes used by the United States Postal Service (USPS) for mail delivery routes. In most cases the ZCTA code is the same as the USPS ZIP code for an area. For more information on ZCTAs, please see https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html. </sub>
+
+### Purpose of the MWI
+
+We built the Mental Wellness Index™ (MWI) to provide a tool that the nation can use to address the shadow epidemic of mental health and substance use issues emerging as a result of the COVID-19 pandemic. The MWI is intended to be a tool that community leaders, public health officials, and funding entities can use to support data-informed policy decisions about equitable allocation of resources to address mental wellness.  
+
+The MWI is not intended to be a comprehensive evaluation of a community’s mental wellness. Currently, the MWI does not include some factors that influence mental wellness, such as social cohesion and location of non-traditional mental health service providers, due to lack of data availability (see more on this in the section on Limitations below). We recommend use of the MWI in conjunction with local data and working alongside community groups in order to identify, account for, and include local level factors that shape community mental wellness.  
+
+### Our Focus on the Black Population
+
+Development of the MWI started with the Black population as a priority population, then the tool was expanded to the general population. Our use of the Black population as a priority population provides a use case for using a social justice perspective and considering equity throughout the lifecycle of a project. Even though Black Americans have the same or lower prevalence of adverse mental health and substance use outcomes,^[Breslau, J., Aguilar-Gaxiola, S., Kendler, K. S., Su, M., Williams, D., & Kessler, R. C. (2006). Specifying race-ethnic differences in risk for psychiatric disorder in a USA national sample. Psychological medicine, 36(1), 57–68. https://doi.org/10.1017/S0033291705006161] ^[Breslau, J., Kendler, K. S., Su, M., Gaxiola-Aguilar, S., & Kessler, R. C. (2005). Lifetime risk and persistence of psychiatric disorders across ethnic groups in the United States. Psychological medicine, 35(3), 317–327. https://doi.org/10.1017/s0033291704003514] compared to White Americans, they often suffer worse consequences and are provided poorer access to and quality of care.^[Mental Health America. (2020). Black and African American communities and mental health. Mental Health America. https://www.mhanational.org/issues/black-and-african-american-communities-and-mental-health] ^[Office of the Surgeon General (US); Center for Mental Health Services (US); National Institute of Mental Health (US). (2001). Mental Health: Culture, Race, and Ethnicity: A Supplement to Mental Health: A Report of the Surgeon General. Rockville (MD): Substance Abuse and Mental Health Services Administration (US). Chapter 3 Mental Health Care for African Americans. Available from: https://www.ncbi.nlm.nih.gov/books/NBK44251/] ^[  SAMHSA. (2020). Double jeopardy; COVID-19 and behavioral health disparities for Black and Latino communities in the U.S. https://www.samhsa.gov/sites/default/files/covid19-behavioral-health-disparities-black-latino-communities.pdf]  Moreover, recent data indicate that racial minority groups, such as Black Americans—who have borne disproportionate impacts of COVID-19 exposure, are experiencing higher rates of mental health symptoms and use of substances to cope, compared to White Americans.^[Czeisler, M.É., Lane, R.I., Petrosky, E., et al. (2020). Mental Health, Substance Use, and Suicidal Ideation During the COVID-19 Pandemic — United States, June 24–30, 2020. MMWR Morbidity and Mortality Weekly Report, 69,1049–1057. http://dx.doi.org/10.15585/mmwr.mm6932a1]  For example, in contrast to past trends, data from 2020 found that Black Americans were more likely to have seriously considered suicide in the past 30 days, compared to White Americans. Our goal is to get ahead of these emerging disparities by focusing on a population that has experienced more health disparities historically. Selecting Black Americans as a priority population guided the way we constructed the MWI framework, selected measures, and evaluated datasets to use. Data included in the MWI has been stratified by race for the Black population where possible and measures relevant to this priority population have been included in the framework where data are available. We recognize the importance of evaluating and adapting the MWI for other populations that experience health disparities and note that currently results are available in the tool for both the Black population and the overall population.
+
+### Components of the MWI Framework
+
+![MWI Framework](mwi.png)\
+
+#### Domains
+
+The MWI framework contains three domains that impact community wellness:
+
+- Social Determinants of Health: the social, economic, environmental, and structural conditions that influence a community’s mental wellness and quality of life.
+
+- Healthcare Access: access to healthcare, taking into account quality, financial and geographic accessibility, and other considerations. 
+
+- Health Status: mental health, substance use, and other morbidity and mortality measures that are linked to mental wellness. 
+
+The three domains interact with one another other, for example social determinants of health can impact healthcare access as well as health status, and vice versa. While several measures in the MWI could be considered to fit in multiple domains (for example, is having health insurance a social determinant of health or an aspect of healthcare access?), we have placed each measure in only one domain. However, the user is encouraged to think broadly about how measures may impact mental wellness across domains. 
+
+#### Measures
+
+Within the domains are 28 measures that quantify assets supporting mental wellness as well as obstacles to mental wellness. Please see the “Measures and Data Sources” section for information about the measures used in the MWI. 
+
+#### Ecological Factors
+
+Two important factors influence measures in all three of the domains:
+
+**Community and Cultural Assets**: resources in the form of people, places, and organizations that promote social inclusion and improve the mental health and wellbeing of the community.
+
+The influence of Community and Cultural Assets can be seen prominently in measures such as density of third places (locations outside of work and the home where community members can gather such as religious institutions, community centers, etc), though this factor also influences other measures throughout the framework. Community and Cultural Assets are challenging to quantify because they are often not measured in national datasets, but they deeply influence a community’s mental wellness. 
+
+**Structural Racism**: the macrolevel systems, social forces, institutions, ideologies, and processes that interact with one another to generate and reinforce inequities among racial and ethnic groups.
+
+Structural Racism influences measures across all domains, contributing to inequality in healthcare access, health status, and social determinants of health. The influence of Structural Racism can be seen prominently in measures such as the Index of Concentration at the Extremes (a proxy for residential segregation), but it impacts measures throughout the framework. Structural racism harms not just Black Americans and other people of color, but society as a whole. The burden of disparity plays out economically, socially, and environmentally. Structural racism creates divisions based on race and ethnicity that can contribute to lack of dialogue between Americans of varying race, perpetuating misunderstanding, “other”ing, and ultimately making it difficult to come together and solve problems with all relevant voices at the table. The 2020 census shows a proportional population-level increase in multiracial and non-white individuals.^[United States Census Bureau. (2021, August 12). Improved Race and Ethnicity Measures Reveal U.S. Population Is Much More Multiracial. The United States Census Bureau. https://www.census.gov/library/stories/2021/08/improved-race-ethnicity-measures-reveal-united-states-population-much-more-multiracial.html]  
+
+### How is the MWI Calculated?
+
+The MWI is calculated for each ZIP Code Tabulation Area (ZCTA) in the country (except for ZCTAs with too much missing data to calculate a MWI value). ZCTAs are statistical entities developed by the United States Census Bureau and are generalized areal representations of the ZIP Code services areas used by the United States Postal Service (USPS) for mail delivery routes. In most cases the ZCTA code is the same as the USPS ZIP code for an area.
+
+The MWI for a ZCTA is calculated multiplying the percentile ranked value of each of the 28 measures in that ZCTA by the weight assigned to each measure, then summing these resulting values as shown in the equation below where m designates a measure. See the [Weighting Methodology (link)] document for more information about measure weights, including how placeholder weights have been assigned.
+
+MWI = $\sum_{m = 1}^{28} percentile\space ranked\space value_m * weight_m$
+
+MWI = $\sum_{m = 1}^{28} percentile\space ranked\space value_{z,m} * weight_m$
+
+## How to Use the MWI
+
+### How to Use the Tool
+
+- Interactive map and distribution visualizations
+
+- Select population to view (either Overall population or Black population)
+
+- Select whether you would like to view the aggregated MWI values themselves, or specific measures that contribute to the MWI. 
+
+- Select a state to focus on.
+
+- Select a ZCTA to focus on. 
+
+- Hover over a ZCTA on the map or distribution to view values for that ZCTA
+
+- Select measure weights
+
+- Upload data 
+
+### Recommended Uses
+
+Communities, health departments, and the federal government as well as state and local governments may use findings from the MWI tool to: 
+
+- Inform decisions about where resources to improve mental wellness may be most impactful
+
+- Understand the factors that may serve as barriers to mental wellness in an area, and which types of resources may have the greatest impact (ex: new treatment facilities, improved infrastructure, police reform, etc)
+
+- Enhance community grant applications
+
+- Focus resources based on objective evaluation of need to support assets improve mental wellness and to remove obstacles to mental wellness. 
+
+The MWI Index and tool should NOT be used to 
+- Shouldn’t be the only tool used to allocate resources 
+
+- Shouldn’t be used to make decisions on behalf on communities without their input
+
+- Shouldn’t be used for program evaluation or tracking progress (point in time estimate, not to show progress over time)
+
+## Measures and Data Sources
+
+### Measure Selection Process
+
+We leveraged existing MITRE projects and work, researched factors associated with mental wellness based on national and community studies, and engaged with external subject matter experts and stakeholders in order to selected measures to include in the MWI, considering equity throughout the lifecycle of the MWI creation. 
+
+**Requirements**: Notably, measures were limited to topics for which nationally available, public data is available at a geographically granular level (ideally the ZCTA level or lower).
+
+Though race stratified data is not available for all measures in the MWI, preference was given in the selection process to measures with data that can stratified by race for the Black population. For data that is stratified by the Black population – the measure is calculated for both the Black population and the overall population. For data that can not be stratified, the overall population values are used for both calculations. 
+
+The following **measure evaluation and selection criteria** were considered during measure selection: 
+
+* __Equity__: Does the measure capture inequities between populations, value group differences, and build on best science and community experience without introducing bias? Is the measure in line with a “do no harm” approach?
+
+* __Importance__: Is the measure an important factor contributing to mental wellness, reflective of a high preventable burden (economic, disability, mortality), and is it evidence-based? 
+
+* __Relevance and Usability__: Is information produced by the measure meaningful, understandable, useful for decision-making? Does it convey a sense of the obligation to act? 
+
+* __Scientific Soundness__: What is the measure’s sensitivity, specificity, reliability, and validity? 
+
+* __Feasibility__: What is the collection burden for a measure? Are the data updated frequently and available on a timely basis? 
+
+### MWI Measures
+
+The table below summarizes the measures that are included in the MWI, their domain (and sub-domain), whether stratified data is available, and the data sources. Please see the individual Measure documentation sections for more information about each measure. 
+
+| **Measure Name** | **Domain** | **Sub-Domain** | **Stratification** | **Data Source** |
+|:---:|:---:|:---:|:---:|:---:|
+| Access to Financial Services | SDOH | Financial Access | Not Applicable | New America, Mapping Financial Opportunity Project |
+| Alcohol Outlet Density | SDOH | Built Environment | Not Applicable | CBP |
+|Below 100% Federal Poverty Level|SDOH|Income & Unemployment|Black Population|ACS|
+|Broadband Access|SDOH|Built Environment|Black Population|ACS|
+|Housing Stress|SDOH|Housing|Black Population|HUD CHAS|
+|Living Within a Half-Mile of a Park|SDOH|Built Environment|Not Applicable|CDC Environmental Public Health Tracking Network|
+|Mortgage Acceptance Rate|SDOH|Financial Access|Black Population|HMDA, Consumer Financial Protection Bureau|
+|No High School Diploma|SDOH|Education|Black Population|ACS|
+|Nursery and Preschool Enrollment|SDOH|Education|Black Population|ACS|
+|Police Killings|SDOH|Safety & Community Trauma|Black Population|Mapping Police Violence|
+|Residential Segregation|SDOH|Housing|Black Population|ACS|
+|Third Places|SDOH|Social Capital|Not applicable|CBP|
+|Unemployment|SDOH|Income & Unemployment|Black Population|ACS|
+|Violent Crime|SDOH|Safety & Community Trauma|Not available|County Health Rankings|
+|Voter Participation|SDOH|Social Capital|Not Available|TBD|
+|Mental Health Treatment Facility Access|Healthcare Access|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator
+|Substance Use Treatment Facility Access|Healthcare Access|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator|
+|Uninsured|Healthcare Access|Health Insurance|Black Population|ACS|
+|Adult Binge Drinking|Health Status|Substance Use|Not available|CDC BRFSS, PLACES|
+|Alcohol-Related Mortality|Health Status|Substance Use|Black Population|CDC WONDER
+|Estimated Drug Poisoning|Health Status|Substance Use|Black Population|CDC WONDER|
+|Insufficient Sleep|Health Status|Other Morbidity & Mortality|Not available|CDC BRFSS, PLACES|
+|Life Expectancy|Health Status|Other Morbidity & Mortality|Black Population (extrapolated)|CDC USALEEP, NVSS|
+|Obesity|Health Status|Other Morbidity & Mortality|Not Available|CDC BRFSS, PLACES Data Portal|
+|Poor Mental Health|Health Status|Mental Health|Not Available|CDC BRFSS, PLACES|
+|Smoking Status|Health Status|Substance Use|Not available|CDC BRFSS, PLACES|
+|Suicidal Ideation|Health Status|Mental Health|Not Available|NSDUH|
+|Suicide Mortality|Health Status|Mental Health|Black Population|CDC WONDER|
+
+Data Sources Acronyms:
+
+- ACS – American Community Survey
+
+- BRFSS – Behavioral Risk Factor Surveillance System (BRFSS)
+
+- CDC – Centers for Disease Control 
+
+- CBP – County Business Patterns
+
+- CHAS – Consolidated Planning/Comprehensive Housing Affordability Strategy
+
+- HMDA – Home Mortgage Disclosure Act
+
+- HUD – Housing and Urban Development
+
+- NSDUH – National Survey on Drug Use and Health 
+
+- SAMHSA – Substance Abuse and Mental Health Services Administration
+
+- WONDER – Wide-ranging Online Data for Epidemiologic Research
+
+
+## Strengths, Limitations, and Challenges
+
+__Strengths__ of the MWI include the following:
+
+- <u>There is no existing tool that summarizes the factors influencing mental wellness of communities for the entire nation at a geographically granular level</u> (such as the ZIP code level). The MWI fills this gap. 
+
+- <u>Adjustable and modifiable for various use cases</u>. The MWI allows users to modify the index by either uploading their own local or use-case specific data, and by adjusting the placeholder weights based on their preferences, use case, or priorities. The measures and overall MWI calculation can be viewed for both the Black population and the overall population. 
+
+- <u>Objective, data-based evaluation</u> of the factors that influence mental well-being allows for a like to like comparison of areas and can empower users to best distribute resources for the highest impact, or to advocate for their community. The MWI can provide valuable information to communities, public health practitioners, government agencies, and funders seeking to improve or understand community mental wellness. 
+
+- <u>Consideration of equity</u> throughout the creation of the MWI by focusing on a priority population facing emerging disparities in mental wellbeing, rather than only the overall population. This consideration of equity also guided how measures were selected and constructed. For example, rather than using data that only shows physician presence in an area, we developed novel measures based on SAMHSA treatment facility data that take into consideration payment assistance, language services offered, access to a continuum of treatment and care, and special focus groups that can facilitate better access to care. We also selected not to include various measures where the association with mental wellness is only established for the majority population, but not for our priority population or for other minority populations, or where data is only representative of certain populations. For example, while data on vehicle access data are available, many people use other modes of transportation, so lacking a rerepresentative transportation measure we have not included this topic in the MWI.
+
+__Limitations of the MWI__: 
+
+<u>Limited by challenges in data availability</u>. We faced limitations based on the types of data that are available and collected in national datasets such as:
+
+- Lack of access to geographically granular data on certain topics
+
+- Lack of data stratified by demographics such as race, ethnicity, sexual orientation, English proficiency/language, etc. Though we sought to use race stratified data where possible, some measures that were deemed important to include and that were selected cannot be stratified by race, limiting the applicability of these measures to the Black priority population calculations.
+
+- Most data collected is deficit-focused, and there is a lack of asset and strengths-focused data that reflects how communities see themselves.
+
+- Availability of data impacted by history of structural racism.
+
+- Some vulnerable populations, such as individuals experiencing homelessness, may not be represented in various national datasets. 
+
+Nationally representative, geographically granular data were unavailable for a wide range of topics that impact mental wellness, such as exposure to stigma, access to reliable transportation (including public transportation), Adverse Childhood Experiences (ACES), community allostatic load, redlining, hate crimes, and infrastructure spending, among others. If data on these, or other topics, are available at the local level, using the MWI Tool data upload feature can enhance the results of the MWI. 
+
+<u>We had a limited ability to consult directly with communities in the creation of the MWI</u>. Input from communities that are directly impacted is vital to ensure a tool will be most useful for them. In our next steps, we hope to engage directly with communities to determine their priorities and preferences, incorporate participatory approaches, and work with communities to determine how the MWI can best address their needs. 
+
+<u>We have sought to address these challenges by</u>: 
+
+- Incorporating novel measures and methods focused on assets where data is available (ex: third places, access to financial services, voter participation and others).
+
+- Creating adaptability in the MWI Tool for users and communities to be able to build their own use cases by uploading local data, and weight measures according to their priorities and preferences.
+
+- Committing to document and share recommendations related to data challenges with others to positively influence change.
+
+Please see individual [measure documentation link] for more information on the strengths and limitations of specific measures selected. 
