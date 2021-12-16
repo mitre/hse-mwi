@@ -540,6 +540,7 @@ ui <- fluidPage(
     # about ----
     tabPanel(
       title = div("About", class="about"),
+      includeHTML("about/about.html"),
       HTML(
         "Acknowledgements: MIP team, Larke Huang, etc.<br>"
       ),
