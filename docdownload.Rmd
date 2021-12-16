@@ -1,5 +1,5 @@
 ---
-title: "Documentation Download Page"
+title: "Measure & Methodology Documentation Download Page"
 output: 
   html_document:
     theme: cosmo
@@ -12,4 +12,4 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into this tool. Detailed documentation for each can be accessed below.
+Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each can be accessed below. All methods used to calculate unqiue statistical procedures can also be accessed below.
