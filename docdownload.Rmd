@@ -1,5 +1,5 @@
 ---
-title: "Measure & Methodology Documentation Download Page"
+title: "Measure & Methodology Documentation Download"
 output: 
   html_document:
     theme: cosmo
@@ -13,3 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each can be accessed below. All methods used to calculate unqiue statistical procedures can also be accessed below.
+
+# Measures
+
+## Social Determinants of Health 
+[Alcohol Outlet Density](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Outlet_Density.docx?raw=true)
