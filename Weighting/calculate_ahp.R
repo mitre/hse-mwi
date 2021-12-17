@@ -20,6 +20,7 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data")
 ahp_form <- read_xlsx(file.path(data_folder, "Mental Wellness Index™ (MWI) Weighting.xlsx"))
+metadata <- read_xlsx(file.path(data_folder, "Metadata.xlsx"))
 
 
 convert_response <- function(x) {
@@ -33,7 +34,7 @@ convert_response <- function(x) {
 }
 
 ahp_recode <- ahp_form %>% mutate_at(vars(contains("vs")), convert_response)
-respondent <- ahp_recode %>% tail(1)
+respondent <- ahp_recode[4,]
 
 # Create Matricies -------
 
@@ -122,7 +123,7 @@ test <- rbind(A,B,C,D)
 
 # Calculate Eigen ----
 
-calculate_eigen <- function(matrix){
+calculate_weights <- function(matrix){
   nroot <- apply(matrix, 1, prod)^(1/ncol(matrix))
   eigen <- nroot / sum(nroot)
   mat <- cbind(matrix, nroot, eigen)
@@ -131,7 +132,7 @@ calculate_eigen <- function(matrix){
 
 
 calculate_consistency <- function(matrix) {
-  weights <- calculate_eigen(matrix)
+  weights <- calculate_weights(matrix)
   consistency <- rep(NA,nrow(weights))
   
   for(i in 1:nrow(weights)){
@@ -149,12 +150,29 @@ calculate_consistency <- function(matrix) {
   ci <- consistency_index/judgement_table[nrow(matrix)]
   
   if (ci > 0.1) {
-    cat(paste("The Consistency Index is >0.1, which indicates that preferences may not be consistent. \n CI =", ci))
-  } else
-    cat(paste("The Consistency Index is <=0.1. \n CI =", ci))
+    cat(paste("The Consistency Index for", deparse(substitute(matrix)), "matrix is >0.1, which indicates that preferences may not be consistent. \n CI =", ci))
+  } else {
+    cat(paste("The Consistency Index for", deparse(substitute(matrix)), "is <=0.1. \n CI =", ci))
   }
+}
 
-calculate_consistency(test)
-calculate_consistency(healthcare)
-calculate_consistency(domains)
-calculate_consistency(sdoh)
+
+
+weights_domains <- calculate_weights(domains)
+weights_sdoh <- calculate_weights(sdoh)
+weights_healthcare <- calculate_weights(healthcare)
+weights_status <- calculate_weights(status)
+
+meas_weights <- c(weights_sdoh[,"eigen"] * weights_domains["SDOH", "eigen"],
+                  weights_healthcare[,"eigen"] * weights_domains["HC", "eigen"],
+                  weights_status[,"eigen"] * weights_domains["HS", "eigen"])
+
+meas_weights
+
+output <- metadata %>% select(Measure, Category, Subcategory, Weights) 
+n_meas <- output %>%
+  group_by(Subcategory) %>%
+  count()
+rownames(n_meas) <- n_meas$Subcategory
+output[Subcategory == "Built Environment", "Weights"] <- meas_weights["env"]/n_meas["Built Environment", "n"]
+output[Subcateorgy == "Financial Access", ]
