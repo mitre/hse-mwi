@@ -48,3 +48,9 @@ Each measure used in the MWI Tool was assessed based on its strengths, limitatio
 - [Suicide Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicide_Mortality.docx)
 - [Life Expectancy](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Life_Expectancy.docx)
 - [Suicidal Ideation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicidal_Ideation.docx)
+
+# Methods
+- [Facility Weights](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Facility%20Weights%20Methods.docx)
+- [Geography](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Geography%20Methods.docx)
+- [Two Step Floating Catchment Methodology](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Two%20Step%20FCA.docx)
+- [Facility Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting%20Methods.docx)
