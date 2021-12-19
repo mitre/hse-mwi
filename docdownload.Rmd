@@ -36,3 +36,15 @@ Each measure used in the MWI Tool was assessed based on its strengths, limitatio
 - [Uninsured](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Uninsured.docx)
 - [Mental Health Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mental_Health_Treatment_Facility_Access.docx)
 - [Substance Use Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Substance_Use_Treatment_Facility_Access.docx)
+
+## Health Status
+- [Adult Binge Drinking](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Adult_Binge_Drinking.docx)
+- [Insufficient Sleep](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Insufficient_Sleep.docx)
+- [Obesity](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Obesity.docx)
+- [Poor Mental Health](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Poor_Mental_Health.docx)
+- [Smoking Status](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Smoking_Status.docx)
+- [Alcohol-Related Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Related_Mortality.docx)
+- [Estimated Drug Poisoning Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Estimated_Drug_Poisoning_Mortality.docx)
+- [Suicide Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicide_Mortality.docx)
+- [Life Expectancy](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Life_Expectancy.docx)
+- [Suicidal Ideation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicidal_Ideation.docx)
