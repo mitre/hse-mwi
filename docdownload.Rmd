@@ -17,4 +17,17 @@ Each measure used in the MWI Tool was assessed based on its strengths, limitatio
 # Measures
 
 ## Social Determinants of Health 
-[Alcohol Outlet Density](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Outlet_Density.docx?raw=true)
+- [Alcohol Outlet Density](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Outlet_Density.docx?raw=true)
+- [Below 100% Poverty Rate](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Below_100_Federal_Poverty_Level.docx)
+- [Broadband Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Broadband_Access.docx)
+- [Mortgage Lending Difference](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mortgage_Lending_Difference.docx)
+- [No High School Diplomna](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/No_High_School_Diploma.docx)
+- [Nursery and Preschool Enrollment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Nursery_and_Preschool_Enrollment.docx)
+- [Police Killings](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Police_Killings.docx)
+- [Residential Segregation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Residential_segregation.docx)
+- [Third Places](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Third_Places.docx)
+- [Unemployment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Unemployment.docx)
+- [Access to Financial Services](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Access_to_Financial_Services.docx)
+- [Violent Crime](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Violent_crime.docx)
+- [Housing Stress](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Housing_Stress.docx)
+- [Living Within a Half-Mile of a Park](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Living_Within_a_Half_Mile_of_a_Park.docx)
