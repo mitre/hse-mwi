@@ -20,27 +20,29 @@ data_folder <- file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data")
 ahp_form <- read_xlsx(file.path(data_folder, "Mental Wellness Index™ (MWI) Weighting.xlsx"))
-metadata <- read_xlsx(file.path(data_folder, "Metadata.xlsx"))
+data_info <- read.csv(file.path(data_folder, "Cleaned", "HSE_MWI_Data_Information.csv"))
 
 
 convert_response <- function(x) {
   recode(x,
-       "A is much more important than B" = 9,
-       "A is moderately more important than B" = 5,
-       "A and B are equally important" = 1,
-       "B is moderately more important than A" = 1/5,
-       "B is much more important than A" = 1/9,
+       "A >>> B" = 7,
+       "A >> B" = 5,
+       "A > B" = 3,
+       "A = B" = 1,
+       "A < B" = 1/3,
+       "A << B" = 1/5,
+       "A <<< B" = 1/7,
        .default = 0)
 }
 
 ahp_recode <- ahp_form %>% mutate_at(vars(contains("vs")), convert_response)
-respondent <- ahp_recode[4,]
+respondent <- ahp_recode[7,]
 
 # Create Matricies -------
 
     ## Matrix 1: Domains -----
 domains <- diag(3)
-colnames(domains) <- rownames(domains) <- c("SDOH", "HC", "HS")
+colnames(domains) <- rownames(domains) <- unique(data_info$Category)
 domains[1,2] <- respondent$`Social Determinants of Health (A) vs. Healthcare Access (B)`
 domains[1,3] <- respondent$`Social Determinants of Health (A) vs Health Status (B)`
 domains[2,3] <- respondent$`Healthcare Access (A) vs. Health Status (B)`
@@ -52,7 +54,8 @@ domains[3,2] <- 1/domains[2,3]
 
     ## Matrix 2: SDOH -------
 sdoh <- diag(7)
-colnames(sdoh) <- rownames(sdoh) <- c("env", "edu", "inc", "hous", "social", "trauma", "fin")
+nm <- unique(data_info[data_info$Category == "Social Determinants of Health", "Subcategory"])
+colnames(sdoh) <- rownames(sdoh) <- nm[c(2,5,3,4,7,6,1)]
 # Fill Responses into matrix
 sdoh[1,2] <- respondent$`Built Environment (A) vs. Education Success (B)`
 sdoh[3,4] <- respondent$`Income & Employment (A) vs. Housing (B)`
@@ -90,7 +93,7 @@ for(i in 2:nrow(sdoh)){
 
     ## Matrix 3: Healthcare Access -----
 healthcare <- diag(3)
-colnames(healthcare) <- rownames(healthcare) <- c("mh", "su", "ins")
+colnames(healthcare) <- rownames(healthcare) <- unique(data_info[data_info$Category == "Healthcare Access", "Measure"])
 
 healthcare[1,2] <- respondent$`Mental Health Treatment Facilities (A) vs. Substance Use Treatment Facilities (B)`
 healthcare[1,3] <- respondent$`Mental Health Treatment Facilities (A) vs. Uninsured`
@@ -102,7 +105,8 @@ healthcare[3,2] <- 1/healthcare[2,3]
 
     ## Matrix 4: Health Status -------
 status <- diag(3)
-colnames(status) <- rownames(status) <- c("mh", "su", "other")
+nm <- unique(data_info[data_info$Category == "Health Status", "Subcategory"])
+colnames(status) <- rownames(status) <- nm[c(3,1,2)]
 status[2,1] <- respondent$`Substance Use morbidity and mortality (A) vs. Mental Health morbidity and mortality (B)`
 status[2,3] <- respondent$`Substance Use morbidity and mortality (A) vs. Other morbidity and mortality (B)`
 status[1,3] <- respondent$`Mental Health morbidity and mortality (A) vs. Other morbidity and mortality (B)`
@@ -113,13 +117,13 @@ status[3,1] <- 1/status[1,3]
 
 # Function Consistency Ratio (check that CR is not > 0.1, otherwise judgments are untrustworthy )
 
-
-A <- c(1,1/3, 1/9,1/5)
-B <- c(3,1,1,1)
-C <- c(9,1,1,3)
-D <- c(5,1,1/3,1)
-
-test <- rbind(A,B,C,D)
+# # Example matrix
+# A <- c(1,1/3, 1/9,1/5)
+# B <- c(3,1,1,1)
+# C <- c(9,1,1,3)
+# D <- c(5,1,1/3,1)
+# 
+# test <- rbind(A,B,C,D)
 
 # Calculate Eigen ----
 
@@ -163,16 +167,11 @@ weights_sdoh <- calculate_weights(sdoh)
 weights_healthcare <- calculate_weights(healthcare)
 weights_status <- calculate_weights(status)
 
-meas_weights <- c(weights_sdoh[,"eigen"] * weights_domains["SDOH", "eigen"],
-                  weights_healthcare[,"eigen"] * weights_domains["HC", "eigen"],
-                  weights_status[,"eigen"] * weights_domains["HS", "eigen"])
+meas_weights <- c(weights_sdoh[,"eigen"] * weights_domains["Social Determinants of Health", "eigen"],
+                  weights_healthcare[,"eigen"] * weights_domains["Healthcare Access", "eigen"],
+                  weights_status[,"eigen"] * weights_domains["Health Status", "eigen"])
 
-meas_weights
-
-output <- metadata %>% select(Measure, Category, Subcategory, Weights) 
-n_meas <- output %>%
-  group_by(Subcategory) %>%
-  count()
-rownames(n_meas) <- n_meas$Subcategory
-output[Subcategory == "Built Environment", "Weights"] <- meas_weights["env"]/n_meas["Built Environment", "n"]
-output[Subcateorgy == "Financial Access", ]
+calculate_consistency(domains)
+calculate_consistency(sdoh)
+calculate_consistency(healthcare)
+calculate_consistency(status)
