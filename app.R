@@ -700,7 +700,7 @@ ui <- fluidPage(
     tabPanel(
       title = div("Explore ZIP Codes", class="explore"),
       class = "explore-panel",
-
+      
       sidebarLayout(
         sidebarPanel(
           width = 3,
@@ -779,6 +779,50 @@ ui <- fluidPage(
       )
     ),
     
+    # upload data ----
+    tabPanel(
+      title = div("Create Your Own MWI", class = "explore"),
+      fluidRow(
+        column(width = 2),
+        column(
+          width = 8,
+          HTML("<center><h2>Create your own MWI!</h2></center>"),
+          HTML(paste0(
+            "<p align = 'justify'>",
+            "Create your own Mental Wellness Index for your community below by updating your data and metadata. To do so, take the following steps:",
+            "<ol>",
+            "<li> Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).</li>",
+            "<ul>",
+            "<li>Accepted geographical ID types are always numeric and include the following:</li>",
+            "<ul>",
+            "<li>ZCTA (example: 35406)</li>",
+            "<li>County (example: 01001)</li>",
+            "<li>ZIP Code (example: 35051)</li>",
+            "<li>Census Tract (example: 01001020100)</li>",
+            "</ul>",
+            "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see step 2).</li>",
+            "<li>Numerators and denominators must be numeric columns.</li>",
+            "<li>Missing data should have cells left blank.</li>",
+            "</ul>",
+            "<li> Download Metadata.xlsx with the button below. Add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
+            "<ul>",
+            "<li>If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.</li>",
+            "<li>If you would not like to include a measure in your MWI, either delete the measure row or set its weight to 0./li>",
+            "</ul>",
+            "<li>Put your data and the updated Metadata.xlsx file in a zip file (.zip).</li>",
+            "<li>Upload your zip file and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
+            "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
+            "<li>To view your MWI, click the 'Advanced Options' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
+            "</ol>",
+            "</p>"
+          )),
+          # STOP HERE 
+          downloadButton("down_metadata", "Download Metadata.xlsx")
+        ),
+        column(width = 2)
+      )
+    ),
+    
     # about ----
     tabPanel(
       title = div("About", class="about"),
@@ -833,7 +877,7 @@ server <- function(input, output, session) {
         st_coordinates(geopts$pop[geopts$pop$GEOID10 == "30165",])[2] - 1 &
         st_coordinates(geopts$pop)[,2] <=
         st_coordinates(geopts$pop[geopts$pop$GEOID10 == "30165",])[2] + 1 
-        ,],
+      ,],
     "mwi" = mwi[["pop"]][# community -- within +/- .5
       mwi[["pop"]]$ZCTA %in% 
         geodat[["pop"]]$GEOID10[
@@ -1132,10 +1176,10 @@ server <- function(input, output, session) {
   output$data_info <- renderUI({
     withProgress(message = "Rendering data information", {
       full_name <- measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
-
+      
       HTML(paste0(
         "<font size = '2'>",
-
+        
         "A variety of data sources are used for measures comprising the Mental Wellness Index. The data currently pictured for ",
         full_name,
         " came from ",
@@ -1166,7 +1210,7 @@ server <- function(input, output, session) {
   output$us_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
       us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat,
-                 st_sub$idx, is_all = st_sub$is_all)
+                           st_sub$idx, is_all = st_sub$is_all)
       
       if (focus_info$hl){
         # add a highlighted polygon
