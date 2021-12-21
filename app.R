@@ -538,12 +538,14 @@ ui <- fluidPage(
     ),
     
     # about ----
-    tabPanel(
-      title = div("About", class="about"),
-      HTML(
-        "Acknowledgements: MIP team, Larke Huang, etc.<br>"
-      ),
-      HTML("Contact: Emilie Gilde (egilde@mitre.org)")
+    navbarMenu("About",
+               tabPanel("About the MWI", includeHTML("about/about.html"),
+                        HTML(
+                          "Acknowledgements: MIP team, Larke Huang, etc.<br>"),
+                        HTML("Contact: Emilie Gilde (egilde@mitre.org)")),
+               tabPanel("Measure & Methodology Documentation Download", 
+                        includeHTML("Documentation & Methods Download Page/docdownload.html"))
+      
     )
   ),
   
