@@ -52,10 +52,7 @@ index_types <- c("Population" = "pop",
                  "Black" = "black")
 
 # folder where all the data and information for the pipeline is
-data_folder <- file.path(
-  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
-  "Health and Social Equity - SJP - BHN Score Creation",
-  "Data")
+data_folder <- file.path("Data")
 
 # load measure registry -- first sheet
 m_reg <- as.data.frame(
@@ -203,7 +200,10 @@ for (idx in index_types){
 # save(list = "zips", file = file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
 # 
 # # load zip code data (should be much faster)
-# load(file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
+# load(file.path(file.path(
+# gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+# "Health and Social Equity - SJP - BHN Score Creation",
+# "Data"), "Resources", "ZCTAs_shapefile_US.RData"))
 # 
 # # create the geo data for leaflet
 # # NOTE: may want to do this ahead of time, if possible, when the base index is done
@@ -218,10 +218,16 @@ for (idx in index_types){
 #   # add state and county (multiple counties for a zcta separated by pipes)
 # }
 # # saving for now, while things are stable
-# save(list = "geodat", file = file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+# save(list = "geodat", file = file.path(file.path(
+# gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+# "Health and Social Equity - SJP - BHN Score Creation",
+# "Data"), "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
 
 # load geodat data (should be much faster)
-load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+load(file.path(file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data"), "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
 
 # get available zctas -- both will have the same
 avail_zctas <- geodat[["pop"]]$GEOID10
