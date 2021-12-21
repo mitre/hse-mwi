@@ -34,6 +34,16 @@ sass(
   output = "about/app.css"
 )
 
+# ??source
+sourceDir <- function(path, trace = TRUE, ...) {
+  for (nm in list.files(path, pattern = "[.][RrSsQq]$")) {
+    # if(trace) cat(nm,":")
+    source(file.path(path, nm), ...)
+    # if(trace) cat("\n")
+  }
+}
+
+sourceDir("about", local = environment())
 
 # load data ----
 
@@ -540,11 +550,11 @@ ui <- fluidPage(
     # about ----
     tabPanel(
       title = div("About", class="about"),
-      includeHTML("about/about.html"),
-      HTML(
-        "Acknowledgements: MIP team, Larke Huang, etc.<br>"
-      ),
-      HTML("Contact: Emilie Gilde (egilde@mitre.org)")
+      # NOTE: when making changes to about.Rmd, move result to www
+      htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
+                             class="about-panel",
+                             frameborder = 0, 
+                             scrolling = 'auto')
     )
   ),
   
