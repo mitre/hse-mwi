@@ -10,6 +10,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+# NOTE: once knit, move html output to www/
 ```
 
 ## Introduction
@@ -32,7 +34,9 @@ Development of the MWI started with the Black population as a priority populatio
 
 ### Components of the MWI Framework
 
-![MWI Framework](mwi.png)\
+<center>
+![MWI Framework](mwi.png){width=400px}
+</center>
 
 #### Domains
 
@@ -68,9 +72,9 @@ The MWI is calculated for each ZIP Code Tabulation Area (ZCTA) in the country (e
 
 The MWI for a ZCTA is calculated multiplying the percentile ranked value of each of the 28 measures in that ZCTA by the weight assigned to each measure, then summing these resulting values as shown in the equation below where m designates a measure. See the [Weighting Methodology (link)] document for more information about measure weights, including how placeholder weights have been assigned.
 
-MWI = $\sum_{m = 1}^{28} percentile\space ranked\space value_m * weight_m$
+$$MWI = \sum_{m = 1}^{28} percentile\space ranked\space value_m * weight_m$$
 
-MWI = $\sum_{m = 1}^{28} percentile\space ranked\space value_{z,m} * weight_m$
+$$MWI = \sum_{m = 1}^{28} percentile\space ranked\space value_{z,m} * weight_m$$
 
 ## How to Use the MWI
 
