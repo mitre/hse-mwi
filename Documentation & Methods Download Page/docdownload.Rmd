@@ -12,7 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each can be accessed below. All methods used to calculate unqiue statistical procedures can also be accessed below.
+Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each measure can be accessed below. All methods used to calculate unqiue statistical procedures can also be accessed below. Click on the link to download the corresponding documentation.
 
 # Measures
 
