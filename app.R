@@ -555,9 +555,14 @@ ui <- fluidPage(
                  htmltools::tags$iframe(src = "www/about.html", # put testdoc.html to /www
                                         class="about-panel",
                                         frameborder = 0, 
-                                        scrolling = 'auto'),
-               tabPanel("Measure & Methodology Documentation Download", 
-                        includeHTML("www/docdownload.html"))
+                                        scrolling = 'auto')),
+               tabPanel(
+                 title = div("Measure & Methodology Documentation Download",
+                             class = "download"), 
+                 htmltools::tags$iframe(src = "www/docdownload.html",
+                                        class = "download-panel",
+                                        frameborder = 0,
+                                        scrolling = "auto")
     )
   ),
   
