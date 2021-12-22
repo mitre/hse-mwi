@@ -137,7 +137,7 @@ cbp <- full_join(cbp, pop, by = c("ZCTA" = "GEOID"))
 cbp$City <- us_cities[cbp$ZCTA, "place.name"]
 cbp$State <- us_cities[cbp$ZCTA, "state.code"]
 
-<<<<<<< HEAD
+
 cbp_city <- cbp %>% group_by(City, State) %>%
   summarize(ESTAB = sum(ESTAB, na.rm = T),
             pop = sum(B01001_001E, na.rm = T)) %>%
@@ -150,15 +150,6 @@ cbp_city <- cbp %>% group_by(City, State) %>%
 
 
 final <- left_join(cbp, cbp_city, by = c("City", "State")) %>%
-=======
-# Calculating measure value = # outlets / population in ZCTA
-final <- full_join(cbp, pop, by = c("ZCTA" = "GEOID")) %>%
-  mutate(alcoholoutlet_pop = ESTAB/B01001_001E,
-         # Replacing NAs with 0s
-         alcoholoutlet_pop = ifelse(is.na(alcoholoutlet_pop), 0, alcoholoutlet_pop),
-         # Set max for areas with greater than 100 outlets per 100,000 (55 ZCTAs)
-         alcoholoutlet_pop = ifelse(alcoholoutlet_pop > 0.001, 0.001, alcoholoutlet_pop)) %>%
->>>>>>> dd3ec16b4a0076b0218aeb13e995ae39aab83e69
   select(ZCTA, alcoholoutlet_pop)
 
 
