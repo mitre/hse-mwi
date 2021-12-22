@@ -556,9 +556,6 @@ ui <- fluidPage(
                                         class="about-panel",
                                         frameborder = 0, 
                                         scrolling = 'auto'),
-                        HTML(
-                          "Acknowledgements: MIP team, Larke Huang, etc.<br>"),
-                        HTML("Contact: Emilie Gilde (egilde@mitre.org)")),
                tabPanel("Measure & Methodology Documentation Download", 
                         includeHTML("www/docdownload.html"))
     )
