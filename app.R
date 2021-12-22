@@ -193,41 +193,14 @@ for (idx in index_types){
     cty_cw[mwi[[idx]]$ZCTA, -1]
 }
 
-# get zip code data -- ONLY ORIGINAL
-# NOTE: cb = T will download a generalized file
-# zips <- zctas(cb = T)
-# zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
-# save(list = "zips", file = file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
-# 
-# # load zip code data (should be much faster)
-# load(file.path(file.path(
-# gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
-# "Health and Social Equity - SJP - BHN Score Creation",
-# "Data"), "Resources", "ZCTAs_shapefile_US.RData"))
-# 
-# # create the geo data for leaflet
-# # NOTE: may want to do this ahead of time, if possible, when the base index is done
-# geodat <- list()
-# for (idx in index_types){
-#   geodat[[idx]] <-
-#     geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
-# 
-#   # sort by state code
-#   geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE),]
-# 
-#   # add state and county (multiple counties for a zcta separated by pipes)
-# }
-# # saving for now, while things are stable
-# save(list = "geodat", file = file.path(file.path(
-# gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
-# "Health and Social Equity - SJP - BHN Score Creation",
-# "Data"), "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+if (!"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
+    list.files(file.path(data_folder, "Cleaned"))){
+  source(file.path("Processing_Pipeline", "create_shpfiles.R"))
+} else {
+  # load geodat data (should be much faster)
+  load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+}
 
-# load geodat data (should be much faster)
-load(file.path(file.path(
-  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
-  "Health and Social Equity - SJP - BHN Score Creation",
-  "Data"), "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
 
 # get available zctas -- both will have the same
 avail_zctas <- geodat[["pop"]]$GEOID10
