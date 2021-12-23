@@ -2,6 +2,7 @@
 title: "The Mental Wellbeing Index"
 output: 
   html_document:
+    self_contained: false
     theme: cosmo
     toc: true
     toc_depth: 4
@@ -10,7 +11,6 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 # NOTE: once knit, move html output to www/
 ```
 
