@@ -2,6 +2,7 @@
 title: "Measure & Methodology Documentation Download"
 output: 
   html_document:
+    self_contained: false
     theme: cosmo
     toc: true
     toc_depth: 4
