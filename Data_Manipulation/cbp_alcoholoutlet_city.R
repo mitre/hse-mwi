@@ -8,6 +8,7 @@
 library(dplyr)
 library(tidycensus)
 library(censusapi)
+library(readxl)
 
 source("Processing_Pipeline/crosswalk_func.R")
 
@@ -22,7 +23,9 @@ resource_folder <-file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Resources")
 
-
+grocery_states <- read_xlsx(file.path(resource_folder, "BWL_Grocery_Laws.xlsx"), skip = 1)
+grocery_states[,3:5] <- ifelse(grocery_states[,3:5] == "Y", TRUE, FALSE)
+grocery_states$any_alc_sales <- ifelse(rowSums(grocery_states[,3:5] , na.rm = T) > 0, TRUE, FALSE)
 
 # Read in and clean zip code according to common mistakes
 # inputs:
@@ -109,7 +112,7 @@ grocery <- grocery %>% filter(ZIPCODE %in% allowed_zips$ZIP_CODE) #6551 zip code
 all <- full_join(bwl, convenience, by = "ZIPCODE") %>%
   full_join(convenience_gas, by = "ZIPCODE") %>%
   full_join(grocery, by = "ZIPCODE") %>%
-  mutate(ESTAB = sum(bwl, convenience, convenience_gas, grocery, na.rm = T)) %>%
+  mutate(ESTAB = sum(bwl, convenience, convenience_gas, grocery, na.rm = T)) 
   select(ESTAB, ZIPCODE)
 
 
