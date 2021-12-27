@@ -1,6 +1,9 @@
-# Container Methods for CBP Data (County Business Patterns)
+# Alcohol Outlet Density - Container Methods for CBP Data (County Business Patterns)
 # By Karen Jiang
 # Originated on: 6/8/21
+
+# NOTE: keeping this as a separate script, since we may come back to this in future
+
 
 library(dplyr)
 library(tidycensus)
