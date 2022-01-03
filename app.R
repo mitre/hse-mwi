@@ -666,9 +666,12 @@ ui <- fluidPage(
             ),
             bsCollapsePanel(
               "Custom MWI Upload",
+              HTML("<font size = '2'><p>"),
+              "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
+              HTML("<p></font>"),
               fileInput(
                 "custom_data_st",
-                label = "Upload Custom Mental Wellness Index",
+                label = "Upload Custom Mental Wellness Index (.RData)",
                 accept = ".RData"
               ),
               actionButton(
@@ -774,9 +777,12 @@ ui <- fluidPage(
             ),
             bsCollapsePanel(
               "Custom MWI Upload",
+              HTML("<font size = '2'><p>"),
+              "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
+              HTML("</p></font>"),
               fileInput(
                 "custom_data_com",
-                label = "Upload Custom Mental Wellness Index",
+                label = "Upload Custom Mental Wellness Index (.RData)",
                 accept = ".RData"
               ),
               actionButton(
@@ -843,10 +849,10 @@ ui <- fluidPage(
     tabPanel(
       title = div("Create Your Own MWI", class = "explore"),
       fluidRow(
-        column(width = 2),
+        column(width = 3),
         column(
-          width = 8,
-          HTML("<center><h2>Create your own MWI!</h2></center>"),
+          width = 6,
+          HTML("<center><h2>Create your own Mental Wellness Index (MWI)!</h2></center>"),
           HTML(paste0(
             "<p align = 'justify'>",
             "Create your own Mental Wellness Index for your community below by updating your data and metadata. To do so, take the following steps:",
@@ -865,30 +871,39 @@ ui <- fluidPage(
             "<li>Missing data should have cells left blank.</li>",
             "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black population measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
             "</ul>",
+            "<br>",
             "<li> Download Metadata.xlsx with the button below. Add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
             "<ul>",
             "<li>If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.</li>",
             "<li>If you would not like to include a measure in your MWI, either delete the measure row or set its weight to 0.</li>",
             "</ul>",
-            "<li>Put your data and the updated Metadata.xlsx file in a zip file (.zip).</li>",
-            "<li>Upload your zip file and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
+            "<br>",
+            "<li>Put your data and the updated Metadata.xlsx file in a ZIP file (.zip).</li>",
+            "<br>",
+            "<li>Upload your ZIP file and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
+            "<br>",
             "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
-            "<li>To view your MWI, click the 'Advanced Options' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
+            "<br>",
+            "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
             "</ol>",
             "</p>"
           )),
-          # STOP HERE 
+          hr(),
+          HTML("<center>"),
           downloadButton("download_metadata", "Download Metadata.xlsx"),
+          HTML("<br><br>"),
           fileInput(
             "custom_zip", 
-            "Upload Custom Data ZIP",
+            "Upload Custom Data ZIP File (.zip)",
             accept = ".zip"
           ),
           actionButton("custom_mwi_go", "Create Custom MWI"),
           downloadButton("download_custom_mwi", "Download Custom MWI"),
-          verbatimTextOutput("custom_error")
+          HTML("<br><br>"),
+          verbatimTextOutput("custom_error"),
+          HTML("</center>")
         ),
-        column(width = 2)
+        column(width = 3)
       )
     ),
     
@@ -2037,7 +2052,7 @@ server <- function(input, output, session) {
             overall_list(overall_out)
             
             output$custom_error <- renderText({
-              paste0("Complete! Click 'Download Custom MWI' to download. Upload resulting .RData on the 'Explore States' page to explore.")
+              paste0("Complete! Click 'Download Custom MWI' to download. Upload resulting .RData on the 'Custom MWI Upload' section of the 'Explore States' or 'Explore ZIP Codes' page to explore.")
             })
           }
         } else {
