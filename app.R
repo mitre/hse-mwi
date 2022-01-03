@@ -527,13 +527,23 @@ ui <- fluidPage(
     ),
     
     # about ----
-    tabPanel(
-      title = div("About", class="about"),
-      # NOTE: when making changes to about.Rmd, move result to www
-      htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
-                             class="about-panel",
-                             frameborder = 0, 
-                             scrolling = 'auto')
+    navbarMenu(
+      "About",
+      tabPanel(
+        title = div("About", class="about"),
+        # NOTE: when making changes to about.Rmd, move result to www
+        htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
+                               class="about-panel",
+                               frameborder = 0, 
+                               scrolling = 'auto')),
+      tabPanel(
+        title = div("Measure & Methodology Documentation Download",
+                    class = "about"), 
+        htmltools::tags$iframe(src = "docdownload.html",
+                               class = "about-panel",
+                               frameborder = 0,
+                               scrolling = "auto")
+      )
     )
   ),
   
