@@ -976,28 +976,28 @@ server <- function(input, output, session) {
   
   com_sub <- reactiveValues(
     "idx" = "pop",
-    "ZCTA" = "30165", 
+    "ZCTA" = "35214", 
     "geodat" = overall$geodat[["pop"]][ # community -- within +/- .5
       st_coordinates(overall$geopts$pop)[,1] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "30165",])[1] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] - 1 &
         st_coordinates(overall$geopts$pop)[,1] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "30165",])[1] + 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] + 1 &
         st_coordinates(overall$geopts$pop)[,2] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "30165",])[2] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] - 1 &
         st_coordinates(overall$geopts$pop)[,2] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "30165",])[2] + 1 
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] + 1 
       ,],
     "mwi" = overall$mwi[["pop"]][# community -- within +/- .5
       overall$mwi[["pop"]]$ZCTA %in% 
         overall$geodat[["pop"]]$GEOID10[
           st_coordinates(overall$geopts$pop)[,1] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "30165",])[1] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] - 1 &
             st_coordinates(overall$geopts$pop)[,1] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "30165",])[1] + 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] + 1 &
             st_coordinates(overall$geopts$pop)[,2] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "30165",])[2] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] - 1 &
             st_coordinates(overall$geopts$pop)[,2] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "30165",])[2] + 1 
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] + 1 
         ]
       ,],
     "com_map_fill" = "Mental_Wellness_Index"
@@ -1250,7 +1250,7 @@ server <- function(input, output, session) {
       )
       
       # update selected defaults for community view
-      com_sub$ZCTA <- "30165"
+      com_sub$ZCTA <- "35214"
       com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
         st_coordinates(ol$geopts$pop)[,1] >=
           st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
