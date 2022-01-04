@@ -22,6 +22,7 @@ resource_folder <-file.path(
 # Spreadsheet with zipcodes and state FIPS
 zips <- read.csv(file.path(resource_folder, "IRS_zipcodes_by_state.csv")) %>%
   select(c(1:3))
+zips$zipcode <- as.character(zips$zipcode)
 
 # Spreadsheet with state by state Grocery Laws
 grocery_states <- read_xlsx(file.path(resource_folder, "BWL_Grocery_Laws.xlsx"),
@@ -40,9 +41,9 @@ get_zbp <- function(naics, name){
                    region = "zipcode:*",
                    NAICS2017 = naics
   ) %>%
-    mutate(zip = as.integer(zip_code)) %>%
+    mutate(zip = paste0(zip_code)) %>%
     select(zip, ESTAB) 
-  colnames(dat) <- c("fips", name)
+  colnames(dat) <- c("zip", name)
   return(dat)
 }
 
