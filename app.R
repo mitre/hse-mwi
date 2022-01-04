@@ -89,7 +89,10 @@ app_prepocess <- function(m_reg, info_df, mwi, app_start = T){
     }
   }
   
-  if (!app_start){
+  if (!app_start | 
+      (app_start &
+       !"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
+       list.files(file.path(data_folder, "Cleaned")))){
     
     # add counties/states to mwi
     for (idx in index_types){
@@ -99,7 +102,8 @@ app_prepocess <- function(m_reg, info_df, mwi, app_start = T){
     
     # get zip code data
     # NOTE: cb = T will download a generalized file
-    zips <- zctas(starts_with = mwi$pop$ZCTA, cb = T)
+    zips <- zctas(cb = T)
+    zips <- zips[zips$GEOID10 %in% mwi$pop$ZCTA,]
     zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
     
     # create the geo data for leaflet
@@ -107,7 +111,7 @@ app_prepocess <- function(m_reg, info_df, mwi, app_start = T){
     geodat <- geopts <- list()
     for (idx in index_types){
       geodat[[idx]] <-
-        geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "inner")
+        geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
       
       # sort by state code and zcta
       geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
@@ -115,6 +119,14 @@ app_prepocess <- function(m_reg, info_df, mwi, app_start = T){
       
       # convert to points for US visualization -- ignore warnings
       geopts[[idx]] <- st_centroid(geodat[[idx]])
+    }
+    
+    if (app_start &
+         !"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
+         list.files(file.path(data_folder, "Cleaned"))){
+      save(list = c("geodat", "geopts"), 
+           file = file.path(data_folder, 
+                            "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
     }
   } else {
     # load geodat data (should be much faster)
@@ -144,10 +156,7 @@ index_types <- c("Population" = "pop",
                  "Black" = "black")
 
 # folder where all the data and information for the pipeline is
-data_folder <- file.path(
-  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
-  "Health and Social Equity - SJP - BHN Score Creation",
-  "Data")
+data_folder <- file.path("Data")
 
 # load measure registry -- first sheet
 m_reg <- as.data.frame(
@@ -908,12 +917,23 @@ ui <- fluidPage(
     ),
     
     # about ----
-    tabPanel(
-      title = div("About", class="about"),
-      HTML(
-        "Acknowledgements: MIP team, Larke Huang, etc.<br>"
-      ),
-      HTML("Contact: Emilie Gilde (egilde@mitre.org)")
+    navbarMenu(
+      "About",
+      tabPanel(
+        title = div("About", class="about"),
+        # NOTE: when making changes to about.Rmd, move result to www
+        htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
+                               class="about-panel",
+                               frameborder = 0, 
+                               scrolling = 'auto')),
+      tabPanel(
+        title = div("Measure & Methodology Documentation Download",
+                    class = "about"), 
+        htmltools::tags$iframe(src = "docdownload.html",
+                               class = "about-panel",
+                               frameborder = 0,
+                               scrolling = "auto")
+      )
     )
   ),
   
@@ -1374,6 +1394,7 @@ server <- function(input, output, session) {
       # add a highlighted polygon
       us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
                            st_sub$idx,
+                           ol = ol,
                            is_all = st_sub$is_all,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
@@ -1410,6 +1431,7 @@ server <- function(input, output, session) {
       # add a highlighted polygon
       us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
                            st_sub$idx,
+                           ol = ol,
                            is_all = st_sub$is_all,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)

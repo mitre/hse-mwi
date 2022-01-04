@@ -37,6 +37,25 @@ mh_fac <- read_csv(file.path(data_folder,
 sa_fac <- read_csv(file.path(data_folder,
                              "SAMHSA_Locator/Substance_Use_Treament_Facility_listing_2021_05_18_134647.csv"))
 
+# Weights Folder
+weights_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Raw", "SAMHSA_Locator")
+
+# Download Weights
+mh_weights <- read_csv(file.path(weights_folder,
+                                  "SAMHSA_MHFacility_weights.csv"))
+
+sa_weights <- read_csv(file.path(weights_folder,
+                                 "SAMHSA_SUFacility_weights.csv"))
+
+# Add weights in MH dataset
+mh_fac <- add_column(mh_fac, weights = mh_weights$weight, .before = "psy")
+
+# Add weights in SA dataset
+sa_fac <- add_column(sa_fac, weights = sa_weights$weight, .before = "dt")
+
 # Import census tracts & establish polygons
 states <- c(1:2, 4:6, 8:9, 10:13, 15:42, 44:51, 53:56)
 poly <- get_decennial(geography = "tract", state = states,
@@ -52,13 +71,14 @@ poly <- get_decennial(geography = "tract", state = states,
 # Inputs
 #   data: dataset of facilities with specified point data
 #   geo: dataset of geographical points
+#   facil: the type of facility (MH, SA, etc) in character format
 # Output  
 #   Returns R value for each facility within the dataset of facilities
 
 # Set the amount of rows to be iterated
 n <- 1000
 
-step_1_fca <- function (data, geo) {
+step_1_fca <- function (data, geo, facil) {
   # Build a for loop while subseting by proximity - only look at CT centroids
   # within +/- 1 lat/long of facility
   # Create for loop
@@ -68,12 +88,15 @@ step_1_fca <- function (data, geo) {
   geo_coord <- st_coordinates(geo)
   fac_coord <- st_coordinates(data)
   start <- Sys.time()
-  for (i in 1:n) {
+  for (i in 1:nrow(data)) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
     }
-    
+    # Output every 1000 values
+    if (i %% 1000 == 0){
+      write.csv(data, file = paste0("step1", facil, "_", i, ".csv"), row.names = F)
+      }
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 MH treatment centers
     # Keep the logical 
@@ -82,10 +105,12 @@ step_1_fca <- function (data, geo) {
       geo_coord[,1] < fac_coord[i,1] + 1 &
       geo_coord[,1] > fac_coord[i,1] - 1
     
-    geo$d[prox_log] <- 
+    if (sum(prox_log) != 0) {
+      geo$d[prox_log] <- 
       raster::pointDistance(
         data[i,], 
         geo[prox_log, ], lonlat = T) * .0006213712
+    }
     # Calculate the r value
     # Step 1 of 2 Step Floating Catchment Area (FCA) Methodology
     data$R[i] <- 1/sum(filter(geo,
@@ -122,10 +147,14 @@ step_2_fca <- function (data, geo, facil) {
   geo_coord <- st_coordinates(geo)
   fac_coord <- st_coordinates(data)
   start <- Sys.time()
-  for (i in 1:n) {
+  for (i in 1:nrow(geo)) {
     # print every 50
     if (i %% 50 == 0){
       print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
+    }
+    # Output every 1000 values
+    if (i %% 1000 == 0){
+      write.csv(data, file = paste0("step2", facil, "_", i, ".csv"), row.names = F)
     }
     # Compute distances between facility and CT centroids within +/-1 proximity
     # for first 1000 CT centroids
@@ -134,11 +163,12 @@ step_2_fca <- function (data, geo, facil) {
       fac_coord[,2] > geo_coord[i,2] - 1 &
       fac_coord[,1] < geo_coord[i,1] + 1 &
       fac_coord[,1] > geo_coord[i,1] - 1
-    
+    if (sum(prox_log) != 0) {
     data$d[prox_log] <- 
       raster::pointDistance(
         data[prox_log,], 
         geo[i, ], lonlat = T) * .0006213712
+    }
     # Calculate the A value
     # Sum all r values within the distance threshold for each CT
     geo$A[i] <- sum(filter(data, d < geo[["Distance"]][i])$R)
@@ -178,12 +208,14 @@ ct <- ct %>%
   relocate(c("tract", "LATITUDE", "LONGITUDE", "POPULATION", "Distance")) %>%
   st_as_sf(coords = c("LONGITUDE", "LATITUDE"),
            crs = st_crs(poly))
+# Remove duplicates from CT dataset
+ct <- ct[!duplicated(ct$tract),]
 
 # Select/Remove Relevant Variables in Facility Data
 mh_fac <- mh_fac %>%
-  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:186))
+  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:187))
 sa_fac <- sa_fac %>%
-  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:238))
+  select(c(name1, zip, county, latitude, longitude, type_facility), c(19:239))
 
 # Convert point data into workable column for MH Facilities
 mh_fac <- mh_fac %>%
@@ -201,13 +233,13 @@ mh_fac[is.na(mh_fac$GEOID),]
 which(is.na(mh_fac$GEOID), arr.ind=TRUE)
  
 # Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
-mh_fac[10552, 174] <- "02016000200" # One for Alaska
-mh_fac[10583, 174] <- "15007040300" # One for Hawaii
+mh_fac[10552, 175] <- "02016000200" # One for Alaska
+mh_fac[10583, 175] <- "15007040300" # One for Hawaii
 
 # Remove irrelevant variables and incomplete cases
 mh_fac <- mh_fac %>%
   select(c("name1", "zip", "county.y", "type_facility", "GEOID", "geometry"),
-         c(6:173)) %>%
+         c(6:174)) %>%
   rename("tract" = "GEOID", "county" = "county.y")
 
 mh_fac <- mh_fac[complete.cases(mh_fac$tract),]
@@ -228,17 +260,17 @@ sa_fac[is.na(sa_fac$GEOID),]
 which(is.na(sa_fac$GEOID), arr.ind=TRUE)
 
 # Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
-sa_fac[6657, 226] <- "26033970600" # One for Michigan 
-sa_fac[12045, 226] <- "06037800506" # One for California
-sa_fac[13896, 226] <- "41007950300" # One for Oregon
-sa_fac[14114, 226] <- "02016000100" # One for Alaska
-sa_fac[14161, 226] <- "15009030902" # One for Hawaii
-sa_fac[14169, 226] <- "15009031700" # Another for Hawaii
+sa_fac[6657, 227] <- "26033970600" # One for Michigan 
+sa_fac[12045, 227] <- "06037800506" # One for California
+sa_fac[13896, 227] <- "41007950300" # One for Oregon
+sa_fac[14114, 227] <- "02016000100" # One for Alaska
+sa_fac[14161, 227] <- "15009030902" # One for Hawaii
+sa_fac[14169, 227] <- "15009031700" # Another for Hawaii
 
 # Remove irrelevant variables and incomplete cases
 sa_fac <- sa_fac %>%
   select(c("name1", "zip", "county.y", "type_facility", "GEOID", "geometry"),
-         c(6:225)) %>%
+         c(6:226)) %>%
   rename("tract" = "GEOID", "county" = "county.y")
 
 sa_fac <- sa_fac[complete.cases(sa_fac$tract),]
@@ -268,8 +300,8 @@ which(is.na(sa_fac$Distance), arr.ind=TRUE)
 
 # Manually add in Distance and Population values
 # Determined from US Census & Distance Thresholds of other CTs in same county
-sa_fac[3371, 227] <- 14177 # Population Value for Shannon County
-sa_fac[3371, 228] <- 60 # Distance Threshold for Shannon County
+sa_fac[3371, 228] <- 14177 # Population Value for Shannon County
+sa_fac[3371, 229] <- 60 # Distance Threshold for Shannon County
 
 sa_fac <- sa_fac %>%
 rename(geometry = "geometry.x") %>%
@@ -278,20 +310,16 @@ rename(geometry = "geometry.x") %>%
   relocate(Distance, .after = geometry) %>%
   rename(c("ct_" = "ct")) # rename variable to avoid confusion with dataset
 
-# Add 1 to all weights in MH dataset
-mh_fac <- add_column(mh_fac, weights = 1, .before = "psy")
-
-# Add 1 to all weights in SH dataset
-sa_fac <- add_column(sa_fac, weights = 1, .before = "dt")
-
 # Results----
 # Create R values for MH dataset
-mh_fac <- step_1_fca(mh_fac, ct) %>%
-  relocate(R, .after = POPULATION)
+mh_fac <- step_1_fca(mh_fac, ct, "mh") %>%
+  relocate(R, .after = POPULATION) %>%
+  mutate(R = ifelse(R < 0,0, R))
 
 # Create R values for SA dataset
-sa_fac <- step_1_fca(sa_fac, ct) %>%
-  relocate(R, .after = POPULATION) 
+sa_fac <- step_1_fca(sa_fac, ct, "sa") %>%
+  relocate(R, .after = POPULATION) %>%
+  mutate(R = ifelse(R < 0, 0, R))
 
 # Create A values using MH dataset
 ct <- step_2_fca(mh_fac, ct, "mh")
@@ -306,27 +334,31 @@ ct$A_mh[-c(1:n)] <- 0
 ct$A_sa[-c(1:n)] <- 0
 
 # Distribution of R value for MH 
-ggplot(mh_fac[1:n,], aes(R)) + 
+ggplot(mh_fac[1:nrow(mh_fac),], aes(R)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of R value for SA
-ggplot(sa_fac[1:n,], aes(R)) + 
+ggplot(sa_fac[1:nrow(sa_fac),], aes(R)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of A value for MH
-ggplot(ct[1:n,], aes(A_mh)) + 
+ggplot(ct[1:nrow(mh_fac),], aes(A_mh)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
 # Distribution of A value for SA
-ggplot(ct[1:n,], aes(A_sa)) + 
+ggplot(ct[1:nrow(sa_fac),], aes(A_sa)) + 
   geom_histogram(aes(y = ..density..), color = "black", fill = "white") +
   geom_density(alpha = .2, fill = "#FF6666") 
 
+# Remove Geometry
+ct <- ct %>%
+  dplyr::select(-geometry)
+
 # Export Facility Access Dataset
-# write.csv(ct,
-#           file = file.path(data_folder,
-#                            "SAMHSA_CT_treatmentfacilityaccess.csv"),
-#           row.names = F, na = "")
+write.csv(ct,
+           file = file.path(data_folder,
+                            "SAMHSA_CT_treatmentfacilityaccess.csv"),
+           row.names = F, na = "")

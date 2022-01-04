@@ -8,10 +8,7 @@
 
 library(stringr)
 
-cw_folder <- file.path(
-  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
-  "Health and Social Equity - SJP - BHN Score Creation",
-  "Data", "Resources")
+cw_folder <- file.path("Data", "Resources")
 
 # load crosswalk files
 county_cw <- read.csv(file.path(cw_folder, "zcta_county_rel_10.txt"),
