@@ -19,6 +19,9 @@ resource_folder <-file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Resources")
 
+# Spreadsheet with zipcodes and state FIPS
+zips <- read.csv(file.path(resource_folder, "IRS_zipcodes_by_state.csv"))
+
 # Spreadsheet with state by state Grocery Laws
 grocery_states <- read_xlsx(file.path(resource_folder, "BWL_Grocery_Laws.xlsx"),
                             skip = 1)
@@ -28,7 +31,7 @@ grocery_states[,3:5] <- ifelse(grocery_states[,3:5] == "Y", TRUE, FALSE)
 grocery_states$any_alc_sales <- ifelse(rowSums(grocery_states[,3:5] , na.rm = T) > 0, TRUE, FALSE)
 
 # Function to get cbp code from api, and return df with zipcode FIPS and number of establishments   
-get_cbp <- function(naics, name){
+get_zbp <- function(naics, name){
   dat <- getCensus(name = "cbp",
                    key = Sys.getenv("CENSUS_API_KEY"),
                    vintage = "2019",
@@ -36,8 +39,8 @@ get_cbp <- function(naics, name){
                    region = "zipcode:*",
                    NAICS2017 = naics
   ) %>%
-    mutate(fips = paste0(state,county)) %>%
-    select(fips, ESTAB) 
+    mutate(zip = paste0(zip_code)) %>%
+    select(zip, ESTAB) 
   colnames(dat) <- c("fips", name)
   return(dat)
 }
