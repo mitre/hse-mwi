@@ -608,7 +608,7 @@ ui <- fluidPage(
   div(
     titlePanel(
       title="", 
-      windowTitle=HTML(paste0("Mental Wellness Index (TM) Tool"))
+      windowTitle=HTML(paste0("Mental Wellness Index™ Tool"))
     ),
     style="display:none"
   ),
@@ -620,7 +620,7 @@ ui <- fluidPage(
         img(src="media/MITRE_logo.png", height="30"),
         target="blank",
       ),
-      HTML(paste0("Mental Wellness Index",tags$sup("TM")," Tool")),
+      HTML(paste0("Mental Wellness Index™ Tool")),
     ),
     theme="stylesheets/app.css",
     
@@ -982,6 +982,100 @@ server <- function(input, output, session) {
       ,],
     "com_map_fill" = "Mental_Wellness_Index"
   )
+  
+  # create and observe starting modal ----
+  
+  welcome_modal <- modalDialog(
+    title = 
+      HTML("<b><center>Welcome to the Mental Wellness Index™!</b></center>"),
+    size = "l",
+    fluidRow(
+      
+      column(
+        width = 7,
+        HTML("<p align = 'justify'><font size = '3'>"),
+        HTML(
+          "The <b>Mental Wellness Index™ (MWI)</b> quantifies factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation.  The MWI aggregates <b>28 weighted measures</b> that quantify facilitators and barriers to mental wellness across <b>three domains</b>: <b>Social Determinants of Health</b>, <b>Healthcare Access</b>, and <b>Health Status</b>. Two <b>dynamic factors</b> (<b>Structural Racism</b> and <b>Community and Cultural Assets</b>) influence measures in all three of the domains. The Mental Wellness Index tool allows users to <b>explore the MWI and its measures</b>, providing information for the <b>overall population</b> and <b>Black populations</b>."
+        ),
+        HTML("</p></font>"),
+        HTML("<font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font>")
+      ),
+      column(
+        width = 5,
+        HTML("<center>"),
+        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+        HTML("</center>")
+      )
+    ),
+    hr(),
+    HTML(paste0(
+      "<p><font size = '3'><b><center>You can explore the MWI Tool in two ways:</p></b></font>"
+    )),
+    fluidRow(
+      column(
+        width = 6,
+        HTML("<font size = '3'><b><p>Explore States</p></b></font>"),
+        img(src = file.path("media", "MWI_State_View.png"), align = "center", height = "200px"),
+        HTML("<font size = '2'><p><i>Good for exploring measures overall, gives general distributions in states</i></p></font>")
+      ),
+      column(
+        width = 6,
+        HTML("<font size = '3'><b><p>Explore ZIP Codes</p></b></font>"),
+        img(src = file.path("media", "MWI_ZIP_Code_View.png"), align = "center", height = "200px"),
+        HTML("<font size = '2'><p><i>Good for exploring measures for a specific ZIP Code, gives all measure results for a ZIP Code</p></i></font>")
+      )
+    ),
+    selectInput(
+      "start_st",
+      "Choose your state and click below to get started!",
+      choices = c(unname(f_st), "All"),
+      selected = "Alabama",
+      width = "400px"
+    ),
+    HTML("</center>"),
+    footer = tagList(
+      HTML("<center>"),
+      actionButton("enter_mwi", "Start Exploring!"),
+      modalButton("Use Defaults"),
+      HTML("</center>")
+    ),
+    easyClose = T # it will just use defaults
+  )
+  
+  showModal(welcome_modal)
+  
+  observeEvent(input$enter_mwi, {
+    # update all of the inputs -- this will cascade
+    
+    # update available states
+    updateSelectInput(
+      session = session,
+      "st_focus",
+      "Which state would you like to focus on?",
+      choices = c(unname(f_st), "All"),
+      selected = input$start_st
+    )
+    
+    # update selected defaults for community view
+    com_sub$ZCTA <- ol$mwi$pop$ZCTA[ol$mwi$pop$STATE_NAME == input$start_st][1]
+    # community boundary
+    # community -- within +/- .5
+    com_log <- st_coordinates(ol$geopts$pop)[,1] >=
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+      st_coordinates(ol$geopts$pop)[,1] <=
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+      st_coordinates(ol$geopts$pop)[,2] >=
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+      st_coordinates(ol$geopts$pop)[,2] <=
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+    
+    com_sub$geodat <- ol$geodat[["pop"]][com_log,]
+    com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+      ol$mwi[["pop"]]$ZCTA %in% 
+        ol$geodat[["pop"]]$GEOID10[com_log],]
+    
+    removeModal()
+  })
   
   # observe custom data ----
   
