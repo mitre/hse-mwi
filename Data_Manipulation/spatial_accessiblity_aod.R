@@ -20,9 +20,7 @@ resource_folder <-file.path(
   "Data", "Resources")
 
 # Spreadsheet with zipcodes and state FIPS
-zips <- read.csv(file.path(resource_folder, "IRS_zipcodes_by_state.csv")) %>%
-  select(c(1:3))
-zips$zipcode <- as.character(zips$zipcode)
+
 
 # Spreadsheet with state by state Grocery Laws
 grocery_states <- read_xlsx(file.path(resource_folder, "BWL_Grocery_Laws.xlsx"),
