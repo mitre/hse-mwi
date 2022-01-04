@@ -39,7 +39,7 @@ get_zbp <- function(naics, name){
                    region = "zipcode:*",
                    NAICS2017 = naics
   ) %>%
-    mutate(zip = paste0(zip_code)) %>%
+    mutate(zip = as.integer(zip_code)) %>%
     select(zip, ESTAB) 
   colnames(dat) <- c("fips", name)
   return(dat)
