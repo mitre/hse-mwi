@@ -41,7 +41,7 @@ sass(
 
 # function for app preprocessing ----
 
-app_prepocess <- function(m_reg, info_df, mwi, app_start = T){
+app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
   
   # create measure name to overall category
   meas_col_to_type <- setNames(m_reg$Category, m_reg$Measure)
@@ -57,8 +57,8 @@ app_prepocess <- function(m_reg, info_df, mwi, app_start = T){
     names(avail_measures[[idx]]) <- 
       c("Mental Wellness Index", 
         m_reg[
-          gsub("_pop","",
-               gsub("_black","",colnames(mwi[[idx]])[-c(1:2)])), "Measure"
+          gsub("*_pop$","",
+               gsub("*_black$","",colnames(mwi[[idx]])[-c(1:2)])), "Measure"
         ]
       )
     
@@ -311,7 +311,7 @@ meas_min_colors["Mental Wellness Index"] <-
 
 
 
-overall <- app_prepocess(m_reg, info_df, mwi, app_start = T)
+overall <- app_preprocess(m_reg, info_df, mwi, app_start = T)
 # add other specific data
 overall[["m_reg"]] <- m_reg
 overall[["info_dat"]] <- info_df
@@ -1313,11 +1313,11 @@ server <- function(input, output, session) {
     idx <- input$idx_type
     
     fill <- 
-      if (idx == "pop" & grepl("_black", input$us_map_fill)){
-        gsub("_black", "_pop", input$us_map_fill)
-      } else if (idx == "black" & grepl("_pop", input$us_map_fill) &
+      if (idx == "pop" & grepl("*_black$", input$us_map_fill)){
+        gsub("*_black$", "_pop", input$us_map_fill)
+      } else if (idx == "black" & grepl("*_pop$", input$us_map_fill) &
                  !input$us_map_fill %in% colnames(ol$mwi[["black"]])){
-        gsub("_pop", "_black", input$us_map_fill)
+        gsub("*_pop$", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
       }
@@ -1372,11 +1372,11 @@ server <- function(input, output, session) {
     }
     
     st_sub$us_map_fill <- 
-      if (st_sub$idx == "pop" & grepl("_black", input$us_map_fill)){
-        gsub("_black", "_pop", input$us_map_fill)
-      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill) &
+      if (st_sub$idx == "pop" & grepl("*_black$", input$us_map_fill)){
+        gsub("*_black$", "_pop", input$us_map_fill)
+      } else if (st_sub$idx == "black" & grepl("*_pop$", input$us_map_fill) &
                  !input$us_map_fill %in% colnames(ol$mwi[["black"]])){
-        gsub("_pop", "_black", input$us_map_fill)
+        gsub("*_pop$", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
       }
@@ -1398,11 +1398,11 @@ server <- function(input, output, session) {
   # reset map click focus
   observeEvent(input$us_map_fill, {
     st_sub$us_map_fill <- 
-      if (st_sub$idx == "pop" & grepl("_black", input$us_map_fill)){
-        gsub("_black", "_pop", input$us_map_fill)
-      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill) &
+      if (st_sub$idx == "pop" & grepl("*_black$", input$us_map_fill)){
+        gsub("*_black$", "_pop", input$us_map_fill)
+      } else if (st_sub$idx == "black" & grepl("*_pop$", input$us_map_fill) &
                  !input$us_map_fill %in% colnames(ol$mwi[["black"]])){
-        gsub("_pop", "_black", input$us_map_fill)
+        gsub("*_pop$", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
       }
@@ -1485,11 +1485,11 @@ server <- function(input, output, session) {
     idx <- input$idx_type
     
     fill <- 
-      if (idx == "pop" & grepl("_black", input$com_map_fill)){
-        gsub("_black", "_pop", input$com_map_fill)
-      } else if (idx == "black" & grepl("_pop", input$com_map_fill) &
+      if (idx == "pop" & grepl("*_black$", input$com_map_fill)){
+        gsub("*_black$", "_pop", input$com_map_fill)
+      } else if (idx == "black" & grepl("*_pop$", input$com_map_fill) &
                  !input$com_map_fill %in% colnames(ol$mwi[["black"]])){
-        gsub("_pop", "_black", input$com_map_fill)
+        gsub("*_pop$", "_black", input$com_map_fill)
       } else {
         input$com_map_fill
       }
@@ -1554,11 +1554,11 @@ server <- function(input, output, session) {
                                   ol$geodat[[idx]]$GEOID10[zcta_log],]
       
       com_sub$com_map_fill <- 
-        if (com_sub$idx == "pop" & grepl("_black", input$com_map_fill)){
-          gsub("_black", "_pop", input$com_map_fill)
-        } else if (com_sub$idx == "black" & grepl("_pop", input$com_map_fill) &
+        if (com_sub$idx == "pop" & grepl("*_black$", input$com_map_fill)){
+          gsub("*_black$", "_pop", input$com_map_fill)
+        } else if (com_sub$idx == "black" & grepl("*_pop$", input$com_map_fill) &
                    !input$com_map_fill %in% colnames(ol$mwi[["black"]])){
-          gsub("_pop", "_black", input$com_map_fill)
+          gsub("*_pop$", "_black", input$com_map_fill)
         } else {
           input$com_map_fill
         }
@@ -1569,11 +1569,11 @@ server <- function(input, output, session) {
   # reset map click focus
   observeEvent(input$com_map_fill, {
     com_sub$com_map_fill <- 
-      if (com_sub$idx == "pop" & grepl("_black", input$com_map_fill)){
+      if (com_sub$idx == "pop" & grepl("*_black$", input$com_map_fill)){
         gsub("_black", "_pop", input$com_map_fill)
-      } else if (com_sub$idx == "black" & grepl("_pop", input$com_map_fill) &
+      } else if (com_sub$idx == "black" & grepl("*_pop$", input$com_map_fill) &
                  !input$com_map_fill %in% colnames(ol$mwi[["black"]])){
-        gsub("_pop", "_black", input$com_map_fill)
+        gsub("*_pop$", "_black", input$com_map_fill)
       } else {
         input$com_map_fill
       }
@@ -2240,7 +2240,7 @@ server <- function(input, output, session) {
               overall_out$mwi[["black"]][overall_out$mwi[["black"]]$ZCTA != "",]
             
             ap <- suppressWarnings(
-              app_prepocess(overall_out$m_reg, 
+              app_preprocess(overall_out$m_reg, 
                             overall_out$info_dat, overall_out$mwi,
                             app_start = F)
             )
