@@ -286,26 +286,19 @@ The table below summarizes the years and geographic levels for the data sources 
 |Substance Abuse and Mental Health Services Administration (SAMHSA), Behavioral Health Treatment Services Locator|2021 (as of May 18)|	Latitude/Longitude|
 |United States Department of Housing and Urban Development, Consolidated Planning/Comprehensive Housing Affordability Strategy (CHAS)	|2013-2017|Census tract
 
-### Recommended Uses
+## Recommended Uses
 
-Communities, health departments, and the federal government as well as state and local governments may use findings from the MWI tool to: 
+Recommended uses for the MWI include: 
 
-- Inform decisions about where resources to improve mental wellness may be most impactful
+*	**For policy makers**: Inform decisions about resource allocation, including selecting which resources may be most impactful for improving mental wellness.
+*	**For communities and community leaders**: Provide a community dashboard of factors that influence mental wellness and focus points for interventions and resources. 
+*	**For funders**: Provide a resource for grantmaking across standardized factors for both applicant communities and funders. *	**For researchers**: Provide an index focused on mental wellness to deepen understanding of assets and barriers in communities. 
 
-- Understand the factors that may serve as barriers to mental wellness in an area, and which types of resources may have the greatest impact (ex: new treatment facilities, improved infrastructure, police reform, etc)
+The MWI should not be used:
 
-- Enhance community grant applications
-
-- Focus resources based on objective evaluation of need to support assets improve mental wellness and to remove obstacles to mental wellness. 
-
-The MWI Index and tool should NOT be used to 
-- Shouldn’t be the only tool used to allocate resources 
-
-- Shouldn’t be used to make decisions on behalf on communities without their input
-
-- Shouldn’t be used for program evaluation or tracking progress (point in time estimate, not to show progress over time)
-
-
+*	as the only tool used to allocate resources,
+*	to make decisions on behalf on communities without their input, or
+*	for program evaluation or tracking progress over time (because the MWI provides point in time data and does not contain time series data to show progress over time).
 
 
 ## Strengths, Limitations, and Challenges
