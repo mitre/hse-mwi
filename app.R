@@ -885,8 +885,10 @@ ui <- fluidPage(
           HTML("<center><h2>Create your own Mental Wellness Index (MWI)!</h2></center>"),
           HTML(paste0(
             "<p align = 'justify'>",
-            "Create your own Mental Wellness Index for your community below by updating your data and metadata. To do so, take the following steps:",
+            "Create your own Mental Wellness Index for your community below by adjusting weights and/or adding your own data and metadata. To do so, take the following steps:",
             "<ol>",
+            "<li> If you are only adjusting weights for included data, skip to step 3.</li>",
+            "<br>",
             "<li> Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).</li>",
             "<ul>",
             "<li>Accepted geographical ID types are always numeric and include the following:</li>",
@@ -902,13 +904,14 @@ ui <- fluidPage(
             "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black population measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
             "</ul>",
             "<br>",
-            "<li> Download Metadata.xlsx with the button below. Add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
+            "<li> Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
             "<ul>",
             "<li>If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.</li>",
             "<li>If you would not like to include a measure in your MWI, either delete the measure row or set its weight to 0.</li>",
+            "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
             "</ul>",
             "<br>",
-            "<li>Put your data and the updated Metadata.xlsx file in a ZIP file (.zip).</li>",
+            "<li>Put your data (if using) and the updated Metadata.xlsx file in a ZIP file (.zip).</li>",
             "<br>",
             "<li>Upload your ZIP file and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
             "<br>",
@@ -2174,13 +2177,14 @@ server <- function(input, output, session) {
           })
         }
         
-        # check that metadata is in the list, that there's new data in it,
+        # check that metadata is in the list, that there's something in it,
         # that the rest of the data is csv
         if (zip_true &
           "Metadata.xlsx" %in% zip_df$Name & 
-          nrow(zip_df) > 1 &
+          (nrow(zip_df) == 1 |
+          (nrow(zip_df) > 1 &
           all(endsWith(tolower(zip_df$Name[zip_df$Name != "Metadata.xlsx"]),
-                       ".csv"))){
+                       ".csv"))))){
           # read the metadata file
           unzip(zipfile=input$custom_zip$datapath, files = "Metadata.xlsx", exdir=".")
           m_reg_custom <- as.data.frame(
@@ -2200,7 +2204,7 @@ server <- function(input, output, session) {
           
           # now pass it into the pipeline file
           overall_out <- tryCatch({
-            mwi_pipeline(m_reg_custom, custom_data)
+            mwi_pipeline(m_reg_custom, custom_data, run_custom = T)
           }, 
           error = function(cond){
             output$custom_error <- renderText({
@@ -2259,9 +2263,8 @@ server <- function(input, output, session) {
             paste0(
               "ERROR: One of the following is wrong with your uploaded ZIP:\n",
               "1: Does not contain Metadata.xlsx\n",
-              "2: Does not have additional custom data\n",
-              "3: Custom data not in CSV format\n",
-              "4: There is no ZIP file\n",
+              "2: Has additional custom data and custom data not in CSV format\n",
+              "3: There is no ZIP file\n",
               "Please fix the above, reupload, and re-do.")
           })
         }

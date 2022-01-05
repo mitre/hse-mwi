@@ -103,13 +103,14 @@ geo_levels <- c(
 
 # pipeline function ----
 
-mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
+mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(), 
+                         run_custom = F){
   
   # saving for the overall output
   overall_out <- list()
   
   # custom data, replace
-  if (length(custom_data) > 0){
+  if (run_custom){
     m_reg <- m_reg_custom
   }
   
@@ -118,7 +119,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   m_reg <- m_reg[!is.na(m_reg$Numerator),]
   rownames(m_reg) <- m_reg$Numerator
   
-  if (length(custom_data) > 0){
+  if (run_custom){
     overall_out[["m_reg"]] <- m_reg
   }
   
@@ -201,32 +202,41 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   # first subtract the weight amount
   info_dat$Effective_Weights <- 
     info_dat$Effective_Weights - info_dat$Effective_Weights*info_dat$Total_Penalty 
-  # now we need to rescale back to big bucket weights
-  # amounts
-  wt_amt <- c(
-    "sdoh" = 60, # SDOH
-    "ha" = 15, # healthcare access
-    "hs" = 25 # health status
-  )
-  # names
-  cat_names <- c(
-    "sdoh" = "Social Determinants of Health",
-    "ha" = "Healthcare Access",
-    "hs" = "Health Status"
-  )
-  for (cn in names(cat_names)){
-    cn_log <- info_dat$Category == cat_names[cn]
-    
-    # add the penalties
-    info_dat$Effective_Weights[cn_log] <- 
-      info_dat$Effective_Weights[cn_log]-
-      (info_dat$Effective_Weights[cn_log]*info_dat$Total_Penalty[cn_log])
-    
-    # scale the weights to the whole category
-    info_dat$Effective_Weights[cn_log] <- 
-      info_dat$Effective_Weights[cn_log]/
-      sum(info_dat$Effective_Weights[cn_log])*wt_amt[cn]
+  
+  if (!run_custom){
+    # now we need to rescale back to big bucket weights
+    # amounts
+    wt_amt <- c(
+      "sdoh" = 60, # SDOH
+      "ha" = 15, # healthcare access
+      "hs" = 25 # health status
+    )
+    # names
+    cat_names <- c(
+      "sdoh" = "Social Determinants of Health",
+      "ha" = "Healthcare Access",
+      "hs" = "Health Status"
+    )
+    for (cn in names(cat_names)){
+      cn_log <- info_dat$Category == cat_names[cn]
+      
+      # add the penalties
+      info_dat$Effective_Weights[cn_log] <- 
+        info_dat$Effective_Weights[cn_log]-
+        (info_dat$Effective_Weights[cn_log]*info_dat$Total_Penalty[cn_log])
+      
+      # scale the weights to the whole category
+      info_dat$Effective_Weights[cn_log] <- 
+        info_dat$Effective_Weights[cn_log]/
+        sum(info_dat$Effective_Weights[cn_log])*wt_amt[cn]
+    }
+  } else {
+    # we don't impose categories on given data, just rescale to 100
+    info_dat$Effective_Weights <- 
+      info_dat$Effective_Weights/
+      sum(info_dat$Effective_Weights)*100
   }
+  
   
   # duplicate rows that are race stratified
   info_dat <- rbind(info_dat, info_dat[m_reg$`Race Stratification`,])
@@ -289,7 +299,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   cat(paste0("[", Sys.time(), "]: Writing out data information\n"))
   
   # save if we're running original data, keep inside if we're running custom data
-  if (length(custom_data) > 0){
+  if (run_custom){
     overall_out[["info_dat"]] <- info_dat
   } else {
     write.csv(info_dat, 
@@ -368,7 +378,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   
   # if using custom data, we need to filter out all ZCTAs with no data for our
   # custom data
-  if (length(custom_data) > 0){
+  if (run_custom & length(custom_data) > 0){
     for (fn in names(custom_data)){
       # get the numerators that correspond to the file
       all_num <- m_reg$Numerator[m_reg$Filename == fn]
@@ -421,7 +431,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   
   cat(paste0("[", Sys.time(), "]: Write out converted, scaled data\n"))
   
-  if (length(custom_data) > 0){
+  if (run_custom){
     overall_out[["meas_df"]] <- meas_df
   } else {
     write.csv(meas_df, 
@@ -457,7 +467,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   
   cat(paste0("[", Sys.time(), "]: Write out percentile ranked data\n"))
   
-  if (length(custom_data) > 0){
+  if (run_custom){
     overall_out[["perc_meas_df"]] <- perc_meas_df
     overall_out[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
   } else {
@@ -502,7 +512,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   
   cat(paste0("[", Sys.time(), "]: Write out final indices\n"))
   
-  if (length(custom_data) > 0){
+  if (run_custom){
     overall_out[["pop_pm"]] <- pop_pm
     overall_out[["black_pm"]] <- black_pm
   } else {
