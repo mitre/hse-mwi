@@ -48,17 +48,29 @@ The MWI is not intended to be a comprehensive evaluation of a community’s ment
 
 The MWI framework contains three domains: 
 
-* Social Determinants of Health: the social, economic, environmental, and structural conditions that influence a community’s mental wellness and quality of life. 
+* **Social Determinants of Health**: the social, economic, environmental, and structural conditions that influence a community’s mental wellness and quality of life. 
 
-* Healthcare Access: access to traditional healthcare systems, accounting for quality, financial, geographic, and other considerations.  
+* **Healthcare Access**: access to traditional healthcare systems, accounting for quality, financial, geographic, and other considerations.  
 
-* Health Status: mental health, substance use, and other morbidity and mortality measures that are linked to mental wellness.  
+* **Health Status**: mental health, substance use, and other morbidity and mortality measures that are linked to mental wellness.  
 
 Each measure belongs to a single domain.  There are 15 measures in the social determinants of health domain, 3 measures in the healthcare access domain, and 10 measures in the health status domain.   While the domains are distinct (they do not overlap), they can influence one another. For example, the social determinants of health can influence healthcare access and health status, and vice versa. 
 
 Please see the [Measures and Data Sources](#measures-and-data-sources) section for information about the measures in the MWI.
 
 <a name="measures-and-data-sources"></a>
+
+#### Dynamic Factors
+
+Community and Cultural Assets and Structural Racism acknowledge the positive and negative influences of human factors that influence outcomes and the spatial distribution of assets and obstacles for measures in all three domains: 
+
+**Community and Cultural Assets**: resources in the form of people, places, and organizations that promote social connection and improve the health and wellbeing of the community.^[Arts & Planning Toolkit. (n.d.). What is Cultural Asset Mapping? https://artsandplanning.mapc.org/cultural-asset-mapping/] ^[National Institute for Health and Care Excellence. (2017, March 3). Community engagement: improving health and wellbeing, Quality standard [QS148]. https://www.nice.org.uk/guidance/qs148/chapter/quality-statement-3-identifying-community-assets]
+
+Community and Cultural Assets influence all measures in the MWI. Community and Cultural Assets are challenging to quantify because they are often not measured in national datasets, but they have an important influence on community mental wellness. One example of a measure where community and cultural assets can be seen prominently is Third Places, which measures the number of third places, defined as places where people spend time outside of their home (“first place”) and their work (“second place”), per 100,000 people.   
+
+**Structural Racism**: the macrolevel systems, social forces, institutions, ideologies, and processes that interact with one another to generate and reinforce inequities among racial and ethnic groups.^[Gee, G., & Ford, C. (2011). Structural Racism and Health Inequities: Old Issues, New Directions. Du Bois Review: Social Science Research on Race, 8(1), 115-132. https://doi.org/10.1017/S1742058X11000130] 
+
+Structural Racism influences all measures in the MWI. Structural racism harms society as a whole, not only Black populations and other people of color. Structural racism operates on many levels, often intersecting with other “isms” (sexism, classism, etc.) and has cascading effects that are often unnamed and seemingly unnoticed.  These cascading effects highlight the importance of our approach for developing the MWI -- that equity delivered to historically marginalized populations will accrue to others and potentially catalyzes movement toward social and racial justice. One example of a measure where structural racism can be seen prominently is the Index of Concentration at the Extremes (a proxy for residential segregation). 
 
 #### Measures
 
