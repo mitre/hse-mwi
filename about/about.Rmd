@@ -341,3 +341,45 @@ Nationally representative, geographically granular data were unavailable for a w
 - Committing to document and share recommendations related to challenges with others to positively influence change.
 
 Please see [measure documentation](https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures) for more information on the strengths and limitations of specific measures selected. 
+
+## Validity Testing
+
+Analytic and face validity verification is in progress to evaluate the robustness, validity, and accuracy of the MWI. As part of the analytic validity testing, the team will examine the correlation of the MWI with other major health indices, such as the Social Vulnerability Index (SVI), County Health Rankings (CHR), HRSA’s Service Area Status (SAS), and others.  To test its face validity, listening sessions will be held with community key informants and others to solicit feedback on ways to improve the MWI and the MWI tool to increase its validity and usefulness.  The MWI team will update this page with results as they become available.
+
+## Acknowledgements and Contact Information
+We would like to acknowledge the following team members, advisors, and reviewers/contributors that helped to create the MWI.
+
+<u>Team members </u>:
+
+- Lynne Cuppernull
+- Hannah De los Santos
+- Stacie DeRamus
+- Emilie Gilde
+- Karen Jiang
+- Hannah Leker
+- Danyelle Mannix 
+- Caroline Mills
+- Emily Pantalone
+- Mitch Strahlman
+
+<u>Key advisors</u>:
+
+- Larke Huang 
+- Cassandra Okechukwu
+- Jenine Patterson
+- Erica Taylor 
+
+<u>Reviewers/Contributors</u>: 
+
+- Robert Staubs 
+- Chris Teixeira 
+- Brooke Wilkens 
+- Tori Mudd
+- Elizabeth Murphy
+-Sarah Ober and the Case Study for Health Equity in Population Health MIP team
+
+We would also like to extend our gratitude to the many other external organizations, community key informants, and individuals that contributed their time to discussing, reviewing, and providing feedback for the MWI. 
+
+For more information about the MWI, please contact the MITRE Social Justice Platform at socialjustice@mitre.org.
+
+
