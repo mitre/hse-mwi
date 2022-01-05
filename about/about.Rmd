@@ -20,6 +20,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The Mental Wellness Index™ (MWI) quantifies factors that influence community-level mental wellness and aggregates them into a single numerical ranking at the ZIP code* level for the entire nation. These factors act as assets or obstacles to mental wellness and are grouped into three domains: social determinants of health, healthcare access, and health status. The MWI framework also acknowledges two dynamic factors that influence mental wellness: community and cultural assets and structural racism. These two factors influence each of the measures used to calculate the index. The MWI is currently available for the overall population and for our first priority population, Black populations.  
 
+### What Do We Mean by Mental Wellness?
+
+Mental wellness:
+
+* is more than having physiological needs met, and means everyone in a community has opportunities to achieve, experience joy, have their value recognized and can actualize their self-agency and power in their environments 
+* means thriving regardless of a mental health or substance use challenge and giving everyone the opportunity to flourish^[National Council for Mental Wellbeing (n.d.) We Are Mental Wellbeing. The National Council for Mental Wellbeing. https://www.thenationalcouncil.org/about/we-are-mental-wellbeing/]
+
+In the MWI, mental wellness is a composite of social determinants of health, healthcare access, and health status.  
+
 ### Purpose of the MWI
 
 We built the Mental Wellness Index™ (MWI) to provide a tool that the nation can use to address the shadow epidemic of mental health and substance use issues emerging as a result of the COVID-19 pandemic. The MWI is intended to be a tool that community leaders, public health officials, and funding entities can use to support data-informed policy decisions about equitable allocation of resources to address mental wellness.  
