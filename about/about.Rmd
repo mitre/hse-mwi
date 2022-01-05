@@ -188,83 +188,63 @@ Then, users can explore further by hovering their mouse over ZIP codes on the ma
 
 Additionally, the Create Your Own MWI page can be used to upload custom data, or to adjust measure weights. Instructions can be found by clicking on the Create Your Own MWI tab. 
 
-### Recommended Uses
-
-Communities, health departments, and the federal government as well as state and local governments may use findings from the MWI tool to: 
-
-- Inform decisions about where resources to improve mental wellness may be most impactful
-
-- Understand the factors that may serve as barriers to mental wellness in an area, and which types of resources may have the greatest impact (ex: new treatment facilities, improved infrastructure, police reform, etc)
-
-- Enhance community grant applications
-
-- Focus resources based on objective evaluation of need to support assets improve mental wellness and to remove obstacles to mental wellness. 
-
-The MWI Index and tool should NOT be used to 
-- Shouldn’t be the only tool used to allocate resources 
-
-- Shouldn’t be used to make decisions on behalf on communities without their input
-
-- Shouldn’t be used for program evaluation or tracking progress (point in time estimate, not to show progress over time)
-
 ## Measures and Data Sources
 
 ### Measure Selection Process
 
-We leveraged existing MITRE projects and work, researched factors associated with mental wellness based on national and community studies, and engaged with external subject matter experts and stakeholders in order to selected measures to include in the MWI, considering equity throughout the lifecycle of the MWI creation. 
+To select measures to include in the MWI, we leveraged data and expertise from existing MITRE projects and work; researched factors associated with mental wellness based on national and community studies; and engaged with external subject matter experts, funding organizations, and potential users. 
 
-**Requirements**: Notably, measures were limited to topics for which nationally available, public data is available at a geographically granular level (ideally the ZCTA level or lower).
+**Measure selection requirements**: selected measures were limited to topics for which nationally available, public data are available at a geographically granular level (ideally the ZIP code level or lower).
 
-Though race stratified data is not available for all measures in the MWI, preference was given in the selection process to measures with data that can stratified by race for the Black population. For data that is stratified by the Black population – the measure is calculated for both the Black population and the overall population. For data that can not be stratified, the overall population values are used for both calculations. 
+Though race stratified data are not available for all measures in the MWI, preference was given in the selection process to measures with data that can be stratified by race for Black populations. For data that is stratified by Black populations – the measure is calculated for both Black populations and the overall population (see measure documentation  for more information on these calculations). For data that cannot be stratified, the overall population values are used for both calculations. Some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race. 
 
-The following **measure evaluation and selection criteria** were considered during measure selection: 
+**Measure evaluation and selection criteria** that were considered during measure selection are shown below: 
 
 * __Equity__: Does the measure capture inequities between populations, value group differences, and build on best science and community experience without introducing bias? Is the measure in line with a “do no harm” approach?
 
-* __Importance__: Is the measure an important factor contributing to mental wellness, reflective of a high preventable burden (economic, disability, mortality), and is it evidence-based? 
+* __Importance__: IIs the measure an important indicator of mental wellness, supported by a consensus of evidence in literature? 
 
-* __Relevance and Usability__: Is information produced by the measure meaningful, understandable, useful for decision-making? Does it convey a sense of the obligation to act? 
+* __Relevance and Usability__: Is information produced by the measure meaningful, understandable, and useful for decision-making? Does it convey a sense of the obligation to act? 
 
 * __Scientific Soundness__: What is the measure’s sensitivity, specificity, reliability, and validity? 
 
-* __Feasibility__: What is the collection burden for a measure? Are the data updated frequently and available on a timely basis? 
+* __Feasibility__: What is the measure collection burden? How frequently are data updated, and are they available on a timely basis? 
 
 ### MWI Measures
 
-The table below summarizes the measures that are included in the MWI, their domain (and sub-domain), whether stratified data is available, and the data sources. Please see the individual Measure documentation sections for more information about each measure. 
+The table below summarizes the measures that are included in the MWI, their domain (and sub-domain), whether race stratified data is available, and the data sources. Please see the [measure documentation](https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures) for more information about each measure. For stratification, “N/A” signifies that race stratification was not applicable for the measure, while “No” signifies that race stratified data was not available for the measures. 
 
 | **Measure Name** | **Domain** | **Sub-Domain** | **Stratification** | **Data Source** |
 |:---:|:---:|:---:|:---:|:---:|
-| Access to Financial Services | SDOH | Financial Access | Not Applicable | New America, Mapping Financial Opportunity Project |
-| Alcohol Outlet Density | SDOH | Built Environment | Not Applicable | CBP |
-|Below 100% Federal Poverty Level|SDOH|Income & Unemployment|Black Population|ACS|
-|Broadband Access|SDOH|Built Environment|Black Population|ACS|
-|Housing Stress|SDOH|Housing|Black Population|HUD CHAS|
-|Living Within a Half-Mile of a Park|SDOH|Built Environment|Not Applicable|CDC Environmental Public Health Tracking Network|
-|Mortgage Acceptance Rate|SDOH|Financial Access|Black Population|HMDA, Consumer Financial Protection Bureau|
-|No High School Diploma|SDOH|Education|Black Population|ACS|
-|Nursery and Preschool Enrollment|SDOH|Education|Black Population|ACS|
-|Police Killings|SDOH|Safety & Community Trauma|Black Population|Mapping Police Violence|
-|Residential Segregation|SDOH|Housing|Black Population|ACS|
-|Third Places|SDOH|Social Capital|Not applicable|CBP|
-|Unemployment|SDOH|Income & Unemployment|Black Population|ACS|
-|Violent Crime|SDOH|Safety & Community Trauma|Not available|County Health Rankings|
-|Voter Participation|SDOH|Social Capital|Not Available|TBD|
-|Mental Health Treatment Facility Access|Healthcare Access|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator
-|Substance Use Treatment Facility Access|Healthcare Access|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator|
-|Uninsured|Healthcare Access|Health Insurance|Black Population|ACS|
-|Adult Binge Drinking|Health Status|Substance Use|Not available|CDC BRFSS, PLACES|
-|Alcohol-Related Mortality|Health Status|Substance Use|Black Population|CDC WONDER
-|Estimated Drug Poisoning|Health Status|Substance Use|Black Population|CDC WONDER|
-|Insufficient Sleep|Health Status|Other Morbidity & Mortality|Not available|CDC BRFSS, PLACES|
-|Life Expectancy|Health Status|Other Morbidity & Mortality|Black Population (extrapolated)|CDC USALEEP, NVSS|
-|Obesity|Health Status|Other Morbidity & Mortality|Not Available|CDC BRFSS, PLACES Data Portal|
-|Poor Mental Health|Health Status|Mental Health|Not Available|CDC BRFSS, PLACES|
-|Smoking Status|Health Status|Substance Use|Not available|CDC BRFSS, PLACES|
-|Suicidal Ideation|Health Status|Mental Health|Not Available|NSDUH|
-|Suicide Mortality|Health Status|Mental Health|Black Population|CDC WONDER|
-
-Data Sources Acronyms:
+| Access to Financial Services | <span style="color:#5d499e">SDOH</span> | Financial Access | Not Applicable | New America, Mapping Financial Opportunity Project |
+| Alcohol Outlet Density | <span style="color:#5d499e">SDOH</span> | Built Environment | Not Applicable | CBP |
+|Below 100% Federal Poverty Level|<span style="color:#5d499e">SDOH</span> |Income & Unemployment|Black Population|ACS|
+|Broadband Access|<span style="color:#5d499e">SDOH</span> |Built Environment|Black Population|ACS|
+|Housing Stress|<span style="color:#5d499e">SDOH</span> |Housing|Black Population|HUD CHAS|
+|Living Within a Half-Mile of a Park|<span style="color:#5d499e">SDOH</span> |Built Environment|Not Applicable|CDC Environmental Public Health Tracking Network|
+|Mortgage Acceptance Rate|<span style="color:#5d499e">SDOH</span> |Financial Access|Black Population|HMDA, Consumer Financial Protection Bureau|
+|No High School Diploma|<span style="color:#5d499e">SDOH</span> |Education|Black Population|ACS|
+|Nursery and Preschool Enrollment|<span style="color:#5d499e">SDOH</span> |Education|Black Population|ACS|
+|Police Killings|<span style="color:#5d499e">SDOH</span> |Safety & Community Trauma|Black Population|Mapping Police Violence|
+|Residential Segregation|<span style="color:#5d499e">SDOH</span> |Housing|Black Population|ACS|
+|Third Places|<span style="color:#5d499e">SDOH</span> |Social Capital|Not applicable|CBP|
+|Unemployment|<span style="color:#5d499e">SDOH</span> |Income & Unemployment|Black Population|ACS|
+|Violent Crime|<span style="color:#5d499e">SDOH</span> |Safety & Community Trauma|Not available|County Health Rankings|
+|Voter Participation|<span style="color:#5d499e">SDOH</span> |Social Capital|Not Available|TBD|
+|Mental Health Treatment Facility Access|<span style="color:#70ad47">Healthcare Access</span>|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator
+|Substance Use Treatment Facility Access|<span style="color:#70ad47">Healthcare Access</span>|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator|
+|Uninsured|<span style="color:#70ad47">Healthcare Access</span>|Health Insurance|Black Population|ACS|
+|Adult Binge Drinking|<span style="color:#157ba7">Health Status</span>|Substance Use|Not available|CDC BRFSS, PLACES|
+|Alcohol-Related Mortality|<span style="color:#157ba7">Health Status</span>|Substance Use|Black Population|CDC WONDER
+|Estimated Drug Poisoning|<span style="color:#157ba7">Health Status</span>|Substance Use|Black Population|CDC WONDER|
+|Insufficient Sleep|<span style="color:#157ba7">Health Status</span>|Other Morbidity & Mortality|Not available|CDC BRFSS, PLACES|
+|Life Expectancy|<span style="color:#157ba7">Health Status</span>|Other Morbidity & Mortality|Black Population (extrapolated)|CDC USALEEP, NVSS|
+|Obesity|<span style="color:#157ba7">Health Status</span>|Other Morbidity & Mortality|Not Available|CDC BRFSS, PLACES Data Portal|
+|Poor Mental Health|<span style="color:#157ba7">Health Status</span>|Mental Health|Not Available|CDC BRFSS, PLACES|
+|Smoking Status|<span style="color:#157ba7">Health Status</span>|Substance Use|Not available|CDC BRFSS, PLACES|
+|Suicidal Ideation|<span style="color:#157ba7">Health Status</span>|Mental Health|Not Available|NSDUH|
+|Suicide Mortality|<span style="color:#157ba7">Health Status</span>|Mental Health|Black Population|CDC WONDER|
+_Notes_:
 
 - ACS – American Community Survey
 
@@ -285,6 +265,47 @@ Data Sources Acronyms:
 - SAMHSA – Substance Abuse and Mental Health Services Administration
 
 - WONDER – Wide-ranging Online Data for Epidemiologic Research
+
+<br>
+
+The table below summarizes the years and geographic levels for the data sources used. For information on how measures with data available at various geographic levels were processed, see the [Geography Methods](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Geography%20Methods.pdf) document. 
+
+| **Data Source Name** | **Year(s)** | **Source Geographic Levels** |
+|:---:|:---:|:---:|
+|American Community Survey (ACS)|2015-2019|ZIP code tabulation area (ZCTA)|
+|Centers for Disease Control and Prevention (CDC) Behavioral Risk Factor Surveillance System (BRFSS), accessed via the PLACES Project Data Portal|2018|ZIP code tabulation area (ZCTA)|
+|Centers for Disease Control and Prevention (CDC) U.S. Small-area Life Expectancy Estimates Project (USALEEP)|2010-2015|Census tract
+|Centers for Disease Control and Prevention (CDC) National Environmental Public Health (EPH), Tracking Network Query Tool|2015|Census tract|
+|Centers for Disease Control and Prevention (CDC) Wide-ranging Online Data for Epidemiologic Research (WONDER)|2010-2019|County|
+|County Business Patterns (CBP)|2019|ZIP code, County|
+|County Health Rankings|2014, 2016, 2017-2019|County|
+|Home Mortgage Disclosure Act (HMDA) Dataset, Consumer Financial Protection Bureau|2020|ZIP code tabulation area (ZCTA)|
+|Mapping Police Violence|2015-2019|ZIP code|
+|New America, Mapping Financial Opportunity (MFO) Project|2019, 2021|County|
+|Interactive National Survey on Drug Use and Health (NSDUH) Substate Estimates|2016-2018|Substate region|
+|Substance Abuse and Mental Health Services Administration (SAMHSA), Behavioral Health Treatment Services Locator|2021 (as of May 18)|	Latitude/Longitude|
+|United States Department of Housing and Urban Development, Consolidated Planning/Comprehensive Housing Affordability Strategy (CHAS)	|2013-2017|Census tract
+
+### Recommended Uses
+
+Communities, health departments, and the federal government as well as state and local governments may use findings from the MWI tool to: 
+
+- Inform decisions about where resources to improve mental wellness may be most impactful
+
+- Understand the factors that may serve as barriers to mental wellness in an area, and which types of resources may have the greatest impact (ex: new treatment facilities, improved infrastructure, police reform, etc)
+
+- Enhance community grant applications
+
+- Focus resources based on objective evaluation of need to support assets improve mental wellness and to remove obstacles to mental wellness. 
+
+The MWI Index and tool should NOT be used to 
+- Shouldn’t be the only tool used to allocate resources 
+
+- Shouldn’t be used to make decisions on behalf on communities without their input
+
+- Shouldn’t be used for program evaluation or tracking progress (point in time estimate, not to show progress over time)
+
+
 
 
 ## Strengths, Limitations, and Challenges
