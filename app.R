@@ -829,8 +829,11 @@ ui <- fluidPage(
             ),
             bsCollapsePanel(
               "About the Mental Wellness Index",
+              HTML("<center>"),
+              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+              HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
               )),
               HTML(paste0(
                 "All states are included.",
