@@ -221,6 +221,16 @@ cty_cw$COUNTY <- aggregate(COUNTY ~ ZCTA5, data = county_cw,
 cty_cw$GEOID <- aggregate(GEOID ~ ZCTA5, data = county_cw, 
                           FUN = function(x){paste(x, collapse = "|")})[,2]
 
+# no directionality percentile ranking
+no_dir_perc_meas_df <- read.csv(
+  file.path(data_folder, "Cleaned", 
+            "HSE_MWI_ZCTA_No_Directionality_Percentile_Ranked_Measures.csv"),
+  colClasses = c("GEOID" = "character")
+)
+colnames(no_dir_perc_meas_df)[colnames(no_dir_perc_meas_df) == "GEOID"] <- "ZCTA"
+no_dir_perc_meas_df <- no_dir_perc_meas_df[no_dir_perc_meas_df$ZCTA != "",]
+rownames(no_dir_perc_meas_df) <- no_dir_perc_meas_df$ZCTA
+
 # MWI scores
 # NOTE: may also save as RData for faster reading
 mwi <- list()
@@ -257,8 +267,8 @@ names(meas_colors) <- c(unique(m_reg$Category), "Mental Wellness Index")
 # get max/min colors for each palette
 meas_max_colors <- c(
   "#5d499e", # SDOH
-  "#70ad47", # health status
-  "#157ba7", # healthcare acess
+  "#157ba7", # healthcare status
+  "#70ad47", # health access
   "#00441b" #"#70ad47" # MWI
 )
 
@@ -267,8 +277,8 @@ meas_max_colors <- c(
 # })
 meas_min_colors <-  c(
   "#fcfbfd", # SDOH
-  "#f7fcf5", # health status
-  "#f7fbff", # healthcare acess
+  "#f7fbff", # health status
+  "#f7fcf5", # health access
   "#3f157d" #"#5d499e" # MWI
 )
 #   sapply(1:length(meas_colors), function(x){
@@ -305,6 +315,7 @@ overall <- app_prepocess(m_reg, info_df, mwi, app_start = T)
 # add other specific data
 overall[["m_reg"]] <- m_reg
 overall[["info_dat"]] <- info_df
+overall[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
 
 # add counties/states to mwi
 for (idx in index_types){
@@ -322,6 +333,10 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
   # subset map for easy plotting
   gd_map <- geodat[,c(fill, "GEOID10", "STATE", "STATE_NAME", "geometry")]
   colnames(gd_map)[1] <- "Fill"
+  if (fill != "Mental_Wellness_Index"){
+    # replace data with no directionality data
+    gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID10, fill]
+  }
   
   # get rid of empty polygons
   gd_map <- gd_map[!is.na(gd_map$GEOID10),]
@@ -389,12 +404,13 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                     values = ~c(0, Fill, 100), 
                     opacity = 0.7, 
                     position = "bottomright",
-                    title = unname(full_name),
-                    labFormat = function(type, cuts, p){
-                      paste0(c("0 (More Obstacles)", 
-                               "20", "40", "60",
-                               "80", "100 (More Assets)"))
-                    }) %>%
+                    title = unname(full_name)#,
+                    # labFormat = function(type, cuts, p){
+                    #   paste0(c("0 (More Obstacles)", 
+                    #            "20", "40", "60",
+                    #            "80", "100 (More Assets)"))
+                    # }
+                    ) %>%
           fitBounds(
             lng1 = bounds[1],
             lng2 = bounds[3],
@@ -417,12 +433,13 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                     values = ~c(0, Fill, 100), 
                     opacity = 0.7, 
                     position = "bottomright",
-                    title = unname(full_name),
-                    labFormat = function(type, cuts, p){
-                      paste0(c("0 (More Challenges)", 
-                               "<p align = 'left'>20<p>", "40", "60",
-                               "80", "100 (More Assets)"))
-                    }) %>%
+                    title = unname(full_name)#,
+                    # labFormat = function(type, cuts, p){
+                    #   paste0(c("0 (More Challenges)", 
+                    #            "<p align = 'left'>20<p>", "40", "60",
+                    #            "80", "100 (More Assets)"))
+                    # }
+                    ) %>%
           fitBounds(
             lng1 = bounds[1],
             lng2 = bounds[3],
@@ -504,6 +521,10 @@ plot_bee_distr <- function(fill, st, mwi, idx, ol, is_all = F, hl = F, zcta_hl =
   )
   # remove all the empty rows
   bee.df <- bee.df[complete.cases(bee.df),]
+  if (fill != "Mental_Wellness_Index"){
+    # replace data with no directionality data
+    bee.df$val <- ol$no_dir_perc_meas_df[bee.df$zcta, fill]
+  }
   
   # if we're going to highlight a point
   if (hl){
@@ -719,7 +740,7 @@ ui <- fluidPage(
             width = 4,
             # hr(),
             uiOutput("us_distr_title"),
-            withSpinner(plotlyOutput("us_distr", height = 500),
+            withSpinner(plotlyOutput("us_distr", height = 400),
                         type = 8, color = "#005B94", hide.ui = F),
             # hr(),
             bsCollapse(
@@ -830,7 +851,7 @@ ui <- fluidPage(
             width = 4,
             bsCollapse(
               multiple = T,
-              open = c("ZCTA Measure Rankings", "Selected Measure Interpretation", "About Selected Measure"),
+              open = c("ZCTA Measure Results", "Selected Measure Interpretation", "About Selected Measure"),
               bsCollapsePanel(
                 "Selected Measure Interpretation",
                 uiOutput("com_map_expl")
@@ -845,7 +866,7 @@ ui <- fluidPage(
                 ))
               ),
               bsCollapsePanel(
-                "ZCTA Measure Rankings",
+                "ZCTA Measure Results",
                 uiOutput("com_map_report_card")
               )
             )
@@ -1640,7 +1661,7 @@ server <- function(input, output, session) {
     })
   })
   
-  # put an explanation
+  # put an explanation, no zcta selected
   output$us_map_expl <- renderUI({
     withProgress(message = "Rendering map explanation", {
       full_name <- ol$measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
@@ -1650,50 +1671,56 @@ server <- function(input, output, session) {
       } else {
         mc
       }
-      # # get the orientation for the measure
-      # if (st_sub$us_map_fill != "Score"){
-      #   ori <- ol$info_dat[st_sub$us_map_fill, "Direction"]
-      #   ori <- ifelse(ori > 0, "higher", "lower")
-      # } else {
-      #   ori <- "higher"
-      # }
-      # 
-      text <- paste0(
-        "A ", 
-        html_color(mc, "higher"),
-        " value indicates more ",
-        html_color(mc, "assets"),
-        " supporting ", 
-        html_color(mc, paste("mental wellness")),
-        "."
-      )
       
-      # if (st_sub$us_map_fill != "Mental_Wellness_Index"){
-      #   wt <- round(ol$info_dat[st_sub$us_map_fill, "Effective_Weights"],2)
-      #   
-      #   # TODO: COME BACK TO THIS NUMBER
-      #   text <- paste0(
-      #     text,
-      #     " The ", 
-      #     html_color(mc, full_name),
-      #     " measure has a weight of ", 
-      #     html_color(mc, wt),
-      #     ", indicating a ",
-      #     html_color(mc, ifelse(wt > 3, "high", "low")),
-      #     " contribution to the overall Mental Wellness Index."
-      #   )
-      # } else {
-      text <- paste0(
-        text,
-        " A ",
-        html_color(lc, "lower"),
-        " value indicates more ",
-        html_color(lc, "obstacles"),
-        " to ",
-        html_color(lc, "mental wellness"),
-        "."
-      )
-      # }
+      # get measure directionality
+      dir_val <- if (st_sub$us_map_fill != "Mental_Wellness_Index"){
+        ol$info_dat[st_sub$us_map_fill, "Directionality"]
+      } else {
+        1
+      }
+      
+      if (st_sub$us_map_fill == "Mental_Wellness_Index"){
+        text <- paste0(
+          "A ", 
+          html_color(mc, "higher"),
+          " value indicates more ",
+          html_color(mc, "assets"),
+          " supporting ", 
+          html_color(mc, paste("mental wellness")),
+          "."
+        )
+        
+        text <- paste0(
+          text,
+          " A ",
+          html_color(lc, "lower"),
+          " value indicates more ",
+          html_color(lc, "obstacles"),
+          " to ",
+          html_color(lc, "mental wellness"),
+          "."
+        )
+      } else {
+        text <- paste0(
+          "A ", 
+          html_color(mc, "higher"),
+          " value indicates a ",
+          html_color(mc, "higher"),
+          " ranking for ", 
+          html_color(mc, full_name),
+          ".",
+          "</font></b><p></p>",
+          "<font size = '2'>",
+          "<i>",
+          ifelse(
+            dir_val == -1, 
+            "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+            ""
+          ),
+          "</i>",
+          "</font>"
+        )
+      }
       
       HTML(paste0(
         "<center>",
@@ -1747,12 +1774,32 @@ server <- function(input, output, session) {
       if (focus_info$ZCTA != ""){
         full_name <- ol$measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
         
+        # get measure directionality
+        dir_val <- if (st_sub$us_map_fill != "Mental_Wellness_Index"){
+          ol$info_dat[st_sub$us_map_fill, "Directionality"]
+        } else {
+          1
+        }
+        
         # get scores
+        dir_df <-
+        if (st_sub$us_map_fill == "Mental_Wellness_Index"){
+          st_sub$mwi
+        } else {
+          ol$no_dir_perc_meas_df[st_sub$mwi$ZCTA,]
+        }
+        overall_df <- 
+          if (st_sub$us_map_fill == "Mental_Wellness_Index"){
+            ol$mwi[[st_sub$idx]]
+          } else {
+            ol$no_dir_perc_meas_df
+          }
+        
         f_val <- 
-          st_sub$mwi[
-            st_sub$mwi$ZCTA == focus_info$ZCTA, st_sub$us_map_fill]
-        all_st_val <- st_sub$mwi[, st_sub$us_map_fill]
-        all_us_val <- ol$mwi[[st_sub$idx]][, st_sub$us_map_fill]
+          dir_df[
+            dir_df$ZCTA == focus_info$ZCTA, st_sub$us_map_fill]
+        all_st_val <- dir_df[, st_sub$us_map_fill]
+        all_us_val <- overall_df[, st_sub$us_map_fill]
         
         # get colors
         if (st_sub$us_map_fill == "Mental_Wellness_Index"){
@@ -1794,17 +1841,21 @@ server <- function(input, output, session) {
             html_color(mc, us_comp), " relative to the United States.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates more assets supporting mental wellness. A lower value indicates more obstacles to mental wellness.</i>",
+            "<i>A higher value indicates a higher ranking for ",
+            full_name,
+            ". ",
+            ifelse(
+              dir_val == -1, 
+              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+              ""
+            ),
+            "</i>",
             "</font>",
             "</center>"
           ))
         } else {
           HTML(paste0(
             "<center>",
-            "<font size = '2'>",
-            "<i>A higher value indicates more assets supporting mental wellness. A lower value indicates more obstacles to mental wellness.</i>",
-            "<p></p>",
-            "</font>",
             "<b><font size = '3'>",
             "ZCTA ", html_color(mc, focus_info$ZCTA),
             " (ZIP Code",
@@ -1815,7 +1866,15 @@ server <- function(input, output, session) {
             ", indicating missing data or no population in this area.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates more assets supporting mental wellness. A lower value indicates more obstacles to mental wellness.</i>",
+            "<i>A higher value indicates a higher ranking for ",
+            full_name,
+            ". ",
+            ifelse(
+              dir_val == -1, 
+              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.  ",
+              ""
+            ),
+            "</i>",
             "</font>",
             "</center>"
           ))
@@ -1841,7 +1900,7 @@ server <- function(input, output, session) {
         ),
         " ",
         ifelse(full_name == "Mental Wellness Index",
-               "various sources",
+               "various sources of",
                ol$info_dat[com_sub$com_map_fill, "Source"]
         ),
         " data.<p><p>",
@@ -1873,59 +1932,34 @@ server <- function(input, output, session) {
       full_name <- ol$measure_to_names[[com_sub$idx]][com_sub$com_map_fill]
       mc <- meas_max_colors[ol$meas_col_to_type[full_name]]
       lc <- meas_min_colors[ol$meas_col_to_type[full_name]]
-      # # get the orientation for the measure
-      # if (com_sub$com_map_fill != "Score"){
-      #   ori <- ol$info_dat[com_sub$com_map_fill, "Direction"]
-      #   ori <- ifelse(ori > 0, "higher", "lower")
-      # } else {
-      #   ori <- "higher"
-      # }
-      # 
-      # text <- paste0(
-      #   "A ",
-      #   html_color(mc, "higher"),
-      #   " value indicates more ",
-      #   html_color(mc, "assets"),
-      #   " supporting mental ",
-      #   html_color(mc, paste(ori, "wellness")),
-      #   "."
-      # )
-      # 
-      # if (com_sub$com_map_fill != "Mental_Wellness_Index"){
-      #   wt <- round(ol$info_dat[com_sub$com_map_fill, "Effective_Weights"],2)
-      #   
-      #   # TODO: COME BACK TO THIS NUMBER
-      #   text <- paste0(
-      #     text,
-      #     " The ", 
-      #     html_color(mc, full_name),
-      #     " measure has a weight of ", 
-      #     html_color(mc, wt),
-      #     ", indicating a ",
-      #     html_color(mc, ifelse(wt > 3, "high", "low")),
-      #     " contribution to the overall Mental Wellness Index."
-      #   )
-      # } else {
-      #   text <- paste0(
-      #     text,
-      #     " A ", 
-      #     html_color(lc, "lower"),
-      #     " value indicates more ",
-      #     html_color(lc, "obstacles"),
-      #     " to mental ", 
-      #     html_color(lc, "wellness"),
-      #     "."
-      #   )
-      # }
-      # 
+      
       # add ZCTA interpretation
+      # get measure directionality
+      dir_val <- if (com_sub$com_map_fill != "Mental_Wellness_Index"){
+        ol$info_dat[com_sub$com_map_fill, "Directionality"]
+      } else {
+        1
+      }
       
       # get scores
+      dir_df <-
+        if (com_sub$com_map_fill == "Mental_Wellness_Index"){
+          com_sub$mwi
+        } else {
+          ol$no_dir_perc_meas_df[com_sub$mwi$ZCTA,]
+        }
+      overall_df <- 
+        if (com_sub$com_map_fill == "Mental_Wellness_Index"){
+          ol$mwi[[com_sub$idx]]
+        } else {
+          ol$no_dir_perc_meas_df
+        }
+      
       f_val <- 
-        com_sub$mwi[
-          com_sub$mwi$ZCTA == com_sub$ZCTA, com_sub$com_map_fill]
-      all_com_val <- com_sub$mwi[, com_sub$com_map_fill]
-      all_us_val <- ol$mwi[[com_sub$idx]][, com_sub$com_map_fill]
+        dir_df[
+          dir_df$ZCTA == com_sub$ZCTA, com_sub$com_map_fill]
+      all_com_val <- dir_df[, com_sub$com_map_fill]
+      all_us_val <- overall_df[, com_sub$com_map_fill]
       
       # get colors
       if (com_sub$com_map_fill == "Mental_Wellness_Index"){
@@ -1964,7 +1998,19 @@ server <- function(input, output, session) {
           html_color(mc, com_comp), 
           " relative to the selected community, and in the ",
           html_color(mc, us_comp), " relative to the United States.",
-          "</font></b></center>"
+          "</b><p></p>",
+          "<font size = '2'>",
+          "<i>A higher value indicates a higher ranking for ",
+          full_name,
+          ". ",
+          ifelse(
+            dir_val == -1, 
+            "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+            ""
+          ),
+          "</i>",
+          "</font>",
+          "</font></center>"
         ))
       } else {
         text_2 <-
@@ -1977,17 +2023,29 @@ server <- function(input, output, session) {
             " does not have a value for ", 
             html_color(mc, full_name),
             ", indicating missing data or no population in this area.",
-            "</font></b></center>"
+            "</b><p></p>",
+            "<font size = '2'>",
+            "<i>A higher value indicates a higher ranking for ",
+            full_name,
+            ". ",
+            ifelse(
+              dir_val == -1, 
+              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+              ""
+            ),
+            "</i>",
+            "</font>",
+            "</font></center>"
           ))
       }
       
       HTML(paste0(
         "<center>",
-        "<font size = '3'><b>",
+        "<font size = '3'>",
         # text,
         # "<p><p>",
         text_2,
-        "</b></font>",
+        "</font>",
         "</center>"
       ))
     })
@@ -1997,23 +2055,40 @@ server <- function(input, output, session) {
   output$com_map_report_card <- renderUI({
     mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
     
+    dn <- "Mental Wellness Index"
+    text_mwi <- paste0(
+      "<b><font size = '3'>",
+      html_color(
+        ifelse(trunc(mwi_zcta[1, "Mental_Wellness_Index"]) >= 50,
+               mc, meas_min_colors[dn]),
+        dn),
+      ifelse(dn == "Mental Wellness Index", 
+             paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
+             ""),
+      "</b></font>",
+      "<br>"
+    )
+    
     text <- ""
     for (dn in names(ol$avail_meas_list[[com_sub$idx]])){
       mc <- meas_max_colors[dn]
       
-      text <- paste0(
-        text, 
-        "<b><font size = '3'>",
-        html_color(mc, dn),
-        ifelse(dn == "Mental Wellness Index", 
-               paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
-               ""),
-        "</b></font>",
-        "<br>"
-      )
-      
       if (dn != "Mental Wellness Index"){
+        text <- paste0(
+          text,
+          "<b><font size = '3'>",
+          html_color(mc, dn),
+          ifelse(dn == "Mental Wellness Index", 
+                 paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
+                 ""),
+          "</b></font>",
+          "<br>"
+        )
+        
         for (cn in ol$avail_meas_list[[com_sub$idx]][[dn]]){
+          # get measure directionality
+          dir_val <- ol$info_dat[cn, "Directionality"]
+          
           text <- paste0(
             text, 
             "<b>",
@@ -2022,26 +2097,34 @@ server <- function(input, output, session) {
               paste0(
                 # ifelse(ol$info_dat[cn, "Directionality"] > 0, "Higher ", "Lower "),
                 ol$measure_to_names[[com_sub$idx]][cn])),
+            ifelse(dir_val == -1, "*", ""),
             ": ",
             "</b>",
             trunc(mwi_zcta[1, cn]),
             "<br>"
           )
         }
+        
+        text <- paste0(
+          text,
+          "</p>",
+          "<p>"
+        )
       }
-      
-      text <- paste0(
-        text,
-        "</p>",
-        "<p>"
-      )
     }
+    text_meas <- text
     
     HTML(paste0(
       "<font size = '2'>",
-      "<i>A higher value indicates more assets supporting mental wellness. A lower value indicates more obstacles to mental wellness.</i>",
+      "<i>A higher MWI value indicates more assets supporting mental wellness. A lower MWI value indicates more obstacles to mental wellness. Range from 0 to 100.</i>",
       "<p></p>",
-      text,
+      text_mwi,
+      "<hr/>",
+      "<font size = '3'><b>Measure Rankings:</b></font>",
+      "<i><p>Range from 0 to 100. Measures with * were included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.</p></i>",
+      "<p></p>",
+      text_meas,
+      
       "</font>"
     ))
   })

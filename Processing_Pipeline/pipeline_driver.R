@@ -438,6 +438,12 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   # allocate the percentile scaled dataframe
   perc_meas_df <- meas_df
   
+  # keep ranking of original directionality -- "more means more"
+  # for visualization purposes
+  no_dir_perc_meas_df <- perc_meas_df
+  no_dir_perc_meas_df[,-1] <- apply(no_dir_perc_meas_df[,-1], MARGIN = 2, perc.rank)
+  no_dir_perc_meas_df <- no_dir_perc_meas_df[no_dir_perc_meas_df$GEOID != "",]
+  
   # then we want to put them in the correct directionality
   # (higher score == higher need)
   perc_meas_df[, info_dat$Numerator] <- 
@@ -453,10 +459,17 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list()){
   
   if (length(custom_data) > 0){
     overall_out[["perc_meas_df"]] <- perc_meas_df
+    overall_out[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
   } else {
     write.csv(perc_meas_df, 
               file.path(cleaned_folder,
                         "HSE_MWI_ZCTA_Percentile_Ranked_Measures.csv"),
+              na = "",
+              row.names = F)
+    
+    write.csv(no_dir_perc_meas_df, 
+              file.path(cleaned_folder,
+                        "HSE_MWI_ZCTA_No_Directionality_Percentile_Ranked_Measures.csv"),
               na = "",
               row.names = F)
   }
