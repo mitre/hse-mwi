@@ -1,5 +1,5 @@
 ---
-title: "The Mental Wellbeing Index"
+title: "The Mental Wellness Index"
 output: 
   html_document:
     theme: cosmo
