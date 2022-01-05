@@ -389,4 +389,6 @@ We would also like to extend our gratitude to the many other external organizati
 
 For more information about the MWI, please contact the MITRE Social Justice Platform at socialjustice@mitre.org.
 
+*Note – In this document, the term “ZIP code” refers to ZIP Code Tabulation Areas (ZCTAs), which are used in the Mental Wellness Index and are represented in maps and plots. ZCTAs are statistical entities that are analogous to ZIP Codes used by the United States Postal Service (USPS) for mail delivery routes. In most cases the ZCTA code is the same as the USPS ZIP code for an area. For more information on ZCTAs, please see: https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html.
+
 
