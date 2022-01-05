@@ -307,36 +307,37 @@ __Strengths__ of the MWI include the following:
 
 - <u>There is no existing tool that summarizes the factors influencing mental wellness of communities for the entire nation at a geographically granular level</u> (such as the ZIP code level). The MWI fills this gap. 
 
-- <u>Adjustable and modifiable for various use cases</u>. The MWI allows users to modify the index by either uploading their own local or use-case specific data, and by adjusting the placeholder weights based on their preferences, use case, or priorities. The measures and overall MWI calculation can be viewed for both the Black population and the overall population. 
+- <u>A focus on equity</u> by embedding equity focused language into the MWI framework through the dynamic factors of structural racism and community and cultural assets. In creating a tool meant to support decision-makers and equitable allocation of resources to improve mental wellness outcomes, we acknowledge that it is essential to address the role of structural racism and disinvestment in people and communities, which have led to the accumulation of obstacles that hinder mental wellness. Nevertheless, our focus on including community and cultural assets within the framework seeks to make explicit the strengths, identities, and aspirations that individuals and communities hold about themselves that promote mental wellness.
 
-- <u>Objective, data-based evaluation</u> of the factors that influence mental well-being allows for a like to like comparison of areas and can empower users to best distribute resources for the highest impact, or to advocate for their community. The MWI can provide valuable information to communities, public health practitioners, government agencies, and funders seeking to improve or understand community mental wellness. 
+- <u>Adjustable and modifiable for various use cases</u>. The MWI allows users to modify the index by either uploading their own local or use-case specific data, and by adjusting the placeholder weights based on their preferences, use case, or priorities. The measures and overall MWI calculation can be viewed for both Black populations and the overall population. 
 
-- <u>Consideration of equity</u> throughout the creation of the MWI by focusing on a priority population facing emerging disparities in mental wellbeing, rather than only the overall population. This consideration of equity also guided how measures were selected and constructed. For example, rather than using data that only shows physician presence in an area, we developed novel measures based on SAMHSA treatment facility data that take into consideration payment assistance, language services offered, access to a continuum of treatment and care, and special focus groups that can facilitate better access to care. We also selected not to include various measures where the association with mental wellness is only established for the majority population, but not for our priority population or for other minority populations, or where data is only representative of certain populations. For example, while data on vehicle access data are available, many people use other modes of transportation, so lacking a rerepresentative transportation measure we have not included this topic in the MWI.
+- <u>Objective, data-based dashboard</u> of the factors that influence mental well-being allows for a “like to like” comparison of areas and can help inform users (in partnership with impacted communities) about how best to distribute resources for the highest impact, and to advocate for their community. The MWI can provide valuable information to communities, public health practitioners, government agencies, and funders seeking to improve or understand community mental wellness. 
 
-__Limitations of the MWI__: 
+__Limitations__ of the MWI: 
 
 <u>Limited by challenges in data availability</u>. We faced limitations based on the types of data that are available and collected in national datasets such as:
 
 - Lack of access to geographically granular data on certain topics
 
-- Lack of data stratified by demographics such as race, ethnicity, sexual orientation, English proficiency/language, etc. Though we sought to use race stratified data where possible, some measures that were deemed important to include and that were selected cannot be stratified by race, limiting the applicability of these measures to the Black priority population calculations.
+- Lack of data stratified by demographics such as race, ethnicity, sexual orientation, English proficiency/language, etc. 
 
-- Most data collected is deficit-focused, and there is a lack of asset and strengths-focused data that reflects how communities see themselves.
+- Most data is deficit-focused, and deficit-focused data may not represent community-based perspectives and lacks a focus on assets and strengths.
 
-- Availability of data impacted by history of structural racism.
+ - Impact of structural racism inherent to the research enterprise, which impacts areas such as survey development, sampling, data collection and analysis, etc.
+ 
+- Some populations, such as individuals experiencing homelessness, may not be represented in various national datasets
 
-- Some vulnerable populations, such as individuals experiencing homelessness, may not be represented in various national datasets. 
+Because data were aggregated from multiple data sources, we note that all data is not from the same year or range of years. Additionally, some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race, so calculations based on these measures may have lower validity for Black populations. Race stratified data were available for 14 measures, unavailable for 8 measures, and not applicable for 6 measures.
 
-Nationally representative, geographically granular data were unavailable for a wide range of topics that impact mental wellness, such as exposure to stigma, access to reliable transportation (including public transportation), Adverse Childhood Experiences (ACES), community allostatic load, redlining, hate crimes, and infrastructure spending, among others. If data on these, or other topics, are available at the local level, using the MWI Tool data upload feature can enhance the results of the MWI. 
+Nationally representative, geographically granular data were unavailable for a wide range of topics that impact mental wellness, such as social connectedness,  sense of belonging, access to safe, reliable, and efficient transportation, community allostatic load,  and access to culturally and linguistically appropriate care, among others. If data on these, or other topics, are available at the local level, using the MWI tool data upload feature can enhance the results of the MWI. 
 
-<u>We had a limited ability to consult directly with communities in the creation of the MWI</u>. Input from communities that are directly impacted is vital to ensure a tool will be most useful for them. In our next steps, we hope to engage directly with communities to determine their priorities and preferences, incorporate participatory approaches, and work with communities to determine how the MWI can best address their needs. 
+<u>We had a limited ability to consult directly with communities in the creation of the MWI</u>. Input from communities that are directly impacted is vital to ensure a tool will be most useful for them. While we consulted with and had input from selected community leaders and program providers in Black communities, we did not have direct input from community residents. In our next steps, we hope to engage directly with communities to understand their priorities and preferences, incorporate participatory approaches, and work with communities to understand how the MWI can best address their needs. 
 
-<u>We have sought to address these challenges by</u>: 
+<u>We have sought to address these challenges by</u>:
 
-- Incorporating novel measures and methods focused on assets where data is available (ex: third places, access to financial services, voter participation and others).
+- Prioritizing race-stratified measures. 
+- Building adaptive features into the MWI tool that allow users to upload community-specific data (effectively adding and removing measures), and weight measures according to their values and preferences.
+- Incorporating creative measure constructs by including measures of assets that are not “traditionally” included in health indices (ex: third places, access to financial services, voter participation, etc.), and application of novel methodologies to represent key constructs (ex: using data about treatment facility characteristics in addition to location data). 
+- Committing to document and share recommendations related to challenges with others to positively influence change.
 
-- Creating adaptability in the MWI Tool for users and communities to be able to build their own use cases by uploading local data, and weight measures according to their priorities and preferences.
-
-- Committing to document and share recommendations related to data challenges with others to positively influence change.
-
-Please see individual [measure documentation link] for more information on the strengths and limitations of specific measures selected. 
+Please see [measure documentation](https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures) for more information on the strengths and limitations of specific measures selected. 
