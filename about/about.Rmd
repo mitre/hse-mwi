@@ -18,9 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### What is the MWI
 
-The MWI aggregates quantitative measures of the factors that influence community-level mental wellness into a single composite index at the ZIP code* level. The index takes into account that community mental wellness is shaped by many factors; not only health status itself, but also social determinants of health (which can support or provide obstacles to mental wellness), and access to healthcare (which impacts the ability of community members to receive care). The MWI framework also acknowledges the impacts of both community and cultural assets (which can enhance mental wellness) and structural racism (which provides obstacles to mental wellness). The influence of these two factors can be seen throughout the measures used to calculate the index. The MWI is currently available for both the overall population and the Black population. 
-
-<sup>* ZIP Code Tabulation Areas (ZCTAs) are used in the Mental Wellness Index and are represented in maps and plots. ZCTAs are statistical entities that are analogous to ZIP Codes used by the United States Postal Service (USPS) for mail delivery routes. In most cases the ZCTA code is the same as the USPS ZIP code for an area. For more information on ZCTAs, please see https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html. </sub>
+The Mental Wellness Index™ (MWI) quantifies factors that influence community-level mental wellness and aggregates them into a single numerical ranking at the ZIP code* level for the entire nation. These factors act as assets or obstacles to mental wellness and are grouped into three domains: social determinants of health, healthcare access, and health status. The MWI framework also acknowledges two dynamic factors that influence mental wellness: community and cultural assets and structural racism. These two factors influence each of the measures used to calculate the index. The MWI is currently available for the overall population and for our first priority population, Black populations.  
 
 ### Purpose of the MWI
 
