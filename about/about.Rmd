@@ -78,8 +78,6 @@ The MWI is calculated for each ZIP code* in the country. If the MWI is missing f
 
 $$MWI = \sum_{m = 1}^{28} percentile\space ranked\space value_m * weight_m$$
 
-$$MWI = \sum_{m = 1}^{28} percentile\space ranked\space value_{z,m} * weight_m$$
-
 ## First Priority Population: Black Populations 
 
 MITRE’s approach to the development, testing, and operationalization of the MWI reflects the convergence of MITRE’s Social Justice Platform (a commitment to invest in social and health equity across populations) and the concept of “centering at the margins.” In contrast to the more typical approach that centers and normalizes the experience and perspectives of White populations, “centering at the margins” prioritizes populations that have been historically underserved and under-resourced. This approach recognizes that equity delivered to historically underserved populations will accrue to others and potentially catalyzes movement toward social and racial justice. The MWI is available for both Black populations (as the initial priority population) and for the overall population (to enable broad applicability). We hope to add additional priority populations to the MWI for other groups that are experiencing health disparities.  
@@ -90,26 +88,105 @@ Black populations also experience more criminalization of mental health and subs
 
 Selecting Black populations as a priority population guided the way we constructed the MWI framework, selected measures, and evaluated datasets to use. MWI measures have been stratified by race for Black populations where possible.  
 
+## How to Use the MWI Tool
 
-## How to Use the MWI
+The MWI tool is an interactive, web-based application that allows users to explore the MWI and its 28 measures in all ZIP codes* in the United States, upload community-specific data (effectively add or remove measures), and customize measure weights to reflect their perspectives.  
 
-### How to Use the Tool
+### Interpreting the MWI and its Measures 
 
-- Interactive map and distribution visualizations
+The MWI and its individual measures are displayed as rankings that show how a given ZIP code compares to all other ZIP codes in the nation on a range between 0 and 100. For example, a Broadband Access measure ranking of 75 means that this ZIP code ranks higher than 75% of the ZIP codes in the nation for this measure (not that 75% of individuals in the ZIP code have broadband access).  
 
-- Select population to view (either Overall population or Black population)
+For both the MWI and individual measures, a higher ranking (closer to 100) indicates more assets to mental wellness, while a lower ranking (closer to 0) indicates more obstacles to mental wellness.  
 
-- Select whether you would like to view the aggregated MWI values themselves, or specific measures that contribute to the MWI. 
+The tool has two pages that can be used to explore the MWI: Explore States and Explore ZIP Codes:
 
-- Select a state to focus on.
+### Explore States
 
-- Select a ZCTA to focus on. 
+<center>
+![](explorestates.png){width=400px}
+</center>
 
-- Hover over a ZCTA on the map or distribution to view values for that ZCTA
+The Explore States page allows users to explore the MWI through interactive map and distribution visualizations. This page is useful if you would like to focus on a particular state or compare a ZIP Code to state-wide rankings. 
 
-- Select measure weights
+Users should:
 
-- Upload data 
+1. Select population to view (either Overall or Black),
+
+<center>
+![](selectpopulation.png){width=400px}
+</center>
+
+2. Select either a specific state, or the entire country (“All” states),
+
+<center>
+![](selectstate.png){width=400px}
+</center>
+
+3. Select to explore either the overall MWI, or an individual measure.
+
+<center>
+![](selectmeasure.png){width=400px}
+</center>
+
+Then, users can select a ZIP code within their selected state by either:
+
+1. Entering the numeric ZIP code under “Exploration Options”,
+
+<center>
+![](enterzipcode.png){width=400px}
+</center>
+
+2. Or by clicking on a ZIP code on the interactive map.
+
+<center>
+![](clickonzipcode.png){width=400px}
+</center>
+
+<br>
+
+Users can also explore the MWI by hovering over ZIP codes on the map, or by hovering over points on the interactive distribution. 
+
+<center>
+![](distribution.png){height=400px}
+</center>
+
+### Explore ZIP Codes
+
+In addition to an interactive map, the Explore ZIP Codes page provides a community overview that shows the MWI and each individual measure for a specified ZIP code. This page is useful to see all measures for a ZIP code, or to focus on areas (which may cross state lines) surrounding a ZIP code.
+
+<center>
+![](explorezipcodes.png){width=400px}
+</center>
+
+Users should:
+
+1.	Select population to view (either Overall or Black),
+
+<center>
+![](selectpopulation.png){width=400px}
+</center>
+
+2.	Select to explore either the overall MWI, or an individual measure, and 
+
+<center>
+![](selectmeasure.png){width=400px}
+</center>
+
+3. Enter a numeric ZIP code under “Exploration Options”.
+
+<center>
+![](enterzipcode.png){width=400px}
+</center>
+
+Then, users can explore further by hovering their mouse over ZIP codes on the map.
+
+<center>
+![](hoverzipcode.png){width=400px}
+</center>
+
+<br>
+
+Additionally, the [Create Your Own MWI](http://sjp-hse-vm.mitre.org/hse/hse-mwi/) page can be used to upload custom data, or to adjust measure weights. Instructions can be found at the above link. 
 
 ### Recommended Uses
 
