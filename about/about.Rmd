@@ -186,7 +186,7 @@ Then, users can explore further by hovering their mouse over ZIP codes on the ma
 
 <br>
 
-Additionally, the [Create Your Own MWI](http://sjp-hse-vm.mitre.org/hse/hse-mwi/) page can be used to upload custom data, or to adjust measure weights. Instructions can be found at the above link. 
+Additionally, the Create Your Own MWI page can be used to upload custom data, or to adjust measure weights. Instructions can be found by clicking on the Create Your Own MWI tab. 
 
 ### Recommended Uses
 
