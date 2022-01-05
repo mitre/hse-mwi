@@ -52,10 +52,7 @@ index_types <- c("Population" = "pop",
                  "Black" = "black")
 
 # folder where all the data and information for the pipeline is
-data_folder <- file.path(
-  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
-  "Health and Social Equity - SJP - BHN Score Creation",
-  "Data")
+data_folder <- file.path("Data")
 
 # load measure registry -- first sheet
 m_reg <- as.data.frame(
@@ -196,32 +193,14 @@ for (idx in index_types){
     cty_cw[mwi[[idx]]$ZCTA, -1]
 }
 
-# get zip code data -- ONLY ORIGINAL
-# NOTE: cb = T will download a generalized file
-# zips <- zctas(cb = T)
-# zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
-# save(list = "zips", file = file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
-# 
-# # load zip code data (should be much faster)
-# load(file.path(data_folder, "Resources", "ZCTAs_shapefile_US.RData"))
-# 
-# # create the geo data for leaflet
-# # NOTE: may want to do this ahead of time, if possible, when the base index is done
-# geodat <- list()
-# for (idx in index_types){
-#   geodat[[idx]] <-
-#     geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
-# 
-#   # sort by state code
-#   geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE),]
-# 
-#   # add state and county (multiple counties for a zcta separated by pipes)
-# }
-# # saving for now, while things are stable
-# save(list = "geodat", file = file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+if (!"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
+    list.files(file.path(data_folder, "Cleaned"))){
+  source(file.path("Processing_Pipeline", "create_shpfiles.R"))
+} else {
+  # load geodat data (should be much faster)
+  load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+}
 
-# load geodat data (should be much faster)
-load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
 
 # get available zctas -- both will have the same
 avail_zctas <- geodat[["pop"]]$GEOID10
@@ -548,21 +527,23 @@ ui <- fluidPage(
     ),
     
     # about ----
-    navbarMenu("About",
-               tabPanel(
-                 title = div("About", class="about"),
-                 # NOTE: when making changes to about.Rmd, move result to www
-                 htmltools::tags$iframe(src = "www/about.html", # put testdoc.html to /www
-                                        class="about-panel",
-                                        frameborder = 0, 
-                                        scrolling = 'auto')),
-               tabPanel(
-                 title = div("Measure & Methodology Documentation Download",
-                             class = "download"), 
-                 htmltools::tags$iframe(src = "www/docdownload.html",
-                                        class = "download-panel",
-                                        frameborder = 0,
-                                        scrolling = "auto")
+    navbarMenu(
+      "About",
+      tabPanel(
+        title = div("About", class="about"),
+        # NOTE: when making changes to about.Rmd, move result to www
+        htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
+                               class="about-panel",
+                               frameborder = 0, 
+                               scrolling = 'auto')),
+      tabPanel(
+        title = div("Measure & Methodology Documentation Download",
+                    class = "about"), 
+        htmltools::tags$iframe(src = "docdownload.html",
+                               class = "about-panel",
+                               frameborder = 0,
+                               scrolling = "auto")
+      )
     )
   ),
   

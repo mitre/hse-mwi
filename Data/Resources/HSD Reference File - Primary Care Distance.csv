@@ -1,0 +1,3265 @@
+COUNTY,ST,COUNTY_STATE,SSACD,COUNTY DESIGNA-TION,Primary Care Distance
+Autauga,AL,"Autauga, AL",01000,Micro,20
+Baldwin,AL,"Baldwin, AL",01010,Metro,10
+Barbour,AL,"Barbour, AL",01020,Rural,30
+Bibb,AL,"Bibb, AL",01030,Rural,30
+Blount,AL,"Blount, AL",01040,Micro,20
+Bullock,AL,"Bullock, AL",01050,Rural,30
+Butler,AL,"Butler, AL",01060,Rural,30
+Calhoun,AL,"Calhoun, AL",01070,Metro,10
+Chambers,AL,"Chambers, AL",01080,Micro,20
+Cherokee,AL,"Cherokee, AL",01090,Rural,30
+Chilton,AL,"Chilton, AL",01100,Micro,20
+Choctaw,AL,"Choctaw, AL",01110,Rural,30
+Clarke,AL,"Clarke, AL",01120,Rural,30
+Clay,AL,"Clay, AL",01130,Rural,30
+Cleburne,AL,"Cleburne, AL",01140,Rural,30
+Coffee,AL,"Coffee, AL",01150,Micro,20
+Colbert,AL,"Colbert, AL",01160,Micro,20
+Conecuh,AL,"Conecuh, AL",01170,Rural,30
+Coosa,AL,"Coosa, AL",01180,Rural,30
+Covington,AL,"Covington, AL",01190,Rural,30
+Crenshaw,AL,"Crenshaw, AL",01200,Rural,30
+Cullman,AL,"Cullman, AL",01210,Metro,15
+Dale,AL,"Dale, AL",01220,Micro,20
+Dallas,AL,"Dallas, AL",01230,Rural,30
+DeKalb,AL,"DeKalb, AL",01240,Micro,20
+Elmore,AL,"Elmore, AL",01250,Metro,10
+Escambia,AL,"Escambia, AL",01260,Rural,30
+Etowah,AL,"Etowah, AL",01270,Metro,10
+Fayette,AL,"Fayette, AL",01280,Rural,30
+Franklin,AL,"Franklin, AL",01290,Micro,20
+Geneva,AL,"Geneva, AL",01300,Rural,30
+Greene,AL,"Greene, AL",01310,Rural,30
+Hale,AL,"Hale, AL",01320,Rural,30
+Henry,AL,"Henry, AL",01330,Rural,30
+Houston,AL,"Houston, AL",01340,Metro,10
+Jackson,AL,"Jackson, AL",01350,Micro,20
+Jefferson,AL,"Jefferson, AL",01360,Metro,10
+Lamar,AL,"Lamar, AL",01370,Rural,30
+Lauderdale,AL,"Lauderdale, AL",01380,Metro,10
+Lawrence,AL,"Lawrence, AL",01390,Rural,30
+Lee,AL,"Lee, AL",01400,Metro,10
+Limestone,AL,"Limestone, AL",01410,Metro,10
+Lowndes,AL,"Lowndes, AL",01420,Rural,30
+Macon,AL,"Macon, AL",01430,Rural,30
+Madison,AL,"Madison, AL",01440,Metro,10
+Marengo,AL,"Marengo, AL",01450,Rural,30
+Marion,AL,"Marion, AL",01460,Rural,30
+Marshall,AL,"Marshall, AL",01470,Metro,10
+Mobile,AL,"Mobile, AL",01480,Metro,10
+Monroe,AL,"Monroe, AL",01490,Rural,30
+Montgomery,AL,"Montgomery, AL",01500,Metro,10
+Morgan,AL,"Morgan, AL",01510,Metro,10
+Perry,AL,"Perry, AL",01520,Rural,30
+Pickens,AL,"Pickens, AL",01530,Rural,30
+Pike,AL,"Pike, AL",01540,Rural,30
+Randolph,AL,"Randolph, AL",01550,Rural,30
+Russell,AL,"Russell, AL",01560,Micro,20
+St. Clair,AL,"St. Clair, AL",01570,Metro,10
+Shelby,AL,"Shelby, AL",01580,Metro,10
+Sumter,AL,"Sumter, AL",01590,Rural,30
+Talladega,AL,"Talladega, AL",01600,Metro,10
+Tallapoosa,AL,"Tallapoosa, AL",01610,Micro,20
+Tuscaloosa,AL,"Tuscaloosa, AL",01620,Metro,10
+Walker,AL,"Walker, AL",01630,Micro,20
+Washington,AL,"Washington, AL",01640,Rural,30
+Wilcox,AL,"Wilcox, AL",01650,Rural,30
+Winston,AL,"Winston, AL",01660,Rural,30
+Aleutians East,AK,"Aleutians East, AK",02013,CEAC,60
+Aleutians West,AK,"Aleutians West, AK",02016,CEAC,60
+Anchorage,AK,"Anchorage, AK",02020,Metro,10
+Bethel,AK,"Bethel, AK",02050,CEAC,60
+Bristol Bay,AK,"Bristol Bay, AK",02060,CEAC,60
+Denali,AK,"Denali, AK",02068,CEAC,60
+Dillingham,AK,"Dillingham, AK",02070,CEAC,60
+Fairbanks North Star,AK,"Fairbanks North Star, AK",02090,Micro,20
+Haines,AK,"Haines, AK",02100,CEAC,60
+Hoonah-Angoon,AK,"Hoonah-Angoon, AK",02105,CEAC,60
+Juneau,AK,"Juneau, AK",02110,Rural,30
+Kenai Peninsula,AK,"Kenai Peninsula, AK",02122,CEAC,60
+Ketchikan Gateway,AK,"Ketchikan Gateway, AK",02130,CEAC,60
+Kodiak Island,AK,"Kodiak Island, AK",02150,CEAC,60
+Lake and Peninsula,AK,"Lake and Peninsula, AK",02164,CEAC,60
+Matanuska-Susitna,AK,"Matanuska-Susitna, AK",02170,CEAC,60
+Nome,AK,"Nome, AK",02180,CEAC,60
+North Slope,AK,"North Slope, AK",02185,CEAC,60
+Northwest Arctic,AK,"Northwest Arctic, AK",02188,CEAC,60
+Petersburg,AK,"Petersburg, AK",02195,CEAC,60
+Prince of Wales-Hyder,AK,"Prince of Wales-Hyder, AK",02198,CEAC,60
+Sitka,AK,"Sitka, AK",02220,CEAC,60
+Skagway,AK,"Skagway, AK",02230,CEAC,60
+Southeast Fairbanks,AK,"Southeast Fairbanks, AK",02240,CEAC,60
+Valdez-Cordova,AK,"Valdez-Cordova, AK",02261,CEAC,60
+Kusilvak (formerly Wade Hampton),AK,"Kusilvak, AK (formerly Wade Hampton, AK)",02270,CEAC,60
+Wrangell,AK,"Wrangell, AK",02275,CEAC,60
+Yakutat,AK,"Yakutat, AK",02282,CEAC,60
+Yukon-Koyukuk,AK,"Yukon-Koyukuk, AK",02290,CEAC,60
+Apache,AZ,"Apache, AZ",03000,CEAC,60
+Cochise,AZ,"Cochise, AZ",03010,Micro,20
+Coconino,AZ,"Coconino, AZ",03020,CEAC,60
+Gila,AZ,"Gila, AZ",03030,Micro,20
+Graham,AZ,"Graham, AZ",03040,CEAC,60
+Greenlee,AZ,"Greenlee, AZ",03050,CEAC,60
+La Paz,AZ,"La Paz, AZ",03055,CEAC,60
+Maricopa,AZ,"Maricopa, AZ",03060,Metro,10
+Mohave,AZ,"Mohave, AZ",03070,Metro,10
+Navajo,AZ,"Navajo, AZ",03080,Micro,20
+Pima,AZ,"Pima, AZ",03090,Metro,10
+Pinal,AZ,"Pinal, AZ",03100,Metro,10
+Pinal,AZ,"Pinal, AZ",03101,Metro,10
+Santa Cruz,AZ,"Santa Cruz, AZ",03110,Rural,30
+Yavapai,AZ,"Yavapai, AZ",03120,Metro,10
+Yuma,AZ,"Yuma, AZ",03130,Metro,10
+Arkansas,AR,"Arkansas, AR",04000,Rural,30
+Ashley,AR,"Ashley, AR",04010,Rural,30
+Baxter,AR,"Baxter, AR",04020,Micro,20
+Benton,AR,"Benton, AR",04030,Metro,10
+Boone,AR,"Boone, AR",04040,Micro,20
+Bradley,AR,"Bradley, AR",04050,Rural,30
+Calhoun,AR,"Calhoun, AR",04060,CEAC,60
+Carroll,AR,"Carroll, AR",04070,Rural,30
+Chicot,AR,"Chicot, AR",04080,Rural,30
+Clark,AR,"Clark, AR",04090,Rural,30
+Clay,AR,"Clay, AR",04100,Rural,30
+Cleburne,AR,"Cleburne, AR",04110,Rural,30
+Cleveland,AR,"Cleveland, AR",04120,Rural,30
+Columbia,AR,"Columbia, AR",04130,Rural,30
+Conway,AR,"Conway, AR",04140,Rural,30
+Craighead,AR,"Craighead, AR",04150,Metro,10
+Crawford,AR,"Crawford, AR",04160,Metro,10
+Crittenden,AR,"Crittenden, AR",04170,Micro,20
+Cross,AR,"Cross, AR",04180,Rural,30
+Dallas,AR,"Dallas, AR",04190,Rural,30
+Desha,AR,"Desha, AR",04200,Rural,30
+Drew,AR,"Drew, AR",04210,Rural,30
+Faulkner,AR,"Faulkner, AR",04220,Metro,10
+Franklin,AR,"Franklin, AR",04230,Rural,30
+Fulton,AR,"Fulton, AR",04240,Rural,30
+Garland,AR,"Garland, AR",04250,Metro,10
+Grant,AR,"Grant, AR",04260,Rural,30
+Greene,AR,"Greene, AR",04270,Micro,20
+Hempstead,AR,"Hempstead, AR",04280,Rural,30
+Hot Spring,AR,"Hot Spring, AR",04290,Micro,20
+Howard,AR,"Howard, AR",04300,Rural,30
+Independence,AR,"Independence, AR",04310,Rural,30
+Izard,AR,"Izard, AR",04320,Rural,30
+Jackson,AR,"Jackson, AR",04330,Rural,30
+Jefferson,AR,"Jefferson, AR",04340,Micro,20
+Johnson,AR,"Johnson, AR",04350,Rural,30
+Lafayette,AR,"Lafayette, AR",04360,Rural,30
+Lawrence,AR,"Lawrence, AR",04370,Rural,30
+Lee,AR,"Lee, AR",04380,Rural,30
+Lincoln,AR,"Lincoln, AR",04390,Rural,30
+Little River,AR,"Little River, AR",04400,Rural,30
+Logan,AR,"Logan, AR",04410,Rural,30
+Lonoke,AR,"Lonoke, AR",04420,Micro,20
+Madison,AR,"Madison, AR",04430,Rural,30
+Marion,AR,"Marion, AR",04440,Rural,30
+Miller,AR,"Miller, AR",04450,Micro,20
+Mississippi,AR,"Mississippi, AR",04460,Rural,30
+Monroe,AR,"Monroe, AR",04470,Rural,30
+Montgomery,AR,"Montgomery, AR",04480,Rural,30
+Nevada,AR,"Nevada, AR",04490,Rural,30
+Newton,AR,"Newton, AR",04500,CEAC,60
+Ouachita,AR,"Ouachita, AR",04510,Rural,30
+Perry,AR,"Perry, AR",04520,Rural,30
+Phillips,AR,"Phillips, AR",04530,Rural,30
+Pike,AR,"Pike, AR",04540,Rural,30
+Poinsett,AR,"Poinsett, AR",04550,Rural,30
+Polk,AR,"Polk, AR",04560,Rural,30
+Pope,AR,"Pope, AR",04570,Micro,20
+Prairie,AR,"Prairie, AR",04580,Rural,30
+Pulaski,AR,"Pulaski, AR",04590,Metro,10
+Randolph,AR,"Randolph, AR",04600,Rural,30
+St. Francis,AR,"St. Francis, AR",04610,Rural,30
+Saline,AR,"Saline, AR",04620,Metro,15
+Scott,AR,"Scott, AR",04630,Rural,30
+Searcy,AR,"Searcy, AR",04640,Rural,30
+Sebastian,AR,"Sebastian, AR",04650,Metro,10
+Sevier,AR,"Sevier, AR",04660,Rural,30
+Sharp,AR,"Sharp, AR",04670,Rural,30
+Stone,AR,"Stone, AR",04680,Rural,30
+Union,AR,"Union, AR",04690,Rural,30
+Van Buren,AR,"Van Buren, AR",04700,Rural,30
+Washington,AR,"Washington, AR",04710,Metro,10
+White,AR,"White, AR",04720,Micro,20
+Woodruff,AR,"Woodruff, AR",04730,Rural,30
+Yell,AR,"Yell, AR",04740,Rural,30
+Alameda,CA,"Alameda, CA",05000,Large Metro,5
+Alpine,CA,"Alpine, CA",05010,CEAC,60
+Amador,CA,"Amador, CA",05020,Micro,20
+Butte,CA,"Butte, CA",05030,Metro,10
+Calaveras,CA,"Calaveras, CA",05040,Rural,30
+Colusa,CA,"Colusa, CA",05050,Rural,30
+Contra Costa,CA,"Contra Costa, CA",05060,Large Metro,5
+Del Norte,CA,"Del Norte, CA",05070,Rural,30
+El Dorado,CA,"El Dorado, CA",05080,Metro,10
+Fresno,CA,"Fresno, CA",05090,Metro,10
+Glenn,CA,"Glenn, CA",05100,Rural,30
+Humboldt,CA,"Humboldt, CA",05110,Micro,20
+Imperial,CA,"Imperial, CA",05120,Micro,20
+Inyo,CA,"Inyo, CA",05130,CEAC,60
+Kern,CA,"Kern, CA",05140,Metro,15
+Kings,CA,"Kings, CA",05150,Metro,10
+Lake,CA,"Lake, CA",05160,Micro,20
+Lassen,CA,"Lassen, CA",05170,CEAC,60
+Los Angeles,CA,"Los Angeles, CA",05200,Large Metro,5
+Los Angeles,CA,"Los Angeles, CA",05201,Large Metro,5
+Los Angeles,CA,"Los Angeles, CA",05210,Large Metro,5
+Madera,CA,"Madera, CA",05300,Micro,20
+Marin,CA,"Marin, CA",05310,Metro,10
+Mariposa,CA,"Mariposa, CA",05320,Rural,30
+Mendocino,CA,"Mendocino, CA",05330,Micro,20
+Merced,CA,"Merced, CA",05340,Metro,10
+Modoc,CA,"Modoc, CA",05350,CEAC,60
+Mono,CA,"Mono, CA",05360,CEAC,60
+Monterey,CA,"Monterey, CA",05370,Metro,10
+Napa,CA,"Napa, CA",05380,Metro,10
+Nevada,CA,"Nevada, CA",05390,Metro,10
+Orange,CA,"Orange, CA",05400,Large Metro,5
+Orange,CA,"Orange, CA",05401,Large Metro,5
+Placer,CA,"Placer, CA",05410,Metro,10
+Plumas,CA,"Plumas, CA",05420,CEAC,60
+Riverside,CA,"Riverside, CA",05430,Metro,10
+Sacramento,CA,"Sacramento, CA",05440,Large Metro,5
+San Benito,CA,"San Benito, CA",05450,Micro,20
+San Bernardino,CA,"San Bernardino, CA",05460,Metro,10
+San Diego,CA,"San Diego, CA",05470,Metro,10
+San Francisco,CA,"San Francisco, CA",05480,Large Metro,5
+San Joaquin,CA,"San Joaquin, CA",05490,Metro,10
+San Luis Obispo,CA,"San Luis Obispo, CA",05500,Metro,10
+San Mateo,CA,"San Mateo, CA",05510,Large Metro,5
+Santa Barbara,CA,"Santa Barbara, CA",05520,Metro,10
+Santa Clara,CA,"Santa Clara, CA",05530,Large Metro,5
+Santa Cruz,CA,"Santa Cruz, CA",05540,Metro,10
+Shasta,CA,"Shasta, CA",05550,Micro,20
+Sierra,CA,"Sierra, CA",05560,CEAC,60
+Siskiyou,CA,"Siskiyou, CA",05570,CEAC,60
+Solano,CA,"Solano, CA",05580,Metro,10
+Sonoma,CA,"Sonoma, CA",05590,Metro,10
+Stanislaus,CA,"Stanislaus, CA",05600,Metro,10
+Sutter,CA,"Sutter, CA",05610,Metro,10
+Tehama,CA,"Tehama, CA",05620,Micro,20
+Trinity,CA,"Trinity, CA",05630,CEAC,60
+Tulare,CA,"Tulare, CA",05640,Metro,10
+Tuolumne,CA,"Tuolumne, CA",05650,Micro,20
+Ventura,CA,"Ventura, CA",05660,Metro,10
+Yolo,CA,"Yolo, CA",05670,Metro,10
+Yuba,CA,"Yuba, CA",05680,Metro,10
+Adams,CO,"Adams, CO",06000,Metro,10
+Alamosa,CO,"Alamosa, CO",06010,Rural,30
+Arapahoe,CO,"Arapahoe, CO",06020,Metro,10
+Archuleta,CO,"Archuleta, CO",06030,CEAC,60
+Baca,CO,"Baca, CO",06040,CEAC,60
+Bent,CO,"Bent, CO",06050,CEAC,60
+Boulder,CO,"Boulder, CO",06060,Metro,10
+Chaffee,CO,"Chaffee, CO",06070,Rural,30
+Cheyenne,CO,"Cheyenne, CO",06080,CEAC,60
+Clear Creek,CO,"Clear Creek, CO",06090,Rural,30
+Conejos,CO,"Conejos, CO",06100,CEAC,60
+Costilla,CO,"Costilla, CO",06110,CEAC,60
+Crowley,CO,"Crowley, CO",06120,CEAC,60
+Custer,CO,"Custer, CO",06130,CEAC,60
+Delta,CO,"Delta, CO",06140,Rural,30
+Denver,CO,"Denver, CO",06150,Large Metro,5
+Dolores,CO,"Dolores, CO",06160,CEAC,60
+Douglas,CO,"Douglas, CO",06170,Metro,10
+Eagle,CO,"Eagle, CO",06180,Micro,20
+Elbert,CO,"Elbert, CO",06190,Rural,30
+El Paso,CO,"El Paso, CO",06200,Metro,10
+Fremont,CO,"Fremont, CO",06210,Rural,30
+Garfield,CO,"Garfield, CO",06220,Micro,20
+Gilpin,CO,"Gilpin, CO",06230,Rural,30
+Grand,CO,"Grand, CO",06240,CEAC,60
+Gunnison,CO,"Gunnison, CO",06250,CEAC,60
+Hinsdale,CO,"Hinsdale, CO",06260,CEAC,60
+Huerfano,CO,"Huerfano, CO",06270,CEAC,60
+Jackson,CO,"Jackson, CO",06280,CEAC,60
+Jefferson,CO,"Jefferson, CO",06290,Metro,10
+Kiowa,CO,"Kiowa, CO",06300,CEAC,60
+Kit Carson,CO,"Kit Carson, CO",06310,CEAC,60
+Lake,CO,"Lake, CO",06320,Rural,30
+La Plata,CO,"La Plata, CO",06330,Micro,20
+Larimer,CO,"Larimer, CO",06340,Metro,10
+Las Animas,CO,"Las Animas, CO",06350,CEAC,60
+Lincoln,CO,"Lincoln, CO",06360,CEAC,60
+Logan,CO,"Logan, CO",06370,Rural,30
+Mesa,CO,"Mesa, CO",06380,Micro,20
+Mineral,CO,"Mineral, CO",06390,CEAC,60
+Moffat,CO,"Moffat, CO",06400,CEAC,60
+Montezuma,CO,"Montezuma, CO",06410,Rural,30
+Montrose,CO,"Montrose, CO",06420,Rural,30
+Morgan,CO,"Morgan, CO",06430,Rural,30
+Otero,CO,"Otero, CO",06440,Rural,30
+Ouray,CO,"Ouray, CO",06450,CEAC,60
+Park,CO,"Park, CO",06460,CEAC,60
+Phillips,CO,"Phillips, CO",06470,CEAC,60
+Pitkin,CO,"Pitkin, CO",06480,Rural,30
+Prowers,CO,"Prowers, CO",06490,CEAC,60
+Pueblo,CO,"Pueblo, CO",06500,Micro,20
+Rio Blanco,CO,"Rio Blanco, CO",06510,CEAC,60
+Rio Grande,CO,"Rio Grande, CO",06520,Rural,30
+Routt,CO,"Routt, CO",06530,Rural,30
+Saguache,CO,"Saguache, CO",06540,CEAC,60
+San Juan,CO,"San Juan, CO",06550,CEAC,60
+San Miguel,CO,"San Miguel, CO",06560,CEAC,60
+Sedgwick,CO,"Sedgwick, CO",06570,CEAC,60
+Summit,CO,"Summit, CO",06580,Rural,30
+Teller,CO,"Teller, CO",06590,Rural,30
+Washington,CO,"Washington, CO",06600,CEAC,60
+Weld,CO,"Weld, CO",06610,Metro,10
+Yuma,CO,"Yuma, CO",06620,CEAC,60
+Broomfield,CO,"Broomfield, CO",06630,Metro,10
+Fairfield,CT,"Fairfield, CT",07000,Large Metro,5
+Hartford,CT,"Hartford, CT",07010,Metro,10
+Litchfield,CT,"Litchfield, CT",07020,Metro,10
+Middlesex,CT,"Middlesex, CT",07030,Metro,10
+New Haven,CT,"New Haven, CT",07040,Metro,10
+New London,CT,"New London, CT",07050,Metro,10
+Tolland,CT,"Tolland, CT",07060,Metro,10
+Windham,CT,"Windham, CT",07070,Metro,10
+Kent,DE,"Kent, DE",08000,Metro,10
+New Castle,DE,"New Castle, DE",08010,Metro,10
+Sussex,DE,"Sussex, DE",08020,Metro,10
+District of Columbia,DC,"District of Columbia, DC",09000,Large Metro,5
+Alachua,FL,"Alachua, FL",10000,Metro,10
+Baker,FL,"Baker, FL",10010,Rural,30
+Bay,FL,"Bay, FL",10020,Metro,10
+Bradford,FL,"Bradford, FL",10030,Micro,20
+Brevard,FL,"Brevard, FL",10040,Metro,10
+Broward,FL,"Broward, FL",10050,Large Metro,5
+Calhoun,FL,"Calhoun, FL",10060,Rural,30
+Charlotte,FL,"Charlotte, FL",10070,Metro,10
+Citrus,FL,"Citrus, FL",10080,Metro,10
+Clay,FL,"Clay, FL",10090,Metro,10
+Collier,FL,"Collier, FL",10100,Metro,10
+Columbia,FL,"Columbia, FL",10110,Micro,20
+Miami-Dade,FL,"Miami-Dade, FL",10120,Large Metro,5
+DeSoto,FL,"DeSoto, FL",10130,Micro,20
+Dixie,FL,"Dixie, FL",10140,Rural,30
+Duval,FL,"Duval, FL",10150,Metro,10
+Escambia,FL,"Escambia, FL",10160,Metro,10
+Flagler,FL,"Flagler, FL",10170,Metro,10
+Franklin,FL,"Franklin, FL",10180,Rural,30
+Gadsden,FL,"Gadsden, FL",10190,Micro,20
+Gilchrist,FL,"Gilchrist, FL",10200,Rural,30
+Glades,FL,"Glades, FL",10210,Rural,30
+Gulf,FL,"Gulf, FL",10220,Rural,30
+Hamilton,FL,"Hamilton, FL",10230,Rural,30
+Hardee,FL,"Hardee, FL",10240,Rural,30
+Hendry,FL,"Hendry, FL",10250,Rural,30
+Hernando,FL,"Hernando, FL",10260,Metro,10
+Highlands,FL,"Highlands, FL",10270,Micro,20
+Hillsborough,FL,"Hillsborough, FL",10280,Large Metro,5
+Holmes,FL,"Holmes, FL",10290,Rural,30
+Indian River,FL,"Indian River, FL",10300,Metro,10
+Jackson,FL,"Jackson, FL",10310,Micro,20
+Jefferson,FL,"Jefferson, FL",10320,Rural,30
+Lafayette,FL,"Lafayette, FL",10330,Rural,30
+Lake,FL,"Lake, FL",10340,Metro,10
+Lee,FL,"Lee, FL",10350,Metro,10
+Leon,FL,"Leon, FL",10360,Metro,10
+Levy,FL,"Levy, FL",10370,Rural,30
+Liberty,FL,"Liberty, FL",10380,CEAC,60
+Madison,FL,"Madison, FL",10390,Rural,30
+Manatee,FL,"Manatee, FL",10400,Metro,10
+Marion,FL,"Marion, FL",10410,Metro,10
+Martin,FL,"Martin, FL",10420,Metro,10
+Monroe,FL,"Monroe, FL",10430,Micro,20
+Nassau,FL,"Nassau, FL",10440,Metro,10
+Okaloosa,FL,"Okaloosa, FL",10450,Metro,10
+Okeechobee,FL,"Okeechobee, FL",10460,Micro,20
+Orange,FL,"Orange, FL",10470,Large Metro,5
+Osceola,FL,"Osceola, FL",10480,Metro,10
+Palm Beach,FL,"Palm Beach, FL",10490,Metro,10
+Pasco,FL,"Pasco, FL",10500,Metro,10
+Pinellas,FL,"Pinellas, FL",10510,Large Metro,5
+Polk,FL,"Polk, FL",10520,Metro,10
+Putnam,FL,"Putnam, FL",10530,Micro,20
+St. Johns,FL,"St. Johns, FL",10540,Metro,10
+St. Lucie,FL,"St. Lucie, FL",10550,Metro,10
+Santa Rosa,FL,"Santa Rosa, FL",10560,Metro,10
+Sarasota,FL,"Sarasota, FL",10570,Metro,10
+Seminole,FL,"Seminole, FL",10580,Metro,10
+Sumter,FL,"Sumter, FL",10590,Metro,10
+Suwannee,FL,"Suwannee, FL",10600,Micro,20
+Taylor,FL,"Taylor, FL",10610,Rural,30
+Union,FL,"Union, FL",10620,Micro,20
+Volusia,FL,"Volusia, FL",10630,Metro,10
+Wakulla,FL,"Wakulla, FL",10640,Micro,20
+Walton,FL,"Walton, FL",10650,Micro,20
+Washington,FL,"Washington, FL",10660,Rural,30
+Appling,GA,"Appling, GA",11000,Rural,30
+Atkinson,GA,"Atkinson, GA",11010,Rural,30
+Bacon,GA,"Bacon, GA",11011,Rural,30
+Baker,GA,"Baker, GA",11020,CEAC,60
+Baldwin,GA,"Baldwin, GA",11030,Micro,20
+Banks,GA,"Banks, GA",11040,Micro,20
+Barrow,GA,"Barrow, GA",11050,Metro,10
+Bartow,GA,"Bartow, GA",11060,Metro,10
+Ben Hill,GA,"Ben Hill, GA",11070,Micro,20
+Berrien,GA,"Berrien, GA",11080,Rural,30
+Bibb,GA,"Bibb, GA",11090,Metro,10
+Bleckley,GA,"Bleckley, GA",11100,Micro,20
+Brantley,GA,"Brantley, GA",11110,Rural,30
+Brooks,GA,"Brooks, GA",11120,Rural,30
+Bryan,GA,"Bryan, GA",11130,Micro,20
+Bulloch,GA,"Bulloch, GA",11140,Metro,15
+Burke,GA,"Burke, GA",11150,Rural,30
+Butts,GA,"Butts, GA",11160,Micro,20
+Calhoun,GA,"Calhoun, GA",11161,Rural,30
+Camden,GA,"Camden, GA",11170,Micro,20
+Candler,GA,"Candler, GA",11180,Rural,30
+Carroll,GA,"Carroll, GA",11190,Metro,10
+Catoosa,GA,"Catoosa, GA",11200,Metro,10
+Charlton,GA,"Charlton, GA",11210,Rural,30
+Chatham,GA,"Chatham, GA",11220,Metro,10
+Chattahoochee,GA,"Chattahoochee, GA",11230,Rural,30
+Chattooga,GA,"Chattooga, GA",11240,Micro,20
+Cherokee,GA,"Cherokee, GA",11250,Metro,10
+Clarke,GA,"Clarke, GA",11260,Metro,10
+Clay,GA,"Clay, GA",11270,Rural,30
+Clayton,GA,"Clayton, GA",11280,Metro,10
+Clinch,GA,"Clinch, GA",11281,CEAC,60
+Cobb,GA,"Cobb, GA",11290,Large Metro,5
+Coffee,GA,"Coffee, GA",11291,Micro,20
+Colquitt,GA,"Colquitt, GA",11300,Micro,20
+Columbia,GA,"Columbia, GA",11310,Metro,10
+Cook,GA,"Cook, GA",11311,Micro,20
+Coweta,GA,"Coweta, GA",11320,Metro,10
+Crawford,GA,"Crawford, GA",11330,Rural,30
+Crisp,GA,"Crisp, GA",11340,Micro,20
+Dade,GA,"Dade, GA",11341,Micro,20
+Dawson,GA,"Dawson, GA",11350,Micro,20
+Decatur,GA,"Decatur, GA",11360,Rural,30
+DeKalb,GA,"DeKalb, GA",11370,Large Metro,5
+Dodge,GA,"Dodge, GA",11380,Rural,30
+Dooly,GA,"Dooly, GA",11381,Rural,30
+Dougherty,GA,"Dougherty, GA",11390,Metro,10
+Douglas,GA,"Douglas, GA",11400,Metro,10
+Early,GA,"Early, GA",11410,Rural,30
+Echols,GA,"Echols, GA",11420,CEAC,60
+Effingham,GA,"Effingham, GA",11421,Metro,10
+Elbert,GA,"Elbert, GA",11430,Micro,20
+Emanuel,GA,"Emanuel, GA",11440,Rural,30
+Evans,GA,"Evans, GA",11441,Micro,20
+Fannin,GA,"Fannin, GA",11450,Micro,20
+Fayette,GA,"Fayette, GA",11451,Metro,10
+Floyd,GA,"Floyd, GA",11460,Metro,10
+Forsyth,GA,"Forsyth, GA",11461,Metro,10
+Franklin,GA,"Franklin, GA",11462,Micro,20
+Fulton,GA,"Fulton, GA",11470,Large Metro,5
+Gilmer,GA,"Gilmer, GA",11471,Micro,20
+Glascock,GA,"Glascock, GA",11480,Rural,30
+Glynn,GA,"Glynn, GA",11490,Metro,10
+Gordon,GA,"Gordon, GA",11500,Metro,10
+Grady,GA,"Grady, GA",11510,Micro,20
+Greene,GA,"Greene, GA",11520,Rural,30
+Gwinnett,GA,"Gwinnett, GA",11530,Large Metro,5
+Habersham,GA,"Habersham, GA",11540,Micro,20
+Hall,GA,"Hall, GA",11550,Metro,10
+Hancock,GA,"Hancock, GA",11560,Rural,30
+Haralson,GA,"Haralson, GA",11570,Micro,20
+Harris,GA,"Harris, GA",11580,Micro,20
+Hart,GA,"Hart, GA",11581,Micro,20
+Heard,GA,"Heard, GA",11590,Rural,30
+Henry,GA,"Henry, GA",11591,Metro,10
+Houston,GA,"Houston, GA",11600,Metro,10
+Irwin,GA,"Irwin, GA",11601,Rural,30
+Jackson,GA,"Jackson, GA",11610,Metro,10
+Jasper,GA,"Jasper, GA",11611,Rural,30
+Jeff Davis,GA,"Jeff Davis, GA",11612,Rural,30
+Jefferson,GA,"Jefferson, GA",11620,Rural,30
+Jenkins,GA,"Jenkins, GA",11630,Rural,30
+Johnson,GA,"Johnson, GA",11640,Rural,30
+Jones,GA,"Jones, GA",11650,Micro,20
+Lamar,GA,"Lamar, GA",11651,Micro,20
+Lanier,GA,"Lanier, GA",11652,Micro,20
+Laurens,GA,"Laurens, GA",11660,Micro,20
+Lee,GA,"Lee, GA",11670,Micro,20
+Liberty,GA,"Liberty, GA",11680,Metro,10
+Lincoln,GA,"Lincoln, GA",11690,Rural,30
+Long,GA,"Long, GA",11691,Rural,30
+Lowndes,GA,"Lowndes, GA",11700,Metro,10
+Lumpkin,GA,"Lumpkin, GA",11701,Micro,20
+McDuffie,GA,"McDuffie, GA",11702,Micro,20
+McIntosh,GA,"McIntosh, GA",11703,Rural,30
+Macon,GA,"Macon, GA",11710,Rural,30
+Madison,GA,"Madison, GA",11720,Micro,20
+Marion,GA,"Marion, GA",11730,Rural,30
+Meriwether,GA,"Meriwether, GA",11740,Rural,30
+Miller,GA,"Miller, GA",11741,Rural,30
+Mitchell,GA,"Mitchell, GA",11750,Rural,30
+Monroe,GA,"Monroe, GA",11760,Micro,20
+Montgomery,GA,"Montgomery, GA",11770,Rural,30
+Morgan,GA,"Morgan, GA",11771,Micro,20
+Murray,GA,"Murray, GA",11772,Micro,20
+Muscogee,GA,"Muscogee, GA",11780,Metro,10
+Newton,GA,"Newton, GA",11790,Metro,10
+Oconee,GA,"Oconee, GA",11800,Micro,20
+Oglethorpe,GA,"Oglethorpe, GA",11801,Rural,30
+Paulding,GA,"Paulding, GA",11810,Metro,10
+Peach,GA,"Peach, GA",11811,Micro,20
+Pickens,GA,"Pickens, GA",11812,Micro,20
+Pierce,GA,"Pierce, GA",11820,Micro,20
+Pike,GA,"Pike, GA",11821,Micro,20
+Polk,GA,"Polk, GA",11830,Micro,20
+Pulaski,GA,"Pulaski, GA",11831,Rural,30
+Putnam,GA,"Putnam, GA",11832,Micro,20
+Quitman,GA,"Quitman, GA",11833,Rural,30
+Rabun,GA,"Rabun, GA",11834,Rural,30
+Randolph,GA,"Randolph, GA",11835,Rural,30
+Richmond,GA,"Richmond, GA",11840,Metro,10
+Rockdale,GA,"Rockdale, GA",11841,Metro,10
+Schley,GA,"Schley, GA",11842,Rural,30
+Screven,GA,"Screven, GA",11850,Rural,30
+Seminole,GA,"Seminole, GA",11851,Rural,30
+Spalding,GA,"Spalding, GA",11860,Metro,10
+Stephens,GA,"Stephens, GA",11861,Micro,20
+Stewart,GA,"Stewart, GA",11862,Rural,30
+Sumter,GA,"Sumter, GA",11870,Micro,20
+Talbot,GA,"Talbot, GA",11880,Rural,30
+Taliaferro,GA,"Taliaferro, GA",11881,CEAC,60
+Tattnall,GA,"Tattnall, GA",11882,Micro,20
+Taylor,GA,"Taylor, GA",11883,Rural,30
+Telfair,GA,"Telfair, GA",11884,Rural,30
+Terrell,GA,"Terrell, GA",11885,Rural,30
+Thomas,GA,"Thomas, GA",11890,Micro,20
+Tift,GA,"Tift, GA",11900,Micro,20
+Toombs,GA,"Toombs, GA",11901,Micro,20
+Towns,GA,"Towns, GA",11902,Micro,20
+Treutlen,GA,"Treutlen, GA",11903,Rural,30
+Troup,GA,"Troup, GA",11910,Metro,10
+Turner,GA,"Turner, GA",11911,Rural,30
+Twiggs,GA,"Twiggs, GA",11912,Rural,30
+Union,GA,"Union, GA",11913,Micro,20
+Upson,GA,"Upson, GA",11920,Micro,20
+Walker,GA,"Walker, GA",11921,Metro,10
+Walton,GA,"Walton, GA",11930,Metro,10
+Ware,GA,"Ware, GA",11940,Rural,30
+Warren,GA,"Warren, GA",11941,Rural,30
+Washington,GA,"Washington, GA",11950,Rural,30
+Wayne,GA,"Wayne, GA",11960,Rural,30
+Webster,GA,"Webster, GA",11961,Rural,30
+Wheeler,GA,"Wheeler, GA",11962,Rural,30
+White,GA,"White, GA",11963,Micro,20
+Whitfield,GA,"Whitfield, GA",11970,Metro,10
+Wilcox,GA,"Wilcox, GA",11971,Rural,30
+Wilkes,GA,"Wilkes, GA",11972,Rural,30
+Wilkinson,GA,"Wilkinson, GA",11973,Rural,30
+Worth,GA,"Worth, GA",11980,Rural,30
+Hawaii,HI,"Hawaii, HI",12010,Micro,20
+Honolulu,HI,"Honolulu, HI",12020,Metro,10
+Kalawao,HI,"Kalawao, HI",12030,Metro,10
+Kauai,HI,"Kauai, HI",12040,Micro,20
+Maui,HI,"Maui, HI",12050,Metro,10
+Ada,ID,"Ada, ID",13000,Metro,10
+Adams,ID,"Adams, ID",13010,CEAC,60
+Bannock,ID,"Bannock, ID",13020,Micro,20
+Bear Lake,ID,"Bear Lake, ID",13030,CEAC,60
+Benewah,ID,"Benewah, ID",13040,Rural,30
+Bingham,ID,"Bingham, ID",13050,Rural,30
+Blaine,ID,"Blaine, ID",13060,CEAC,60
+Boise,ID,"Boise, ID",13070,CEAC,60
+Bonner,ID,"Bonner, ID",13080,Rural,30
+Bonneville,ID,"Bonneville, ID",13090,Micro,20
+Boundary,ID,"Boundary, ID",13100,CEAC,60
+Butte,ID,"Butte, ID",13110,CEAC,60
+Camas,ID,"Camas, ID",13120,CEAC,60
+Canyon,ID,"Canyon, ID",13130,Metro,10
+Caribou,ID,"Caribou, ID",13140,CEAC,60
+Cassia,ID,"Cassia, ID",13150,CEAC,60
+Clark,ID,"Clark, ID",13160,CEAC,60
+Clearwater,ID,"Clearwater, ID",13170,CEAC,60
+Custer,ID,"Custer, ID",13180,CEAC,60
+Elmore,ID,"Elmore, ID",13190,CEAC,60
+Franklin,ID,"Franklin, ID",13200,Rural,30
+Fremont,ID,"Fremont, ID",13210,CEAC,60
+Gem,ID,"Gem, ID",13220,Rural,30
+Gooding,ID,"Gooding, ID",13230,Rural,30
+Idaho,ID,"Idaho, ID",13240,CEAC,60
+Jefferson,ID,"Jefferson, ID",13250,Rural,30
+Jerome,ID,"Jerome, ID",13260,Rural,30
+Kootenai,ID,"Kootenai, ID",13270,Metro,10
+Latah,ID,"Latah, ID",13280,Rural,30
+Lemhi,ID,"Lemhi, ID",13290,CEAC,60
+Lewis,ID,"Lewis, ID",13300,CEAC,60
+Lincoln,ID,"Lincoln, ID",13310,CEAC,60
+Madison,ID,"Madison, ID",13320,Micro,20
+Minidoka,ID,"Minidoka, ID",13330,Rural,30
+Nez Perce,ID,"Nez Perce, ID",13340,Rural,30
+Oneida,ID,"Oneida, ID",13350,CEAC,60
+Owyhee,ID,"Owyhee, ID",13360,CEAC,60
+Payette,ID,"Payette, ID",13370,Micro,20
+Power,ID,"Power, ID",13380,CEAC,60
+Shoshone,ID,"Shoshone, ID",13390,CEAC,60
+Teton,ID,"Teton, ID",13400,Rural,30
+Twin Falls,ID,"Twin Falls, ID",13410,Micro,20
+Valley,ID,"Valley, ID",13420,CEAC,60
+Washington,ID,"Washington, ID",13430,CEAC,60
+Adams,IL,"Adams, IL",14000,Micro,20
+Alexander,IL,"Alexander, IL",14010,Rural,30
+Bond,IL,"Bond, IL",14020,Rural,30
+Boone,IL,"Boone, IL",14030,Metro,10
+Brown,IL,"Brown, IL",14040,Rural,30
+Bureau,IL,"Bureau, IL",14050,Rural,30
+Calhoun,IL,"Calhoun, IL",14060,Rural,30
+Carroll,IL,"Carroll, IL",14070,Rural,30
+Cass,IL,"Cass, IL",14080,Rural,30
+Champaign,IL,"Champaign, IL",14090,Metro,10
+Christian,IL,"Christian, IL",14100,Rural,30
+Clark,IL,"Clark, IL",14110,Rural,30
+Clay,IL,"Clay, IL",14120,Rural,30
+Clinton,IL,"Clinton, IL",14130,Micro,20
+Coles,IL,"Coles, IL",14140,Metro,10
+Cook,IL,"Cook, IL",14141,Large Metro,5
+Crawford,IL,"Crawford, IL",14150,Rural,30
+Cumberland,IL,"Cumberland, IL",14160,Rural,30
+DeKalb,IL,"DeKalb, IL",14170,Metro,10
+De Witt,IL,"De Witt, IL",14180,Rural,30
+Douglas,IL,"Douglas, IL",14190,Rural,30
+DuPage,IL,"DuPage, IL",14250,Large Metro,5
+Edgar,IL,"Edgar, IL",14310,Rural,30
+Edwards,IL,"Edwards, IL",14320,Rural,30
+Effingham,IL,"Effingham, IL",14330,Micro,20
+Fayette,IL,"Fayette, IL",14340,Rural,30
+Ford,IL,"Ford, IL",14350,Rural,30
+Franklin,IL,"Franklin, IL",14360,Micro,20
+Fulton,IL,"Fulton, IL",14370,Rural,30
+Gallatin,IL,"Gallatin, IL",14380,Rural,30
+Greene,IL,"Greene, IL",14390,Rural,30
+Grundy,IL,"Grundy, IL",14400,Metro,10
+Hamilton,IL,"Hamilton, IL",14410,Rural,30
+Hancock,IL,"Hancock, IL",14420,Rural,30
+Hardin,IL,"Hardin, IL",14421,Rural,30
+Henderson,IL,"Henderson, IL",14440,Rural,30
+Henry,IL,"Henry, IL",14450,Micro,20
+Iroquois,IL,"Iroquois, IL",14460,Rural,30
+Jackson,IL,"Jackson, IL",14470,Metro,10
+Jasper,IL,"Jasper, IL",14480,Rural,30
+Jefferson,IL,"Jefferson, IL",14490,Micro,20
+Jersey,IL,"Jersey, IL",14500,Micro,20
+Jo Daviess,IL,"Jo Daviess, IL",14510,Rural,30
+Johnson,IL,"Johnson, IL",14520,Rural,30
+Kane,IL,"Kane, IL",14530,Metro,10
+Kankakee,IL,"Kankakee, IL",14540,Metro,10
+Kendall,IL,"Kendall, IL",14550,Metro,10
+Knox,IL,"Knox, IL",14560,Micro,20
+Lake,IL,"Lake, IL",14570,Large Metro,5
+La Salle,IL,"La Salle, IL",14580,Micro,20
+Lawrence,IL,"Lawrence, IL",14590,Rural,30
+Lee,IL,"Lee, IL",14600,Rural,30
+Livingston,IL,"Livingston, IL",14610,Rural,30
+Logan,IL,"Logan, IL",14620,Rural,30
+McDonough,IL,"McDonough, IL",14630,Micro,20
+McHenry,IL,"McHenry, IL",14640,Metro,10
+McLean,IL,"McLean, IL",14650,Metro,10
+Macon,IL,"Macon, IL",14660,Metro,10
+Macoupin,IL,"Macoupin, IL",14670,Micro,20
+Madison,IL,"Madison, IL",14680,Metro,10
+Marion,IL,"Marion, IL",14690,Micro,20
+Marshall,IL,"Marshall, IL",14700,Rural,30
+Mason,IL,"Mason, IL",14710,Rural,30
+Massac,IL,"Massac, IL",14720,Micro,20
+Menard,IL,"Menard, IL",14730,Rural,30
+Mercer,IL,"Mercer, IL",14740,Rural,30
+Monroe,IL,"Monroe, IL",14750,Micro,20
+Montgomery,IL,"Montgomery, IL",14760,Rural,30
+Morgan,IL,"Morgan, IL",14770,Micro,20
+Moultrie,IL,"Moultrie, IL",14780,Rural,30
+Ogle,IL,"Ogle, IL",14790,Micro,20
+Peoria,IL,"Peoria, IL",14800,Metro,10
+Perry,IL,"Perry, IL",14810,Rural,30
+Piatt,IL,"Piatt, IL",14820,Rural,30
+Pike,IL,"Pike, IL",14830,Rural,30
+Pope,IL,"Pope, IL",14831,Rural,30
+Pulaski,IL,"Pulaski, IL",14850,Rural,30
+Putnam,IL,"Putnam, IL",14860,Rural,30
+Randolph,IL,"Randolph, IL",14870,Micro,20
+Richland,IL,"Richland, IL",14880,Rural,30
+Rock Island,IL,"Rock Island, IL",14890,Metro,10
+St. Clair,IL,"St. Clair, IL",14900,Metro,10
+Saline,IL,"Saline, IL",14910,Micro,20
+Sangamon,IL,"Sangamon, IL",14920,Metro,10
+Schuyler,IL,"Schuyler, IL",14921,Rural,30
+Scott,IL,"Scott, IL",14940,Rural,30
+Shelby,IL,"Shelby, IL",14950,Rural,30
+Stark,IL,"Stark, IL",14960,Rural,30
+Stephenson,IL,"Stephenson, IL",14970,Micro,20
+Tazewell,IL,"Tazewell, IL",14980,Metro,10
+Union,IL,"Union, IL",14981,Rural,30
+Vermilion,IL,"Vermilion, IL",14982,Micro,20
+Wabash,IL,"Wabash, IL",14983,Micro,20
+Warren,IL,"Warren, IL",14984,Rural,30
+Washington,IL,"Washington, IL",14985,Rural,30
+Wayne,IL,"Wayne, IL",14986,Rural,30
+White,IL,"White, IL",14987,Rural,30
+Whiteside,IL,"Whiteside, IL",14988,Micro,20
+Will,IL,"Will, IL",14989,Metro,10
+Williamson,IL,"Williamson, IL",14990,Metro,10
+Winnebago,IL,"Winnebago, IL",14991,Metro,10
+Woodford,IL,"Woodford, IL",14992,Micro,20
+Adams,IN,"Adams, IN",15000,Micro,20
+Allen,IN,"Allen, IN",15010,Metro,10
+Bartholomew,IN,"Bartholomew, IN",15020,Metro,10
+Benton,IN,"Benton, IN",15030,Rural,30
+Blackford,IN,"Blackford, IN",15040,Micro,20
+Boone,IN,"Boone, IN",15050,Metro,10
+Brown,IN,"Brown, IN",15060,Rural,30
+Carroll,IN,"Carroll, IN",15070,Micro,20
+Cass,IN,"Cass, IN",15080,Micro,20
+Clark,IN,"Clark, IN",15090,Metro,10
+Clay,IN,"Clay, IN",15100,Micro,20
+Clinton,IN,"Clinton, IN",15110,Micro,20
+Crawford,IN,"Crawford, IN",15120,Rural,30
+Daviess,IN,"Daviess, IN",15130,Micro,20
+Dearborn,IN,"Dearborn, IN",15140,Micro,20
+Decatur,IN,"Decatur, IN",15150,Micro,20
+De Kalb,IN,"De Kalb, IN",15160,Micro,20
+Delaware,IN,"Delaware, IN",15170,Metro,10
+Dubois,IN,"Dubois, IN",15180,Micro,20
+Elkhart,IN,"Elkhart, IN",15190,Metro,10
+Fayette,IN,"Fayette, IN",15200,Micro,20
+Floyd,IN,"Floyd, IN",15210,Metro,10
+Fountain,IN,"Fountain, IN",15220,Rural,30
+Franklin,IN,"Franklin, IN",15230,Micro,20
+Fulton,IN,"Fulton, IN",15240,Micro,20
+Gibson,IN,"Gibson, IN",15250,Micro,20
+Grant,IN,"Grant, IN",15260,Metro,10
+Greene,IN,"Greene, IN",15270,Micro,20
+Hamilton,IN,"Hamilton, IN",15280,Metro,10
+Hancock,IN,"Hancock, IN",15290,Metro,10
+Harrison,IN,"Harrison, IN",15300,Micro,20
+Hendricks,IN,"Hendricks, IN",15310,Metro,10
+Henry,IN,"Henry, IN",15320,Micro,20
+Howard,IN,"Howard, IN",15330,Metro,10
+Huntington,IN,"Huntington, IN",15340,Micro,20
+Jackson,IN,"Jackson, IN",15350,Micro,20
+Jasper,IN,"Jasper, IN",15360,Micro,20
+Jay,IN,"Jay, IN",15370,Micro,20
+Jefferson,IN,"Jefferson, IN",15380,Micro,20
+Jennings,IN,"Jennings, IN",15390,Micro,20
+Johnson,IN,"Johnson, IN",15400,Metro,10
+Knox,IN,"Knox, IN",15410,Micro,20
+Kosciusko,IN,"Kosciusko, IN",15420,Metro,10
+Lagrange,IN,"LaGrange, IN",15430,Micro,20
+Lake,IN,"Lake, IN",15440,Metro,10
+La Porte,IN,"La Porte, IN",15450,Metro,10
+Lawrence,IN,"Lawrence, IN",15460,Micro,20
+Madison,IN,"Madison, IN",15470,Metro,10
+Marion,IN,"Marion, IN",15480,Large Metro,5
+Marshall,IN,"Marshall, IN",15490,Micro,20
+Martin,IN,"Martin, IN",15500,Rural,30
+Miami,IN,"Miami, IN",15510,Micro,20
+Monroe,IN,"Monroe, IN",15520,Metro,10
+Montgomery,IN,"Montgomery, IN",15530,Micro,20
+Morgan,IN,"Morgan, IN",15540,Metro,10
+Newton,IN,"Newton, IN",15550,Rural,30
+Noble,IN,"Noble, IN",15560,Micro,20
+Ohio,IN,"Ohio, IN",15570,Rural,30
+Orange,IN,"Orange, IN",15580,Rural,30
+Owen,IN,"Owen, IN",15590,Micro,20
+Parke,IN,"Parke, IN",15600,Rural,30
+Perry,IN,"Perry, IN",15610,Micro,20
+Pike,IN,"Pike, IN",15620,Rural,30
+Porter,IN,"Porter, IN",15630,Metro,10
+Posey,IN,"Posey, IN",15640,Micro,20
+Pulaski,IN,"Pulaski, IN",15650,Rural,30
+Putnam,IN,"Putnam, IN",15660,Micro,20
+Randolph,IN,"Randolph, IN",15670,Micro,20
+Ripley,IN,"Ripley, IN",15680,Micro,20
+Rush,IN,"Rush, IN",15690,Rural,30
+St. Joseph,IN,"St. Joseph, IN",15700,Metro,10
+Scott,IN,"Scott, IN",15710,Micro,20
+Shelby,IN,"Shelby, IN",15720,Micro,20
+Spencer,IN,"Spencer, IN",15730,Micro,20
+Starke,IN,"Starke, IN",15740,Micro,20
+Steuben,IN,"Steuben, IN",15750,Micro,20
+Sullivan,IN,"Sullivan, IN",15760,Rural,30
+Switzerland,IN,"Switzerland, IN",15770,Rural,30
+Tippecanoe,IN,"Tippecanoe, IN",15780,Metro,10
+Tipton,IN,"Tipton, IN",15790,Micro,20
+Union,IN,"Union, IN",15800,Rural,30
+Vanderburgh,IN,"Vanderburgh, IN",15810,Metro,10
+Vermillion,IN,"Vermillion, IN",15820,Micro,20
+Vigo,IN,"Vigo, IN",15830,Metro,10
+Wabash,IN,"Wabash, IN",15840,Micro,20
+Warren,IN,"Warren, IN",15850,Rural,30
+Warrick,IN,"Warrick, IN",15860,Metro,10
+Washington,IN,"Washington, IN",15870,Micro,20
+Wayne,IN,"Wayne, IN",15880,Metro,10
+Wells,IN,"Wells, IN",15890,Micro,20
+White,IN,"White, IN",15900,Rural,30
+Whitley,IN,"Whitley, IN",15910,Micro,20
+Adair,IA,"Adair, IA",16000,Rural,30
+Adams,IA,"Adams, IA",16010,CEAC,60
+Allamakee,IA,"Allamakee, IA",16020,Rural,30
+Appanoose,IA,"Appanoose, IA",16030,Rural,30
+Audubon,IA,"Audubon, IA",16040,Rural,30
+Benton,IA,"Benton, IA",16050,Rural,30
+Black Hawk,IA,"Black Hawk, IA",16060,Metro,10
+Boone,IA,"Boone, IA",16070,Rural,30
+Bremer,IA,"Bremer, IA",16080,Micro,20
+Buchanan,IA,"Buchanan, IA",16090,Rural,30
+Buena Vista,IA,"Buena Vista, IA",16100,Rural,30
+Butler,IA,"Butler, IA",16110,Rural,30
+Calhoun,IA,"Calhoun, IA",16120,Rural,30
+Carroll,IA,"Carroll, IA",16130,Rural,30
+Cass,IA,"Cass, IA",16140,Rural,30
+Cedar,IA,"Cedar, IA",16150,Rural,30
+Cerro Gordo,IA,"Cerro Gordo, IA",16160,Micro,20
+Cherokee,IA,"Cherokee, IA",16170,Rural,30
+Chickasaw,IA,"Chickasaw, IA",16180,Rural,30
+Clarke,IA,"Clarke, IA",16190,Rural,30
+Clay,IA,"Clay, IA",16200,Rural,30
+Clayton,IA,"Clayton, IA",16210,Rural,30
+Clinton,IA,"Clinton, IA",16220,Micro,20
+Crawford,IA,"Crawford, IA",16230,Rural,30
+Dallas,IA,"Dallas, IA",16240,Metro,10
+Davis,IA,"Davis, IA",16250,Rural,30
+Decatur,IA,"Decatur, IA",16260,Rural,30
+Delaware,IA,"Delaware, IA",16270,Rural,30
+Des Moines,IA,"Des Moines, IA",16280,Micro,20
+Dickinson,IA,"Dickinson, IA",16290,Rural,30
+Dubuque,IA,"Dubuque, IA",16300,Metro,15
+Emmet,IA,"Emmet, IA",16310,Rural,30
+Fayette,IA,"Fayette, IA",16320,Rural,30
+Floyd,IA,"Floyd, IA",16330,Rural,30
+Franklin,IA,"Franklin, IA",16340,Rural,30
+Fremont,IA,"Fremont, IA",16350,Rural,30
+Greene,IA,"Greene, IA",16360,Rural,30
+Grundy,IA,"Grundy, IA",16370,Rural,30
+Guthrie,IA,"Guthrie, IA",16380,Rural,30
+Hamilton,IA,"Hamilton, IA",16390,Rural,30
+Hancock,IA,"Hancock, IA",16400,Rural,30
+Hardin,IA,"Hardin, IA",16410,Rural,30
+Harrison,IA,"Harrison, IA",16420,Rural,30
+Henry,IA,"Henry, IA",16430,Rural,30
+Howard,IA,"Howard, IA",16440,Rural,30
+Humboldt,IA,"Humboldt, IA",16450,Rural,30
+Ida,IA,"Ida, IA",16460,Rural,30
+Iowa,IA,"Iowa, IA",16470,Rural,30
+Jackson,IA,"Jackson, IA",16480,Rural,30
+Jasper,IA,"Jasper, IA",16490,Micro,20
+Jefferson,IA,"Jefferson, IA",16500,Rural,30
+Johnson,IA,"Johnson, IA",16510,Metro,10
+Jones,IA,"Jones, IA",16520,Rural,30
+Keokuk,IA,"Keokuk, IA",16530,Rural,30
+Kossuth,IA,"Kossuth, IA",16540,Rural,30
+Lee,IA,"Lee, IA",16550,Micro,20
+Linn,IA,"Linn, IA",16560,Metro,10
+Louisa,IA,"Louisa, IA",16570,Rural,30
+Lucas,IA,"Lucas, IA",16580,Rural,30
+Lyon,IA,"Lyon, IA",16590,Rural,30
+Madison,IA,"Madison, IA",16600,Rural,30
+Mahaska,IA,"Mahaska, IA",16610,Rural,30
+Marion,IA,"Marion, IA",16620,Micro,20
+Marshall,IA,"Marshall, IA",16630,Micro,20
+Mills,IA,"Mills, IA",16640,Rural,30
+Mitchell,IA,"Mitchell, IA",16650,Rural,30
+Monona,IA,"Monona, IA",16660,Rural,30
+Monroe,IA,"Monroe, IA",16670,Rural,30
+Montgomery,IA,"Montgomery, IA",16680,Rural,30
+Muscatine,IA,"Muscatine, IA",16690,Micro,20
+O'Brien,IA,"O'Brien, IA",16700,Rural,30
+Osceola,IA,"Osceola, IA",16710,Rural,30
+Page,IA,"Page, IA",16720,Rural,30
+Palo Alto,IA,"Palo Alto, IA",16730,Rural,30
+Plymouth,IA,"Plymouth, IA",16740,Rural,30
+Pocahontas,IA,"Pocahontas, IA",16750,Rural,30
+Polk,IA,"Polk, IA",16760,Metro,10
+Pottawattamie,IA,"Pottawattamie, IA",16770,Micro,20
+Poweshiek,IA,"Poweshiek, IA",16780,Rural,30
+Ringgold,IA,"Ringgold, IA",16790,CEAC,60
+Sac,IA,"Sac, IA",16800,Rural,30
+Scott,IA,"Scott, IA",16810,Metro,10
+Shelby,IA,"Shelby, IA",16820,Rural,30
+Sioux,IA,"Sioux, IA",16830,Rural,30
+Story,IA,"Story, IA",16840,Metro,10
+Tama,IA,"Tama, IA",16850,Rural,30
+Taylor,IA,"Taylor, IA",16860,Rural,30
+Union,IA,"Union, IA",16870,Rural,30
+Van Buren,IA,"Van Buren, IA",16880,Rural,30
+Wapello,IA,"Wapello, IA",16890,Micro,20
+Warren,IA,"Warren, IA",16900,Micro,20
+Washington,IA,"Washington, IA",16910,Rural,30
+Wayne,IA,"Wayne, IA",16920,Rural,30
+Webster,IA,"Webster, IA",16930,Micro,20
+Winnebago,IA,"Winnebago, IA",16940,Rural,30
+Winneshiek,IA,"Winneshiek, IA",16950,Rural,30
+Woodbury,IA,"Woodbury, IA",16960,Metro,10
+Worth,IA,"Worth, IA",16970,Rural,30
+Wright,IA,"Wright, IA",16980,Rural,30
+Allen,KS,"Allen, KS",17000,Rural,30
+Anderson,KS,"Anderson, KS",17010,Rural,30
+Atchison,KS,"Atchison, KS",17020,Rural,30
+Barber,KS,"Barber, KS",17030,CEAC,60
+Barton,KS,"Barton, KS",17040,Rural,30
+Bourbon,KS,"Bourbon, KS",17050,Rural,30
+Brown,KS,"Brown, KS",17060,Rural,30
+Butler,KS,"Butler, KS",17070,Micro,20
+Chase,KS,"Chase, KS",17080,CEAC,60
+Chautauqua,KS,"Chautauqua, KS",17090,CEAC,60
+Cherokee,KS,"Cherokee, KS",17100,Rural,30
+Cheyenne,KS,"Cheyenne, KS",17110,CEAC,60
+Clark,KS,"Clark, KS",17120,CEAC,60
+Clay,KS,"Clay, KS",17130,Rural,30
+Cloud,KS,"Cloud, KS",17140,Rural,30
+Coffey,KS,"Coffey, KS",17150,Rural,30
+Comanche,KS,"Comanche, KS",17160,CEAC,60
+Cowley,KS,"Cowley, KS",17170,Rural,30
+Crawford,KS,"Crawford, KS",17180,Micro,20
+Decatur,KS,"Decatur, KS",17190,CEAC,60
+Dickinson,KS,"Dickinson, KS",17200,Rural,30
+Doniphan,KS,"Doniphan, KS",17210,Rural,30
+Douglas,KS,"Douglas, KS",17220,Metro,10
+Edwards,KS,"Edwards, KS",17230,CEAC,60
+Elk,KS,"Elk, KS",17240,CEAC,60
+Ellis,KS,"Ellis, KS",17250,Rural,30
+Ellsworth,KS,"Ellsworth, KS",17260,CEAC,60
+Finney,KS,"Finney, KS",17270,Rural,30
+Ford,KS,"Ford, KS",17280,Rural,30
+Franklin,KS,"Franklin, KS",17290,Rural,30
+Geary,KS,"Geary, KS",17300,Micro,20
+Gove,KS,"Gove, KS",17310,CEAC,60
+Graham,KS,"Graham, KS",17320,CEAC,60
+Grant,KS,"Grant, KS",17330,Rural,30
+Gray,KS,"Gray, KS",17340,CEAC,60
+Greeley,KS,"Greeley, KS",17350,CEAC,60
+Greenwood,KS,"Greenwood, KS",17360,CEAC,60
+Hamilton,KS,"Hamilton, KS",17370,CEAC,60
+Harper,KS,"Harper, KS",17380,CEAC,60
+Harvey,KS,"Harvey, KS",17390,Micro,20
+Haskell,KS,"Haskell, KS",17391,CEAC,60
+Hodgeman,KS,"Hodgeman, KS",17410,CEAC,60
+Jackson,KS,"Jackson, KS",17420,Rural,30
+Jefferson,KS,"Jefferson, KS",17430,Rural,30
+Jewell,KS,"Jewell, KS",17440,CEAC,60
+Johnson,KS,"Johnson, KS",17450,Metro,10
+Kearny,KS,"Kearny, KS",17451,CEAC,60
+Kingman,KS,"Kingman, KS",17470,CEAC,60
+Kiowa,KS,"Kiowa, KS",17480,CEAC,60
+Labette,KS,"Labette, KS",17490,Rural,30
+Lane,KS,"Lane, KS",17500,CEAC,60
+Leavenworth,KS,"Leavenworth, KS",17510,Metro,10
+Lincoln,KS,"Lincoln, KS",17520,CEAC,60
+Linn,KS,"Linn, KS",17530,Rural,30
+Logan,KS,"Logan, KS",17540,CEAC,60
+Lyon,KS,"Lyon, KS",17550,Rural,30
+McPherson,KS,"McPherson, KS",17560,Rural,30
+Marion,KS,"Marion, KS",17570,Rural,30
+Marshall,KS,"Marshall, KS",17580,Rural,30
+Meade,KS,"Meade, KS",17590,CEAC,60
+Miami,KS,"Miami, KS",17600,Micro,20
+Mitchell,KS,"Mitchell, KS",17610,CEAC,60
+Montgomery,KS,"Montgomery, KS",17620,Micro,20
+Morris,KS,"Morris, KS",17630,CEAC,60
+Morton,KS,"Morton, KS",17640,CEAC,60
+Nemaha,KS,"Nemaha, KS",17650,Rural,30
+Neosho,KS,"Neosho, KS",17660,Rural,30
+Ness,KS,"Ness, KS",17670,CEAC,60
+Norton,KS,"Norton, KS",17680,CEAC,60
+Osage,KS,"Osage, KS",17690,Rural,30
+Osborne,KS,"Osborne, KS",17700,CEAC,60
+Ottawa,KS,"Ottawa, KS",17710,CEAC,60
+Pawnee,KS,"Pawnee, KS",17720,CEAC,60
+Phillips,KS,"Phillips, KS",17730,CEAC,60
+Pottawatomie,KS,"Pottawatomie, KS",17740,Rural,30
+Pratt,KS,"Pratt, KS",17750,Rural,30
+Rawlins,KS,"Rawlins, KS",17760,CEAC,60
+Reno,KS,"Reno, KS",17770,Micro,20
+Republic,KS,"Republic, KS",17780,CEAC,60
+Rice,KS,"Rice, KS",17790,Rural,30
+Riley,KS,"Riley, KS",17800,Metro,10
+Rooks,KS,"Rooks, KS",17810,CEAC,60
+Rush,KS,"Rush, KS",17820,CEAC,60
+Russell,KS,"Russell, KS",17830,CEAC,60
+Saline,KS,"Saline, KS",17840,Micro,20
+Scott,KS,"Scott, KS",17841,CEAC,60
+Sedgwick,KS,"Sedgwick, KS",17860,Metro,10
+Seward,KS,"Seward, KS",17870,Rural,30
+Shawnee,KS,"Shawnee, KS",17880,Metro,10
+Sheridan,KS,"Sheridan, KS",17890,CEAC,60
+Sherman,KS,"Sherman, KS",17900,CEAC,60
+Smith,KS,"Smith, KS",17910,CEAC,60
+Stafford,KS,"Stafford, KS",17920,CEAC,60
+Stanton,KS,"Stanton, KS",17921,CEAC,60
+Stevens,KS,"Stevens, KS",17940,CEAC,60
+Sumner,KS,"Sumner, KS",17950,Rural,30
+Thomas,KS,"Thomas, KS",17960,CEAC,60
+Trego,KS,"Trego, KS",17970,CEAC,60
+Wabaunsee,KS,"Wabaunsee, KS",17980,CEAC,60
+Wallace,KS,"Wallace, KS",17981,CEAC,60
+Washington,KS,"Washington, KS",17982,CEAC,60
+Wichita,KS,"Wichita, KS",17983,CEAC,60
+Wilson,KS,"Wilson, KS",17984,Rural,30
+Woodson,KS,"Woodson, KS",17985,CEAC,60
+Wyandotte,KS,"Wyandotte, KS",17986,Metro,10
+Adair,KY,"Adair, KY",18000,Rural,30
+Allen,KY,"Allen, KY",18010,Micro,20
+Anderson,KY,"Anderson, KY",18020,Micro,20
+Ballard,KY,"Ballard, KY",18030,Rural,30
+Barren,KY,"Barren, KY",18040,Micro,20
+Bath,KY,"Bath, KY",18050,Rural,30
+Bell,KY,"Bell, KY",18060,Micro,20
+Boone,KY,"Boone, KY",18070,Metro,10
+Bourbon,KY,"Bourbon, KY",18080,Micro,20
+Boyd,KY,"Boyd, KY",18090,Micro,20
+Boyle,KY,"Boyle, KY",18100,Micro,20
+Bracken,KY,"Bracken, KY",18110,Rural,30
+Breathitt,KY,"Breathitt, KY",18120,Rural,30
+Breckinridge,KY,"Breckinridge, KY",18130,Rural,30
+Bullitt,KY,"Bullitt, KY",18140,Metro,10
+Butler,KY,"Butler, KY",18150,Rural,30
+Caldwell,KY,"Caldwell, KY",18160,Rural,30
+Calloway,KY,"Calloway, KY",18170,Micro,20
+Campbell,KY,"Campbell, KY",18180,Metro,10
+Carlisle,KY,"Carlisle, KY",18190,Rural,30
+Carroll,KY,"Carroll, KY",18191,Micro,20
+Carter,KY,"Carter, KY",18210,Micro,20
+Casey,KY,"Casey, KY",18220,Rural,30
+Christian,KY,"Christian, KY",18230,Metro,15
+Clark,KY,"Clark, KY",18240,Micro,20
+Clay,KY,"Clay, KY",18250,Rural,30
+Clinton,KY,"Clinton, KY",18260,Micro,20
+Crittenden,KY,"Crittenden, KY",18270,Rural,30
+Cumberland,KY,"Cumberland, KY",18271,Rural,30
+Daviess,KY,"Daviess, KY",18290,Metro,10
+Edmonson,KY,"Edmonson, KY",18291,Rural,30
+Elliott,KY,"Elliott, KY",18310,Rural,30
+Estill,KY,"Estill, KY",18320,Micro,20
+Fayette,KY,"Fayette, KY",18330,Metro,10
+Fleming,KY,"Fleming, KY",18340,Rural,30
+Floyd,KY,"Floyd, KY",18350,Micro,20
+Franklin,KY,"Franklin, KY",18360,Metro,10
+Fulton,KY,"Fulton, KY",18361,Rural,30
+Gallatin,KY,"Gallatin, KY",18362,Rural,30
+Garrard,KY,"Garrard, KY",18390,Micro,20
+Grant,KY,"Grant, KY",18400,Micro,20
+Graves,KY,"Graves, KY",18410,Micro,20
+Grayson,KY,"Grayson, KY",18420,Micro,20
+Green,KY,"Green, KY",18421,Rural,30
+Greenup,KY,"Greenup, KY",18440,Micro,20
+Hancock,KY,"Hancock, KY",18450,Rural,30
+Hardin,KY,"Hardin, KY",18460,Metro,10
+Harlan,KY,"Harlan, KY",18470,Micro,20
+Harrison,KY,"Harrison, KY",18480,Micro,20
+Hart,KY,"Hart, KY",18490,Rural,30
+Henderson,KY,"Henderson, KY",18500,Micro,20
+Henry,KY,"Henry, KY",18510,Micro,20
+Hickman,KY,"Hickman, KY",18511,Rural,30
+Hopkins,KY,"Hopkins, KY",18530,Micro,20
+Jackson,KY,"Jackson, KY",18540,Rural,30
+Jefferson,KY,"Jefferson, KY",18550,Large Metro,5
+Jessamine,KY,"Jessamine, KY",18560,Metro,10
+Johnson,KY,"Johnson, KY",18570,Micro,20
+Kenton,KY,"Kenton, KY",18580,Metro,10
+Knott,KY,"Knott, KY",18590,Rural,30
+Knox,KY,"Knox, KY",18600,Micro,20
+Larue,KY,"Larue, KY",18610,Micro,20
+Laurel,KY,"Laurel, KY",18620,Metro,10
+Lawrence,KY,"Lawrence, KY",18630,Rural,30
+Lee,KY,"Lee, KY",18640,Rural,30
+Leslie,KY,"Leslie, KY",18650,Rural,30
+Letcher,KY,"Letcher, KY",18660,Micro,20
+Lewis,KY,"Lewis, KY",18670,Rural,30
+Lincoln,KY,"Lincoln, KY",18680,Micro,20
+Livingston,KY,"Livingston, KY",18690,Rural,30
+Logan,KY,"Logan, KY",18700,Rural,30
+Lyon,KY,"Lyon, KY",18710,Rural,30
+McCracken,KY,"McCracken, KY",18720,Metro,10
+McCreary,KY,"McCreary, KY",18730,Rural,30
+McLean,KY,"McLean, KY",18740,Rural,30
+Madison,KY,"Madison, KY",18750,Metro,10
+Magoffin,KY,"Magoffin, KY",18760,Rural,30
+Marion,KY,"Marion, KY",18770,Micro,20
+Marshall,KY,"Marshall, KY",18780,Micro,20
+Martin,KY,"Martin, KY",18790,Micro,20
+Mason,KY,"Mason, KY",18800,Micro,20
+Meade,KY,"Meade, KY",18801,Micro,20
+Menifee,KY,"Menifee, KY",18802,Rural,30
+Mercer,KY,"Mercer, KY",18830,Micro,20
+Metcalfe,KY,"Metcalfe, KY",18831,Rural,30
+Monroe,KY,"Monroe, KY",18850,Rural,30
+Montgomery,KY,"Montgomery, KY",18860,Micro,20
+Morgan,KY,"Morgan, KY",18861,Rural,30
+Muhlenberg,KY,"Muhlenberg, KY",18880,Micro,20
+Nelson,KY,"Nelson, KY",18890,Micro,20
+Nicholas,KY,"Nicholas, KY",18900,Rural,30
+Ohio,KY,"Ohio, KY",18910,Rural,30
+Oldham,KY,"Oldham, KY",18920,Metro,10
+Owen,KY,"Owen, KY",18930,Rural,30
+Owsley,KY,"Owsley, KY",18931,Rural,30
+Pendleton,KY,"Pendleton, KY",18932,Micro,20
+Perry,KY,"Perry, KY",18960,Micro,20
+Pike,KY,"Pike, KY",18970,Micro,20
+Powell,KY,"Powell, KY",18971,Micro,20
+Pulaski,KY,"Pulaski, KY",18972,Micro,20
+Robertson,KY,"Robertson, KY",18973,Rural,30
+Rockcastle,KY,"Rockcastle, KY",18974,Micro,20
+Rowan,KY,"Rowan, KY",18975,Micro,20
+Russell,KY,"Russell, KY",18976,Micro,20
+Scott,KY,"Scott, KY",18977,Metro,10
+Shelby,KY,"Shelby, KY",18978,Micro,20
+Simpson,KY,"Simpson, KY",18979,Micro,20
+Spencer,KY,"Spencer, KY",18980,Micro,20
+Taylor,KY,"Taylor, KY",18981,Micro,20
+Todd,KY,"Todd, KY",18982,Rural,30
+Trigg,KY,"Trigg, KY",18983,Rural,30
+Trimble,KY,"Trimble, KY",18984,Rural,30
+Union,KY,"Union, KY",18985,Rural,30
+Warren,KY,"Warren, KY",18986,Metro,10
+Washington,KY,"Washington, KY",18987,Rural,30
+Wayne,KY,"Wayne, KY",18988,Rural,30
+Webster,KY,"Webster, KY",18989,Rural,30
+Whitley,KY,"Whitley, KY",18990,Micro,20
+Wolfe,KY,"Wolfe, KY",18991,Rural,30
+Woodford,KY,"Woodford, KY",18992,Micro,20
+Acadia,LA,"Acadia, LA",19000,Micro,20
+Allen,LA,"Allen, LA",19010,Rural,30
+Ascension,LA,"Ascension, LA",19020,Metro,10
+Assumption,LA,"Assumption, LA",19030,Micro,20
+Avoyelles,LA,"Avoyelles, LA",19040,Rural,30
+Beauregard,LA,"Beauregard, LA",19050,Rural,30
+Bienville,LA,"Bienville, LA",19060,Rural,30
+Bossier,LA,"Bossier, LA",19070,Metro,10
+Caddo,LA,"Caddo, LA",19080,Metro,10
+Calcasieu,LA,"Calcasieu, LA",19090,Metro,10
+Caldwell,LA,"Caldwell, LA",19100,Rural,30
+Cameron,LA,"Cameron, LA",19110,CEAC,60
+Catahoula,LA,"Catahoula, LA",19120,Rural,30
+Claiborne,LA,"Claiborne, LA",19130,Rural,30
+Concordia,LA,"Concordia, LA",19140,Rural,30
+De Soto,LA,"De Soto, LA",19150,Rural,30
+East Baton Rouge,LA,"East Baton Rouge, LA",19160,Metro,10
+East Carroll,LA,"East Carroll, LA",19170,Rural,30
+East Feliciana,LA,"East Feliciana, LA",19180,Rural,30
+Evangeline,LA,"Evangeline, LA",19190,Micro,20
+Franklin,LA,"Franklin, LA",19200,Rural,30
+Grant,LA,"Grant, LA",19210,Rural,30
+Iberia,LA,"Iberia, LA",19220,Metro,10
+Iberville,LA,"Iberville, LA",19230,Micro,20
+Jackson,LA,"Jackson, LA",19240,Rural,30
+Jefferson,LA,"Jefferson, LA",19250,Metro,10
+Jefferson Davis,LA,"Jefferson Davis, LA",19260,Rural,30
+Lafayette,LA,"Lafayette, LA",19270,Metro,10
+Lafourche,LA,"Lafourche, LA",19280,Micro,20
+La Salle,LA,"La Salle, LA",19290,Rural,30
+Lincoln,LA,"Lincoln, LA",19300,Micro,20
+Livingston,LA,"Livingston, LA",19310,Metro,15
+Madison,LA,"Madison, LA",19320,Rural,30
+Morehouse,LA,"Morehouse, LA",19330,Rural,30
+Natchitoches,LA,"Natchitoches, LA",19340,Rural,30
+Orleans,LA,"Orleans, LA",19350,Metro,10
+Ouachita,LA,"Ouachita, LA",19360,Metro,10
+Plaquemines,LA,"Plaquemines, LA",19370,Rural,30
+Pointe Coupee,LA,"Pointe Coupee, LA",19380,Rural,30
+Rapides,LA,"Rapides, LA",19390,Metro,15
+Red River,LA,"Red River, LA",19400,Rural,30
+Richland,LA,"Richland, LA",19410,Rural,30
+Sabine,LA,"Sabine, LA",19420,Rural,30
+St. Bernard,LA,"St. Bernard, LA",19430,Micro,20
+St. Charles,LA,"St. Charles, LA",19440,Metro,10
+St. Helena,LA,"St. Helena, LA",19450,Rural,30
+St. James,LA,"St. James, LA",19460,Micro,20
+St. John the Baptist,LA,"St. John the Baptist, LA",19470,Micro,20
+St. Landry,LA,"St. Landry, LA",19480,Micro,20
+St. Martin,LA,"St. Martin, LA",19490,Micro,20
+St. Mary,LA,"St. Mary, LA",19500,Micro,20
+St. Tammany,LA,"St. Tammany, LA",19510,Metro,10
+Tangipahoa,LA,"Tangipahoa, LA",19520,Metro,15
+Tensas,LA,"Tensas, LA",19530,CEAC,60
+Terrebonne,LA,"Terrebonne, LA",19540,Micro,20
+Union,LA,"Union, LA",19550,Rural,30
+Vermilion,LA,"Vermilion, LA",19560,Micro,20
+Vernon,LA,"Vernon, LA",19570,Micro,20
+Washington,LA,"Washington, LA",19580,Micro,20
+Webster,LA,"Webster, LA",19590,Micro,20
+West Baton Rouge,LA,"West Baton Rouge, LA",19600,Micro,20
+West Carroll,LA,"West Carroll, LA",19610,Rural,30
+West Feliciana,LA,"West Feliciana, LA",19620,Rural,30
+Winn,LA,"Winn, LA",19630,Rural,30
+Androscoggin,ME,"Androscoggin, ME",20000,Metro,10
+Aroostook,ME,"Aroostook, ME",20010,Micro,20
+Cumberland,ME,"Cumberland, ME",20020,Metro,10
+Franklin,ME,"Franklin, ME",20030,Rural,30
+Hancock,ME,"Hancock, ME",20040,Micro,20
+Kennebec,ME,"Kennebec, ME",20050,Metro,10
+Knox,ME,"Knox, ME",20060,Micro,20
+Lincoln,ME,"Lincoln, ME",20070,Micro,20
+Oxford,ME,"Oxford, ME",20080,Micro,20
+Penobscot,ME,"Penobscot, ME",20090,Micro,20
+Piscataquis,ME,"Piscataquis, ME",20100,CEAC,60
+Sagadahoc,ME,"Sagadahoc, ME",20110,Micro,20
+Somerset,ME,"Somerset, ME",20120,Micro,20
+Waldo,ME,"Waldo, ME",20130,Micro,20
+Washington,ME,"Washington, ME",20140,Rural,30
+York,ME,"York, ME",20150,Metro,10
+Allegany,MD,"Allegany, MD",21000,Metro,10
+Anne Arundel,MD,"Anne Arundel, MD",21010,Metro,10
+Baltimore,MD,"Baltimore, MD",21020,Metro,10
+Baltimore City,MD,"Baltimore city, MD",21030,Large Metro,5
+Calvert,MD,"Calvert, MD",21040,Metro,10
+Caroline,MD,"Caroline, MD",21050,Micro,20
+Carroll,MD,"Carroll, MD",21060,Metro,10
+Cecil,MD,"Cecil, MD",21070,Metro,10
+Charles,MD,"Charles, MD",21080,Metro,10
+Dorchester,MD,"Dorchester, MD",21090,Micro,20
+Frederick,MD,"Frederick, MD",21100,Metro,10
+Garrett,MD,"Garrett, MD",21110,Rural,30
+Harford,MD,"Harford, MD",21120,Metro,10
+Howard,MD,"Howard, MD",21130,Metro,10
+Kent,MD,"Kent, MD",21140,Micro,20
+Montgomery,MD,"Montgomery, MD",21150,Large Metro,5
+Prince George's,MD,"Prince George's, MD",21160,Large Metro,5
+Queen Anne's,MD,"Queen Anne's, MD",21170,Micro,20
+St. Mary's,MD,"St. Mary's, MD",21180,Metro,10
+Somerset,MD,"Somerset, MD",21190,Micro,20
+Talbot,MD,"Talbot, MD",21200,Micro,20
+Washington,MD,"Washington, MD",21210,Metro,10
+Wicomico,MD,"Wicomico, MD",21220,Metro,10
+Worcester,MD,"Worcester, MD",21230,Metro,10
+Barnstable,MA,"Barnstable, MA",22000,Metro,10
+Berkshire,MA,"Berkshire, MA",22010,Metro,10
+Bristol,MA,"Bristol, MA",22020,Metro,10
+Dukes,MA,"Dukes, MA",22030,Micro,20
+Essex,MA,"Essex, MA",22040,Large Metro,5
+Franklin,MA,"Franklin, MA",22060,Metro,10
+Hampden,MA,"Hampden, MA",22070,Metro,10
+Hampshire,MA,"Hampshire, MA",22080,Metro,10
+Middlesex,MA,"Middlesex, MA",22090,Large Metro,5
+Nantucket,MA,"Nantucket, MA",22120,Micro,20
+Norfolk,MA,"Norfolk, MA",22130,Large Metro,5
+Plymouth,MA,"Plymouth, MA",22150,Metro,10
+Suffolk,MA,"Suffolk, MA",22160,Large Metro,5
+Worcester,MA,"Worcester, MA",22170,Metro,10
+Alcona,MI,"Alcona, MI",23000,Rural,30
+Alger,MI,"Alger, MI",23010,Rural,30
+Allegan,MI,"Allegan, MI",23020,Metro,10
+Alpena,MI,"Alpena, MI",23030,Micro,20
+Antrim,MI,"Antrim, MI",23040,Rural,30
+Arenac,MI,"Arenac, MI",23050,Rural,30
+Baraga,MI,"Baraga, MI",23060,CEAC,60
+Barry,MI,"Barry, MI",23070,Metro,10
+Bay,MI,"Bay, MI",23080,Metro,10
+Benzie,MI,"Benzie, MI",23090,Micro,20
+Berrien,MI,"Berrien, MI",23100,Metro,10
+Branch,MI,"Branch, MI",23110,Micro,20
+Calhoun,MI,"Calhoun, MI",23120,Metro,10
+Cass,MI,"Cass, MI",23130,Metro,10
+Charlevoix,MI,"Charlevoix, MI",23140,Micro,20
+Cheboygan,MI,"Cheboygan, MI",23150,Rural,30
+Chippewa,MI,"Chippewa, MI",23160,Rural,30
+Clare,MI,"Clare, MI",23170,Micro,20
+Clinton,MI,"Clinton, MI",23180,Metro,10
+Crawford,MI,"Crawford, MI",23190,Rural,30
+Delta,MI,"Delta, MI",23200,Rural,30
+Dickinson,MI,"Dickinson, MI",23210,Rural,30
+Eaton,MI,"Eaton, MI",23220,Metro,10
+Emmet,MI,"Emmet, MI",23230,Micro,20
+Genesee,MI,"Genesee, MI",23240,Metro,10
+Gladwin,MI,"Gladwin, MI",23250,Micro,20
+Gogebic,MI,"Gogebic, MI",23260,Rural,30
+Grand Traverse,MI,"Grand Traverse, MI",23270,Metro,10
+Gratiot,MI,"Gratiot, MI",23280,Micro,20
+Hillsdale,MI,"Hillsdale, MI",23290,Micro,20
+Houghton,MI,"Houghton, MI",23300,Rural,30
+Huron,MI,"Huron, MI",23310,Rural,30
+Ingham,MI,"Ingham, MI",23320,Metro,10
+Ionia,MI,"Ionia, MI",23330,Metro,10
+Iosco,MI,"Iosco, MI",23340,Rural,30
+Iron,MI,"Iron, MI",23350,CEAC,60
+Isabella,MI,"Isabella, MI",23360,Metro,10
+Jackson,MI,"Jackson, MI",23370,Metro,10
+Kalamazoo,MI,"Kalamazoo, MI",23380,Metro,10
+Kalkaska,MI,"Kalkaska, MI",23390,Rural,30
+Kent,MI,"Kent, MI",23400,Metro,10
+Keweenaw,MI,"Keweenaw, MI",23410,CEAC,60
+Lake,MI,"Lake, MI",23420,Rural,30
+Lapeer,MI,"Lapeer, MI",23430,Metro,10
+Leelanau,MI,"Leelanau, MI",23440,Micro,20
+Lenawee,MI,"Lenawee, MI",23450,Metro,10
+Livingston,MI,"Livingston, MI",23460,Metro,10
+Luce,MI,"Luce, MI",23470,CEAC,60
+Mackinac,MI,"Mackinac, MI",23480,Rural,30
+Macomb,MI,"Macomb, MI",23490,Large Metro,5
+Manistee,MI,"Manistee, MI",23500,Rural,30
+Marquette,MI,"Marquette, MI",23510,Micro,20
+Mason,MI,"Mason, MI",23520,Micro,20
+Mecosta,MI,"Mecosta, MI",23530,Micro,20
+Menominee,MI,"Menominee, MI",23540,Rural,30
+Midland,MI,"Midland, MI",23550,Metro,10
+Missaukee,MI,"Missaukee, MI",23560,Rural,30
+Monroe,MI,"Monroe, MI",23570,Metro,10
+Montcalm,MI,"Montcalm, MI",23580,Micro,20
+Montmorency,MI,"Montmorency, MI",23590,Rural,30
+Muskegon,MI,"Muskegon, MI",23600,Metro,10
+Newaygo,MI,"Newaygo, MI",23610,Micro,20
+Oakland,MI,"Oakland, MI",23620,Large Metro,5
+Oceana,MI,"Oceana, MI",23630,Micro,20
+Ogemaw,MI,"Ogemaw, MI",23640,Rural,30
+Ontonagon,MI,"Ontonagon, MI",23650,CEAC,60
+Osceola,MI,"Osceola, MI",23660,Rural,30
+Oscoda,MI,"Oscoda, MI",23670,Rural,30
+Otsego,MI,"Otsego, MI",23680,Rural,30
+Ottawa,MI,"Ottawa, MI",23690,Metro,10
+Presque Isle,MI,"Presque Isle, MI",23700,Rural,30
+Roscommon,MI,"Roscommon, MI",23710,Rural,30
+Saginaw,MI,"Saginaw, MI",23720,Metro,10
+St. Clair,MI,"St. Clair, MI",23730,Metro,10
+St. Joseph,MI,"St. Joseph, MI",23740,Metro,10
+Sanilac,MI,"Sanilac, MI",23750,Rural,30
+Schoolcraft,MI,"Schoolcraft, MI",23760,CEAC,60
+Shiawassee,MI,"Shiawassee, MI",23770,Metro,10
+Tuscola,MI,"Tuscola, MI",23780,Micro,20
+Van Buren,MI,"Van Buren, MI",23790,Metro,10
+Washtenaw,MI,"Washtenaw, MI",23800,Metro,10
+Wayne,MI,"Wayne, MI",23810,Large Metro,5
+Wexford,MI,"Wexford, MI",23830,Micro,20
+Aitkin,MN,"Aitkin, MN",24000,CEAC,60
+Anoka,MN,"Anoka, MN",24010,Metro,10
+Becker,MN,"Becker, MN",24020,Rural,30
+Beltrami,MN,"Beltrami, MN",24030,Rural,30
+Benton,MN,"Benton, MN",24040,Micro,20
+Big Stone,MN,"Big Stone, MN",24050,Rural,30
+Blue Earth,MN,"Blue Earth, MN",24060,Micro,20
+Brown,MN,"Brown, MN",24070,Rural,30
+Carlton,MN,"Carlton, MN",24080,Rural,30
+Carver,MN,"Carver, MN",24090,Metro,10
+Cass,MN,"Cass, MN",24100,Rural,30
+Chippewa,MN,"Chippewa, MN",24110,Rural,30
+Chisago,MN,"Chisago, MN",24120,Metro,10
+Clay,MN,"Clay, MN",24130,Micro,20
+Clearwater,MN,"Clearwater, MN",24140,CEAC,60
+Cook,MN,"Cook, MN",24150,CEAC,60
+Cottonwood,MN,"Cottonwood, MN",24160,Rural,30
+Crow Wing,MN,"Crow Wing, MN",24170,Micro,20
+Dakota,MN,"Dakota, MN",24180,Metro,10
+Dodge,MN,"Dodge, MN",24190,Rural,30
+Douglas,MN,"Douglas, MN",24200,Micro,20
+Faribault,MN,"Faribault, MN",24210,Rural,30
+Fillmore,MN,"Fillmore, MN",24220,Rural,30
+Freeborn,MN,"Freeborn, MN",24230,Rural,30
+Goodhue,MN,"Goodhue, MN",24240,Micro,20
+Grant,MN,"Grant, MN",24250,Rural,30
+Hennepin,MN,"Hennepin, MN",24260,Large Metro,5
+Houston,MN,"Houston, MN",24270,Rural,30
+Hubbard,MN,"Hubbard, MN",24280,Rural,30
+Isanti,MN,"Isanti, MN",24290,Micro,20
+Itasca,MN,"Itasca, MN",24300,Rural,30
+Jackson,MN,"Jackson, MN",24310,Rural,30
+Kanabec,MN,"Kanabec, MN",24320,Rural,30
+Kandiyohi,MN,"Kandiyohi, MN",24330,Micro,20
+Kittson,MN,"Kittson, MN",24340,CEAC,60
+Koochiching,MN,"Koochiching, MN",24350,CEAC,60
+Lac qui Parle,MN,"Lac qui Parle, MN",24360,CEAC,60
+Lake,MN,"Lake, MN",24370,CEAC,60
+Lake of the Woods,MN,"Lake of the Woods, MN",24380,CEAC,60
+Le Sueur,MN,"Le Sueur, MN",24390,Micro,20
+Lincoln,MN,"Lincoln, MN",24400,Rural,30
+Lyon,MN,"Lyon, MN",24410,Rural,30
+McLeod,MN,"McLeod, MN",24420,Micro,20
+Mahnomen,MN,"Mahnomen, MN",24430,CEAC,60
+Marshall,MN,"Marshall, MN",24440,CEAC,60
+Martin,MN,"Martin, MN",24450,Rural,30
+Meeker,MN,"Meeker, MN",24460,Rural,30
+Mille Lacs,MN,"Mille Lacs, MN",24470,Rural,30
+Morrison,MN,"Morrison, MN",24480,Rural,30
+Mower,MN,"Mower, MN",24490,Micro,20
+Murray,MN,"Murray, MN",24500,Rural,30
+Nicollet,MN,"Nicollet, MN",24510,Micro,20
+Nobles,MN,"Nobles, MN",24520,Rural,30
+Norman,MN,"Norman, MN",24530,CEAC,60
+Olmsted,MN,"Olmsted, MN",24540,Metro,10
+Otter Tail,MN,"Otter Tail, MN",24550,Micro,20
+Pennington,MN,"Pennington, MN",24560,Rural,30
+Pine,MN,"Pine, MN",24570,Rural,30
+Pipestone,MN,"Pipestone, MN",24580,Rural,30
+Polk,MN,"Polk, MN",24590,Rural,30
+Pope,MN,"Pope, MN",24600,Rural,30
+Ramsey,MN,"Ramsey, MN",24610,Large Metro,5
+Red Lake,MN,"Red Lake, MN",24620,CEAC,60
+Redwood,MN,"Redwood, MN",24630,Rural,30
+Renville,MN,"Renville, MN",24640,Rural,30
+Rice,MN,"Rice, MN",24650,Metro,10
+Rock,MN,"Rock, MN",24660,Rural,30
+Roseau,MN,"Roseau, MN",24670,CEAC,60
+St. Louis,MN,"St. Louis, MN",24680,Metro,15
+Scott,MN,"Scott, MN",24690,Metro,10
+Sherburne,MN,"Sherburne, MN",24700,Metro,10
+Sibley,MN,"Sibley, MN",24710,Rural,30
+Stearns,MN,"Stearns, MN",24720,Metro,10
+Steele,MN,"Steele, MN",24730,Micro,20
+Stevens,MN,"Stevens, MN",24740,Rural,30
+Swift,MN,"Swift, MN",24750,Rural,30
+Todd,MN,"Todd, MN",24760,Rural,30
+Traverse,MN,"Traverse, MN",24770,CEAC,60
+Wabasha,MN,"Wabasha, MN",24780,Rural,30
+Wadena,MN,"Wadena, MN",24790,Rural,30
+Waseca,MN,"Waseca, MN",24800,Rural,30
+Washington,MN,"Washington, MN",24810,Metro,10
+Watonwan,MN,"Watonwan, MN",24820,Rural,30
+Wilkin,MN,"Wilkin, MN",24830,CEAC,60
+Winona,MN,"Winona, MN",24840,Micro,20
+Wright,MN,"Wright, MN",24850,Metro,10
+Yellow Medicine,MN,"Yellow Medicine, MN",24860,Rural,30
+Adams,MS,"Adams, MS",25000,Micro,20
+Alcorn,MS,"Alcorn, MS",25010,Micro,20
+Amite,MS,"Amite, MS",25020,Rural,30
+Attala,MS,"Attala, MS",25030,Rural,30
+Benton,MS,"Benton, MS",25040,Rural,30
+Bolivar,MS,"Bolivar, MS",25050,Rural,30
+Calhoun,MS,"Calhoun, MS",25060,Rural,30
+Carroll,MS,"Carroll, MS",25070,Rural,30
+Chickasaw,MS,"Chickasaw, MS",25080,Rural,30
+Choctaw,MS,"Choctaw, MS",25090,Rural,30
+Claiborne,MS,"Claiborne, MS",25100,Rural,30
+Clarke,MS,"Clarke, MS",25110,Rural,30
+Clay,MS,"Clay, MS",25120,Rural,30
+Coahoma,MS,"Coahoma, MS",25130,Rural,30
+Copiah,MS,"Copiah, MS",25140,Rural,30
+Covington,MS,"Covington, MS",25150,Rural,30
+DeSoto,MS,"DeSoto, MS",25160,Metro,10
+Forrest,MS,"Forrest, MS",25170,Metro,10
+Franklin,MS,"Franklin, MS",25180,Rural,30
+George,MS,"George, MS",25190,Rural,30
+Greene,MS,"Greene, MS",25200,Rural,30
+Grenada,MS,"Grenada, MS",25210,Micro,20
+Hancock,MS,"Hancock, MS",25220,Micro,20
+Harrison,MS,"Harrison, MS",25230,Metro,10
+Hinds,MS,"Hinds, MS",25240,Metro,10
+Holmes,MS,"Holmes, MS",25250,Rural,30
+Humphreys,MS,"Humphreys, MS",25260,Rural,30
+Issaquena,MS,"Issaquena, MS",25270,CEAC,60
+Itawamba,MS,"Itawamba, MS",25280,Rural,30
+Jackson,MS,"Jackson, MS",25290,Metro,10
+Jasper,MS,"Jasper, MS",25300,Rural,30
+Jefferson,MS,"Jefferson, MS",25310,Rural,30
+Jefferson Davis,MS,"Jefferson Davis, MS",25320,Rural,30
+Jones,MS,"Jones, MS",25330,Micro,20
+Kemper,MS,"Kemper, MS",25340,Rural,30
+Lafayette,MS,"Lafayette, MS",25350,Micro,20
+Lamar,MS,"Lamar, MS",25360,Metro,15
+Lauderdale,MS,"Lauderdale, MS",25370,Metro,10
+Lawrence,MS,"Lawrence, MS",25380,Rural,30
+Leake,MS,"Leake, MS",25390,Rural,30
+Lee,MS,"Lee, MS",25400,Metro,10
+Leflore,MS,"Leflore, MS",25410,Micro,20
+Lincoln,MS,"Lincoln, MS",25420,Micro,20
+Lowndes,MS,"Lowndes, MS",25430,Metro,15
+Madison,MS,"Madison, MS",25440,Metro,15
+Marion,MS,"Marion, MS",25450,Rural,30
+Marshall,MS,"Marshall, MS",25460,Micro,20
+Monroe,MS,"Monroe, MS",25470,Rural,30
+Montgomery,MS,"Montgomery, MS",25480,Rural,30
+Neshoba,MS,"Neshoba, MS",25490,Micro,20
+Newton,MS,"Newton, MS",25500,Rural,30
+Noxubee,MS,"Noxubee, MS",25510,Rural,30
+Oktibbeha,MS,"Oktibbeha, MS",25520,Micro,20
+Panola,MS,"Panola, MS",25530,Rural,30
+Pearl River,MS,"Pearl River, MS",25540,Micro,25
+Perry,MS,"Perry, MS",25550,Rural,30
+Pike,MS,"Pike, MS",25560,Micro,20
+Pontotoc,MS,"Pontotoc, MS",25570,Micro,20
+Prentiss,MS,"Prentiss, MS",25580,Micro,20
+Quitman,MS,"Quitman, MS",25590,Rural,30
+Rankin,MS,"Rankin, MS",25600,Metro,10
+Scott,MS,"Scott, MS",25610,Rural,30
+Sharkey,MS,"Sharkey, MS",25620,Rural,30
+Simpson,MS,"Simpson, MS",25630,Rural,30
+Smith,MS,"Smith, MS",25640,Rural,30
+Stone,MS,"Stone, MS",25650,Rural,30
+Sunflower,MS,"Sunflower, MS",25660,Rural,30
+Tallahatchie,MS,"Tallahatchie, MS",25670,Rural,30
+Tate,MS,"Tate, MS",25680,Micro,20
+Tippah,MS,"Tippah, MS",25690,Rural,30
+Tishomingo,MS,"Tishomingo, MS",25700,Rural,30
+Tunica,MS,"Tunica, MS",25710,Rural,30
+Union,MS,"Union, MS",25720,Micro,20
+Walthall,MS,"Walthall, MS",25730,Rural,30
+Warren,MS,"Warren, MS",25740,Micro,20
+Washington,MS,"Washington, MS",25750,Micro,20
+Wayne,MS,"Wayne, MS",25760,Rural,30
+Webster,MS,"Webster, MS",25770,Rural,30
+Wilkinson,MS,"Wilkinson, MS",25780,Rural,30
+Winston,MS,"Winston, MS",25790,Rural,30
+Yalobusha,MS,"Yalobusha, MS",25800,Rural,30
+Yazoo,MS,"Yazoo, MS",25810,Rural,30
+Adair,MO,"Adair, MO",26000,Rural,30
+Andrew,MO,"Andrew, MO",26010,Rural,30
+Atchison,MO,"Atchison, MO",26020,CEAC,60
+Audrain,MO,"Audrain, MO",26030,Rural,30
+Barry,MO,"Barry, MO",26040,Rural,30
+Barton,MO,"Barton, MO",26050,Rural,30
+Bates,MO,"Bates, MO",26060,Rural,30
+Benton,MO,"Benton, MO",26070,Rural,30
+Bollinger,MO,"Bollinger, MO",26080,Rural,30
+Boone,MO,"Boone, MO",26090,Metro,10
+Buchanan,MO,"Buchanan, MO",26100,Metro,10
+Butler,MO,"Butler, MO",26110,Micro,20
+Caldwell,MO,"Caldwell, MO",26120,Rural,30
+Callaway,MO,"Callaway, MO",26130,Micro,20
+Camden,MO,"Camden, MO",26140,Micro,20
+Cape Girardeau,MO,"Cape Girardeau, MO",26150,Metro,10
+Carroll,MO,"Carroll, MO",26160,Rural,30
+Carter,MO,"Carter, MO",26170,Rural,30
+Cass,MO,"Cass, MO",26180,Metro,10
+Cedar,MO,"Cedar, MO",26190,Rural,30
+Chariton,MO,"Chariton, MO",26200,Rural,30
+Christian,MO,"Christian, MO",26210,Metro,10
+Clark,MO,"Clark, MO",26220,Rural,30
+Clay,MO,"Clay, MO",26230,Metro,10
+Clinton,MO,"Clinton, MO",26240,Rural,30
+Cole,MO,"Cole, MO",26250,Metro,10
+Cooper,MO,"Cooper, MO",26260,Rural,30
+Crawford,MO,"Crawford, MO",26270,Rural,30
+Dade,MO,"Dade, MO",26280,Rural,30
+Dallas,MO,"Dallas, MO",26290,Rural,30
+Daviess,MO,"Daviess, MO",26300,Rural,30
+DeKalb,MO,"DeKalb, MO",26310,Rural,30
+Dent,MO,"Dent, MO",26320,Rural,30
+Douglas,MO,"Douglas, MO",26330,Rural,30
+Dunklin,MO,"Dunklin, MO",26340,Micro,20
+Franklin,MO,"Franklin, MO",26350,Metro,10
+Gasconade,MO,"Gasconade, MO",26360,Rural,30
+Gentry,MO,"Gentry, MO",26370,Rural,30
+Greene,MO,"Greene, MO",26380,Metro,10
+Grundy,MO,"Grundy, MO",26390,Rural,30
+Harrison,MO,"Harrison, MO",26400,Rural,30
+Henry,MO,"Henry, MO",26410,Rural,30
+Hickory,MO,"Hickory, MO",26411,Rural,30
+Holt,MO,"Holt, MO",26412,CEAC,60
+Howard,MO,"Howard, MO",26440,Rural,30
+Howell,MO,"Howell, MO",26450,Rural,30
+Iron,MO,"Iron, MO",26460,Rural,30
+Jackson,MO,"Jackson, MO",26470,Metro,10
+Jasper,MO,"Jasper, MO",26480,Metro,10
+Jefferson,MO,"Jefferson, MO",26490,Metro,10
+Johnson,MO,"Johnson, MO",26500,Micro,20
+Knox,MO,"Knox, MO",26510,CEAC,60
+Laclede,MO,"Laclede, MO",26520,Rural,30
+Lafayette,MO,"Lafayette, MO",26530,Micro,20
+Lawrence,MO,"Lawrence, MO",26540,Micro,20
+Lewis,MO,"Lewis, MO",26541,Rural,30
+Lincoln,MO,"Lincoln, MO",26560,Micro,20
+Linn,MO,"Linn, MO",26570,Rural,30
+Livingston,MO,"Livingston, MO",26580,Rural,30
+McDonald,MO,"McDonald, MO",26590,Rural,30
+Macon,MO,"Macon, MO",26600,Rural,30
+Madison,MO,"Madison, MO",26601,Rural,30
+Maries,MO,"Maries, MO",26620,Rural,30
+Marion,MO,"Marion, MO",26630,Micro,20
+Mercer,MO,"Mercer, MO",26631,CEAC,60
+Miller,MO,"Miller, MO",26650,Rural,30
+Mississippi,MO,"Mississippi, MO",26660,Rural,30
+Moniteau,MO,"Moniteau, MO",26670,Rural,30
+Monroe,MO,"Monroe, MO",26680,Rural,30
+Montgomery,MO,"Montgomery, MO",26690,Rural,30
+Morgan,MO,"Morgan, MO",26700,Rural,30
+New Madrid,MO,"New Madrid, MO",26710,Rural,30
+Newton,MO,"Newton, MO",26720,Micro,20
+Nodaway,MO,"Nodaway, MO",26730,Rural,30
+Oregon,MO,"Oregon, MO",26740,Rural,30
+Osage,MO,"Osage, MO",26750,Rural,30
+Ozark,MO,"Ozark, MO",26751,Rural,30
+Pemiscot,MO,"Pemiscot, MO",26770,Rural,30
+Perry,MO,"Perry, MO",26780,Rural,30
+Pettis,MO,"Pettis, MO",26790,Micro,20
+Phelps,MO,"Phelps, MO",26800,Micro,20
+Pike,MO,"Pike, MO",26810,Rural,30
+Platte,MO,"Platte, MO",26820,Metro,10
+Polk,MO,"Polk, MO",26821,Rural,30
+Pulaski,MO,"Pulaski, MO",26840,Micro,20
+Putnam,MO,"Putnam, MO",26850,CEAC,60
+Ralls,MO,"Ralls, MO",26860,Rural,30
+Randolph,MO,"Randolph, MO",26870,Micro,20
+Ray,MO,"Ray, MO",26880,Rural,30
+Reynolds,MO,"Reynolds, MO",26881,CEAC,60
+Ripley,MO,"Ripley, MO",26900,Rural,30
+St. Charles,MO,"St. Charles, MO",26910,Metro,10
+St. Clair,MO,"St. Clair, MO",26911,Rural,30
+St. Francois,MO,"St. Francois, MO",26930,Metro,10
+St. Louis,MO,"St. Louis, MO",26940,Large Metro,5
+St. Louis City,MO,"St. Louis city, MO",26950,Large Metro,5
+Ste. Genevieve,MO,"Ste. Genevieve, MO",26960,Rural,30
+Saline,MO,"Saline, MO",26970,Rural,30
+Schuyler,MO,"Schuyler, MO",26980,Rural,30
+Scotland,MO,"Scotland, MO",26981,Rural,30
+Scott,MO,"Scott, MO",26982,Micro,20
+Shannon,MO,"Shannon, MO",26983,CEAC,60
+Shelby,MO,"Shelby, MO",26984,Rural,30
+Stoddard,MO,"Stoddard, MO",26985,Rural,30
+Stone,MO,"Stone, MO",26986,Micro,20
+Sullivan,MO,"Sullivan, MO",26987,CEAC,60
+Taney,MO,"Taney, MO",26988,Micro,20
+Texas,MO,"Texas, MO",26989,Rural,30
+Vernon,MO,"Vernon, MO",26990,Rural,30
+Warren,MO,"Warren, MO",26991,Micro,20
+Washington,MO,"Washington, MO",26992,Rural,30
+Wayne,MO,"Wayne, MO",26993,Rural,30
+Webster,MO,"Webster, MO",26994,Micro,20
+Worth,MO,"Worth, MO",26995,CEAC,60
+Wright,MO,"Wright, MO",26996,Rural,30
+Beaverhead,MT,"Beaverhead, MT",27000,CEAC,60
+Big Horn,MT,"Big Horn, MT",27010,CEAC,60
+Blaine,MT,"Blaine, MT",27020,CEAC,60
+Broadwater,MT,"Broadwater, MT",27030,CEAC,60
+Carbon,MT,"Carbon, MT",27040,CEAC,60
+Carter,MT,"Carter, MT",27050,CEAC,60
+Cascade,MT,"Cascade, MT",27060,Micro,20
+Chouteau,MT,"Chouteau, MT",27070,CEAC,60
+Custer,MT,"Custer, MT",27080,CEAC,60
+Daniels,MT,"Daniels, MT",27090,CEAC,60
+Dawson,MT,"Dawson, MT",27100,CEAC,60
+Deer Lodge,MT,"Deer Lodge, MT",27110,Rural,30
+Fallon,MT,"Fallon, MT",27120,CEAC,60
+Fergus,MT,"Fergus, MT",27130,CEAC,60
+Flathead,MT,"Flathead, MT",27140,Micro,20
+Gallatin,MT,"Gallatin, MT",27150,Micro,20
+Garfield,MT,"Garfield, MT",27160,CEAC,60
+Glacier,MT,"Glacier, MT",27170,CEAC,60
+Golden Valley,MT,"Golden Valley, MT",27180,CEAC,60
+Granite,MT,"Granite, MT",27190,CEAC,60
+Hill,MT,"Hill, MT",27200,CEAC,60
+Jefferson,MT,"Jefferson, MT",27210,CEAC,60
+Judith Basin,MT,"Judith Basin, MT",27220,CEAC,60
+Lake,MT,"Lake, MT",27230,Rural,30
+Lewis and Clark,MT,"Lewis and Clark, MT",27240,Micro,20
+Liberty,MT,"Liberty, MT",27250,CEAC,60
+Lincoln,MT,"Lincoln, MT",27260,CEAC,60
+McCone,MT,"McCone, MT",27270,CEAC,60
+Madison,MT,"Madison, MT",27280,CEAC,60
+Meagher,MT,"Meagher, MT",27290,CEAC,60
+Mineral,MT,"Mineral, MT",27300,CEAC,60
+Missoula,MT,"Missoula, MT",27310,Micro,20
+Musselshell,MT,"Musselshell, MT",27320,CEAC,60
+Park,MT,"Park, MT",27330,CEAC,60
+Petroleum,MT,"Petroleum, MT",27340,CEAC,60
+Phillips,MT,"Phillips, MT",27350,CEAC,60
+Pondera,MT,"Pondera, MT",27360,CEAC,60
+Powder River,MT,"Powder River, MT",27370,CEAC,60
+Powell,MT,"Powell, MT",27380,CEAC,60
+Prairie,MT,"Prairie, MT",27390,CEAC,60
+Ravalli,MT,"Ravalli, MT",27400,Rural,30
+Richland,MT,"Richland, MT",27410,CEAC,60
+Roosevelt,MT,"Roosevelt, MT",27420,CEAC,60
+Rosebud,MT,"Rosebud, MT",27430,CEAC,60
+Sanders,MT,"Sanders, MT",27440,CEAC,60
+Sheridan,MT,"Sheridan, MT",27450,CEAC,60
+Silver Bow,MT,"Silver Bow, MT",27460,Rural,30
+Stillwater,MT,"Stillwater, MT",27470,CEAC,60
+Sweet Grass,MT,"Sweet Grass, MT",27480,CEAC,60
+Teton,MT,"Teton, MT",27490,CEAC,60
+Toole,MT,"Toole, MT",27500,CEAC,60
+Treasure,MT,"Treasure, MT",27510,CEAC,60
+Valley,MT,"Valley, MT",27520,CEAC,60
+Wheatland,MT,"Wheatland, MT",27530,CEAC,60
+Wibaux,MT,"Wibaux, MT",27540,CEAC,60
+Yellowstone,MT,"Yellowstone, MT",27550,Micro,20
+Adams,NE,"Adams, NE",28000,Micro,20
+Antelope,NE,"Antelope, NE",28010,CEAC,60
+Arthur,NE,"Arthur, NE",28020,CEAC,60
+Banner,NE,"Banner, NE",28030,CEAC,60
+Blaine,NE,"Blaine, NE",28040,CEAC,60
+Boone,NE,"Boone, NE",28050,CEAC,60
+Box Butte,NE,"Box Butte, NE",28060,Rural,30
+Boyd,NE,"Boyd, NE",28070,CEAC,60
+Brown,NE,"Brown, NE",28080,CEAC,60
+Buffalo,NE,"Buffalo, NE",28090,Micro,20
+Burt,NE,"Burt, NE",28100,Rural,30
+Butler,NE,"Butler, NE",28110,Rural,30
+Cass,NE,"Cass, NE",28120,Rural,30
+Cedar,NE,"Cedar, NE",28130,Rural,30
+Chase,NE,"Chase, NE",28140,CEAC,60
+Cherry,NE,"Cherry, NE",28150,CEAC,60
+Cheyenne,NE,"Cheyenne, NE",28160,CEAC,60
+Clay,NE,"Clay, NE",28170,Rural,30
+Colfax,NE,"Colfax, NE",28180,Rural,30
+Cuming,NE,"Cuming, NE",28190,Rural,30
+Custer,NE,"Custer, NE",28200,CEAC,60
+Dakota,NE,"Dakota, NE",28210,Micro,20
+Dawes,NE,"Dawes, NE",28220,CEAC,60
+Dawson,NE,"Dawson, NE",28230,Rural,30
+Deuel,NE,"Deuel, NE",28240,CEAC,60
+Dixon,NE,"Dixon, NE",28250,Rural,30
+Dodge,NE,"Dodge, NE",28260,Micro,20
+Douglas,NE,"Douglas, NE",28270,Large Metro,5
+Dundy,NE,"Dundy, NE",28280,CEAC,60
+Fillmore,NE,"Fillmore, NE",28290,CEAC,60
+Franklin,NE,"Franklin, NE",28300,CEAC,60
+Frontier,NE,"Frontier, NE",28310,CEAC,60
+Furnas,NE,"Furnas, NE",28320,CEAC,60
+Gage,NE,"Gage, NE",28330,Rural,30
+Garden,NE,"Garden, NE",28340,CEAC,60
+Garfield,NE,"Garfield, NE",28350,CEAC,60
+Gosper,NE,"Gosper, NE",28360,CEAC,60
+Grant,NE,"Grant, NE",28370,CEAC,60
+Greeley,NE,"Greeley, NE",28380,CEAC,60
+Hall,NE,"Hall, NE",28390,Metro,10
+Hamilton,NE,"Hamilton, NE",28400,Rural,30
+Harlan,NE,"Harlan, NE",28410,CEAC,60
+Hayes,NE,"Hayes, NE",28420,CEAC,60
+Hitchcock,NE,"Hitchcock, NE",28430,CEAC,60
+Holt,NE,"Holt, NE",28440,CEAC,60
+Hooker,NE,"Hooker, NE",28450,CEAC,60
+Howard,NE,"Howard, NE",28460,Rural,30
+Jefferson,NE,"Jefferson, NE",28470,Rural,30
+Johnson,NE,"Johnson, NE",28480,Rural,30
+Kearney,NE,"Kearney, NE",28490,Rural,30
+Keith,NE,"Keith, NE",28500,CEAC,60
+Keya Paha,NE,"Keya Paha, NE",28510,CEAC,60
+Kimball,NE,"Kimball, NE",28520,CEAC,60
+Knox,NE,"Knox, NE",28530,CEAC,60
+Lancaster,NE,"Lancaster, NE",28540,Metro,10
+Lincoln,NE,"Lincoln, NE",28550,Rural,30
+Logan,NE,"Logan, NE",28560,CEAC,60
+Loup,NE,"Loup, NE",28570,CEAC,60
+McPherson,NE,"McPherson, NE",28580,CEAC,60
+Madison,NE,"Madison, NE",28590,Micro,20
+Merrick,NE,"Merrick, NE",28600,Rural,30
+Morrill,NE,"Morrill, NE",28610,CEAC,60
+Nance,NE,"Nance, NE",28620,CEAC,60
+Nemaha,NE,"Nemaha, NE",28630,Rural,30
+Nuckolls,NE,"Nuckolls, NE",28640,CEAC,60
+Otoe,NE,"Otoe, NE",28650,Rural,30
+Pawnee,NE,"Pawnee, NE",28660,CEAC,60
+Perkins,NE,"Perkins, NE",28670,CEAC,60
+Phelps,NE,"Phelps, NE",28680,Rural,30
+Pierce,NE,"Pierce, NE",28690,Rural,30
+Platte,NE,"Platte, NE",28700,Rural,30
+Polk,NE,"Polk, NE",28710,Rural,30
+Red Willow,NE,"Red Willow, NE",28720,Rural,30
+Richardson,NE,"Richardson, NE",28730,Rural,30
+Rock,NE,"Rock, NE",28740,CEAC,60
+Saline,NE,"Saline, NE",28750,Rural,30
+Sarpy,NE,"Sarpy, NE",28760,Metro,10
+Saunders,NE,"Saunders, NE",28770,Rural,30
+Scotts Bluff,NE,"Scotts Bluff, NE",28780,Rural,30
+Seward,NE,"Seward, NE",28790,Rural,30
+Sheridan,NE,"Sheridan, NE",28800,CEAC,60
+Sherman,NE,"Sherman, NE",28810,CEAC,60
+Sioux,NE,"Sioux, NE",28820,CEAC,60
+Stanton,NE,"Stanton, NE",28830,Rural,30
+Thayer,NE,"Thayer, NE",28840,CEAC,60
+Thomas,NE,"Thomas, NE",28850,CEAC,60
+Thurston,NE,"Thurston, NE",28860,Rural,30
+Valley,NE,"Valley, NE",28870,CEAC,60
+Washington,NE,"Washington, NE",28880,Micro,20
+Wayne,NE,"Wayne, NE",28890,Rural,30
+Webster,NE,"Webster, NE",28900,CEAC,60
+Wheeler,NE,"Wheeler, NE",28910,CEAC,60
+York,NE,"York, NE",28920,Rural,30
+Churchill,NV,"Churchill, NV",29000,CEAC,60
+Clark,NV,"Clark, NV",29010,Metro,10
+Douglas,NV,"Douglas, NV",29020,Micro,20
+Elko,NV,"Elko, NV",29030,CEAC,60
+Esmeralda,NV,"Esmeralda, NV",29040,CEAC,60
+Eureka,NV,"Eureka, NV",29050,CEAC,60
+Humboldt,NV,"Humboldt, NV",29060,CEAC,60
+Lander,NV,"Lander, NV",29070,CEAC,60
+Lincoln,NV,"Lincoln, NV",29080,CEAC,60
+Lyon,NV,"Lyon, NV",29090,Micro,20
+Mineral,NV,"Mineral, NV",29100,CEAC,60
+Nye,NV,"Nye, NV",29110,CEAC,60
+Carson City,NV,"Carson City, NV",29120,Metro,10
+Pershing,NV,"Pershing, NV",29130,CEAC,60
+Storey,NV,"Storey, NV",29140,Rural,30
+Washoe,NV,"Washoe, NV",29150,Metro,10
+White Pine,NV,"White Pine, NV",29160,CEAC,60
+Belknap,NH,"Belknap, NH",30000,Metro,10
+Carroll,NH,"Carroll, NH",30010,Micro,20
+Cheshire,NH,"Cheshire, NH",30020,Metro,10
+Coos,NH,"Coos, NH",30030,Rural,30
+Grafton,NH,"Grafton, NH",30040,Micro,20
+Hillsborough,NH,"Hillsborough, NH",30050,Metro,10
+Merrimack,NH,"Merrimack, NH",30060,Metro,10
+Rockingham,NH,"Rockingham, NH",30070,Metro,10
+Strafford,NH,"Strafford, NH",30080,Metro,10
+Sullivan,NH,"Sullivan, NH",30090,Micro,20
+Atlantic,NJ,"Atlantic, NJ",31000,Metro,10
+Bergen,NJ,"Bergen, NJ",31100,Large Metro,5
+Burlington,NJ,"Burlington, NJ",31150,Metro,10
+Camden,NJ,"Camden, NJ",31160,Large Metro,5
+Cape May,NJ,"Cape May, NJ",31180,Metro,10
+Cumberland,NJ,"Cumberland, NJ",31190,Metro,10
+Essex,NJ,"Essex, NJ",31200,Large Metro,5
+Gloucester,NJ,"Gloucester, NJ",31220,Metro,10
+Hudson,NJ,"Hudson, NJ",31230,Large Metro,5
+Hunterdon,NJ,"Hunterdon, NJ",31250,Metro,10
+Mercer,NJ,"Mercer, NJ",31260,Metro,10
+Middlesex,NJ,"Middlesex, NJ",31270,Large Metro,5
+Monmouth,NJ,"Monmouth, NJ",31290,Metro,10
+Morris,NJ,"Morris, NJ",31300,Metro,10
+Ocean,NJ,"Ocean, NJ",31310,Metro,10
+Passaic,NJ,"Passaic, NJ",31320,Large Metro,5
+Salem,NJ,"Salem, NJ",31340,Metro,10
+Somerset,NJ,"Somerset, NJ",31350,Metro,10
+Sussex,NJ,"Sussex, NJ",31360,Metro,10
+Union,NJ,"Union, NJ",31370,Large Metro,5
+Warren,NJ,"Warren, NJ",31390,Metro,10
+Bernalillo,NM,"Bernalillo, NM",32000,Metro,10
+Catron,NM,"Catron, NM",32010,CEAC,60
+Chaves,NM,"Chaves, NM",32020,Micro,20
+Cibola,NM,"Cibola, NM",32025,CEAC,60
+Colfax,NM,"Colfax, NM",32030,CEAC,60
+Curry,NM,"Curry, NM",32040,Micro,20
+DeBaca,NM,"DeBaca, NM",32050,CEAC,60
+Dona Ana,NM,"Dona Ana, NM",32060,Metro,10
+Eddy,NM,"Eddy, NM",32070,Micro,20
+Grant,NM,"Grant, NM",32080,CEAC,60
+Guadalupe,NM,"Guadalupe, NM",32090,CEAC,60
+Harding,NM,"Harding, NM",32100,CEAC,60
+Hidalgo,NM,"Hidalgo, NM",32110,CEAC,60
+Lea,NM,"Lea, NM",32120,Micro,20
+Lincoln,NM,"Lincoln, NM",32130,CEAC,60
+Los Alamos,NM,"Los Alamos, NM",32131,Micro,20
+Luna,NM,"Luna, NM",32140,CEAC,60
+McKinley,NM,"McKinley, NM",32150,Micro,25
+Mora,NM,"Mora, NM",32160,CEAC,60
+Otero,NM,"Otero, NM",32170,CEAC,60
+Quay,NM,"Quay, NM",32180,CEAC,60
+Rio Arriba,NM,"Rio Arriba, NM",32190,CEAC,60
+Roosevelt,NM,"Roosevelt, NM",32200,CEAC,60
+Sandoval,NM,"Sandoval, NM",32210,Micro,20
+San Juan,NM,"San Juan, NM",32220,Micro,20
+San Miguel,NM,"San Miguel, NM",32230,CEAC,60
+Santa Fe,NM,"Santa Fe, NM",32240,Micro,20
+Sierra,NM,"Sierra, NM",32250,CEAC,60
+Socorro,NM,"Socorro, NM",32260,CEAC,60
+Taos,NM,"Taos, NM",32270,Rural,30
+Torrance,NM,"Torrance, NM",32280,CEAC,60
+Union,NM,"Union, NM",32290,CEAC,60
+Valencia,NM,"Valencia, NM",32300,Micro,20
+Albany,NY,"Albany, NY",33000,Metro,10
+Allegany,NY,"Allegany, NY",33010,Rural,30
+Bronx,NY,"Bronx, NY",33020,Large Metro,5
+Broome,NY,"Broome, NY",33030,Metro,10
+Cattaraugus,NY,"Cattaraugus, NY",33040,Micro,20
+Cayuga,NY,"Cayuga, NY",33050,Metro,10
+Chautauqua,NY,"Chautauqua, NY",33060,Metro,10
+Chemung,NY,"Chemung, NY",33070,Metro,10
+Chenango,NY,"Chenango, NY",33080,Micro,20
+Clinton,NY,"Clinton, NY",33090,Micro,20
+Columbia,NY,"Columbia, NY",33200,Micro,20
+Cortland,NY,"Cortland, NY",33210,Micro,20
+Delaware,NY,"Delaware, NY",33220,Rural,30
+Dutchess,NY,"Dutchess, NY",33230,Metro,10
+Erie,NY,"Erie, NY",33240,Metro,10
+Essex,NY,"Essex, NY",33260,Rural,30
+Franklin,NY,"Franklin, NY",33270,Micro,20
+Fulton,NY,"Fulton, NY",33280,Metro,10
+Genesee,NY,"Genesee, NY",33290,Metro,10
+Greene,NY,"Greene, NY",33300,Micro,20
+Hamilton,NY,"Hamilton, NY",33310,CEAC,60
+Herkimer,NY,"Herkimer, NY",33320,Micro,20
+Jefferson,NY,"Jefferson, NY",33330,Micro,20
+Kings,NY,"Kings, NY",33331,Large Metro,5
+Lewis,NY,"Lewis, NY",33340,Rural,30
+Livingston,NY,"Livingston, NY",33350,Metro,10
+Madison,NY,"Madison, NY",33360,Metro,10
+Monroe,NY,"Monroe, NY",33370,Metro,10
+Montgomery,NY,"Montgomery, NY",33380,Micro,20
+Nassau,NY,"Nassau, NY",33400,Large Metro,5
+New York,NY,"New York, NY",33420,Large Metro,5
+Niagara,NY,"Niagara, NY",33500,Metro,10
+Oneida,NY,"Oneida, NY",33510,Metro,10
+Onondaga,NY,"Onondaga, NY",33520,Metro,10
+Ontario,NY,"Ontario, NY",33530,Metro,10
+Orange,NY,"Orange, NY",33540,Metro,10
+Orleans,NY,"Orleans, NY",33550,Micro,20
+Oswego,NY,"Oswego, NY",33560,Metro,10
+Otsego,NY,"Otsego, NY",33570,Micro,20
+Putnam,NY,"Putnam, NY",33580,Metro,10
+Queens,NY,"Queens, NY",33590,Large Metro,5
+Rensselaer,NY,"Rensselaer, NY",33600,Metro,10
+Richmond,NY,"Richmond, NY",33610,Large Metro,5
+Rockland,NY,"Rockland, NY",33620,Metro,10
+St. Lawrence,NY,"St. Lawrence, NY",33630,Micro,20
+Saratoga,NY,"Saratoga, NY",33640,Metro,10
+Schenectady,NY,"Schenectady, NY",33650,Metro,10
+Schoharie,NY,"Schoharie, NY",33660,Micro,20
+Schuyler,NY,"Schuyler, NY",33670,Micro,20
+Seneca,NY,"Seneca, NY",33680,Micro,20
+Steuben,NY,"Steuben, NY",33690,Micro,20
+Suffolk,NY,"Suffolk, NY",33700,Large Metro,5
+Sullivan,NY,"Sullivan, NY",33710,Micro,20
+Tioga,NY,"Tioga, NY",33720,Micro,20
+Tompkins,NY,"Tompkins, NY",33730,Metro,10
+Ulster,NY,"Ulster, NY",33740,Metro,10
+Warren,NY,"Warren, NY",33750,Micro,20
+Washington,NY,"Washington, NY",33760,Micro,20
+Wayne,NY,"Wayne, NY",33770,Metro,10
+Westchester,NY,"Westchester, NY",33800,Large Metro,5
+Wyoming,NY,"Wyoming, NY",33900,Micro,20
+Yates,NY,"Yates, NY",33910,Micro,20
+Alamance,NC,"Alamance, NC",34000,Metro,10
+Alexander,NC,"Alexander, NC",34010,Micro,20
+Alleghany,NC,"Alleghany, NC",34020,Rural,30
+Anson,NC,"Anson, NC",34030,Rural,30
+Ashe,NC,"Ashe, NC",34040,Micro,20
+Avery,NC,"Avery, NC",34050,Micro,20
+Beaufort,NC,"Beaufort, NC",34060,Micro,25
+Bertie,NC,"Bertie, NC",34070,Rural,30
+Bladen,NC,"Bladen, NC",34080,Rural,30
+Brunswick,NC,"Brunswick, NC",34090,Metro,10
+Buncombe,NC,"Buncombe, NC",34100,Metro,10
+Burke,NC,"Burke, NC",34110,Metro,10
+Cabarrus,NC,"Cabarrus, NC",34120,Metro,10
+Caldwell,NC,"Caldwell, NC",34130,Metro,10
+Camden,NC,"Camden, NC",34140,Rural,30
+Carteret,NC,"Carteret, NC",34150,Metro,10
+Caswell,NC,"Caswell, NC",34160,Micro,20
+Catawba,NC,"Catawba, NC",34170,Metro,10
+Chatham,NC,"Chatham, NC",34180,Metro,10
+Cherokee,NC,"Cherokee, NC",34190,Micro,20
+Chowan,NC,"Chowan, NC",34200,Micro,20
+Clay,NC,"Clay, NC",34210,Rural,30
+Cleveland,NC,"Cleveland, NC",34220,Metro,10
+Columbus,NC,"Columbus, NC",34230,Micro,20
+Craven,NC,"Craven, NC",34240,Metro,15
+Cumberland,NC,"Cumberland, NC",34250,Metro,10
+Currituck,NC,"Currituck, NC",34251,Micro,20
+Dare,NC,"Dare, NC",34270,Micro,20
+Davidson,NC,"Davidson, NC",34280,Metro,10
+Davie,NC,"Davie, NC",34290,Micro,20
+Duplin,NC,"Duplin, NC",34300,Micro,20
+Durham,NC,"Durham, NC",34310,Metro,10
+Edgecombe,NC,"Edgecombe, NC",34320,Metro,10
+Forsyth,NC,"Forsyth, NC",34330,Metro,10
+Franklin,NC,"Franklin, NC",34340,Metro,10
+Gaston,NC,"Gaston, NC",34350,Metro,10
+Gates,NC,"Gates, NC",34360,Rural,30
+Graham,NC,"Graham, NC",34370,Rural,30
+Granville,NC,"Granville, NC",34380,Metro,10
+Greene,NC,"Greene, NC",34390,Micro,20
+Guilford,NC,"Guilford, NC",34400,Metro,10
+Halifax,NC,"Halifax, NC",34410,Micro,20
+Harnett,NC,"Harnett, NC",34420,Metro,10
+Haywood,NC,"Haywood, NC",34430,Metro,10
+Henderson,NC,"Henderson, NC",34440,Metro,10
+Hertford,NC,"Hertford, NC",34450,Micro,20
+Hoke,NC,"Hoke, NC",34460,Metro,10
+Hyde,NC,"Hyde, NC",34470,CEAC,60
+Iredell,NC,"Iredell, NC",34480,Metro,10
+Jackson,NC,"Jackson, NC",34490,Micro,20
+Johnston,NC,"Johnston, NC",34500,Metro,10
+Jones,NC,"Jones, NC",34510,Rural,30
+Lee,NC,"Lee, NC",34520,Metro,10
+Lenoir,NC,"Lenoir, NC",34530,Metro,10
+Lincoln,NC,"Lincoln, NC",34540,Metro,10
+McDowell,NC,"McDowell, NC",34550,Micro,20
+Macon,NC,"Macon, NC",34560,Micro,20
+Madison,NC,"Madison, NC",34570,Rural,30
+Martin,NC,"Martin, NC",34580,Micro,20
+Mecklenburg,NC,"Mecklenburg, NC",34590,Large Metro,5
+Mitchell,NC,"Mitchell, NC",34600,Micro,20
+Montgomery,NC,"Montgomery, NC",34610,Micro,20
+Moore,NC,"Moore, NC",34620,Metro,10
+Nash,NC,"Nash, NC",34630,Metro,10
+New Hanover,NC,"New Hanover, NC",34640,Metro,10
+Northampton,NC,"Northampton, NC",34650,Rural,30
+Onslow,NC,"Onslow, NC",34660,Metro,10
+Orange,NC,"Orange, NC",34670,Metro,10
+Pamlico,NC,"Pamlico, NC",34680,Rural,30
+Pasquotank,NC,"Pasquotank, NC",34690,Micro,20
+Pender,NC,"Pender, NC",34700,Micro,20
+Perquimans,NC,"Perquimans, NC",34710,Micro,20
+Person,NC,"Person, NC",34720,Micro,20
+Pitt,NC,"Pitt, NC",34730,Metro,10
+Polk,NC,"Polk, NC",34740,Micro,20
+Randolph,NC,"Randolph, NC",34750,Metro,10
+Richmond,NC,"Richmond, NC",34760,Micro,20
+Robeson,NC,"Robeson, NC",34770,Metro,10
+Rockingham,NC,"Rockingham, NC",34780,Metro,10
+Rowan,NC,"Rowan, NC",34790,Metro,10
+Rutherford,NC,"Rutherford, NC",34800,Metro,10
+Sampson,NC,"Sampson, NC",34810,Micro,20
+Scotland,NC,"Scotland, NC",34820,Micro,20
+Stanly,NC,"Stanly, NC",34830,Metro,15
+Stokes,NC,"Stokes, NC",34840,Micro,20
+Surry,NC,"Surry, NC",34850,Metro,10
+Swain,NC,"Swain, NC",34860,Rural,30
+Transylvania,NC,"Transylvania, NC",34870,Micro,20
+Tyrrell,NC,"Tyrrell, NC",34880,Rural,30
+Union,NC,"Union, NC",34890,Metro,10
+Vance,NC,"Vance, NC",34900,Micro,20
+Wake,NC,"Wake, NC",34910,Large Metro,5
+Warren,NC,"Warren, NC",34920,Rural,30
+Washington,NC,"Washington, NC",34930,Rural,30
+Watauga,NC,"Watauga, NC",34940,Metro,10
+Wayne,NC,"Wayne, NC",34950,Metro,10
+Wilkes,NC,"Wilkes, NC",34960,Micro,20
+Wilson,NC,"Wilson, NC",34970,Metro,10
+Yadkin,NC,"Yadkin, NC",34980,Micro,20
+Yancey,NC,"Yancey, NC",34981,Micro,20
+Adams,ND,"Adams, ND",35000,CEAC,60
+Barnes,ND,"Barnes, ND",35010,CEAC,60
+Benson,ND,"Benson, ND",35020,CEAC,60
+Billings,ND,"Billings, ND",35030,CEAC,60
+Bottineau,ND,"Bottineau, ND",35040,CEAC,60
+Bowman,ND,"Bowman, ND",35050,CEAC,60
+Burke,ND,"Burke, ND",35060,CEAC,60
+Burleigh,ND,"Burleigh, ND",35070,Micro,20
+Cass,ND,"Cass, ND",35080,Micro,20
+Cavalier,ND,"Cavalier, ND",35090,CEAC,60
+Dickey,ND,"Dickey, ND",35100,CEAC,60
+Divide,ND,"Divide, ND",35110,CEAC,60
+Dunn,ND,"Dunn, ND",35120,CEAC,60
+Eddy,ND,"Eddy, ND",35130,CEAC,60
+Emmons,ND,"Emmons, ND",35140,CEAC,60
+Foster,ND,"Foster, ND",35150,CEAC,60
+Golden Valley,ND,"Golden Valley, ND",35160,CEAC,60
+Grand Forks,ND,"Grand Forks, ND",35170,Micro,20
+Grant,ND,"Grant, ND",35180,CEAC,60
+Griggs,ND,"Griggs, ND",35190,CEAC,60
+Hettinger,ND,"Hettinger, ND",35200,CEAC,60
+Kidder,ND,"Kidder, ND",35210,CEAC,60
+LaMoure,ND,"LaMoure, ND",35220,CEAC,60
+Logan,ND,"Logan, ND",35230,CEAC,60
+McHenry,ND,"McHenry, ND",35240,CEAC,60
+McIntosh,ND,"McIntosh, ND",35250,CEAC,60
+McKenzie,ND,"McKenzie, ND",35260,CEAC,60
+McLean,ND,"McLean, ND",35270,CEAC,60
+Mercer,ND,"Mercer, ND",35280,CEAC,60
+Morton,ND,"Morton, ND",35290,Rural,30
+Mountrail,ND,"Mountrail, ND",35300,CEAC,60
+Nelson,ND,"Nelson, ND",35310,CEAC,60
+Oliver,ND,"Oliver, ND",35320,CEAC,60
+Pembina,ND,"Pembina, ND",35330,CEAC,60
+Pierce,ND,"Pierce, ND",35340,CEAC,60
+Ramsey,ND,"Ramsey, ND",35350,CEAC,60
+Ransom,ND,"Ransom, ND",35360,CEAC,60
+Renville,ND,"Renville, ND",35370,CEAC,60
+Richland,ND,"Richland, ND",35380,Rural,35
+Rolette,ND,"Rolette, ND",35390,Rural,30
+Sargent,ND,"Sargent, ND",35400,CEAC,60
+Sheridan,ND,"Sheridan, ND",35410,CEAC,60
+Sioux,ND,"Sioux, ND",35420,CEAC,60
+Slope,ND,"Slope, ND",35430,CEAC,60
+Stark,ND,"Stark, ND",35440,Rural,30
+Steele,ND,"Steele, ND",35450,CEAC,60
+Stutsman,ND,"Stutsman, ND",35460,CEAC,60
+Towner,ND,"Towner, ND",35470,CEAC,60
+Traill,ND,"Traill, ND",35480,CEAC,60
+Walsh,ND,"Walsh, ND",35490,CEAC,60
+Ward,ND,"Ward, ND",35500,Micro,20
+Wells,ND,"Wells, ND",35510,CEAC,60
+Williams,ND,"Williams, ND",35520,Rural,30
+Adams,OH,"Adams, OH",36000,Rural,30
+Allen,OH,"Allen, OH",36010,Metro,10
+Ashland,OH,"Ashland, OH",36020,Metro,10
+Ashtabula,OH,"Ashtabula, OH",36030,Metro,10
+Athens,OH,"Athens, OH",36040,Metro,10
+Auglaize,OH,"Auglaize, OH",36050,Micro,20
+Belmont,OH,"Belmont, OH",36060,Metro,10
+Brown,OH,"Brown, OH",36070,Micro,20
+Butler,OH,"Butler, OH",36080,Metro,10
+Carroll,OH,"Carroll, OH",36090,Micro,20
+Champaign,OH,"Champaign, OH",36100,Micro,20
+Clark,OH,"Clark, OH",36110,Metro,10
+Clermont,OH,"Clermont, OH",36120,Metro,10
+Clinton,OH,"Clinton, OH",36130,Micro,20
+Columbiana,OH,"Columbiana, OH",36140,Metro,10
+Coshocton,OH,"Coshocton, OH",36150,Micro,20
+Crawford,OH,"Crawford, OH",36160,Micro,20
+Cuyahoga,OH,"Cuyahoga, OH",36170,Large Metro,5
+Darke,OH,"Darke, OH",36190,Micro,20
+Defiance,OH,"Defiance, OH",36200,Micro,20
+Delaware,OH,"Delaware, OH",36210,Metro,10
+Erie,OH,"Erie, OH",36220,Metro,10
+Fairfield,OH,"Fairfield, OH",36230,Metro,10
+Fayette,OH,"Fayette, OH",36240,Micro,20
+Franklin,OH,"Franklin, OH",36250,Large Metro,5
+Fulton,OH,"Fulton, OH",36260,Micro,20
+Gallia,OH,"Gallia, OH",36270,Micro,20
+Geauga,OH,"Geauga, OH",36280,Metro,10
+Greene,OH,"Greene, OH",36290,Metro,10
+Guernsey,OH,"Guernsey, OH",36300,Micro,20
+Hamilton,OH,"Hamilton, OH",36310,Large Metro,5
+Hancock,OH,"Hancock, OH",36330,Metro,10
+Hardin,OH,"Hardin, OH",36340,Micro,20
+Harrison,OH,"Harrison, OH",36350,Rural,30
+Henry,OH,"Henry, OH",36360,Micro,20
+Highland,OH,"Highland, OH",36370,Micro,20
+Hocking,OH,"Hocking, OH",36380,Micro,20
+Holmes,OH,"Holmes, OH",36390,Micro,20
+Huron,OH,"Huron, OH",36400,Metro,10
+Jackson,OH,"Jackson, OH",36410,Micro,20
+Jefferson,OH,"Jefferson, OH",36420,Metro,10
+Knox,OH,"Knox, OH",36430,Metro,10
+Lake,OH,"Lake, OH",36440,Metro,10
+Lawrence,OH,"Lawrence, OH",36450,Metro,10
+Licking,OH,"Licking, OH",36460,Metro,10
+Logan,OH,"Logan, OH",36470,Micro,20
+Lorain,OH,"Lorain, OH",36480,Metro,10
+Lucas,OH,"Lucas, OH",36490,Metro,10
+Madison,OH,"Madison, OH",36500,Micro,20
+Mahoning,OH,"Mahoning, OH",36510,Metro,10
+Marion,OH,"Marion, OH",36520,Metro,10
+Medina,OH,"Medina, OH",36530,Metro,10
+Meigs,OH,"Meigs, OH",36540,Micro,20
+Mercer,OH,"Mercer, OH",36550,Micro,20
+Miami,OH,"Miami, OH",36560,Metro,10
+Monroe,OH,"Monroe, OH",36570,Rural,30
+Montgomery,OH,"Montgomery, OH",36580,Metro,10
+Morgan,OH,"Morgan, OH",36590,Rural,30
+Morrow,OH,"Morrow, OH",36600,Micro,20
+Muskingum,OH,"Muskingum, OH",36610,Metro,10
+Noble,OH,"Noble, OH",36620,Rural,30
+Ottawa,OH,"Ottawa, OH",36630,Micro,20
+Paulding,OH,"Paulding, OH",36640,Rural,30
+Perry,OH,"Perry, OH",36650,Micro,20
+Pickaway,OH,"Pickaway, OH",36660,Metro,10
+Pike,OH,"Pike, OH",36670,Micro,20
+Portage,OH,"Portage, OH",36680,Metro,10
+Preble,OH,"Preble, OH",36690,Micro,20
+Putnam,OH,"Putnam, OH",36700,Micro,20
+Richland,OH,"Richland, OH",36710,Metro,10
+Ross,OH,"Ross, OH",36720,Metro,10
+Sandusky,OH,"Sandusky, OH",36730,Metro,10
+Scioto,OH,"Scioto, OH",36740,Metro,10
+Seneca,OH,"Seneca, OH",36750,Metro,10
+Shelby,OH,"Shelby, OH",36760,Micro,20
+Stark,OH,"Stark, OH",36770,Metro,10
+Summit,OH,"Summit, OH",36780,Metro,10
+Trumbull,OH,"Trumbull, OH",36790,Metro,10
+Tuscarawas,OH,"Tuscarawas, OH",36800,Metro,10
+Union,OH,"Union, OH",36810,Metro,10
+Van Wert,OH,"Van Wert, OH",36820,Micro,20
+Vinton,OH,"Vinton, OH",36830,Rural,30
+Warren,OH,"Warren, OH",36840,Metro,10
+Washington,OH,"Washington, OH",36850,Micro,20
+Wayne,OH,"Wayne, OH",36860,Metro,10
+Williams,OH,"Williams, OH",36870,Micro,20
+Wood,OH,"Wood, OH",36880,Metro,10
+Wyandot,OH,"Wyandot, OH",36890,Micro,20
+Adair,OK,"Adair, OK",37000,Rural,30
+Alfalfa,OK,"Alfalfa, OK",37010,CEAC,60
+Atoka,OK,"Atoka, OK",37020,Rural,30
+Beaver,OK,"Beaver, OK",37030,CEAC,60
+Beckham,OK,"Beckham, OK",37040,Rural,30
+Blaine,OK,"Blaine, OK",37050,Rural,30
+Bryan,OK,"Bryan, OK",37060,Rural,30
+Caddo,OK,"Caddo, OK",37070,Rural,30
+Canadian,OK,"Canadian, OK",37080,Metro,10
+Carter,OK,"Carter, OK",37090,Micro,20
+Cherokee,OK,"Cherokee, OK",37100,Micro,20
+Choctaw,OK,"Choctaw, OK",37110,Rural,30
+Cimarron,OK,"Cimarron, OK",37120,CEAC,60
+Cleveland,OK,"Cleveland, OK",37130,Metro,10
+Coal,OK,"Coal, OK",37140,Rural,30
+Comanche,OK,"Comanche, OK",37150,Metro,15
+Cotton,OK,"Cotton, OK",37160,CEAC,60
+Craig,OK,"Craig, OK",37170,Rural,30
+Creek,OK,"Creek, OK",37180,Micro,20
+Custer,OK,"Custer, OK",37190,Rural,30
+Delaware,OK,"Delaware, OK",37200,Micro,20
+Dewey,OK,"Dewey, OK",37210,CEAC,60
+Ellis,OK,"Ellis, OK",37220,CEAC,60
+Garfield,OK,"Garfield, OK",37230,Micro,20
+Garvin,OK,"Garvin, OK",37240,Rural,30
+Grady,OK,"Grady, OK",37250,Micro,20
+Grant,OK,"Grant, OK",37260,CEAC,60
+Greer,OK,"Greer, OK",37270,CEAC,60
+Harmon,OK,"Harmon, OK",37280,CEAC,60
+Harper,OK,"Harper, OK",37290,CEAC,60
+Haskell,OK,"Haskell, OK",37300,Rural,30
+Hughes,OK,"Hughes, OK",37310,Rural,30
+Jackson,OK,"Jackson, OK",37320,Rural,30
+Jefferson,OK,"Jefferson, OK",37330,CEAC,60
+Johnston,OK,"Johnston, OK",37340,Rural,30
+Kay,OK,"Kay, OK",37350,Rural,30
+Kingfisher,OK,"Kingfisher, OK",37360,Rural,30
+Kiowa,OK,"Kiowa, OK",37370,CEAC,60
+Latimer,OK,"Latimer, OK",37380,Rural,30
+Le Flore,OK,"Le Flore, OK",37390,Rural,30
+Lincoln,OK,"Lincoln, OK",37400,Rural,30
+Logan,OK,"Logan, OK",37410,Micro,20
+Love,OK,"Love, OK",37420,Rural,30
+McClain,OK,"McClain, OK",37430,Micro,20
+McCurtain,OK,"McCurtain, OK",37440,Rural,30
+McIntosh,OK,"McIntosh, OK",37450,Rural,30
+Major,OK,"Major, OK",37460,CEAC,60
+Marshall,OK,"Marshall, OK",37470,Rural,30
+Mayes,OK,"Mayes, OK",37480,Micro,20
+Murray,OK,"Murray, OK",37490,Rural,30
+Muskogee,OK,"Muskogee, OK",37500,Micro,20
+Noble,OK,"Noble, OK",37510,Rural,30
+Nowata,OK,"Nowata, OK",37520,Rural,30
+Okfuskee,OK,"Okfuskee, OK",37530,Rural,30
+Oklahoma,OK,"Oklahoma, OK",37540,Metro,10
+Okmulgee,OK,"Okmulgee, OK",37550,Micro,20
+Osage,OK,"Osage, OK",37560,Rural,30
+Ottawa,OK,"Ottawa, OK",37570,Micro,20
+Pawnee,OK,"Pawnee, OK",37580,Rural,30
+Payne,OK,"Payne, OK",37590,Metro,15
+Pittsburg,OK,"Pittsburg, OK",37600,Rural,30
+Pontotoc,OK,"Pontotoc, OK",37610,Micro,20
+Pottawatomie,OK,"Pottawatomie, OK",37620,Micro,20
+Pushmataha,OK,"Pushmataha, OK",37630,CEAC,60
+Roger Mills,OK,"Roger Mills, OK",37640,CEAC,60
+Rogers,OK,"Rogers, OK",37650,Metro,10
+Seminole,OK,"Seminole, OK",37660,Rural,30
+Sequoyah,OK,"Sequoyah, OK",37670,Micro,20
+Stephens,OK,"Stephens, OK",37680,Micro,20
+Texas,OK,"Texas, OK",37690,Rural,30
+Tillman,OK,"Tillman, OK",37700,CEAC,60
+Tulsa,OK,"Tulsa, OK",37710,Metro,10
+Wagoner,OK,"Wagoner, OK",37720,Metro,10
+Washington,OK,"Washington, OK",37730,Metro,10
+Washita,OK,"Washita, OK",37740,Rural,30
+Woods,OK,"Woods, OK",37750,CEAC,60
+Woodward,OK,"Woodward, OK",37760,Rural,30
+Baker,OR,"Baker, OR",38000,CEAC,60
+Benton,OR,"Benton, OR",38010,Metro,10
+Clackamas,OR,"Clackamas, OR",38020,Metro,10
+Clatsop,OR,"Clatsop, OR",38030,Rural,30
+Columbia,OR,"Columbia, OR",38040,Micro,20
+Coos,OR,"Coos, OR",38050,Micro,20
+Crook,OR,"Crook, OR",38060,CEAC,60
+Curry,OR,"Curry, OR",38070,Rural,30
+Deschutes,OR,"Deschutes, OR",38080,Micro,20
+Douglas,OR,"Douglas, OR",38090,Micro,20
+Gilliam,OR,"Gilliam, OR",38100,CEAC,60
+Grant,OR,"Grant, OR",38110,CEAC,60
+Harney,OR,"Harney, OR",38120,CEAC,60
+Hood River,OR,"Hood River, OR",38130,Rural,30
+Jackson,OR,"Jackson, OR",38140,Metro,15
+Jefferson,OR,"Jefferson, OR",38150,Rural,30
+Josephine,OR,"Josephine, OR",38160,Micro,20
+Klamath,OR,"Klamath, OR",38170,Micro,25
+Lake,OR,"Lake, OR",38180,CEAC,60
+Lane,OR,"Lane, OR",38190,Metro,10
+Lincoln,OR,"Lincoln, OR",38200,Rural,30
+Linn,OR,"Linn, OR",38210,Micro,20
+Malheur,OR,"Malheur, OR",38220,CEAC,60
+Marion,OR,"Marion, OR",38230,Metro,10
+Morrow,OR,"Morrow, OR",38240,CEAC,60
+Multnomah,OR,"Multnomah, OR",38250,Large Metro,5
+Polk,OR,"Polk, OR",38260,Metro,10
+Sherman,OR,"Sherman, OR",38270,CEAC,60
+Tillamook,OR,"Tillamook, OR",38280,Rural,30
+Umatilla,OR,"Umatilla, OR",38290,Micro,20
+Union,OR,"Union, OR",38300,Rural,30
+Wallowa,OR,"Wallowa, OR",38310,CEAC,60
+Wasco,OR,"Wasco, OR",38320,Rural,30
+Washington,OR,"Washington, OR",38330,Metro,10
+Wheeler,OR,"Wheeler, OR",38340,CEAC,60
+Yamhill,OR,"Yamhill, OR",38350,Metro,10
+Adams,PA,"Adams, PA",39000,Metro,10
+Allegheny,PA,"Allegheny, PA",39010,Large Metro,5
+Armstrong,PA,"Armstrong, PA",39070,Metro,10
+Beaver,PA,"Beaver, PA",39080,Metro,10
+Bedford,PA,"Bedford, PA",39100,Rural,30
+Berks,PA,"Berks, PA",39110,Metro,10
+Blair,PA,"Blair, PA",39120,Metro,10
+Bradford,PA,"Bradford, PA",39130,Micro,20
+Bucks,PA,"Bucks, PA",39140,Metro,10
+Butler,PA,"Butler, PA",39150,Metro,10
+Cambria,PA,"Cambria, PA",39160,Metro,10
+Cameron,PA,"Cameron, PA",39180,Rural,30
+Carbon,PA,"Carbon, PA",39190,Metro,10
+Centre,PA,"Centre, PA",39200,Metro,10
+Chester,PA,"Chester, PA",39210,Metro,10
+Clarion,PA,"Clarion, PA",39220,Micro,20
+Clearfield,PA,"Clearfield, PA",39230,Micro,20
+Clinton,PA,"Clinton, PA",39240,Rural,30
+Columbia,PA,"Columbia, PA",39250,Metro,10
+Crawford,PA,"Crawford, PA",39260,Micro,20
+Cumberland,PA,"Cumberland, PA",39270,Metro,10
+Dauphin,PA,"Dauphin, PA",39280,Metro,10
+Delaware,PA,"Delaware, PA",39290,Large Metro,5
+Elk,PA,"Elk, PA",39310,Rural,30
+Erie,PA,"Erie, PA",39320,Metro,10
+Fayette,PA,"Fayette, PA",39330,Metro,10
+Forest,PA,"Forest, PA",39340,Rural,30
+Franklin,PA,"Franklin, PA",39350,Metro,10
+Fulton,PA,"Fulton, PA",39360,Rural,30
+Greene,PA,"Greene, PA",39370,Micro,20
+Huntingdon,PA,"Huntingdon, PA",39380,Micro,20
+Indiana,PA,"Indiana, PA",39390,Metro,10
+Jefferson,PA,"Jefferson, PA",39400,Micro,20
+Juniata,PA,"Juniata, PA",39410,Micro,20
+Lackawanna,PA,"Lackawanna, PA",39420,Metro,10
+Lancaster,PA,"Lancaster, PA",39440,Metro,10
+Lawrence,PA,"Lawrence, PA",39450,Metro,10
+Lebanon,PA,"Lebanon, PA",39460,Metro,10
+Lehigh,PA,"Lehigh, PA",39470,Metro,10
+Luzerne,PA,"Luzerne, PA",39480,Metro,10
+Lycoming,PA,"Lycoming, PA",39510,Micro,20
+McKean,PA,"McKean, PA",39520,Rural,30
+Mercer,PA,"Mercer, PA",39530,Metro,10
+Mifflin,PA,"Mifflin, PA",39540,Micro,20
+Monroe,PA,"Monroe, PA",39550,Metro,10
+Montgomery,PA,"Montgomery, PA",39560,Large Metro,5
+Montour,PA,"Montour, PA",39580,Micro,20
+Northampton,PA,"Northampton, PA",39590,Metro,10
+Northumberland,PA,"Northumberland, PA",39600,Metro,10
+Perry,PA,"Perry, PA",39610,Micro,20
+Philadelphia,PA,"Philadelphia, PA",39620,Large Metro,5
+Pike,PA,"Pike, PA",39630,Metro,10
+Potter,PA,"Potter, PA",39640,Rural,30
+Schuylkill,PA,"Schuylkill, PA",39650,Metro,10
+Snyder,PA,"Snyder, PA",39670,Micro,20
+Somerset,PA,"Somerset, PA",39680,Micro,20
+Sullivan,PA,"Sullivan, PA",39690,Rural,30
+Susquehanna,PA,"Susquehanna, PA",39700,Micro,20
+Tioga,PA,"Tioga, PA",39710,Rural,30
+Union,PA,"Union, PA",39720,Micro,20
+Venango,PA,"Venango, PA",39730,Micro,20
+Warren,PA,"Warren, PA",39740,Rural,30
+Washington,PA,"Washington, PA",39750,Metro,10
+Wayne,PA,"Wayne, PA",39760,Micro,20
+Westmoreland,PA,"Westmoreland, PA",39770,Metro,10
+Wyoming,PA,"Wyoming, PA",39790,Micro,20
+York,PA,"York, PA",39800,Metro,10
+Adjuntas,PR,"Adjuntas, PR",40010,Micro,20
+Aguada,PR,"Aguada, PR",40020,Metro,10
+Aguadilla,PR,"Aguadilla, PR",40030,Metro,10
+Aguas Buenas,PR,"Aguas Buenas, PR",40040,Metro,10
+Aibonito,PR,"Aibonito, PR",40050,Metro,10
+Anasco,PR,"Anasco, PR",40060,Metro,10
+Arecibo,PR,"Arecibo, PR",40070,Metro,10
+Arroyo,PR,"Arroyo, PR",40080,Metro,10
+Barceloneta,PR,"Barceloneta, PR",40090,Metro,10
+Barranquitas,PR,"Barranquitas, PR",40100,Metro,10
+Bayamon,PR,"Bayamon, PR",40110,Metro,10
+Cabo Rojo,PR,"Cabo Rojo, PR",40120,Metro,10
+Caguas,PR,"Caguas, PR",40130,Metro,10
+Camuy,PR,"Camuy, PR",40140,Metro,10
+Canovanas,PR,"Canovanas, PR",40145,Metro,10
+Carolina,PR,"Carolina, PR",40150,Metro,10
+Catano,PR,"Catano, PR",40160,Metro,10
+Cayey,PR,"Cayey, PR",40170,Metro,10
+Ceiba,PR,"Ceiba, PR",40180,Metro,10
+Ciales,PR,"Ciales, PR",40190,Metro,10
+Cidra,PR,"Cidra, PR",40200,Metro,10
+Coamo,PR,"Coamo, PR",40210,Micro,20
+Comerio,PR,"Comerio, PR",40220,Metro,10
+Corozal,PR,"Corozal, PR",40230,Metro,10
+Culebra,PR,"Culebra, PR",40240,Rural,30
+Dorado,PR,"Dorado, PR",40250,Metro,10
+Fajardo,PR,"Fajardo, PR",40260,Metro,10
+Florida,PR,"Florida, PR",40265,Metro,10
+Guanica,PR,"Guanica, PR",40270,Metro,10
+Guayama,PR,"Guayama, PR",40280,Metro,10
+Guayanilla,PR,"Guayanilla, PR",40290,Metro,10
+Guaynabo,PR,"Guaynabo, PR",40300,Metro,10
+Gurabo,PR,"Gurabo, PR",40310,Metro,10
+Hatillo,PR,"Hatillo, PR",40320,Metro,10
+Hormigueros,PR,"Hormigueros, PR",40330,Metro,10
+Humacao,PR,"Humacao, PR",40340,Metro,10
+Isabela,PR,"Isabela, PR",40350,Metro,10
+Jayuya,PR,"Jayuya, PR",40360,Micro,20
+Juana Diaz,PR,"Juana Diaz, PR",40370,Metro,10
+Juncos,PR,"Juncos, PR",40380,Metro,10
+Lajas,PR,"Lajas, PR",40390,Metro,10
+Lares,PR,"Lares, PR",40400,Metro,10
+Las Marias,PR,"Las Marias, PR",40410,Rural,30
+Las Piedras,PR,"Las Piedras, PR",40420,Metro,10
+Loiza,PR,"Loiza, PR",40430,Metro,10
+Luquillo,PR,"Luquillo, PR",40440,Metro,10
+Manati,PR,"Manati, PR",40450,Metro,10
+Maricao,PR,"Maricao, PR",40460,Rural,30
+Maunabo,PR,"Maunabo, PR",40470,Metro,10
+Mayaguez,PR,"Mayaguez, PR",40480,Metro,10
+Moca,PR,"Moca, PR",40490,Metro,10
+Morovis,PR,"Morovis, PR",40500,Metro,10
+Naguabo,PR,"Naguabo, PR",40510,Metro,10
+Naranjito,PR,"Naranjito, PR",40520,Metro,10
+Orocovis,PR,"Orocovis, PR",40530,Metro,10
+Patillas,PR,"Patillas, PR",40540,Metro,10
+Penuelas,PR,"Penuelas, PR",40550,Metro,10
+Ponce,PR,"Ponce, PR",40560,Metro,10
+Quebradillas,PR,"Quebradillas, PR",40570,Metro,10
+Rincon,PR,"Rincon, PR",40580,Metro,10
+Rio Grande,PR,"Rio Grande, PR",40590,Metro,10
+Sabana Grande,PR,"Sabana Grande, PR",40610,Metro,10
+Salinas,PR,"Salinas, PR",40620,Micro,20
+San German,PR,"San German, PR",40630,Metro,10
+San Juan,PR,"San Juan, PR",40640,Metro,10
+San Lorenzo,PR,"San Lorenzo, PR",40650,Metro,10
+San Sebastian,PR,"San Sebastian, PR",40660,Metro,10
+Santa Isabel,PR,"Santa Isabel, PR",40670,Micro,20
+Toa Alta,PR,"Toa Alta, PR",40680,Metro,10
+Toa Baja,PR,"Toa Baja, PR",40690,Metro,10
+Trujillo Alto,PR,"Trujillo Alto, PR",40700,Metro,10
+Utuado,PR,"Utuado, PR",40710,Metro,10
+Vega Alta,PR,"Vega Alta, PR",40720,Metro,10
+Vega Baja,PR,"Vega Baja, PR",40730,Metro,10
+Vieques,PR,"Vieques, PR",40740,Rural,30
+Villalba,PR,"Villalba, PR",40750,Metro,10
+Yabucoa,PR,"Yabucoa, PR",40760,Metro,10
+Yauco,PR,"Yauco, PR",40770,Metro,10
+Bristol,RI,"Bristol, RI",41000,Metro,10
+Kent,RI,"Kent, RI",41010,Metro,10
+Newport,RI,"Newport, RI",41020,Metro,10
+Providence,RI,"Providence, RI",41030,Large Metro,5
+Washington,RI,"Washington, RI",41050,Metro,10
+Abbeville,SC,"Abbeville, SC",42000,Micro,20
+Aiken,SC,"Aiken, SC",42010,Metro,10
+Allendale,SC,"Allendale, SC",42020,Rural,30
+Anderson,SC,"Anderson, SC",42030,Metro,10
+Bamberg,SC,"Bamberg, SC",42040,Rural,30
+Barnwell,SC,"Barnwell, SC",42050,Rural,30
+Beaufort,SC,"Beaufort, SC",42060,Metro,10
+Berkeley,SC,"Berkeley, SC",42070,Metro,10
+Calhoun,SC,"Calhoun, SC",42080,Rural,30
+Charleston,SC,"Charleston, SC",42090,Metro,10
+Cherokee,SC,"Cherokee, SC",42100,Metro,10
+Chester,SC,"Chester, SC",42110,Micro,20
+Chesterfield,SC,"Chesterfield, SC",42120,Micro,20
+Clarendon,SC,"Clarendon, SC",42130,Micro,20
+Colleton,SC,"Colleton, SC",42140,Rural,30
+Darlington,SC,"Darlington, SC",42150,Metro,10
+Dillon,SC,"Dillon, SC",42160,Micro,20
+Dorchester,SC,"Dorchester, SC",42170,Metro,10
+Edgefield,SC,"Edgefield, SC",42180,Micro,20
+Fairfield,SC,"Fairfield, SC",42190,Rural,30
+Florence,SC,"Florence, SC",42200,Metro,10
+Georgetown,SC,"Georgetown, SC",42210,Micro,20
+Greenville,SC,"Greenville, SC",42220,Metro,10
+Greenwood,SC,"Greenwood, SC",42230,Metro,10
+Hampton,SC,"Hampton, SC",42240,Rural,30
+Horry,SC,"Horry, SC",42250,Metro,10
+Jasper,SC,"Jasper, SC",42260,Rural,30
+Kershaw,SC,"Kershaw, SC",42270,Micro,20
+Lancaster,SC,"Lancaster, SC",42280,Metro,10
+Laurens,SC,"Laurens, SC",42290,Micro,20
+Lee,SC,"Lee, SC",42300,Rural,30
+Lexington,SC,"Lexington, SC",42310,Metro,10
+McCormick,SC,"McCormick, SC",42320,Rural,30
+Marion,SC,"Marion, SC",42330,Micro,20
+Marlboro,SC,"Marlboro, SC",42340,Micro,20
+Newberry,SC,"Newberry, SC",42350,Micro,20
+Oconee,SC,"Oconee, SC",42360,Metro,15
+Orangeburg,SC,"Orangeburg, SC",42370,Micro,20
+Pickens,SC,"Pickens, SC",42380,Metro,10
+Richland,SC,"Richland, SC",42390,Metro,10
+Saluda,SC,"Saluda, SC",42400,Rural,30
+Spartanburg,SC,"Spartanburg, SC",42410,Metro,10
+Sumter,SC,"Sumter, SC",42420,Metro,10
+Union,SC,"Union, SC",42430,Micro,20
+Williamsburg,SC,"Williamsburg, SC",42440,Rural,30
+York,SC,"York, SC",42450,Metro,10
+Aurora,SD,"Aurora, SD",43010,CEAC,60
+Beadle,SD,"Beadle, SD",43020,Rural,30
+Bennett,SD,"Bennett, SD",43030,CEAC,60
+Bon Homme,SD,"Bon Homme, SD",43040,Rural,30
+Brookings,SD,"Brookings, SD",43050,Rural,30
+Brown,SD,"Brown, SD",43060,Rural,30
+Brule,SD,"Brule, SD",43070,CEAC,60
+Buffalo,SD,"Buffalo, SD",43080,CEAC,60
+Butte,SD,"Butte, SD",43090,CEAC,60
+Campbell,SD,"Campbell, SD",43100,CEAC,60
+Charles Mix,SD,"Charles Mix, SD",43110,CEAC,60
+Clark,SD,"Clark, SD",43120,CEAC,60
+Clay,SD,"Clay, SD",43130,Rural,30
+Codington,SD,"Codington, SD",43140,Rural,30
+Corson,SD,"Corson, SD",43150,CEAC,60
+Custer,SD,"Custer, SD",43160,CEAC,60
+Davison,SD,"Davison, SD",43170,Rural,30
+Day,SD,"Day, SD",43180,CEAC,60
+Deuel,SD,"Deuel, SD",43190,CEAC,60
+Dewey,SD,"Dewey, SD",43200,CEAC,60
+Douglas,SD,"Douglas, SD",43210,CEAC,60
+Edmunds,SD,"Edmunds, SD",43220,CEAC,60
+Fall River,SD,"Fall River, SD",43230,CEAC,60
+Faulk,SD,"Faulk, SD",43240,CEAC,60
+Grant,SD,"Grant, SD",43250,Rural,30
+Gregory,SD,"Gregory, SD",43260,CEAC,60
+Haakon,SD,"Haakon, SD",43270,CEAC,60
+Hamlin,SD,"Hamlin, SD",43280,Rural,30
+Hand,SD,"Hand, SD",43290,CEAC,60
+Hanson,SD,"Hanson, SD",43300,CEAC,60
+Harding,SD,"Harding, SD",43310,CEAC,60
+Hughes,SD,"Hughes, SD",43320,Rural,30
+Hutchinson,SD,"Hutchinson, SD",43330,CEAC,60
+Hyde,SD,"Hyde, SD",43340,CEAC,60
+Jackson,SD,"Jackson, SD",43350,CEAC,60
+Jerauld,SD,"Jerauld, SD",43360,CEAC,60
+Jones,SD,"Jones, SD",43370,CEAC,60
+Kingsbury,SD,"Kingsbury, SD",43380,CEAC,60
+Lake,SD,"Lake, SD",43390,Rural,30
+Lawrence,SD,"Lawrence, SD",43400,Rural,30
+Lincoln,SD,"Lincoln, SD",43410,Micro,20
+Lyman,SD,"Lyman, SD",43420,CEAC,60
+McCook,SD,"McCook, SD",43430,CEAC,60
+McPherson,SD,"McPherson, SD",43440,CEAC,60
+Marshall,SD,"Marshall, SD",43450,CEAC,60
+Meade,SD,"Meade, SD",43460,CEAC,60
+Mellette,SD,"Mellette, SD",43470,CEAC,60
+Miner,SD,"Miner, SD",43480,CEAC,60
+Minnehaha,SD,"Minnehaha, SD",43490,Metro,10
+Moody,SD,"Moody, SD",43500,Rural,30
+Pennington,SD,"Pennington, SD",43510,Micro,20
+Perkins,SD,"Perkins, SD",43520,CEAC,60
+Potter,SD,"Potter, SD",43530,CEAC,60
+Roberts,SD,"Roberts, SD",43540,CEAC,60
+Sanborn,SD,"Sanborn, SD",43550,CEAC,60
+Oglala Lakota (formerly Shannon),SD,"Oglala Lakota, SD (formerly Shannon, SD)",43560,CEAC,60
+Spink,SD,"Spink, SD",43570,CEAC,60
+Stanley,SD,"Stanley, SD",43580,CEAC,60
+Sully,SD,"Sully, SD",43590,CEAC,60
+Todd,SD,"Todd, SD",43600,CEAC,60
+Tripp,SD,"Tripp, SD",43610,CEAC,60
+Turner,SD,"Turner, SD",43620,Rural,30
+Union,SD,"Union, SD",43630,Rural,30
+Walworth,SD,"Walworth, SD",43640,CEAC,60
+Yankton,SD,"Yankton, SD",43670,Rural,30
+Ziebach,SD,"Ziebach, SD",43680,CEAC,60
+Anderson,TN,"Anderson, TN",44000,Metro,10
+Bedford,TN,"Bedford, TN",44010,Micro,20
+Benton,TN,"Benton, TN",44020,Rural,30
+Bledsoe,TN,"Bledsoe, TN",44030,Rural,30
+Blount,TN,"Blount, TN",44040,Metro,10
+Bradley,TN,"Bradley, TN",44050,Metro,10
+Campbell,TN,"Campbell, TN",44060,Micro,20
+Cannon,TN,"Cannon, TN",44070,Micro,20
+Carroll,TN,"Carroll, TN",44080,Rural,30
+Carter,TN,"Carter, TN",44090,Metro,10
+Cheatham,TN,"Cheatham, TN",44100,Micro,20
+Chester,TN,"Chester, TN",44110,Micro,20
+Claiborne,TN,"Claiborne, TN",44120,Micro,20
+Clay,TN,"Clay, TN",44130,Rural,30
+Cocke,TN,"Cocke, TN",44140,Micro,20
+Coffee,TN,"Coffee, TN",44150,Metro,10
+Crockett,TN,"Crockett, TN",44160,Micro,20
+Cumberland,TN,"Cumberland, TN",44170,Micro,20
+Davidson,TN,"Davidson, TN",44180,Metro,10
+Decatur,TN,"Decatur, TN",44190,Rural,30
+DeKalb,TN,"DeKalb, TN",44200,Micro,20
+Dickson,TN,"Dickson, TN",44210,Metro,15
+Dyer,TN,"Dyer, TN",44220,Micro,20
+Fayette,TN,"Fayette, TN",44230,Micro,20
+Fentress,TN,"Fentress, TN",44240,Rural,30
+Franklin,TN,"Franklin, TN",44250,Micro,20
+Gibson,TN,"Gibson, TN",44260,Micro,20
+Giles,TN,"Giles, TN",44270,Rural,30
+Grainger,TN,"Grainger, TN",44280,Micro,20
+Greene,TN,"Greene, TN",44290,Metro,10
+Grundy,TN,"Grundy, TN",44300,Rural,30
+Hamblen,TN,"Hamblen, TN",44310,Metro,10
+Hamilton,TN,"Hamilton, TN",44320,Metro,10
+Hancock,TN,"Hancock, TN",44330,Rural,30
+Hardeman,TN,"Hardeman, TN",44340,Rural,30
+Hardin,TN,"Hardin, TN",44350,Rural,30
+Hawkins,TN,"Hawkins, TN",44360,Metro,10
+Haywood,TN,"Haywood, TN",44370,Rural,30
+Henderson,TN,"Henderson, TN",44380,Micro,20
+Henry,TN,"Henry, TN",44390,Micro,20
+Hickman,TN,"Hickman, TN",44400,Rural,30
+Houston,TN,"Houston, TN",44410,Rural,30
+Humphreys,TN,"Humphreys, TN",44420,Rural,30
+Jackson,TN,"Jackson, TN",44430,Rural,30
+Jefferson,TN,"Jefferson, TN",44440,Metro,10
+Johnson,TN,"Johnson, TN",44450,Micro,20
+Knox,TN,"Knox, TN",44460,Metro,10
+Lake,TN,"Lake, TN",44470,Rural,30
+Lauderdale,TN,"Lauderdale, TN",44480,Micro,20
+Lawrence,TN,"Lawrence, TN",44490,Micro,20
+Lewis,TN,"Lewis, TN",44500,Rural,30
+Lincoln,TN,"Lincoln, TN",44510,Micro,20
+Loudon,TN,"Loudon, TN",44520,Metro,10
+McMinn,TN,"McMinn, TN",44530,Metro,10
+McNairy,TN,"McNairy, TN",44540,Rural,30
+Macon,TN,"Macon, TN",44550,Micro,20
+Madison,TN,"Madison, TN",44560,Metro,10
+Marion,TN,"Marion, TN",44570,Micro,20
+Marshall,TN,"Marshall, TN",44580,Micro,20
+Maury,TN,"Maury, TN",44590,Metro,10
+Meigs,TN,"Meigs, TN",44600,Micro,20
+Monroe,TN,"Monroe, TN",44610,Micro,20
+Montgomery,TN,"Montgomery, TN",44620,Metro,10
+Moore,TN,"Moore, TN",44630,Rural,30
+Morgan,TN,"Morgan, TN",44640,Rural,30
+Obion,TN,"Obion, TN",44650,Micro,20
+Overton,TN,"Overton, TN",44660,Micro,20
+Perry,TN,"Perry, TN",44670,Rural,30
+Pickett,TN,"Pickett, TN",44680,Rural,30
+Polk,TN,"Polk, TN",44690,Rural,30
+Putnam,TN,"Putnam, TN",44700,Metro,10
+Rhea,TN,"Rhea, TN",44710,Micro,20
+Roane,TN,"Roane, TN",44720,Metro,10
+Robertson,TN,"Robertson, TN",44730,Metro,10
+Rutherford,TN,"Rutherford, TN",44740,Metro,10
+Scott,TN,"Scott, TN",44750,Rural,30
+Sequatchie,TN,"Sequatchie, TN",44760,Micro,20
+Sevier,TN,"Sevier, TN",44770,Metro,10
+Shelby,TN,"Shelby, TN",44780,Metro,10
+Smith,TN,"Smith, TN",44790,Micro,20
+Stewart,TN,"Stewart, TN",44800,Rural,30
+Sullivan,TN,"Sullivan, TN",44810,Metro,10
+Sumner,TN,"Sumner, TN",44820,Metro,10
+Tipton,TN,"Tipton, TN",44830,Metro,10
+Trousdale,TN,"Trousdale, TN",44840,Rural,30
+Unicoi,TN,"Unicoi, TN",44850,Micro,20
+Union,TN,"Union, TN",44860,Micro,20
+Van Buren,TN,"Van Buren, TN",44870,Rural,30
+Warren,TN,"Warren, TN",44880,Micro,20
+Washington,TN,"Washington, TN",44890,Metro,10
+Wayne,TN,"Wayne, TN",44900,Rural,30
+Weakley,TN,"Weakley, TN",44910,Micro,20
+White,TN,"White, TN",44920,Micro,20
+Williamson,TN,"Williamson, TN",44930,Metro,10
+Wilson,TN,"Wilson, TN",44940,Metro,10
+Anderson,TX,"Anderson, TX",45000,Micro,20
+Andrews,TX,"Andrews, TX",45010,Rural,30
+Angelina,TX,"Angelina, TX",45020,Metro,15
+Aransas,TX,"Aransas, TX",45030,Micro,20
+Archer,TX,"Archer, TX",45040,CEAC,60
+Armstrong,TX,"Armstrong, TX",45050,CEAC,60
+Atascosa,TX,"Atascosa, TX",45060,Rural,30
+Austin,TX,"Austin, TX",45070,Rural,30
+Bailey,TX,"Bailey, TX",45080,CEAC,60
+Bandera,TX,"Bandera, TX",45090,Rural,30
+Bastrop,TX,"Bastrop, TX",45100,Micro,20
+Baylor,TX,"Baylor, TX",45110,CEAC,60
+Bee,TX,"Bee, TX",45113,Rural,30
+Bell,TX,"Bell, TX",45120,Metro,10
+Bexar,TX,"Bexar, TX",45130,Large Metro,5
+Blanco,TX,"Blanco, TX",45140,Rural,30
+Borden,TX,"Borden, TX",45150,CEAC,60
+Bosque,TX,"Bosque, TX",45160,Rural,30
+Bowie,TX,"Bowie, TX",45170,Metro,10
+Brazoria,TX,"Brazoria, TX",45180,Metro,10
+Brazos,TX,"Brazos, TX",45190,Metro,10
+Brewster,TX,"Brewster, TX",45200,CEAC,60
+Briscoe,TX,"Briscoe, TX",45201,CEAC,60
+Brooks,TX,"Brooks, TX",45210,CEAC,60
+Brown,TX,"Brown, TX",45220,Rural,30
+Burleson,TX,"Burleson, TX",45221,Rural,30
+Burnet,TX,"Burnet, TX",45222,Rural,30
+Caldwell,TX,"Caldwell, TX",45223,Micro,20
+Calhoun,TX,"Calhoun, TX",45224,Rural,30
+Callahan,TX,"Callahan, TX",45230,Rural,30
+Cameron,TX,"Cameron, TX",45240,Metro,10
+Camp,TX,"Camp, TX",45250,Micro,20
+Carson,TX,"Carson, TX",45251,CEAC,60
+Cass,TX,"Cass, TX",45260,Rural,30
+Castro,TX,"Castro, TX",45270,CEAC,60
+Chambers,TX,"Chambers, TX",45280,Micro,20
+Cherokee,TX,"Cherokee, TX",45281,Micro,20
+Childress,TX,"Childress, TX",45290,Rural,30
+Clay,TX,"Clay, TX",45291,CEAC,60
+Cochran,TX,"Cochran, TX",45292,CEAC,60
+Coke,TX,"Coke, TX",45300,CEAC,60
+Coleman,TX,"Coleman, TX",45301,CEAC,60
+Collin,TX,"Collin, TX",45310,Metro,10
+Collingsworth,TX,"Collingsworth, TX",45311,CEAC,60
+Colorado,TX,"Colorado, TX",45312,Rural,30
+Comal,TX,"Comal, TX",45320,Metro,10
+Comanche,TX,"Comanche, TX",45321,Rural,30
+Concho,TX,"Concho, TX",45330,CEAC,60
+Cooke,TX,"Cooke, TX",45340,Rural,30
+Coryell,TX,"Coryell, TX",45341,Micro,20
+Cottle,TX,"Cottle, TX",45350,CEAC,60
+Crane,TX,"Crane, TX",45360,CEAC,60
+Crockett,TX,"Crockett, TX",45361,CEAC,60
+Crosby,TX,"Crosby, TX",45362,CEAC,60
+Culberson,TX,"Culberson, TX",45370,CEAC,60
+Dallam,TX,"Dallam, TX",45380,CEAC,60
+Dallas,TX,"Dallas, TX",45390,Large Metro,5
+Dawson,TX,"Dawson, TX",45391,Rural,30
+Deaf Smith,TX,"Deaf Smith, TX",45392,Rural,30
+Delta,TX,"Delta, TX",45400,Rural,30
+Denton,TX,"Denton, TX",45410,Metro,10
+DeWitt,TX,"DeWitt, TX",45420,Rural,30
+Dickens,TX,"Dickens, TX",45421,CEAC,60
+Dimmit,TX,"Dimmit, TX",45430,CEAC,60
+Donley,TX,"Donley, TX",45431,CEAC,60
+Duval,TX,"Duval, TX",45440,CEAC,60
+Eastland,TX,"Eastland, TX",45450,Rural,30
+Ector,TX,"Ector, TX",45451,Metro,10
+Edwards,TX,"Edwards, TX",45460,CEAC,60
+Ellis,TX,"Ellis, TX",45470,Metro,10
+El Paso,TX,"El Paso, TX",45480,Metro,10
+Erath,TX,"Erath, TX",45490,Rural,30
+Falls,TX,"Falls, TX",45500,Rural,30
+Fannin,TX,"Fannin, TX",45510,Rural,30
+Fayette,TX,"Fayette, TX",45511,Rural,30
+Fisher,TX,"Fisher, TX",45520,CEAC,60
+Floyd,TX,"Floyd, TX",45521,CEAC,60
+Foard,TX,"Foard, TX",45522,CEAC,60
+Fort Bend,TX,"Fort Bend, TX",45530,Metro,10
+Franklin,TX,"Franklin, TX",45531,Rural,30
+Freestone,TX,"Freestone, TX",45540,Rural,30
+Frio,TX,"Frio, TX",45541,Rural,30
+Gaines,TX,"Gaines, TX",45542,Rural,30
+Galveston,TX,"Galveston, TX",45550,Metro,10
+Garza,TX,"Garza, TX",45551,CEAC,60
+Gillespie,TX,"Gillespie, TX",45552,Rural,30
+Glasscock,TX,"Glasscock, TX",45560,CEAC,60
+Goliad,TX,"Goliad, TX",45561,CEAC,60
+Gonzales,TX,"Gonzales, TX",45562,Rural,30
+Gray,TX,"Gray, TX",45563,Rural,30
+Grayson,TX,"Grayson, TX",45564,Metro,10
+Gregg,TX,"Gregg, TX",45570,Metro,10
+Grimes,TX,"Grimes, TX",45580,Rural,30
+Guadalupe,TX,"Guadalupe, TX",45581,Metro,10
+Hale,TX,"Hale, TX",45582,Rural,30
+Hall,TX,"Hall, TX",45583,CEAC,60
+Hamilton,TX,"Hamilton, TX",45590,CEAC,60
+Hansford,TX,"Hansford, TX",45591,CEAC,60
+Hardeman,TX,"Hardeman, TX",45592,CEAC,60
+Hardin,TX,"Hardin, TX",45600,Micro,20
+Harris,TX,"Harris, TX",45610,Large Metro,5
+Harrison,TX,"Harrison, TX",45620,Micro,20
+Hartley,TX,"Hartley, TX",45621,CEAC,60
+Haskell,TX,"Haskell, TX",45630,CEAC,60
+Hays,TX,"Hays, TX",45631,Metro,10
+Hemphill,TX,"Hemphill, TX",45632,CEAC,60
+Henderson,TX,"Henderson, TX",45640,Micro,20
+Hidalgo,TX,"Hidalgo, TX",45650,Metro,10
+Hill,TX,"Hill, TX",45651,Rural,30
+Hockley,TX,"Hockley, TX",45652,Rural,30
+Hood,TX,"Hood, TX",45653,Metro,10
+Hopkins,TX,"Hopkins, TX",45654,Rural,30
+Houston,TX,"Houston, TX",45660,Rural,30
+Howard,TX,"Howard, TX",45661,Rural,30
+Hudspeth,TX,"Hudspeth, TX",45662,CEAC,60
+Hunt,TX,"Hunt, TX",45670,Metro,10
+Hutchinson,TX,"Hutchinson, TX",45671,Rural,30
+Irion,TX,"Irion, TX",45672,CEAC,60
+Jack,TX,"Jack, TX",45680,CEAC,60
+Jackson,TX,"Jackson, TX",45681,Rural,30
+Jasper,TX,"Jasper, TX",45690,Rural,30
+Jeff Davis,TX,"Jeff Davis, TX",45691,CEAC,60
+Jefferson,TX,"Jefferson, TX",45700,Metro,10
+Jim Hogg,TX,"Jim Hogg, TX",45710,CEAC,60
+Jim Wells,TX,"Jim Wells, TX",45711,Rural,30
+Johnson,TX,"Johnson, TX",45720,Metro,10
+Jones,TX,"Jones, TX",45721,Rural,30
+Karnes,TX,"Karnes, TX",45722,Rural,30
+Kaufman,TX,"Kaufman, TX",45730,Metro,10
+Kendall,TX,"Kendall, TX",45731,Micro,20
+Kenedy,TX,"Kenedy, TX",45732,CEAC,60
+Kent,TX,"Kent, TX",45733,CEAC,60
+Kerr,TX,"Kerr, TX",45734,Micro,20
+Kimble,TX,"Kimble, TX",45740,CEAC,60
+King,TX,"King, TX",45741,CEAC,60
+Kinney,TX,"Kinney, TX",45742,CEAC,60
+Kleberg,TX,"Kleberg, TX",45743,Rural,30
+Knox,TX,"Knox, TX",45744,CEAC,60
+Lamar,TX,"Lamar, TX",45750,Micro,20
+Lamb,TX,"Lamb, TX",45751,Rural,30
+Lampasas,TX,"Lampasas, TX",45752,Rural,30
+La Salle,TX,"La Salle, TX",45753,CEAC,60
+Lavaca,TX,"Lavaca, TX",45754,Rural,30
+Lee,TX,"Lee, TX",45755,Rural,30
+Leon,TX,"Leon, TX",45756,Rural,30
+Liberty,TX,"Liberty, TX",45757,Micro,20
+Limestone,TX,"Limestone, TX",45758,Rural,30
+Lipscomb,TX,"Lipscomb, TX",45759,CEAC,60
+Live Oak,TX,"Live Oak, TX",45760,Rural,30
+Llano,TX,"Llano, TX",45761,Rural,30
+Loving,TX,"Loving, TX",45762,CEAC,60
+Lubbock,TX,"Lubbock, TX",45770,Metro,10
+Lynn,TX,"Lynn, TX",45771,CEAC,60
+McCulloch,TX,"McCulloch, TX",45772,CEAC,60
+McLennan,TX,"McLennan, TX",45780,Metro,10
+McMullen,TX,"McMullen, TX",45781,CEAC,60
+Madison,TX,"Madison, TX",45782,Rural,30
+Marion,TX,"Marion, TX",45783,Rural,30
+Martin,TX,"Martin, TX",45784,CEAC,60
+Mason,TX,"Mason, TX",45785,CEAC,60
+Matagorda,TX,"Matagorda, TX",45790,Rural,30
+Maverick,TX,"Maverick, TX",45791,Micro,20
+Medina,TX,"Medina, TX",45792,Rural,30
+Menard,TX,"Menard, TX",45793,CEAC,60
+Midland,TX,"Midland, TX",45794,Metro,10
+Milam,TX,"Milam, TX",45795,Rural,30
+Mills,TX,"Mills, TX",45796,CEAC,60
+Mitchell,TX,"Mitchell, TX",45797,CEAC,60
+Montague,TX,"Montague, TX",45800,Rural,30
+Montgomery,TX,"Montgomery, TX",45801,Metro,10
+Moore,TX,"Moore, TX",45802,Rural,30
+Morris,TX,"Morris, TX",45803,Rural,30
+Motley,TX,"Motley, TX",45804,CEAC,60
+Nacogdoches,TX,"Nacogdoches, TX",45810,Micro,20
+Navarro,TX,"Navarro, TX",45820,Rural,30
+Newton,TX,"Newton, TX",45821,Rural,30
+Nolan,TX,"Nolan, TX",45822,Rural,30
+Nueces,TX,"Nueces, TX",45830,Metro,10
+Ochiltree,TX,"Ochiltree, TX",45831,Rural,30
+Oldham,TX,"Oldham, TX",45832,CEAC,60
+Orange,TX,"Orange, TX",45840,Metro,10
+Palo Pinto,TX,"Palo Pinto, TX",45841,Rural,30
+Panola,TX,"Panola, TX",45842,Rural,30
+Parker,TX,"Parker, TX",45843,Metro,10
+Parmer,TX,"Parmer, TX",45844,Rural,30
+Pecos,TX,"Pecos, TX",45845,CEAC,60
+Polk,TX,"Polk, TX",45850,Rural,30
+Potter,TX,"Potter, TX",45860,Metro,10
+Presidio,TX,"Presidio, TX",45861,CEAC,60
+Rains,TX,"Rains, TX",45870,Rural,30
+Randall,TX,"Randall, TX",45871,Metro,10
+Reagan,TX,"Reagan, TX",45872,CEAC,60
+Real,TX,"Real, TX",45873,CEAC,60
+Red River,TX,"Red River, TX",45874,Rural,30
+Reeves,TX,"Reeves, TX",45875,CEAC,60
+Refugio,TX,"Refugio, TX",45876,CEAC,60
+Roberts,TX,"Roberts, TX",45877,CEAC,60
+Robertson,TX,"Robertson, TX",45878,Rural,30
+Rockwall,TX,"Rockwall, TX",45879,Metro,10
+Runnels,TX,"Runnels, TX",45880,Rural,30
+Rusk,TX,"Rusk, TX",45881,Micro,20
+Sabine,TX,"Sabine, TX",45882,Rural,30
+San Augustine,TX,"San Augustine, TX",45883,Rural,30
+San Jacinto,TX,"San Jacinto, TX",45884,Rural,30
+San Patricio,TX,"San Patricio, TX",45885,Micro,20
+San Saba,TX,"San Saba, TX",45886,CEAC,60
+Schleicher,TX,"Schleicher, TX",45887,CEAC,60
+Scurry,TX,"Scurry, TX",45888,Rural,30
+Shackelford,TX,"Shackelford, TX",45889,CEAC,60
+Shelby,TX,"Shelby, TX",45890,Rural,30
+Sherman,TX,"Sherman, TX",45891,CEAC,60
+Smith,TX,"Smith, TX",45892,Metro,10
+Somervell,TX,"Somervell, TX",45893,Rural,30
+Starr,TX,"Starr, TX",45900,Micro,20
+Stephens,TX,"Stephens, TX",45901,Rural,30
+Sterling,TX,"Sterling, TX",45902,CEAC,60
+Stonewall,TX,"Stonewall, TX",45903,CEAC,60
+Sutton,TX,"Sutton, TX",45904,CEAC,60
+Swisher,TX,"Swisher, TX",45905,CEAC,60
+Tarrant,TX,"Tarrant, TX",45910,Large Metro,5
+Taylor,TX,"Taylor, TX",45911,Metro,10
+Terrell,TX,"Terrell, TX",45912,CEAC,60
+Terry,TX,"Terry, TX",45913,Rural,30
+Throckmorton,TX,"Throckmorton, TX",45920,CEAC,60
+Titus,TX,"Titus, TX",45921,Micro,20
+Tom Green,TX,"Tom Green, TX",45930,Micro,20
+Travis,TX,"Travis, TX",45940,Large Metro,5
+Trinity,TX,"Trinity, TX",45941,Rural,30
+Tyler,TX,"Tyler, TX",45942,Rural,30
+Upshur,TX,"Upshur, TX",45943,Micro,20
+Upton,TX,"Upton, TX",45944,CEAC,60
+Uvalde,TX,"Uvalde, TX",45945,Rural,30
+Val Verde,TX,"Val Verde, TX",45946,Rural,30
+Van Zandt,TX,"Van Zandt, TX",45947,Micro,20
+Victoria,TX,"Victoria, TX",45948,Metro,15
+Walker,TX,"Walker, TX",45949,Micro,20
+Waller,TX,"Waller, TX",45950,Micro,20
+Ward,TX,"Ward, TX",45951,Rural,30
+Washington,TX,"Washington, TX",45952,Micro,20
+Webb,TX,"Webb, TX",45953,Metro,10
+Wharton,TX,"Wharton, TX",45954,Rural,30
+Wheeler,TX,"Wheeler, TX",45955,CEAC,60
+Wichita,TX,"Wichita, TX",45960,Metro,10
+Wilbarger,TX,"Wilbarger, TX",45961,Rural,30
+Willacy,TX,"Willacy, TX",45962,Rural,30
+Williamson,TX,"Williamson, TX",45970,Metro,10
+Wilson,TX,"Wilson, TX",45971,Micro,20
+Winkler,TX,"Winkler, TX",45972,CEAC,60
+Wise,TX,"Wise, TX",45973,Micro,20
+Wood,TX,"Wood, TX",45974,Micro,20
+Yoakum,TX,"Yoakum, TX",45980,Rural,30
+Young,TX,"Young, TX",45981,Rural,30
+Zapata,TX,"Zapata, TX",45982,Rural,30
+Zavala,TX,"Zavala, TX",45983,CEAC,60
+Beaver,UT,"Beaver, UT",46000,CEAC,60
+Box Elder,UT,"Box Elder, UT",46010,CEAC,60
+Cache,UT,"Cache, UT",46020,Metro,10
+Carbon,UT,"Carbon, UT",46030,Rural,30
+Daggett,UT,"Daggett, UT",46040,CEAC,60
+Davis,UT,"Davis, UT",46050,Metro,10
+Duchesne,UT,"Duchesne, UT",46060,CEAC,60
+Emery,UT,"Emery, UT",46070,CEAC,60
+Garfield,UT,"Garfield, UT",46080,CEAC,60
+Grand,UT,"Grand, UT",46090,CEAC,60
+Iron,UT,"Iron, UT",46100,Rural,30
+Juab,UT,"Juab, UT",46110,CEAC,60
+Kane,UT,"Kane, UT",46120,CEAC,60
+Millard,UT,"Millard, UT",46130,CEAC,60
+Morgan,UT,"Morgan, UT",46140,Rural,30
+Piute,UT,"Piute, UT",46150,CEAC,60
+Rich,UT,"Rich, UT",46160,CEAC,60
+Salt Lake,UT,"Salt Lake, UT",46170,Large Metro,5
+San Juan,UT,"San Juan, UT",46180,CEAC,60
+Sanpete,UT,"Sanpete, UT",46190,Rural,30
+Sevier,UT,"Sevier, UT",46200,Rural,30
+Summit,UT,"Summit, UT",46210,Rural,30
+Tooele,UT,"Tooele, UT",46220,CEAC,60
+Uintah,UT,"Uintah, UT",46230,CEAC,60
+Utah,UT,"Utah, UT",46240,Metro,10
+Wasatch,UT,"Wasatch, UT",46250,Rural,30
+Washington,UT,"Washington, UT",46260,Micro,20
+Wayne,UT,"Wayne, UT",46270,CEAC,60
+Weber,UT,"Weber, UT",46280,Metro,10
+Addison,VT,"Addison, VT",47000,Rural,30
+Bennington,VT,"Bennington, VT",47010,Micro,20
+Caledonia,VT,"Caledonia, VT",47020,Rural,30
+Chittenden,VT,"Chittenden, VT",47030,Metro,10
+Essex,VT,"Essex, VT",47040,CEAC,60
+Franklin,VT,"Franklin, VT",47050,Micro,20
+Grand Isle,VT,"Grand Isle, VT",47060,Rural,30
+Lamoille,VT,"Lamoille, VT",47070,Micro,20
+Orange,VT,"Orange, VT",47080,Rural,30
+Orleans,VT,"Orleans, VT",47090,Rural,30
+Rutland,VT,"Rutland, VT",47100,Micro,20
+Washington,VT,"Washington, VT",47110,Micro,20
+Windham,VT,"Windham, VT",47120,Micro,20
+Windsor,VT,"Windsor, VT",47130,Micro,20
+St. Croix,VI,"St. Croix, VI",48010,Rural,30
+St. John-Thomas,VI,"St. John-Thomas, VI",48020,Rural,30
+Accomack,VA,"Accomack, VA",49000,Micro,20
+Albemarle,VA,"Albemarle, VA",49010,Metro,10
+Alexandria City,VA,"Alexandria city, VA",49011,Large Metro,5
+Alleghany,VA,"Alleghany, VA",49020,Rural,30
+Amelia,VA,"Amelia, VA",49030,Rural,30
+Amherst,VA,"Amherst, VA",49040,Micro,20
+Appomattox,VA,"Appomattox, VA",49050,Rural,30
+Arlington,VA,"Arlington, VA",49060,Large Metro,5
+Augusta,VA,"Augusta, VA",49070,Micro,20
+Bath,VA,"Bath, VA",49080,CEAC,60
+Bedford,VA,"Bedford, VA",49090,Metro,10
+Bland,VA,"Bland, VA",49100,Rural,30
+Botetourt,VA,"Botetourt, VA",49110,Micro,20
+Bristol City,VA,"Bristol city, VA",49111,Metro,10
+Brunswick,VA,"Brunswick, VA",49120,Rural,30
+Buchanan,VA,"Buchanan, VA",49130,Rural,30
+Buckingham,VA,"Buckingham, VA",49140,Rural,30
+Buena Vista City,VA,"Buena Vista city, VA",49141,Rural,30
+Campbell,VA,"Campbell, VA",49150,Metro,10
+Caroline,VA,"Caroline, VA",49160,Micro,20
+Carroll,VA,"Carroll, VA",49170,Micro,20
+Charles City,VA,"Charles City, VA",49180,Rural,30
+Charlotte,VA,"Charlotte, VA",49190,Rural,30
+Charlottesville City,VA,"Charlottesville city, VA",49191,Metro,10
+Chesapeake City,VA,"Chesapeake city, VA",49194,Metro,10
+Chesterfield,VA,"Chesterfield, VA",49200,Metro,10
+Clarke,VA,"Clarke, VA",49210,Micro,20
+Colonial Heights City,VA,"Colonial Heights city, VA",49212,Metro,10
+Covington City,VA,"Covington city, VA",49213,Rural,30
+Craig,VA,"Craig, VA",49220,Rural,30
+Culpeper,VA,"Culpeper, VA",49230,Micro,20
+Cumberland,VA,"Cumberland, VA",49240,Rural,30
+Danville City,VA,"Danville city, VA",49241,Micro,20
+Dickenson,VA,"Dickenson, VA",49250,Rural,30
+Dinwiddie,VA,"Dinwiddie, VA",49260,Micro,20
+Emporia City,VA,"Emporia city, VA",49270,Rural,30
+Essex,VA,"Essex, VA",49280,Rural,30
+Fairfax City,VA,"Fairfax city, VA",49288,Large Metro,5
+Fairfax,VA,"Fairfax, VA",49290,Large Metro,5
+Falls Church City,VA,"Falls Church city, VA",49291,Large Metro,5
+Fauquier,VA,"Fauquier, VA",49300,Metro,15
+Floyd,VA,"Floyd, VA",49310,Rural,30
+Fluvanna,VA,"Fluvanna, VA",49320,Micro,20
+Franklin City,VA,"Franklin city, VA",49328,Rural,30
+Franklin,VA,"Franklin, VA",49330,Micro,20
+Frederick,VA,"Frederick, VA",49340,Metro,15
+Fredericksburg City,VA,"Fredericksburg city, VA",49342,Metro,10
+Galax City,VA,"Galax city, VA",49343,Rural,30
+Giles,VA,"Giles, VA",49350,Rural,30
+Gloucester,VA,"Gloucester, VA",49360,Micro,20
+Goochland,VA,"Goochland, VA",49370,Micro,20
+Grayson,VA,"Grayson, VA",49380,Rural,30
+Greene,VA,"Greene, VA",49390,Micro,20
+Greensville,VA,"Greensville, VA",49400,Rural,30
+Halifax,VA,"Halifax, VA",49410,Rural,30
+Hampton City,VA,"Hampton city, VA",49411,Metro,10
+Hanover,VA,"Hanover, VA",49420,Metro,10
+Harrisonburg City,VA,"Harrisonburg city, VA",49421,Metro,10
+Henrico,VA,"Henrico, VA",49430,Metro,10
+Henry,VA,"Henry, VA",49440,Metro,10
+Highland,VA,"Highland, VA",49450,CEAC,60
+Hopewell City,VA,"Hopewell city, VA",49451,Metro,10
+Isle of Wight,VA,"Isle of Wight, VA",49460,Micro,20
+James City,VA,"James City, VA",49470,Metro,10
+King and Queen,VA,"King and Queen, VA",49480,Rural,30
+King George,VA,"King George, VA",49490,Micro,20
+King William,VA,"King William, VA",49500,Micro,20
+Lancaster,VA,"Lancaster, VA",49510,Micro,20
+Lee,VA,"Lee, VA",49520,Micro,20
+Lexington City,VA,"Lexington city, VA",49522,Rural,30
+Loudoun,VA,"Loudoun, VA",49530,Metro,10
+Louisa,VA,"Louisa, VA",49540,Micro,20
+Lunenburg,VA,"Lunenburg, VA",49550,Rural,30
+Lynchburg City,VA,"Lynchburg city, VA",49551,Metro,10
+Madison,VA,"Madison, VA",49560,Rural,30
+Martinsville City,VA,"Martinsville city, VA",49561,Metro,10
+Manassas City,VA,"Manassas city, VA",49563,Metro,10
+Manassas Park City,VA,"Manassas Park city, VA",49565,Large Metro,5
+Mathews,VA,"Mathews, VA",49570,Rural,30
+Mecklenburg,VA,"Mecklenburg, VA",49580,Rural,30
+Middlesex,VA,"Middlesex, VA",49590,Micro,20
+Montgomery,VA,"Montgomery, VA",49600,Metro,10
+Nelson,VA,"Nelson, VA",49620,Rural,30
+New Kent,VA,"New Kent, VA",49621,Micro,20
+Newport News City,VA,"Newport News city, VA",49622,Metro,10
+Norfolk City,VA,"Norfolk city, VA",49641,Metro,10
+Northampton,VA,"Northampton, VA",49650,Micro,20
+Northumberland,VA,"Northumberland, VA",49660,Micro,20
+Norton City,VA,"Norton city, VA",49661,Micro,20
+Nottoway,VA,"Nottoway, VA",49670,Rural,30
+Orange,VA,"Orange, VA",49680,Micro,20
+Page,VA,"Page, VA",49690,Micro,20
+Patrick,VA,"Patrick, VA",49700,Rural,30
+Petersburg City,VA,"Petersburg city, VA",49701,Metro,10
+Pittsylvania,VA,"Pittsylvania, VA",49710,Micro,20
+Portsmouth City,VA,"Portsmouth city, VA",49711,Metro,10
+Poquoson City,VA,"Poquoson city, VA",49712,Micro,20
+Powhatan,VA,"Powhatan, VA",49720,Micro,20
+Prince Edward,VA,"Prince Edward, VA",49730,Micro,20
+Prince George,VA,"Prince George, VA",49740,Micro,20
+Prince William,VA,"Prince William, VA",49750,Metro,10
+Pulaski,VA,"Pulaski, VA",49770,Micro,20
+Radford City,VA,"Radford city, VA",49771,Metro,10
+Rappahannock,VA,"Rappahannock, VA",49780,Rural,30
+Richmond,VA,"Richmond, VA",49790,Rural,30
+Richmond City,VA,"Richmond city, VA",49791,Metro,10
+Roanoke,VA,"Roanoke, VA",49800,Metro,10
+Roanoke City,VA,"Roanoke city, VA",49801,Metro,10
+Rockbridge,VA,"Rockbridge, VA",49810,Rural,30
+Rockingham,VA,"Rockingham, VA",49820,Micro,20
+Russell,VA,"Russell, VA",49830,Micro,20
+Salem City,VA,"Salem city, VA",49838,Metro,10
+Scott,VA,"Scott, VA",49840,Rural,30
+Shenandoah,VA,"Shenandoah, VA",49850,Micro,20
+Smyth,VA,"Smyth, VA",49860,Micro,20
+Southampton,VA,"Southampton, VA",49870,Rural,30
+Spotsylvania,VA,"Spotsylvania, VA",49880,Metro,10
+Stafford,VA,"Stafford, VA",49890,Metro,10
+Staunton City,VA,"Staunton city, VA",49891,Metro,10
+Suffolk City,VA,"Suffolk city, VA",49892,Metro,10
+Surry,VA,"Surry, VA",49900,Rural,30
+Sussex,VA,"Sussex, VA",49910,Rural,30
+Tazewell,VA,"Tazewell, VA",49920,Micro,20
+Virginia Beach City,VA,"Virginia Beach city, VA",49921,Metro,10
+Warren,VA,"Warren, VA",49930,Micro,20
+Washington,VA,"Washington, VA",49950,Micro,20
+Waynesboro City,VA,"Waynesboro city, VA",49951,Metro,10
+Westmoreland,VA,"Westmoreland, VA",49960,Micro,20
+Williamsburg City,VA,"Williamsburg city, VA",49961,Metro,10
+Winchester City,VA,"Winchester city, VA",49962,Metro,10
+Wise,VA,"Wise, VA",49970,Micro,20
+Wythe,VA,"Wythe, VA",49980,Micro,20
+York,VA,"York, VA",49981,Metro,10
+Adams,WA,"Adams, WA",50000,Rural,30
+Asotin,WA,"Asotin, WA",50010,Rural,30
+Benton,WA,"Benton, WA",50020,Metro,10
+Chelan,WA,"Chelan, WA",50030,Micro,20
+Clallam,WA,"Clallam, WA",50040,Micro,20
+Clark,WA,"Clark, WA",50050,Metro,10
+Columbia,WA,"Columbia, WA",50060,CEAC,60
+Cowlitz,WA,"Cowlitz, WA",50070,Micro,20
+Douglas,WA,"Douglas, WA",50080,Rural,30
+Ferry,WA,"Ferry, WA",50090,CEAC,60
+Franklin,WA,"Franklin, WA",50100,Micro,20
+Garfield,WA,"Garfield, WA",50110,CEAC,60
+Grant,WA,"Grant, WA",50120,Micro,20
+Grays Harbor,WA,"Grays Harbor, WA",50130,Micro,20
+Island,WA,"Island, WA",50140,Metro,10
+Jefferson,WA,"Jefferson, WA",50150,Rural,30
+King,WA,"King, WA",50160,Large Metro,5
+Kitsap,WA,"Kitsap, WA",50170,Metro,10
+Kittitas,WA,"Kittitas, WA",50180,Rural,30
+Klickitat,WA,"Klickitat, WA",50190,Rural,30
+Lewis,WA,"Lewis, WA",50200,Micro,20
+Lincoln,WA,"Lincoln, WA",50210,CEAC,60
+Mason,WA,"Mason, WA",50220,Micro,20
+Okanogan,WA,"Okanogan, WA",50230,CEAC,60
+Pacific,WA,"Pacific, WA",50240,Rural,30
+Pend Oreille,WA,"Pend Oreille, WA",50250,CEAC,60
+Pierce,WA,"Pierce, WA",50260,Metro,10
+San Juan,WA,"San Juan, WA",50270,Micro,20
+Skagit,WA,"Skagit, WA",50280,Micro,20
+Skamania,WA,"Skamania, WA",50290,CEAC,60
+Snohomish,WA,"Snohomish, WA",50300,Metro,10
+Spokane,WA,"Spokane, WA",50310,Metro,10
+Stevens,WA,"Stevens, WA",50320,Rural,30
+Thurston,WA,"Thurston, WA",50330,Metro,10
+Wahkiakum,WA,"Wahkiakum, WA",50340,Rural,30
+Walla Walla,WA,"Walla Walla, WA",50350,Micro,20
+Whatcom,WA,"Whatcom, WA",50360,Metro,10
+Whitman,WA,"Whitman, WA",50370,Rural,30
+Yakima,WA,"Yakima, WA",50380,Metro,10
+Barbour,WV,"Barbour, WV",51000,Rural,30
+Berkeley,WV,"Berkeley, WV",51010,Metro,10
+Boone,WV,"Boone, WV",51020,Rural,30
+Braxton,WV,"Braxton, WV",51030,Rural,30
+Brooke,WV,"Brooke, WV",51040,Micro,20
+Cabell,WV,"Cabell, WV",51050,Metro,10
+Calhoun,WV,"Calhoun, WV",51060,Rural,30
+Clay,WV,"Clay, WV",51070,Rural,30
+Doddridge,WV,"Doddridge, WV",51080,Rural,30
+Fayette,WV,"Fayette, WV",51090,Micro,20
+Gilmer,WV,"Gilmer, WV",51100,Rural,30
+Grant,WV,"Grant, WV",51110,Rural,30
+Greenbrier,WV,"Greenbrier, WV",51120,Rural,30
+Hampshire,WV,"Hampshire, WV",51130,Rural,30
+Hancock,WV,"Hancock, WV",51140,Micro,20
+Hardy,WV,"Hardy, WV",51150,Rural,30
+Harrison,WV,"Harrison, WV",51160,Metro,10
+Jackson,WV,"Jackson, WV",51170,Micro,20
+Jefferson,WV,"Jefferson, WV",51180,Metro,10
+Kanawha,WV,"Kanawha, WV",51190,Metro,10
+Lewis,WV,"Lewis, WV",51200,Rural,30
+Lincoln,WV,"Lincoln, WV",51210,Rural,30
+Logan,WV,"Logan, WV",51220,Micro,20
+McDowell,WV,"McDowell, WV",51230,Rural,30
+Marion,WV,"Marion, WV",51240,Metro,10
+Marshall,WV,"Marshall, WV",51250,Micro,20
+Mason,WV,"Mason, WV",51260,Micro,20
+Mercer,WV,"Mercer, WV",51270,Metro,10
+Mineral,WV,"Mineral, WV",51280,Micro,20
+Mingo,WV,"Mingo, WV",51290,Micro,20
+Monongalia,WV,"Monongalia, WV",51300,Metro,10
+Monroe,WV,"Monroe, WV",51310,Rural,30
+Morgan,WV,"Morgan, WV",51320,Micro,20
+Nicholas,WV,"Nicholas, WV",51330,Rural,30
+Ohio,WV,"Ohio, WV",51340,Micro,20
+Pendleton,WV,"Pendleton, WV",51350,Rural,30
+Pleasants,WV,"Pleasants, WV",51360,Rural,30
+Pocahontas,WV,"Pocahontas, WV",51370,CEAC,60
+Preston,WV,"Preston, WV",51380,Micro,20
+Putnam,WV,"Putnam, WV",51390,Metro,10
+Raleigh,WV,"Raleigh, WV",51400,Metro,10
+Randolph,WV,"Randolph, WV",51410,Rural,30
+Ritchie,WV,"Ritchie, WV",51420,Rural,30
+Roane,WV,"Roane, WV",51430,Rural,30
+Summers,WV,"Summers, WV",51440,Rural,30
+Taylor,WV,"Taylor, WV",51450,Micro,20
+Tucker,WV,"Tucker, WV",51460,Rural,30
+Tyler,WV,"Tyler, WV",51470,Rural,30
+Upshur,WV,"Upshur, WV",51480,Micro,20
+Wayne,WV,"Wayne, WV",51490,Micro,20
+Webster,WV,"Webster, WV",51500,Rural,30
+Wetzel,WV,"Wetzel, WV",51510,Rural,30
+Wirt,WV,"Wirt, WV",51520,Rural,30
+Wood,WV,"Wood, WV",51530,Metro,10
+Wyoming,WV,"Wyoming, WV",51540,Rural,30
+Adams,WI,"Adams, WI",52000,Rural,30
+Ashland,WI,"Ashland, WI",52010,Rural,30
+Barron,WI,"Barron, WI",52020,Micro,20
+Bayfield,WI,"Bayfield, WI",52030,Rural,30
+Brown,WI,"Brown, WI",52040,Metro,10
+Buffalo,WI,"Buffalo, WI",52050,Rural,30
+Burnett,WI,"Burnett, WI",52060,Rural,30
+Calumet,WI,"Calumet, WI",52070,Micro,20
+Chippewa,WI,"Chippewa, WI",52080,Micro,20
+Clark,WI,"Clark, WI",52090,Rural,30
+Columbia,WI,"Columbia, WI",52100,Micro,20
+Crawford,WI,"Crawford, WI",52110,Rural,30
+Dane,WI,"Dane, WI",52120,Metro,10
+Dodge,WI,"Dodge, WI",52130,Metro,10
+Door,WI,"Door, WI",52140,Micro,20
+Douglas,WI,"Douglas, WI",52150,Rural,30
+Dunn,WI,"Dunn, WI",52160,Micro,20
+Eau Claire,WI,"Eau Claire, WI",52170,Metro,10
+Florence,WI,"Florence, WI",52180,CEAC,60
+Fond du Lac,WI,"Fond du Lac, WI",52190,Metro,10
+Forest,WI,"Forest, WI",52200,CEAC,60
+Grant,WI,"Grant, WI",52210,Micro,20
+Green,WI,"Green, WI",52220,Micro,20
+Green Lake,WI,"Green Lake, WI",52230,Micro,20
+Iowa,WI,"Iowa, WI",52240,Rural,30
+Iron,WI,"Iron, WI",52250,CEAC,60
+Jackson,WI,"Jackson, WI",52260,Rural,30
+Jefferson,WI,"Jefferson, WI",52270,Metro,10
+Juneau,WI,"Juneau, WI",52280,Rural,30
+Kenosha,WI,"Kenosha, WI",52290,Metro,10
+Kewaunee,WI,"Kewaunee, WI",52300,Micro,20
+La Crosse,WI,"La Crosse, WI",52310,Metro,10
+Lafayette,WI,"Lafayette, WI",52320,Rural,30
+Langlade,WI,"Langlade, WI",52330,Rural,30
+Lincoln,WI,"Lincoln, WI",52340,Rural,30
+Manitowoc,WI,"Manitowoc, WI",52350,Metro,10
+Marathon,WI,"Marathon, WI",52360,Micro,20
+Marinette,WI,"Marinette, WI",52370,Rural,30
+Marquette,WI,"Marquette, WI",52380,Rural,30
+Menominee,WI,"Menominee, WI",52381,Rural,30
+Milwaukee,WI,"Milwaukee, WI",52390,Large Metro,5
+Monroe,WI,"Monroe, WI",52400,Micro,20
+Oconto,WI,"Oconto, WI",52410,Rural,30
+Oneida,WI,"Oneida, WI",52420,Rural,30
+Outagamie,WI,"Outagamie, WI",52430,Metro,10
+Ozaukee,WI,"Ozaukee, WI",52440,Metro,10
+Pepin,WI,"Pepin, WI",52450,Rural,30
+Pierce,WI,"Pierce, WI",52460,Micro,20
+Polk,WI,"Polk, WI",52470,Rural,30
+Portage,WI,"Portage, WI",52480,Micro,20
+Price,WI,"Price, WI",52490,Rural,30
+Racine,WI,"Racine, WI",52500,Metro,10
+Richland,WI,"Richland, WI",52510,Rural,30
+Rock,WI,"Rock, WI",52520,Metro,10
+Rusk,WI,"Rusk, WI",52530,Rural,30
+St. Croix,WI,"St. Croix, WI",52540,Metro,10
+Sauk,WI,"Sauk, WI",52550,Micro,20
+Sawyer,WI,"Sawyer, WI",52560,Rural,30
+Shawano,WI,"Shawano, WI",52570,Rural,30
+Sheboygan,WI,"Sheboygan, WI",52580,Metro,10
+Taylor,WI,"Taylor, WI",52590,Rural,30
+Trempealeau,WI,"Trempealeau, WI",52600,Rural,30
+Vernon,WI,"Vernon, WI",52610,Rural,30
+Vilas,WI,"Vilas, WI",52620,Rural,30
+Walworth,WI,"Walworth, WI",52630,Metro,10
+Washburn,WI,"Washburn, WI",52640,Rural,30
+Washington,WI,"Washington, WI",52650,Metro,10
+Waukesha,WI,"Waukesha, WI",52660,Metro,10
+Waupaca,WI,"Waupaca, WI",52670,Micro,20
+Waushara,WI,"Waushara, WI",52680,Rural,30
+Winnebago,WI,"Winnebago, WI",52690,Metro,10
+Wood,WI,"Wood, WI",52700,Micro,20
+Albany,WY,"Albany, WY",53000,CEAC,60
+Big Horn,WY,"Big Horn, WY",53010,CEAC,60
+Campbell,WY,"Campbell, WY",53020,Rural,30
+Carbon,WY,"Carbon, WY",53030,CEAC,60
+Converse,WY,"Converse, WY",53040,CEAC,60
+Crook,WY,"Crook, WY",53050,CEAC,60
+Fremont,WY,"Fremont, WY",53060,CEAC,60
+Goshen,WY,"Goshen, WY",53070,CEAC,60
+Hot Springs,WY,"Hot Springs, WY",53080,CEAC,60
+Johnson,WY,"Johnson, WY",53090,CEAC,60
+Laramie,WY,"Laramie, WY",53100,Micro,20
+Lincoln,WY,"Lincoln, WY",53110,CEAC,60
+Natrona,WY,"Natrona, WY",53120,Micro,20
+Niobrara,WY,"Niobrara, WY",53130,CEAC,60
+Park,WY,"Park, WY",53140,CEAC,60
+Platte,WY,"Platte, WY",53150,CEAC,60
+Sheridan,WY,"Sheridan, WY",53160,Rural,30
+Sublette,WY,"Sublette, WY",53170,CEAC,60
+Sweetwater,WY,"Sweetwater, WY",53180,CEAC,60
+Teton,WY,"Teton, WY",53190,CEAC,60
+Uinta,WY,"Uinta, WY",53200,Rural,30
+Washakie,WY,"Washakie, WY",53210,CEAC,60
+Weston,WY,"Weston, WY",53220,CEAC,60
+Northern Islands,MP,"Northern Islands, MP",63050,Metro,10
+Faleasao,AS,"Faleasao, AS",64010,Rural,30
+Fitiuta,AS,"Fitiuta, AS",64020,Rural,30
+Ituau,AS,"Ituau, AS",64030,Rural,30
+Lealataua,AS,"Lealataua, AS",64040,Rural,30
+Leasina,AS,"Leasina, AS",64050,Rural,30
+Mauputasi,AS,"Mauputasi, AS",64060,Metro,10
+Ofu,AS,"Ofu, AS",64070,Rural,30
+Olosega,AS,"Olosega, AS",64080,Rural,30
+Saole,AS,"Saole, AS",64090,Rural,30
+Sua,AS,"Sua, AS",64100,Rural,30
+Swains Island,AS,"Swains Island, AS",64110,Rural,30
+Tau,AS,"Tau, AS",64120,Rural,30
+Tualauta,AS,"Tualauta, AS",64130,Metro,10
+Tualatai,AS,"Tualatai, AS",64140,Rural,30
+Vaifanua,AS,"Vaifanua, AS",64150,Rural,30
+Agana,GU,"Agana, GU",65010,Rural,30
+Agana Heights,GU,"Agana Heights, GU",65020,Rural,30
+Agat,GU,"Agat, GU",65030,Rural,30
+Asan,GU,"Asan, GU",65040,Rural,30
+Barrigada,GU,"Barrigada, GU",65050,Rural,30
+Chalan Pago,GU,"Chalan Pago, GU",65060,Rural,30
+Dededo,GU,"Dededo, GU",65070,Metro,10
+Inarajan,GU,"Inarajan, GU",65080,Rural,30
+Maite,GU,"Maite, GU",65090,Rural,30
+Mangilao,GU,"Mangilao, GU",65100,Metro,10
+Merizo,GU,"Merizo, GU",65110,Rural,30
+Mongmong,GU,"Mongmong, GU",65120,Rural,30
+Ordot,GU,"Ordot, GU",65130,Rural,30
+Piti,GU,"Piti, GU",65140,Rural,30
+Santa Rita,GU,"Santa Rita, GU",65150,Rural,30
+Sinajana,GU,"Sinajana, GU",65160,Rural,30
+Talofofo,GU,"Talofofo, GU",65170,Rural,30
+Tamuning,GU,"Tamuning, GU",65180,Metro,10
+Toto,GU,"Toto, GU",65190,Rural,30
+Umatac,GU,"Umatac, GU",65200,Rural,30
+Yigo,GU,"Yigo, GU",65210,Micro,20
+Yona,GU,"Yona, GU",65220,Rural,30

@@ -2,7 +2,6 @@
 title: "Measure & Methodology Documentation Download"
 output: 
   html_document:
-    self_contained: false
     theme: cosmo
     toc: true
     toc_depth: 4
@@ -11,9 +10,11 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+# NOTE: once knit, move html output to www/
 ```
 
-Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each measure can be accessed below. All methods used to calculate unqiue statistical procedures can also be accessed below. Click on the link to download the corresponding documentation.
+Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each measure can be accessed below. All methods used to calculate unique statistical procedures can also be accessed below. Click on the link to download the corresponding documentation.
 
 # Measures
 
