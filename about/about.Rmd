@@ -1,5 +1,6 @@
 ---
 title: "The Mental Wellness Index"
+subtitle: "Version: 1.0.0 (Alpha)"
 output: 
   html_document:
     theme: cosmo
