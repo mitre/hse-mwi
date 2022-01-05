@@ -22,3 +22,9 @@ m_reg <- m_reg[!is.na(m_reg$Numerator),]
 mwi_pipeline(m_reg_custom = m_reg)
 
 # make sure to delete any remaining RData files in the Cleaned folder
+fn <- file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData")
+# Check its existence
+if (file.exists(fn)) {
+  # Delete file if it exists
+  file.remove(fn)
+}
