@@ -3,8 +3,6 @@
 # Originated on 12/01/2021 
 # Progress update: 50 states and DC are completed. 
 
-# TODO: Find data for KY and SD  
-
 library(sf)
 library(geojsonsf)
 library(tidyverse)
@@ -17,29 +15,31 @@ library(data.table)
 library(s2)
 library(rgdal)
 library(readxl)
-library(geomander) # >= 1.1.0.9000
-library(PL94171)
 library(censable)
 library(dataverse)
+library(datasets)
+
 
 ############ Functions to import the data needed to crosswalk the precinct level to the ZCTAs level ############ 
 # Function imports the 3 sources of 2020 precinct level presidential vote data 
-import_precinct_vote_data <- function(state_abv, data_folder){
-  if(toupper(state_abv) %in% list.dirs(path = paste0(data_folder,"/UF 2020 election data"), full.names = FALSE)) {
-    vote_sf <- st_read(paste0(data_folder,"/UF 2020 election data/",toupper(state_abv),"/",state_abv,"_2020.shp")) %>%
+import_precinct_vote_data <- function(state_abv, raw_data_folder){
+  # imports data for the primary vote data source 
+  if(toupper(state_abv) %in% list.dirs(path = paste0(raw_data_folder,"/UF 2020 election data"), full.names = FALSE)) {
+    vote_sf <- st_read(paste0(raw_data_folder,"/UF 2020 election data/",toupper(state_abv),"/",state_abv,"_2020.shp")) %>%
       # uncomment for maryland 
       # st_zm() %>% 
       sf::st_as_sf() %>% 
       sf::st_transform(26915) %>%
       st_make_valid() %>%
-      mutate(precinct_id = as.character(row_number())) %>%
+      mutate(geo_id = as.character(row_number())) %>%
       rowwise() %>%
       mutate(presidential_votes = sum(c_across(starts_with("G20PRE")))) %>%
-      select(precinct_id,geometry,presidential_votes)
+      select(geo_id,geometry,presidential_votes)
     if(all(st_is_valid(vote_sf))!= "TRUE") warning("The 2020 Election file for the state contains invalid geometries.")
     return(vote_sf)
-  } else if (state_abv %in% c('ms', 'wy')) {
-    vote_sf <-geojsonsf::geojson_sf(paste0(data_folder, "/NYT 2020 election data/precincts-with-results.geojson")) %>% 
+  } else if (state_abv %in% c('ms', 'wy','sd')) {
+    # imports data for the secondary primary vote data source at the precinct level 
+    vote_sf <-geojsonsf::geojson_sf(paste0(raw_data_folder, "/NYT 2020 election data/precincts-with-results.geojson")) %>% 
       filter(substr(GEOID,1,2) %in% c('21','28','46','54')) %>%
       mutate(state = ifelse(substr(GEOID,1,2) %in% '21','ky',
                             ifelse(substr(GEOID,1,2) %in% '28','ms',
@@ -47,40 +47,32 @@ import_precinct_vote_data <- function(state_abv, data_folder){
                                           ifelse(substr(GEOID,1,2) %in% '54','wv','na'))))) %>%
       mutate(presidential_votes = votes_total) %>%
       select(state,presidential_votes, geometry) %>%
+      filter(state == state_abv) %>%
       sf::st_as_sf() %>% 
       sf::st_transform(26915) %>%
-      st_make_valid() %>%
-      st_cast( "MULTIPOLYGON") %>%
-      filter(state == state_abv)
-  } else if (state_abv %in% c('ky','sd')){
-    # adds precinct shapefile geometry to downloaded data 
-    join_shapefile = function(data) {
-      geom_d = pl_get_vtd(data$state[1]) %>%
-        select(GEOID20, area_land=ALAND20, area_water=AWATER20, geometry) %>%
-        left_join(data, geom_d, by="GEOID20") %>%
-        st_as_sf() }
-    # read in shape file 
-    vote_sf <-  read_csv(paste0(data_folder,"/Harvard 2020 election data/",toupper(state_abv),"/",state_abv,"_2020.csv"))%>%
-      join_shapefile() %>%
-      mutate(precinct_id = as.character(row_number())) %>%
-      rowwise() %>%
-      mutate(presidential_votes = sum(c_across(starts_with("pre_20_")))) %>%
-      select(precinct_id,presidential_votes, geometry) %>%
+      st_make_valid() 
+  } else if (state_abv %in% 'ky'){
+    # import vote data on a FIPS county level since it's not available at the precinct level in the NYT data 
+    vote_counts <-  read.csv(paste0(raw_data_folder,"/MIT 2020 election data/countypres_2000-2020-2.csv"))%>%
+      filter(year == 2020,
+             state_po == toupper(state_abv)) %>%
+      select(county_fips,
+             presidential_votes = totalvotes) %>%
+      unique() 
+    vote_counts$county_fips <- as.character(vote_counts$county_fips)
+    # import fips shape file for geometries 
+    fips_sh <- counties(state = state_abv, cb = FALSE, resolution = "500k", year = 2020) %>%
+      mutate(county_fips = paste(STATEFP,COUNTYFP, sep=""))
+    # join shape file to vote data 
+    vote_sf <- vote_counts %>% left_join(fips_sh, by = "county_fips") %>%
+      select(geo_id = county_fips,
+             presidential_votes,
+             geometry) %>% 
       sf::st_as_sf() %>% 
       sf::st_transform(26915) %>%
       st_make_valid()
   }
 }
-
-vote_sf <-  read_csv(paste0(vote_data_folder,"/Harvard 2020 election data/","KY","/","ky","_2020.csv"))%>%
-  join_shapefile() %>%
-  mutate(precinct_id = as.character(row_number())) %>%
-  rowwise() %>%
-  mutate(presidential_votes = sum(c_across(starts_with("PRE_20_")))) %>%
-  select(precinct_id,presidential_votes, geometry) %>%
-  sf::st_as_sf() %>% 
-  sf::st_transform(26915) %>%
-  st_make_valid()
 
 # Function imports the ZCTAs shape files for each state 
 import_zctas <-function(state_abv){
@@ -124,10 +116,10 @@ import_voting_population <- function(state_abv){
 
 ############ Function crosswalks ############ 
 # function generates a crosswalk from the precinct level results to the zcta level boundaries 
-generate_crosswalk <- function(data_folder,output_data_pathway, state_abv){
+crosswalk_votes_to_zctas <- function(raw_data_folder,data_folder, state_abv){
   #### Step 1: Read in data  #### 
   # precinct vote level data
-  vote_sf <- import_precinct_vote_data(state_abv, data_folder)
+  vote_sf <- import_precinct_vote_data(state_abv, raw_data_folder)
   
   # zctas shape file 
   zctas_sf <- import_zctas(state_abv)
@@ -141,8 +133,8 @@ generate_crosswalk <- function(data_folder,output_data_pathway, state_abv){
   #### Step 2: Return all intersections between the precinct boundaries and the ZCTA boundaries  #### 
   # create intersections 
   zctas_overlapping_polys <- st_buffer(st_intersection(zctas_sf,vote_sf),dist=0) %>%
-    mutate(precinct_zctas =  paste(precinct_id, zcta, sep="_")) %>%
-    select(precinct_zctas,precinct_id, zcta,geometry)
+    mutate(precinct_zctas =  paste(geo_id, zcta, sep="_")) %>%
+    select(precinct_zctas,geo_id, zcta,geometry)
   
   
   if(all(st_is_valid(zctas_overlapping_polys))!= "TRUE") warning("The zctas_sf contains invalid geometries")
@@ -175,7 +167,7 @@ generate_crosswalk <- function(data_folder,output_data_pathway, state_abv){
   
   #### Step 5: Apportion the votes by population weighting for each ZCTA  #### 
   general_zctas_crosswalked <- as.data.frame(vote_sf) %>%
-    left_join(crosswalk, by = c("precinct_id"= "precinct")) %>%
+    left_join(crosswalk, by = c("geo_id"= "precinct")) %>%
     group_by(zcta) %>%
     summarise(allocated_presidential_votes = round(sum(presidential_votes * frac_of_precinct)),0) %>%
     as.data.frame() %>%
@@ -190,23 +182,48 @@ generate_crosswalk <- function(data_folder,output_data_pathway, state_abv){
     rename(adult_population = pop19,
            presidential_votes = allocated_presidential_votes)
   
-  
   if(length(unique(general_zctas_crosswalked$zctas)) != length(unique(general_zctas_crosswalked$zctas_id))) warning(paste0("Some ZCTAs have been dropped from the final data frame. ",length(unique(zctas_sf$zctas)), " is the number of unique zctas in the original shpae files and ", length(unique(final_df$zctas))," is the number of unique zctas in the final dataframe."))
   
-  
-  write.csv(final_df,paste0(output_data_pathway,state_abv,"_votes_new.csv"), row.names = FALSE)
+  # write each state file out to the prepossessed folder to save a copy 
+  write.csv(final_df, 
+            file = file.path(
+              paste0(
+              data_folder,
+              "/",state_abv,"_voter_participation.csv"
+            ), 
+            row.names = F, 
+            na = ""))
   
   return(final_df) 
 }
 
-# test function on Rhode Island 
-vote_data_folder <- file.path(
+############  Run crosswalk function on all states ############ 
+raw_data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Raw", "Voter_Participation")
 
-output_data_folder <- "C:/Users/CMILLS/OneDrive - The MITRE Corporation/SJP Shiny App Project/Redo Cleaned Data/"
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Preprocessed")
 
-ri_votes <-  generate_crosswalk(state_abv = "ri", data_folder = vote_data_folder ,output_data_pathway = output_data_folder)
-ky_votes <-  generate_crosswalk(state_abv = "ky", data_folder = vote_data_folder ,output_data_pathway = output_data_folder)
+datalist = list()
 
+state_abv <-tolower(state.abb)
+
+for (i in state_abv){
+  state_file <- crosswalk_votes_to_zctas(state_abv,raw_data_folder,data_folder)
+}
+
+vote_data = do.call(rbind, datalist)
+
+# export to preprocessed folder with date generated in file name 
+write.csv(vote_data, 
+          file = file.path(
+            paste0(
+              data_folder,
+              "/",Sys.Date(),"_voter_participation_.csv"
+            ), 
+            row.names = F, 
+            na = ""))
