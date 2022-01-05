@@ -346,6 +346,12 @@ Please see [measure documentation](https://github.com/mitre/hse-mwi/tree/main/Do
 
 Analytic and face validity verification is in progress to evaluate the robustness, validity, and accuracy of the MWI. As part of the analytic validity testing, the team will examine the correlation of the MWI with other major health indices, such as the Social Vulnerability Index (SVI), County Health Rankings (CHR), HRSA’s Service Area Status (SAS), and others.  To test its face validity, listening sessions will be held with community key informants and others to solicit feedback on ways to improve the MWI and the MWI tool to increase its validity and usefulness.  The MWI team will update this page with results as they become available.
 
+## Downloadable Data and Information
+
+- [Data Information](https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv): The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and directionality.
+- [Mental Wellness Index for Black Americans](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv): The calculated MWI for Black Americans for each ZCTA.
+- [Mental Wellness Index for American Population](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv): The calculated MWI for all Americans for each ZCTA.
+- [MWI Project Github Page](https://github.com/mitre/hse-mwi): This page is home to all of the raw data, code to manipulate the data, documentation concerning each measures, and everything else concerned with the creation of the MWI Tool.
 
 ## Acknowledgements and Contact Information
 We would like to acknowledge the following team members, advisors, and reviewers/contributors that helped to create the MWI.
