@@ -31,9 +31,11 @@ In the MWI, mental wellness is a composite of social determinants of health, hea
 
 ### Purpose of the MWI
 
-We built the Mental Wellness Index™ (MWI) to provide a tool that the nation can use to address the shadow epidemic of mental health and substance use issues emerging as a result of the COVID-19 pandemic. The MWI is intended to be a tool that community leaders, public health officials, and funding entities can use to support data-informed policy decisions about equitable allocation of resources to address mental wellness.  
+We built the MWI because there is no existing resource or health index to understand factors influencing mental wellness at the community level. The MWI is intended to enable local, state, and federal government agencies; non-profits; and communities to visualize the factors that contribute to mental wellness. The MWI promotes data-informed decisions and potentially more equitable allocation of resources.  
 
-The MWI is not intended to be a comprehensive evaluation of a community’s mental wellness. Currently, the MWI does not include some factors that influence mental wellness, such as social cohesion and location of non-traditional mental health service providers, due to lack of data availability (see more on this in the section on Limitations below). We recommend use of the MWI in conjunction with local data and working alongside community groups in order to identify, account for, and include local level factors that shape community mental wellness.  
+The MWI was designed with health equity in mind.^[Office of Disease Prevention and Health Promotion (2021, November 24). Healthy People 2030 Questions & Answers. Healthy People 2030. https://health.gov/our-work/national-health-initiatives/healthy-people/healthy-people-2030/questions-answers#q9] Health equity is not linear, and the goal is not simply the attainment of a particular state. Rather, health equity must be continually re-evaluated. Health equity is both reparative and forward thinking, and does not focus only on the present state, but also root causes from the past as well as preventing future inequities.   
+
+The MWI is not intended to be a comprehensive evaluation of a community’s mental wellness. We recommend use of the MWI in conjunction with local data and working alongside community groups to identify, account for, and include local level factors that shape community mental wellness.   
 
 ### Our Focus on the Black Population
 
