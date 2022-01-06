@@ -55,4 +55,4 @@ Each measure used in the MWI Tool was assessed based on its strengths, limitatio
 - [Facility Weights](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Facility_Weights_Methods.pdf?raw=true){target="_blank"}
 - [Geography](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Geography_Methods.pdf?raw=true){target="_blank"}
 - [Two Step Floating Catchment Methodology](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Two_Step_Floating_Catchment_Area.pdf?raw=true){target="_blank"}
-- [Facility Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf?raw=true){target="_blank"}
+- [Measure Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf?raw=true){target="_blank"}
