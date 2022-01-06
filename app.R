@@ -1715,7 +1715,7 @@ server <- function(input, output, session) {
           html_color(mc, "higher"),
           " value indicates a ",
           html_color(mc, "higher"),
-          " ranking for ", 
+          " national ranking for ", 
           html_color(mc, full_name),
           ".",
           "</font></b><p></p>",
@@ -1850,7 +1850,7 @@ server <- function(input, output, session) {
             html_color(mc, us_comp), " relative to the United States.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates a higher ranking for ",
+            "<i>A higher value indicates a higher national ranking for ",
             full_name,
             ". ",
             ifelse(
@@ -1875,7 +1875,7 @@ server <- function(input, output, session) {
             ", indicating missing data or no population in this area.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates a higher ranking for ",
+            "<i>A higher value indicates a higher national ranking for ",
             full_name,
             ". ",
             ifelse(
@@ -2007,18 +2007,25 @@ server <- function(input, output, session) {
           html_color(mc, com_comp), 
           " relative to the selected community, and in the ",
           html_color(mc, us_comp), " relative to the United States.",
-          "</b><p></p>",
-          "<font size = '2'>",
-          "<i>A higher value indicates a higher ranking for ",
-          full_name,
-          ". ",
+          "</b>",
           ifelse(
-            dir_val == -1, 
-            "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+            full_name != "Mental Wellness Index",
+            paste0(
+              "<p></p>",
+              "<font size = '2'>",
+              "<i>A higher value indicates a higher national ranking for ",
+              full_name,
+              ". ",
+              ifelse(
+                dir_val == -1, 
+                "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                ""
+              ),
+              "</i>",
+              "</font>"
+            ),
             ""
           ),
-          "</i>",
-          "</font>",
           "</font></center>"
         ))
       } else {
@@ -2032,18 +2039,25 @@ server <- function(input, output, session) {
             " does not have a value for ", 
             html_color(mc, full_name),
             ", indicating missing data or no population in this area.",
-            "</b><p></p>",
-            "<font size = '2'>",
-            "<i>A higher value indicates a higher ranking for ",
-            full_name,
-            ". ",
+            "</b>",
             ifelse(
-              dir_val == -1, 
-              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+              full_name != "Mental Wellness Index",
+              paste0(
+                "<p></p>",
+                "<font size = '2'>",
+                "<i>A higher value indicates a higher national ranking for ",
+                full_name,
+                ". ",
+                ifelse(
+                  dir_val == -1, 
+                  "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                  ""
+                ),
+                "</i>",
+                "</font>"
+              ),
               ""
             ),
-            "</i>",
-            "</font>",
             "</font></center>"
           ))
       }
