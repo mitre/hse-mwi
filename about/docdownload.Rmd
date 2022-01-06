@@ -52,7 +52,7 @@ Each measure used in the MWI Tool was assessed based on its strengths, limitatio
 - [Suicidal Ideation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicidal_Ideation.pdf?raw=true){target="_blank"}
 
 # Methods
-- [Facility Weights](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Facility%20Weights%20Methods.pdf?raw=true){target="_blank"}
-- [Geography](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Geography%20Methods.pdf?raw=true){target="_blank"}
+- [Facility Weights](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Facility_Weights_Methods.pdf?raw=true){target="_blank"}
+- [Geography](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Geography_Methods.pdf?raw=true){target="_blank"}
 - [Two Step Floating Catchment Methodology](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Two_Step_Floating_Catchment_Area.pdf?raw=true){target="_blank"}
-- [Facility Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting%20Methods.pdf?raw=true){target="_blank"}
+- [Facility Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf?raw=true){target="_blank"}
