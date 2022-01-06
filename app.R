@@ -8,6 +8,7 @@
 # load libraries ----
 
 library(readxl)
+library(writexl)
 library(htmltools)
 library(shiny)
 library(tigris)
@@ -18,6 +19,10 @@ library(plotly)
 library(ggbeeswarm)
 library(shinyWidgets)
 library(sass)
+library(shinycssloaders)
+library(shinyBS)
+
+options(shiny.maxRequestSize=300*1024^2)
 
 # styling ----
 
@@ -34,16 +39,115 @@ sass(
   output = "about/app.css"
 )
 
-# ??source
-sourceDir <- function(path, trace = TRUE, ...) {
-  for (nm in list.files(path, pattern = "[.][RrSsQq]$")) {
-    # if(trace) cat(nm,":")
-    source(file.path(path, nm), ...)
-    # if(trace) cat("\n")
-  }
-}
+# function for app preprocessing ----
 
-sourceDir("about", local = environment())
+app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
+  
+  # create measure name to overall category
+  meas_col_to_type <- setNames(m_reg$Category, m_reg$Measure)
+  meas_col_to_type["Mental Wellness Index"] <- "Mental Wellness Index"
+  
+  # create measure names
+  avail_measures <- measure_to_names <- avail_meas_w_weights <- 
+    list()
+  # group into list for display
+  avail_meas_list <- m_to_type <- list()
+  for (idx in index_types){
+    avail_measures[[idx]] <- colnames(mwi[[idx]])[-1]
+    names(avail_measures[[idx]]) <- 
+      c("Mental Wellness Index", 
+        m_reg[
+          gsub("*_pop$","",
+               gsub("*_black$","",colnames(mwi[[idx]])[-c(1:2)])), "Measure"
+        ]
+      )
+    
+    measure_to_names[[idx]] <-
+      setNames(names(avail_measures[[idx]]), avail_measures[[idx]])
+    
+    # group into list for display
+    avail_meas_list[[idx]] <- list()
+    
+    # measure column to type
+    m_to_type[[idx]] <- 
+      meas_col_to_type[measure_to_names[[idx]][avail_measures[[idx]]]]
+    
+    # add the weights to the name
+    avail_meas_w_weights[[idx]] <- avail_measures[[idx]]
+    # rownames(measure_to_type) <- measure_to_type$Name
+    names(avail_meas_w_weights[[idx]]) <- 
+      paste0(names(avail_measures[[idx]]),
+             " (Weight: ", 
+             round(info_df[avail_measures[[idx]], "Effective_Weights"], 2),
+             ")")
+    # unmet need score doesn't have a weight
+    names(avail_meas_w_weights[[idx]])[1] <- names(avail_measures[[idx]])[1]
+    # add them to the list
+    for (t in unique(m_to_type[[idx]])){
+      avail_meas_list[[idx]][[t]] <- 
+        avail_meas_w_weights[[idx]][m_to_type[[idx]] == t]
+    }
+  }
+  
+  if (!app_start | 
+      (app_start &
+       !"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
+       list.files(file.path(data_folder, "Cleaned")))){
+    
+    # add counties/states to mwi
+    for (idx in index_types){
+      mwi[[idx]][, colnames(cty_cw)[-1]] <- 
+        cty_cw[mwi[[idx]]$ZCTA, -1]
+    }
+    
+    # get zip code data
+    # NOTE: cb = T will download a generalized file
+    zips <- zctas(cb = T)
+    zips <- zips[zips$GEOID10 %in% mwi$pop$ZCTA,]
+    zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
+    
+    # create the geo data for leaflet
+    # NOTE: may want to do this ahead of time, if possible, when the base index is done
+    geodat <- geopts <- list()
+    for (idx in index_types){
+      geodat[[idx]] <-
+        geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
+      
+      # sort by state code and zcta
+      geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
+                                           geodat[[idx]]$GEOID10),]
+      
+      # convert to points for US visualization -- ignore warnings
+      geopts[[idx]] <- st_centroid(geodat[[idx]])
+    }
+    
+    if (app_start &
+         !"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
+         list.files(file.path(data_folder, "Cleaned"))){
+      save(list = c("geodat", "geopts"), 
+           file = file.path(data_folder, 
+                            "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+    }
+  } else {
+    # load geodat data (should be much faster)
+    load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
+  }
+  
+  # get available zctas -- both will have the same
+  avail_zctas <- geodat[["pop"]]$GEOID10
+  names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10, 
+                               " (State: ", geodat[["pop"]]$STATE_NAME, ")")
+  
+  return(list(
+    meas_col_to_type = meas_col_to_type,
+    avail_measures = avail_measures,
+    measure_to_names = measure_to_names,
+    avail_meas_list = avail_meas_list,
+    geodat = geodat,
+    geopts = geopts
+  ))
+  
+}
 
 # load data ----
 
@@ -67,6 +171,20 @@ info_df <- read.csv(
   file.path(data_folder, "Cleaned", "HSE_MWI_Data_Information.csv"),
   row.names = "Numerator"
 )
+
+# load zip codes to zcta
+zip_cw <- read.csv(
+  file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2020.csv"),
+  colClasses = c(
+    "ZIP_CODE" = "character",
+    "ZCTA" = "character"
+  ))
+territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
+zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
+zip_to_zcta <- setNames(zip_cw$ZCTA, zip_cw$ZIP_CODE)
+zcta_to_zip <- aggregate(ZIP_CODE ~ ZCTA, data = zip_cw, 
+                         FUN = function(x){paste(x, collapse = ", ")})
+zcta_to_zip <- setNames(zcta_to_zip$ZIP_CODE, zcta_to_zip$ZCTA)
 
 # load county cw for zcta state county mapping
 county_cw <- read.csv(
@@ -92,12 +210,26 @@ cty_cw$STATE_2 <- sapply(un_st, `[`, 2)
 data("fips_codes")
 f_st <- setNames(unique(fips_codes$state_name),
                  unique(fips_codes$state_code))
+# subset to 50 states + dc
+f_st <- f_st[f_st %in% c(state.name, "District of Columbia")]
+# swap for the future
+st_to_fips <- setNames(names(f_st), f_st)
 cty_cw$STATE_NAME <- f_st[cty_cw$STATE]
 # add all the counties and geoids as well
 cty_cw$COUNTY <- aggregate(COUNTY ~ ZCTA5, data = county_cw, 
                            FUN = function(x){paste(x, collapse = "|")})[,2]
 cty_cw$GEOID <- aggregate(GEOID ~ ZCTA5, data = county_cw, 
-                           FUN = function(x){paste(x, collapse = "|")})[,2]
+                          FUN = function(x){paste(x, collapse = "|")})[,2]
+
+# no directionality percentile ranking
+no_dir_perc_meas_df <- read.csv(
+  file.path(data_folder, "Cleaned", 
+            "HSE_MWI_ZCTA_No_Directionality_Percentile_Ranked_Measures.csv"),
+  colClasses = c("GEOID" = "character")
+)
+colnames(no_dir_perc_meas_df)[colnames(no_dir_perc_meas_df) == "GEOID"] <- "ZCTA"
+no_dir_perc_meas_df <- no_dir_perc_meas_df[no_dir_perc_meas_df$ZCTA != "",]
+rownames(no_dir_perc_meas_df) <- no_dir_perc_meas_df$ZCTA
 
 # MWI scores
 # NOTE: may also save as RData for faster reading
@@ -123,191 +255,263 @@ names(st_abbrev_to_full) <- c(state.abb, "DC", "All")
 
 # plotting information ----
 
-# create measure name to overall category
-meas_col_to_type <- setNames(m_reg$Category, m_reg$Measure)
-meas_col_to_type["Mental Wellness Index"] <- "Mental Wellness Index"
-
-# create measure names
-avail_measures <- measure_to_names <- avail_meas_w_weights <- 
-  list()
-# group into list for display
-avail_meas_list <- m_to_type <- list()
-for (idx in index_types){
-  avail_measures[[idx]] <- colnames(mwi[[idx]])[-1]
-  names(avail_measures[[idx]]) <- 
-    c("Mental Wellness Index", 
-      m_reg[
-        gsub("_pop","",
-             gsub("_black","",colnames(mwi[[idx]])[-c(1:2)])), "Measure"
-      ]
-    )
-  
-  measure_to_names[[idx]] <-
-    setNames(names(avail_measures[[idx]]), avail_measures[[idx]])
-  
-  # group into list for display
-  avail_meas_list[[idx]] <- list()
-  
-  # measure column to type
-  m_to_type[[idx]] <- 
-    meas_col_to_type[measure_to_names[[idx]][avail_measures[[idx]]]]
-  
-  # add the weights to the name
-  avail_meas_w_weights[[idx]] <- avail_measures[[idx]]
-  # rownames(measure_to_type) <- measure_to_type$Name
-  names(avail_meas_w_weights[[idx]]) <- 
-    paste0(names(avail_measures[[idx]]),
-           " (Weight: ", 
-           round(info_df[avail_measures[[idx]], "Effective_Weights"], 2),
-           ")")
-  # unmet need score doesn't have a weight
-  names(avail_meas_w_weights[[idx]])[1] <- names(avail_measures[[idx]])[1]
-  # add them to the list
-  for (t in unique(m_to_type[[idx]])){
-    avail_meas_list[[idx]][[t]] <- 
-      avail_meas_w_weights[[idx]][m_to_type[[idx]] == t]
-  }
-}
-
 # get measure colors
 meas_colors <- c(
-  "BuPu",
-  "Greens",
-  "Blues",
-  "PRGn"
+  "purples", # SDOH
+  "greens", # health status
+  "blues", # healthcare acess
+  "purple_blue_green" # MWI
 )
 names(meas_colors) <- c(unique(m_reg$Category), "Mental Wellness Index")
 
 # get max/min colors for each palette
-meas_max_colors <- sapply(1:length(meas_colors), function(x){
-  brewer.pal(3, meas_colors[x])[3]
-})
-meas_min_colors <- sapply(1:length(meas_colors), function(x){
-  brewer.pal(3, meas_colors[x])[1]
-})
+meas_max_colors <- c(
+  "#5d499e", # SDOH
+  "#157ba7", # healthcare status
+  "#70ad47", # health access
+  "#00441b" #"#70ad47" # MWI
+)
+
+#   sapply(1:length(meas_colors), function(x){
+#   brewer.pal(3, meas_colors[x])[3]
+# })
+meas_min_colors <-  c(
+  "#fcfbfd", # SDOH
+  "#f7fbff", # health status
+  "#f7fcf5", # health access
+  "#3f157d" #"#5d499e" # MWI
+)
+#   sapply(1:length(meas_colors), function(x){
+#   brewer.pal(3, meas_colors[x])[1]
+# })
 names(meas_max_colors) <- names(meas_min_colors) <- names(meas_colors)
 
-# add cities/states to mwi
+# make meas_colors into a color function
+meas_colors <- lapply(1:length(meas_min_colors), function(x){
+  if (x != length(meas_min_colors)){
+    colorRamp(c(meas_min_colors[x], meas_max_colors[x]), interpolate = "linear")
+  } else { # MWI has something in the middle
+    colorRamp(c(meas_min_colors[x], "#c6dbef", meas_max_colors[x]), interpolate = "linear")
+  }
+})
+meas_colors_pal <- lapply(1:length(meas_min_colors), function(x){
+  if (x != length(meas_min_colors)){
+    colorRampPalette(c(meas_min_colors[x], meas_max_colors[x]), interpolate = "linear")
+  } else { # MWI has something in the middle
+    colorRampPalette(c(meas_min_colors[x], "#c6dbef", meas_max_colors[x]), interpolate = "linear")
+  }
+})
+names(meas_colors) <- names(meas_colors_pal) <- names(meas_max_colors)
+
+# replace min and max colors for MWI
+meas_max_colors["Mental Wellness Index"] <-
+  meas_colors_pal[["Mental Wellness Index"]](7)[6]
+meas_min_colors["Mental Wellness Index"] <-
+  meas_colors_pal[["Mental Wellness Index"]](7)[2]
+
+
+
+overall <- app_preprocess(m_reg, info_df, mwi, app_start = T)
+# add other specific data
+overall[["m_reg"]] <- m_reg
+overall[["info_dat"]] <- info_df
+overall[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
+
+# add counties/states to mwi
 for (idx in index_types){
   mwi[[idx]][, colnames(cty_cw)[-1]] <- 
     cty_cw[mwi[[idx]]$ZCTA, -1]
 }
-
-if (!"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
-    list.files(file.path(data_folder, "Cleaned"))){
-  source(file.path("Processing_Pipeline", "create_shpfiles.R"))
-} else {
-  # load geodat data (should be much faster)
-  load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
-}
-
-
-# get available zctas -- both will have the same
-avail_zctas <- geodat[["pop"]]$GEOID10
-names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10, 
-                             " (State: ", geodat[["pop"]]$STATE_NAME, ")")
+overall[["mwi"]] <- mwi
 
 # plot functions ----
 
 # plot the overall map, filled by measure/score (LEAFLET)
-plot_map <- function(fill, geodat, idx, fill_opacity = .7,
+plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
+                     fill_opacity = .7,
                      add_poly = F, us_proxy = NA, zcta_choose = NA){
   # subset map for easy plotting
-  gd_map <- geodat[,c(fill, "GEOID10", "STATE", "geometry")]
+  gd_map <- geodat[,c(fill, "GEOID10", "STATE", "STATE_NAME", "geometry")]
   colnames(gd_map)[1] <- "Fill"
+  if (fill != "Mental_Wellness_Index"){
+    # replace data with no directionality data
+    gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID10, fill]
+  }
   
   # get rid of empty polygons
   gd_map <- gd_map[!is.na(gd_map$GEOID10),]
   
   # create palette
   pal <- colorNumeric(
-    palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
+    palette = meas_colors[[ol$meas_col_to_type[ol$measure_to_names[[idx]][fill]]]],
     domain = c(0, gd_map$Fill, 100),
     na.color = "transparent",
     reverse = ifelse(fill == "Score", T, F)
   )
   pal_wo_na <- colorNumeric(
-    palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
+    palette = meas_colors[[ol$meas_col_to_type[ol$measure_to_names[[idx]][fill]]]],
     domain = c(0, gd_map$Fill, 100),
     na.color=rgb(0,0,0,0),
     reverse = ifelse(fill == "Score", T, F)
   )
   
   # labels 
-  full_name <- measure_to_names[[idx]][fill]
+  full_name <- ol$measure_to_names[[idx]][fill]
   if (full_name != "Mental Wellness Index"){
     full_name <- paste0(
-      ifelse(info_df[fill, "Directionality"] > 0, "Higher ", "Lower "), 
+      # ifelse(ol$info_dat[fill, "Directionality"] > 0, "Higher ", "Lower "), 
       full_name, 
       " Ranking"
     )
   }
+  
   labels <- 
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
       "ZCTA: ", gd_map$GEOID10, "<br>", 
-      full_name,": ", signif(gd_map$Fill, 4)) %>%
+      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
+      full_name,": ", trunc(gd_map$Fill)) %>%
     lapply(htmltools::HTML)
   
   # get initial zoom area
-  bounds <- unname(st_bbox(geodat))
+  bounds <- 
+    if (!is_com){
+      unname(st_bbox(geodat))
+    } else { # community focuses on ZCTA
+      unname(st_bbox(geodat[geodat$GEOID10 == zcta_choose,]))
+    }
   
   if (!add_poly){
-    # create map
-    mp <- leaflet(data = gd_map) %>%
-      addProviderTiles("CartoDB") %>% #OpenStreetMap
-      addPolygons(fillColor = ~pal(Fill),
-                  weight = 1,
-                  opacity = 1,
-                  color = "#b2aeae",
-                  dashArray = "",
-                  fillOpacity = fill_opacity,
-                  layerId = ~GEOID10,
-                  highlight = highlightOptions(weight = 2,
-                                               color = "#666",
-                                               dashArray = "",
-                                               fillOpacity = 0.7,
-                                               bringToFront = T),
-                  label = labels) %>%
-      addLegend(pal = pal_wo_na,
-                values = ~c(0, Fill, 100), 
-                opacity = 0.7, 
-                position = "bottomright",
-                title = unname(full_name)) %>%
-      fitBounds(
-        lng1 = bounds[1],
-        lng2 = bounds[3],
-        lat1 = bounds[2],
-        lat2 = bounds[4]
-      )
+    mp <- 
+      if (!is_all){ # for specific states
+        # create map
+        leaflet(data = gd_map) %>%
+          addProviderTiles("CartoDB") %>% #OpenStreetMap
+          addPolygons(fillColor = ~pal(Fill),
+                      weight = 1,
+                      opacity = 1,
+                      color = "#b2aeae",
+                      dashArray = "",
+                      fillOpacity = fill_opacity,
+                      layerId = ~GEOID10,
+                      highlight = highlightOptions(weight = 2,
+                                                   color = "#666",
+                                                   dashArray = "",
+                                                   fillOpacity = 0.7,
+                                                   bringToFront = !is_com),
+                      label = labels) %>%
+          addLegend(pal = pal_wo_na,
+                    values = ~c(0, Fill, 100), 
+                    opacity = 0.7, 
+                    position = "bottomright",
+                    title = unname(full_name)#,
+                    # labFormat = function(type, cuts, p){
+                    #   paste0(c("0 (More Obstacles)", 
+                    #            "20", "40", "60",
+                    #            "80", "100 (More Assets)"))
+                    # }
+                    ) %>%
+          fitBounds(
+            lng1 = bounds[1],
+            lng2 = bounds[3],
+            lat1 = bounds[2],
+            lat2 = bounds[4]
+          )
+      } else {
+        leaflet(data = (gd_map)) %>%
+          addProviderTiles("CartoDB") %>% #OpenStreetMap
+          addCircleMarkers(fillColor = ~pal(Fill),
+                           weight = 1,
+                           opacity = 1,
+                           color = ~pal(Fill),
+                           dashArray = "",
+                           fillOpacity = fill_opacity,
+                           layerId = ~GEOID10,
+                           label = labels,
+                           radius = 5) %>%
+          addLegend(pal = pal_wo_na,
+                    values = ~c(0, Fill, 100), 
+                    opacity = 0.7, 
+                    position = "bottomright",
+                    title = unname(full_name)#,
+                    # labFormat = function(type, cuts, p){
+                    #   paste0(c("0 (More Challenges)", 
+                    #            "<p align = 'left'>20<p>", "40", "60",
+                    #            "80", "100 (More Assets)"))
+                    # }
+                    ) %>%
+          fitBounds(
+            lng1 = bounds[1],
+            lng2 = bounds[3],
+            lat1 = bounds[2],
+            lat2 = bounds[4]
+          )
+      }
+    
+    # if it's a community, we also want to focus on it
+    if (is_com){
+      zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
+      mp <- mp %>% 
+        addPolygons(
+          data = zcta_select,
+          fillColor = ~pal(Fill),
+          weight = 4,
+          opacity = 1,
+          color = "#000",
+          dashArray = "",
+          fillOpacity = fill_opacity,
+          # group = "remove_me",
+          highlight = highlightOptions(weight = 4,
+                                       color = "#000",
+                                       dashArray = "",
+                                       fillOpacity = 0.7,
+                                       bringToFront = T),
+          label = labels[gd_map$GEOID10 == zcta_choose]
+        )
+    }
   } else {
     zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
-    
-    mp <- us_proxy %>% 
-      addPolygons(
-        data = zcta_select,
-        fillColor = ~pal(Fill),
-        weight = 4,
-        opacity = 1,
-        color = "#000",
-        dashArray = "",
-        fillOpacity = fill_opacity,
-        layerId = "remove_me",
-        # group = "remove_me",
-        highlight = highlightOptions(weight = 4,
-                                     color = "#000",
-                                     dashArray = "",
-                                     fillOpacity = 0.7,
-                                     bringToFront = T),
-        label = labels[gd_map$GEOID10 == zcta_choose]
-      )
+    mp <- 
+      if (!is_all){
+        us_proxy %>% 
+          addPolygons(
+            data = zcta_select,
+            fillColor = ~pal(Fill),
+            weight = 4,
+            opacity = 1,
+            color = "#000",
+            dashArray = "",
+            fillOpacity = fill_opacity,
+            layerId = "remove_me",
+            # group = "remove_me",
+            highlight = highlightOptions(weight = 4,
+                                         color = "#000",
+                                         dashArray = "",
+                                         fillOpacity = 0.7,
+                                         bringToFront = T),
+            label = labels[gd_map$GEOID10 == zcta_choose]
+          )
+      } else {
+        us_proxy %>% 
+          addCircleMarkers(
+            data = zcta_select,
+            fillColor = ~pal(Fill),
+            weight = 4,
+            opacity = 1,
+            color = "#000",
+            dashArray = "",
+            fillOpacity = 1,
+            layerId = "remove_me",
+            label = labels[gd_map$GEOID10 == zcta_choose],
+            radius = 7)
+      }
   }
   
   return(mp)
 }
 
 # plot a distribution of the fill value using a beeswarm plot (PLOTLY)
-plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
+plot_bee_distr <- function(fill, st, mwi, idx, ol, is_all = F, hl = F, zcta_hl = ""){
   bee.df <- data.frame(
     val = mwi[,fill],
     zcta = mwi$ZCTA,
@@ -317,6 +521,10 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
   )
   # remove all the empty rows
   bee.df <- bee.df[complete.cases(bee.df),]
+  if (fill != "Mental_Wellness_Index"){
+    # replace data with no directionality data
+    bee.df$val <- ol$no_dir_perc_meas_df[bee.df$zcta, fill]
+  }
   
   # if we're going to highlight a point
   if (hl){
@@ -325,10 +533,9 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
     bee.df$focus_alpha[-row_hl] <- .3
     
     pal <- colorNumeric(
-      palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
+      palette = meas_colors[[ol$meas_col_to_type[ol$measure_to_names[[idx]][fill]]]],
       domain = c(0, bee.df$val, 100),
-      na.color = "transparent",
-      reverse = ifelse(fill == "Score", T, F)
+      na.color = "transparent"
     )
     
     hl_pal <- c(
@@ -343,28 +550,26 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
   
   p <- 
     if (hl){
-      ggplot(bee.df, aes(val, lab, color = val, size = focus))+
-        scale_color_distiller(
-          palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
-          direction = ifelse(fill == "Score", -1, 1),
+      ggplot(bee.df, aes(lab, val, color = val, size = focus))+
+        scale_color_gradientn(
+          colors = 
+            meas_colors_pal[[ol$meas_col_to_type[ol$measure_to_names[[idx]][fill]]]](100),
           limits = c(0, 100)
         )+
-        # scale_alpha(range = c(0,1))+
-        # scale_color_manual(values = hl_pal)+
         scale_size_manual(values = hl_size)
     } else {
-      ggplot(bee.df, aes(val, lab, color = val), size = 1.5)+
-        scale_color_distiller(
-          palette = meas_colors[meas_col_to_type[measure_to_names[[idx]][fill]]],
-          direction = ifelse(fill == "Score", -1, 1),
+      ggplot(bee.df, aes(lab, val, color = val), size = 1.5)+
+        scale_color_gradientn(
+          colors = 
+            meas_colors_pal[[ol$meas_col_to_type[ol$measure_to_names[[idx]][fill]]]](100),
           limits = c(0, 100)
         )
     }
   
-  full_name <- measure_to_names[[idx]][fill]
+  full_name <- ol$measure_to_names[[idx]][fill]
   if (full_name != "Mental Wellness Index"){
     full_name <- paste0(
-      ifelse(info_df[fill, "Directionality"] > 0, "Higher ", "Lower "), 
+      # ifelse(ol$info_dat[fill, "Directionality"] > 0, "Higher ", "Lower "), 
       full_name, 
       " Ranking"
     )
@@ -372,47 +577,50 @@ plot_bee_distr <- function(fill, st, mwi, idx, hl = F, zcta_hl = ""){
   
   p <- suppressWarnings(
     p + 
-    geom_quasirandom(
-      aes(text = paste0(
-        "ZCTA: ", zcta, "\n",
-        full_name, ": ", signif(val, 4)
-      )),
-      groupOnX = F, alpha = bee.df$focus_alpha)+
-    theme_bw()+
-    xlab(full_name)+
-    theme(
-      axis.text.y = element_blank(),
-      axis.title.y = element_blank(),
-      axis.ticks.y = element_blank(),
-      legend.position = "none",
-      plot.title = element_text(hjust = .5)
-    )+
-    xlim(-3, 103)+
-    ggtitle(paste0("Distribution of ", measure_to_names[[idx]][fill], 
-                   " for the ",
-                   ifelse(idx == "black", "Black ", "Overall "),
-                   "Population in ", 
-                   st))+
-    NULL
+      theme_bw()+
+      ylab(full_name)+
+      theme(
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.position = "none",
+        plot.title = element_text(hjust = .5)
+      )+
+      ylim(-3, 103)+
+      if (!is_all){
+        geom_quasirandom(
+          aes(text = paste0(
+            "ZCTA: ", zcta, "\n",
+            "ZIP Code: ", unname(zcta_to_zip[zcta]), "<br>", 
+            full_name, ": ", trunc(val)
+          )),
+          groupOnX = T, alpha = bee.df$focus_alpha)
+      } else {
+        geom_violin(
+          fill = meas_colors_pal[[ol$meas_col_to_type[ol$measure_to_names[[idx]][fill]]]](3)[2],
+          color = meas_colors_pal[[ol$meas_col_to_type[ol$measure_to_names[[idx]][fill]]]](3)[2]
+        )
+      }
   )
   
   ggplotly(
     p,
     tooltip = c("text")
-  ) %>% config(displayModeBar = F)
+  ) %>% 
+    layout(margin = list(l = 0, r = 10,
+                         b = 0, t = 0)) %>%
+    config(displayModeBar = F)
 }
 
 # map percentiles to text
 quant_map <- function(perc){
   return(
-    if (perc < 25) {
-      "very low"
-    } else if (perc < 50){
-      "low"
-    } else if (perc < 75){
-      "high"
+    if (perc < 34) {
+      "bottom third"
+    } else if (perc < 67){
+      "middle third"
     } else {
-      "very high"
+      "top third"
     }
   )
 }
@@ -429,7 +637,8 @@ ui <- fluidPage(
   # This is necessary because the navbarPage title is html and not straight text
   div(
     titlePanel(
-      title="", windowTitle="Mental Wellness Index Tool"
+      title="", 
+      windowTitle=HTML(paste0("Mental Wellness Index™ Tool"))
     ),
     style="display:none"
   ),
@@ -441,88 +650,299 @@ ui <- fluidPage(
         img(src="media/MITRE_logo.png", height="30"),
         target="blank",
       ),
-      "Mental Wellness Index Tool",
+      HTML(paste0("Mental Wellness Index™ Tool")),
     ),
     theme="stylesheets/app.css",
     
-    # explore ----
+    # explore states ----
     tabPanel(
-      title = div("Explore", class="explore"),
+      title = div("Explore States", class="explore"),
       class = "explore-panel",
       
       sidebarLayout(
         sidebarPanel(
           width = 3,
-          HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific Zip Code Tabulation Area (ZCTA), click on it in the map to the right or select it from the list below.</b><p>"),
-          radioButtons(
-            inputId = "idx_type",
-            label = "Which population's MWI do you want to view?",
-            choiceValues = unname(index_types),
-            choiceNames = c("Overall", "Black"),
-            inline = T
-          ),
-          # TODO: UPDATE THESE BASED ON POPULATION SELECTED
-          selectInput(
-            "st_focus",
-            "Which state would you like to focus on?",
-            choices = c(unname(f_st), "All"),
-            selected = "North Carolina"
-          ),
-          selectInput(
-            "us_map_fill",
-            "What would you like to explore?",
-            choices = avail_meas_list[["pop"]]
-          ),
-          # sliderInput(
-          #   "us_map_fill_opacity",
-          #   HTML("<b>What fill opacity (%)?</b> A higher number indicates a more opaque fill."),
-          #   min = 0,
-          #   max = 100,
-          #   value = 70,
-          #   step = 10
-          # ),
-          selectizeInput(
-            "zcta_choose",
-            label = "Which ZCTA would you like to focus on?",
-            choices = c("None" = "")#, avail_zctas)
-          ),
-          actionButton("reset_zcta_click", "Reset ZCTA Focus"),
-          hr(),
-          HTML("<font size = '2'>"),
-          HTML(paste0(
-            "Data sourced from various publically available data sources.",
-            "More information on methodology can be found in the about tab."
-          )),
-          # TODO: FIX INFO HERE
-          # uiOutput("data_info"),
-          HTML(paste0("The Mental Wellness Index is the weighted sum of 27 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
-          )),
-          HTML(paste0(
-            "All states are included.", 
-            " Selecting \"All\" will show all included states. Note that this is slower to render.<p>")),
-          HTML("</font>"),
+          bsCollapse(
+            multiple = T,
+            open = c("Exploration Options", "About Selected Measure", "About the Mental Wellness Index"),
+            bsCollapsePanel(
+              "Exploration Options",
+              HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> Select any of the options below to get started. <b>If you would like to focus on a specific ZIP Code*, click on it in the map to the right or select it from the list below.</b><p>"),
+              radioButtons(
+                inputId = "idx_type",
+                label = "Which population's MWI do you want to view?",
+                choiceValues = unname(index_types),
+                choiceNames = c("Overall", "Black"),
+                inline = T
+              ),
+              # TODO: UPDATE THESE BASED ON POPULATION SELECTED
+              selectInput(
+                "st_focus",
+                "Which state would you like to focus on?",
+                choices = c(unname(f_st), "All"),
+                selected = "Alabama"
+              ),
+              selectInput(
+                "us_map_fill",
+                "What would you like to explore?",
+                choices = overall$avail_meas_list[["pop"]]
+              ),
+              textInput(
+                "zip_choose",
+                label = "Which ZIP Code would you like to focus on in the selected state?",
+                placeholder = "e.g. 35004, 00501, 20041, etc."
+              ),
+              actionButton("reset_zcta_click", "Reset ZIP Code Focus")
+            ),
+            bsCollapsePanel(
+              "Custom MWI Upload",
+              HTML("<font size = '2'><p>"),
+              "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
+              HTML("<p></font>"),
+              fileInput(
+                "custom_data_st",
+                label = "Upload Custom Mental Wellness Index (.RData)",
+                accept = ".RData"
+              ),
+              actionButton(
+                "custom_data_load_st",
+                "Upload"
+              ),
+              actionButton(
+                "custom_data_reset_st",
+                "Reset"
+              )
+            ),
+            bsCollapsePanel(
+              "About the Mental Wellness Index",
+              HTML("<center>"),
+              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+              HTML("</center>"),
+              HTML("<font size = '2'>"),
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
+              )),
+              HTML(paste0(
+                "All states are included.",
+                " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p></p>")),
+              HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p></p>"
+              )),
+              HTML("</font>")
+            )
+          )
         ),
         mainPanel(
           width = 9,
-          leafletOutput("us_map", height = 400),
-          HTML("<br>"),
-          uiOutput("us_map_legend"),
-          HTML("<br>"),
-          uiOutput("us_map_expl"),
-          hr(),
-          fluidRow(
-            column(
-              width = 8,
-              plotlyOutput("us_distr")
-            ),
-            column(
-              width = 4,
-              tableOutput("us_quantile"),
-              br(),
-              uiOutput("us_info")
+          column(
+            width = 8,
+            uiOutput("us_map_legend"),
+            HTML("<br>"),
+            withSpinner(leafletOutput("us_map", height = 850),
+                        type = 8, color = "#005B94", hide.ui = F)
+          ),
+          column(
+            width = 4,
+            # hr(),
+            uiOutput("us_distr_title"),
+            withSpinner(plotlyOutput("us_distr", height = 400),
+                        type = 8, color = "#005B94", hide.ui = F),
+            # hr(),
+            bsCollapse(
+              multiple = T,
+              open = c("Measure Interpretation", "About Selected Measure"),
+              bsCollapsePanel(
+                "Measure Interpretation",
+                conditionalPanel(
+                  condition = "!output.focus_on",
+                  # tableOutput("us_quantile"),
+                  uiOutput("us_map_expl")
+                ),
+                conditionalPanel(
+                  condition = "output.focus_on",
+                  uiOutput("us_info")
+                )
+              ),
+              bsCollapsePanel(
+                "About Selected Measure",
+                uiOutput("data_info"),
+                HTML(paste0(
+                  "<font size = '2'>",
+                  "For more information on data and overall methodology, please see the \"About\" page.",
+                  "</font>"
+                ))
+              )
             )
           )
         )
+      )
+    ),
+    
+    # explore communities ----
+    tabPanel(
+      title = div("Explore ZIP Codes", class="explore"),
+      class = "explore-panel",
+      
+      sidebarLayout(
+        sidebarPanel(
+          width = 3,
+          bsCollapse(
+            multiple = T,
+            open = c("Exploration Options", "About Selected Measure", "About the Mental Wellness Index"),
+            bsCollapsePanel(
+              "Exploration Options",
+              HTML("<b>Welcome to the Mental Wellness Index (MWI) Tool!</b> To explore your community's outcomes, enter a specific ZIP Code* to get started.<p>"),
+              radioButtons(
+                inputId = "idx_type_com",
+                label = "Which population's MWI do you want to view?",
+                choiceValues = unname(index_types),
+                choiceNames = c("Overall", "Black"),
+                inline = T
+              ),
+              selectInput(
+                "com_map_fill",
+                "What measure would you like to focus on?",
+                choices = overall$avail_meas_list[["pop"]]
+              ),
+              textInput(
+                "zip_choose_com",
+                label = "Which ZIP Code would you like to focus on?",
+                placeholder = "e.g. 35004, 00501, 20041, etc."
+              )
+            ),
+            bsCollapsePanel(
+              "Custom MWI Upload",
+              HTML("<font size = '2'><p>"),
+              "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
+              HTML("</p></font>"),
+              fileInput(
+                "custom_data_com",
+                label = "Upload Custom Mental Wellness Index (.RData)",
+                accept = ".RData"
+              ),
+              actionButton(
+                "custom_data_load_com",
+                "Upload"
+              ),
+              actionButton(
+                "custom_data_reset_com",
+                "Reset"
+              )
+            ),
+            bsCollapsePanel(
+              "About the Mental Wellness Index",
+              HTML("<center>"),
+              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+              HTML("</center>"),
+              HTML("<font size = '2'>"),
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
+              )),
+              HTML(paste0(
+                "All states are included.",
+                " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p></p>")),
+              HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p></p>"
+              )),
+              HTML("</font>")
+            )
+          )
+        ),
+        mainPanel(
+          width = 9,
+          column(
+            width = 8,
+            uiOutput("com_map_legend"),
+            HTML("<br>"),
+            withSpinner(leafletOutput("com_map", height = 850),
+                        type = 8, color = "#005B94", hide.ui = F)
+          ),
+          column(
+            width = 4,
+            bsCollapse(
+              multiple = T,
+              open = c("ZCTA Measure Results", "Selected Measure Interpretation", "About Selected Measure"),
+              bsCollapsePanel(
+                "Selected Measure Interpretation",
+                uiOutput("com_map_expl")
+              ),
+              bsCollapsePanel(
+                "About Selected Measure",
+                uiOutput("data_info_com"),
+                HTML(paste0(
+                  "<font size = '2'>",
+                  "For more information on data and overall methodology, please see the \"About\" page.",
+                  "</font>"
+                ))
+              ),
+              bsCollapsePanel(
+                "ZCTA Measure Results",
+                uiOutput("com_map_report_card")
+              )
+            )
+          )
+        )
+      )
+    ),
+    
+    # upload data ----
+    tabPanel(
+      title = div("Create Your Own MWI", class = "explore"),
+      fluidRow(
+        column(width = 3),
+        column(
+          width = 6,
+          HTML("<center><h2>Create your own Mental Wellness Index (MWI)!</h2></center>"),
+          HTML(paste0(
+            "<p align = 'justify'>",
+            "Create your own Mental Wellness Index for your community below by adjusting weights and/or adding your own data and metadata. To do so, take the following steps:",
+            "<ol>",
+            "<li> If you are only adjusting weights for included data, skip to step 3.</li>",
+            "<br>",
+            "<li> Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).</li>",
+            "<ul>",
+            "<li>Accepted geographical ID types are always numeric and include the following:</li>",
+            "<ul>",
+            "<li>ZCTA (example: 35406)</li>",
+            "<li>County (example: 01001)</li>",
+            "<li>ZIP Code (example: 35051)</li>",
+            "<li>Census Tract (example: 01001020100)</li>",
+            "</ul>",
+            "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see step 2).</li>",
+            "<li>Numerators and denominators must be numeric columns.</li>",
+            "<li>Missing data should have cells left blank.</li>",
+            "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black populations measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
+            "</ul>",
+            "<br>",
+            "<li> Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
+            "<ul>",
+            "<li>If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.</li>",
+            "<li>If you would not like to include a measure in your MWI, either delete the measure row or set its weight to 0.</li>",
+            "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
+            "</ul>",
+            "<br>",
+            "<li>Put your data (if using) and the updated Metadata.xlsx file in a ZIP file (.zip).</li>",
+            "<br>",
+            "<li>Upload your ZIP file and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
+            "<br>",
+            "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
+            "<br>",
+            "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
+            "</ol>",
+            "</p>"
+          )),
+          hr(),
+          HTML("<center>"),
+          downloadButton("download_metadata", "Download Metadata.xlsx"),
+          HTML("<br><br>"),
+          fileInput(
+            "custom_zip", 
+            "Upload Custom Data ZIP File (.zip)",
+            accept = ".zip"
+          ),
+          actionButton("custom_mwi_go", "Create Custom MWI"),
+          downloadButton("download_custom_mwi", "Download Custom MWI"),
+          HTML("<br><br>"),
+          verbatimTextOutput("custom_error"),
+          HTML("</center>")
+        ),
+        column(width = 3)
       )
     ),
     
@@ -559,7 +979,12 @@ ui <- fluidPage(
 # SERVER ----
 
 server <- function(input, output, session) {
-  # preallocate reactive values ----
+  # preallocate custom data ----
+  
+  # overall list of mwi data
+  ol <- do.call(reactiveValues, overall)
+  
+  # preallocate reactive values: state view ----
   
   focus_info <- reactiveValues(
     "hl" = F,
@@ -568,26 +993,331 @@ server <- function(input, output, session) {
   
   st_sub <- reactiveValues(
     "idx" = "pop",
-    "st" = "North Carolina",
-    "geodat" = geodat[["pop"]][geodat[["pop"]]$STATE_NAME == "North Carolina",],
-    "mwi" = mwi[["pop"]][mwi[["pop"]]$STATE_NAME == "North Carolina",],
-    "us_map_fill" = "Mental_Wellness_Index"
+    "st" = "Alabama",
+    "geodat" = overall$geodat[["pop"]][overall$geodat[["pop"]]$STATE_NAME == "Alabama",],
+    "mwi" = overall$mwi[["pop"]][overall$mwi[["pop"]]$STATE_NAME == "Alabama",],
+    "us_map_fill" = "Mental_Wellness_Index",
+    "is_all" = F
   )
   
   us_proxy <- leafletProxy("us_map")
   
-  # observe button inputs and clicks ----
+  # preallocate reactive values: community view ----
+  
+  com_sub <- reactiveValues(
+    "idx" = "pop",
+    "ZCTA" = "35214", 
+    "geodat" = overall$geodat[["pop"]][ # community -- within +/- .5
+      st_coordinates(overall$geopts$pop)[,1] >=
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] - 1 &
+        st_coordinates(overall$geopts$pop)[,1] <=
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] + 1 &
+        st_coordinates(overall$geopts$pop)[,2] >=
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] - 1 &
+        st_coordinates(overall$geopts$pop)[,2] <=
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] + 1 
+      ,],
+    "mwi" = overall$mwi[["pop"]][# community -- within +/- .5
+      overall$mwi[["pop"]]$ZCTA %in% 
+        overall$geodat[["pop"]]$GEOID10[
+          st_coordinates(overall$geopts$pop)[,1] >=
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] - 1 &
+            st_coordinates(overall$geopts$pop)[,1] <=
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] + 1 &
+            st_coordinates(overall$geopts$pop)[,2] >=
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] - 1 &
+            st_coordinates(overall$geopts$pop)[,2] <=
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] + 1 
+        ]
+      ,],
+    "com_map_fill" = "Mental_Wellness_Index"
+  )
+  
+  # create and observe starting modal ----
+  
+  welcome_modal <- modalDialog(
+    title = 
+      HTML("<b><center>Welcome to the Mental Wellness Index™!</b></center>"),
+    size = "l",
+    fluidRow(
+      
+      column(
+        width = 7,
+        HTML("<p align = 'justify'><font size = '3'>"),
+        HTML(
+          "The <b>Mental Wellness Index™ (MWI)</b> quantifies factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation.  The MWI aggregates <b>28 weighted measures</b> that quantify facilitators and barriers to mental wellness across <b>three domains</b>: <b>Social Determinants of Health</b>, <b>Healthcare Access</b>, and <b>Health Status</b>. Two <b>dynamic factors</b> (<b>Structural Racism</b> and <b>Community and Cultural Assets</b>) influence measures in all three of the domains. The Mental Wellness Index tool allows users to <b>explore the MWI and its measures</b>, providing information for the <b>overall population</b> and <b>Black populations</b>."
+        ),
+        HTML("</p></font>"),
+        HTML("<font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font>")
+      ),
+      column(
+        width = 5,
+        HTML("<center>"),
+        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+        HTML("</center>")
+      )
+    ),
+    hr(),
+    HTML(paste0(
+      "<p><font size = '3'><b><center>You can explore the MWI Tool in two ways:</p></b></font>"
+    )),
+    fluidRow(
+      column(
+        width = 6,
+        HTML("<font size = '3'><b><p>Explore States</p></b></font>"),
+        img(src = file.path("media", "MWI_State_View.png"), align = "center", height = "200px"),
+        HTML("<font size = '2'><p><i>Good for exploring measures overall, gives general distributions in states</i></p></font>")
+      ),
+      column(
+        width = 6,
+        HTML("<font size = '3'><b><p>Explore ZIP Codes</p></b></font>"),
+        img(src = file.path("media", "MWI_ZIP_Code_View.png"), align = "center", height = "200px"),
+        HTML("<font size = '2'><p><i>Good for exploring measures for a specific ZIP Code, gives all measure results for a ZIP Code</p></i></font>")
+      )
+    ),
+    selectInput(
+      "start_st",
+      "Choose your state and click below to get started!",
+      choices = c(unname(f_st), "All"),
+      selected = "Alabama",
+      width = "400px"
+    ),
+    HTML("</center>"),
+    footer = tagList(
+      HTML("<center>"),
+      actionButton("enter_mwi", "Start Exploring!"),
+      modalButton("Use Defaults"),
+      HTML("</center>")
+    ),
+    easyClose = T # it will just use defaults
+  )
+  
+  showModal(welcome_modal)
+  
+  observeEvent(input$enter_mwi, {
+    # update all of the inputs -- this will cascade
+    
+    # update available states
+    updateSelectInput(
+      session = session,
+      "st_focus",
+      "Which state would you like to focus on?",
+      choices = c(unname(f_st), "All"),
+      selected = input$start_st
+    )
+    
+    # update selected defaults for community view
+    com_sub$ZCTA <- ol$mwi$pop$ZCTA[ol$mwi$pop$STATE_NAME == input$start_st][1]
+    # community boundary
+    # community -- within +/- .5
+    com_log <- st_coordinates(ol$geopts$pop)[,1] >=
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+      st_coordinates(ol$geopts$pop)[,1] <=
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+      st_coordinates(ol$geopts$pop)[,2] >=
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+      st_coordinates(ol$geopts$pop)[,2] <=
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+    
+    com_sub$geodat <- ol$geodat[["pop"]][com_log,]
+    com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+      ol$mwi[["pop"]]$ZCTA %in% 
+        ol$geodat[["pop"]]$GEOID10[com_log],]
+    
+    removeModal()
+  })
+  
+  # observe custom data ----
+  
+  # observe custom data upload: state
+  observeEvent(input$custom_data_load_st, {
+    if (!is.null(input$custom_data_st)){
+      # load the RData file
+      load(input$custom_data_st$datapath)
+      
+      for (ov in names(ol)){
+        ol[[ov]] <- overall_output[[ov]]
+      }
+      
+      # update available states
+      updateSelectInput(
+        session = session,
+        "st_focus",
+        "Which state would you like to focus on?",
+        choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
+        selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
+      )
+      
+      # update available states
+      updateSelectInput(
+        session = session,
+        "us_map_fill",
+        "What would you like to explore?",
+        choices = ol$avail_meas_list[["pop"]]
+      )
+      updateSelectInput(
+        session = session,
+        "com_map_fill",
+        "What measure would you like to focus on?",
+        choices = ol$avail_meas_list[["pop"]]
+      )
+      
+      # update selected defaults for community view
+      com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
+      com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
+        st_coordinates(ol$geopts$pop)[,1] >=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+          st_coordinates(ol$geopts$pop)[,1] <=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+          st_coordinates(ol$geopts$pop)[,2] >=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+          st_coordinates(ol$geopts$pop)[,2] <=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+        ,]
+      com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+        ol$mwi[["pop"]]$ZCTA %in% 
+          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+            st_coordinates(ol$geopts$pop)[,1] >=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop)[,1] <=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop)[,2] >=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop)[,2] <=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+          ],]
+    }
+  })
+  
+  # observe custom data upload: community
+  observeEvent(input$custom_data_load_com, {
+    if (!is.null(input$custom_data_com)){
+      # load the RData file
+      load(input$custom_data_com$datapath)
+      
+      for (ov in names(ol)){
+        ol[[ov]] <- overall_output[[ov]]
+      }
+      
+      # update available states
+      updateSelectInput(
+        session = session,
+        "st_focus",
+        "Which state would you like to focus on?",
+        choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
+        selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
+      )
+      
+      # update available states
+      updateSelectInput(
+        session = session,
+        "us_map_fill",
+        "What would you like to explore?",
+        choices = ol$avail_meas_list[["pop"]]
+      )
+      updateSelectInput(
+        session = session,
+        "com_map_fill",
+        "What measure would you like to focus on?",
+        choices = ol$avail_meas_list[["pop"]]
+      )
+      
+      # update selected defaults for community view
+      com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
+      com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
+        st_coordinates(ol$geopts$pop)[,1] >=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+          st_coordinates(ol$geopts$pop)[,1] <=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+          st_coordinates(ol$geopts$pop)[,2] >=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+          st_coordinates(ol$geopts$pop)[,2] <=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+        ,]
+      com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+        ol$mwi[["pop"]]$ZCTA %in% 
+          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+            st_coordinates(ol$geopts$pop)[,1] >=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop)[,1] <=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop)[,2] >=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop)[,2] <=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+          ],]
+    }
+  })
+  
+  # reset to overall MWI
+  observeEvent(c(input$custom_data_reset_st, input$custom_data_reset_com), {
+    if (!is.null(input$custom_data_com) | !is.null(input$custom_data_st)){
+      for (ov in names(ol)){
+        ol[[ov]] <- overall[[ov]]
+      }
+      
+      # update available states
+      updateSelectInput(
+        session = session,
+        "st_focus",
+        "Which state would you like to focus on?",
+        choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
+        selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
+      )
+      
+      # update available states
+      updateSelectInput(
+        session = session,
+        "us_map_fill",
+        "What would you like to explore?",
+        choices = ol$avail_meas_list[["pop"]]
+      )
+      updateSelectInput(
+        session = session,
+        "com_map_fill",
+        "What measure would you like to focus on?",
+        choices = ol$avail_meas_list[["pop"]]
+      )
+      
+      # update selected defaults for community view
+      com_sub$ZCTA <- "35214"
+      com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
+        st_coordinates(ol$geopts$pop)[,1] >=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+          st_coordinates(ol$geopts$pop)[,1] <=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+          st_coordinates(ol$geopts$pop)[,2] >=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+          st_coordinates(ol$geopts$pop)[,2] <=
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+        ,]
+      com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+        ol$mwi[["pop"]]$ZCTA %in% 
+          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+            st_coordinates(ol$geopts$pop)[,1] >=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop)[,1] <=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop)[,2] >=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop)[,2] <=
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+          ],]
+    }
+  })
+  
+  # observe button inputs and clicks: state view ----
   
   # update measures when the population type changes
   observeEvent(input$idx_type, {
     idx <- input$idx_type
     
     fill <- 
-      if (idx == "pop" & grepl("_black", input$us_map_fill)){
-        gsub("_black", "_pop", input$us_map_fill)
-      } else if (idx == "black" & grepl("_pop", input$us_map_fill) &
-                 !input$us_map_fill %in% colnames(mwi[["black"]])){
-        gsub("_pop", "_black", input$us_map_fill)
+      if (idx == "pop" & grepl("*_black$", input$us_map_fill)){
+        gsub("*_black$", "_pop", input$us_map_fill)
+      } else if (idx == "black" & grepl("*_pop$", input$us_map_fill) &
+                 !input$us_map_fill %in% colnames(ol$mwi[["black"]])){
+        gsub("*_pop$", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
       }
@@ -596,7 +1326,7 @@ server <- function(input, output, session) {
       session = session,
       "us_map_fill",
       "Which score/measure would you like to explore?",
-      choices = avail_meas_list[[idx]],
+      choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
   })
@@ -605,50 +1335,51 @@ server <- function(input, output, session) {
   observeEvent(c(input$st_focus, input$idx_type), {
     idx <- input$idx_type
     
+    # if the state is the thing that's changing, reset focus, otherwise no
+    if (idx == st_sub$idx){
+      focus_info$hl <- F
+      focus_info$ZCTA <- ""
+      
+      # remove any previously highlighted polygon
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
+    }
+    
     st_sub$idx <- idx
     
     if (input$st_focus == "All"){
       st_sub$st <- "All"
-      st_sub$geodat <- geodat[[idx]]
-      st_sub$mwi <- mwi[[idx]]
+      st_sub$geodat <- ol$geopts[[idx]]
+      st_sub$mwi <- ol$mwi[[idx]]
+      st_sub$is_all <- T
       
-      updateSelectInput(session, 
-                        "zcta_choose", 
-                        "Which ZCTA would you like to focus on?",
-                        choices = c(
-                          "None" = "", 
-                          avail_zctas)
-      )
     } else {
-      st_sub$st <- input$st_focus
-      st_sub$geodat <- geodat[[idx]][geodat[[idx]]$STATE_NAME == input$st_focus,]
-      st_sub$mwi <- mwi[[idx]][mwi[[idx]]$STATE_NAME == input$st_focus,]
+      # also include zips from bordering states
       
-      updateSelectInput(session, 
-                        "zcta_choose", 
-                        "Which ZCTA would you like to focus on?",
-                        choices = c(
-                          "None" = "", 
-                          avail_zctas[grepl(input$st_focus, names(avail_zctas))]
-                        )
-      )
+      st_sub$st <- input$st_focus
+      st_sub$geodat <- ol$geodat[[idx]][
+        ol$geodat[[idx]]$STATE_NAME == input$st_focus | 
+          ol$geodat[[idx]]$STATE_2 == st_to_fips[input$st_focus] & 
+          !is.na(ol$geodat[[idx]]$STATE_2),]
+      st_sub$mwi <- ol$mwi[[idx]][
+        ol$mwi[[idx]]$STATE_NAME == input$st_focus | 
+          ol$mwi[[idx]]$STATE_2 == st_to_fips[input$st_focus] & 
+          !is.na(ol$mwi[[idx]]$STATE_2),]
+      st_sub$is_all <- F
     }
     
     st_sub$us_map_fill <- 
-      if (st_sub$idx == "pop" & grepl("_black", input$us_map_fill)){
-        gsub("_black", "_pop", input$us_map_fill)
-      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill) &
-                 !input$us_map_fill %in% colnames(mwi[["black"]])){
-        gsub("_pop", "_black", input$us_map_fill)
+      if (st_sub$idx == "pop" & grepl("*_black$", input$us_map_fill)){
+        gsub("*_black$", "_pop", input$us_map_fill)
+      } else if (st_sub$idx == "black" & grepl("*_pop$", input$us_map_fill) &
+                 !input$us_map_fill %in% colnames(ol$mwi[["black"]])){
+        gsub("*_pop$", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
       }
-    
-    focus_info$hl <- F
-    focus_info$ZCTA <- ""
-    
-    # remove any previously highlighted polygon
-    us_proxy %>% removeShape("remove_me")
   })
   
   # update the ZCTA
@@ -657,25 +1388,24 @@ server <- function(input, output, session) {
     focus_info$ZCTA <- ""
     
     # remove any previously highlighted polygon
-    us_proxy %>% removeShape("remove_me")
+    if (!st_sub$is_all){
+      us_proxy %>% removeShape("remove_me")
+    } else {
+      us_proxy %>% removeMarker("remove_me")
+    }
   })
   
   # reset map click focus
   observeEvent(input$us_map_fill, {
     st_sub$us_map_fill <- 
-      if (st_sub$idx == "pop" & grepl("_black", input$us_map_fill)){
-        gsub("_black", "_pop", input$us_map_fill)
-      } else if (st_sub$idx == "black" & grepl("_pop", input$us_map_fill)){
-        gsub("_pop", "_black", input$us_map_fill)
+      if (st_sub$idx == "pop" & grepl("*_black$", input$us_map_fill)){
+        gsub("*_black$", "_pop", input$us_map_fill)
+      } else if (st_sub$idx == "black" & grepl("*_pop$", input$us_map_fill) &
+                 !input$us_map_fill %in% colnames(ol$mwi[["black"]])){
+        gsub("*_pop$", "_black", input$us_map_fill)
       } else {
         input$us_map_fill
       }
-    
-    focus_info$hl <- F
-    focus_info$ZCTA <- ""
-    
-    # remove any previously highlighted polygon
-    us_proxy %>% removeShape("remove_me")
   })
   
   # update the focus
@@ -685,11 +1415,17 @@ server <- function(input, output, session) {
       focus_info$ZCTA <- input$us_map_shape_click$id
       
       # remove any previously highlighted polygon
-      us_proxy %>% removeShape("remove_me")
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
       
       # add a highlighted polygon
       us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
                            st_sub$idx,
+                           ol = ol,
+                           is_all = st_sub$is_all,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
     } else {
@@ -697,21 +1433,36 @@ server <- function(input, output, session) {
       focus_info$ZCTA <- ""
       
       # remove any previously highlighted polygon
-      us_proxy %>% removeShape("remove_me")
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
     }
   })
   
-  observeEvent(input$zcta_choose, {
-    if (input$zcta_choose != ""){
+  observeEvent(input$zip_choose, {
+    if (input$zip_choose != "" & 
+        nchar(input$zip_choose) == 5 &
+        !grepl("\\D", input$zip_choose) & # only numbers
+        input$zip_choose %in% names(zip_to_zcta) & # a valid zcta
+        zip_to_zcta[input$zip_choose] %in% st_sub$geodat$GEOID10 # in the state
+    ){
       focus_info$hl <- T
-      focus_info$ZCTA <- input$zcta_choose
+      focus_info$ZCTA <- unname(zip_to_zcta[input$zip_choose])
       
       # remove any previously highlighted polygon
-      us_proxy %>% removeShape("remove_me")
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
       
       # add a highlighted polygon
       us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
                            st_sub$idx,
+                           ol = ol,
+                           is_all = st_sub$is_all,
                            add_poly = T, us_proxy = us_proxy, 
                            zcta_choose = focus_info$ZCTA)
     } else {
@@ -719,48 +1470,198 @@ server <- function(input, output, session) {
       focus_info$ZCTA <- ""
       
       # remove any previously highlighted polygon
-      us_proxy %>% removeShape("remove_me")
+      if (!st_sub$is_all){
+        us_proxy %>% removeShape("remove_me")
+      } else {
+        us_proxy %>% removeMarker("remove_me")
+      }
     }
   })
   
-  # output plots and information ----
+  # observe button inputs and clicks: community view ----
   
-  # output$data_info <- renderUI({
-  #   withProgress(message = "Rendering data information", {
-  #     full_name <- measure_to_names[input$us_map_fill]
-  #     
-  #     HTML(paste0(
-  #       "<font size = '2'>",
-  #       
-  #       "A variety of data sources are used for measures comprising the Unmet Need Score. The data currently pictured for ", 
-  #       full_name, 
-  #       " came from ",
-  #       ifelse(full_name == "Unmet Need Score", 
-  #              "various sources",
-  #              measure_orientation[full_name, "Source"]),
-  #       ".<p>",
-  #       "</font>"
-  #     ))
-  #   })
-  # })
+  # update measures when the population type changes
+  observeEvent(input$idx_type_com, {
+    idx <- input$idx_type
+    
+    fill <- 
+      if (idx == "pop" & grepl("*_black$", input$com_map_fill)){
+        gsub("*_black$", "_pop", input$com_map_fill)
+      } else if (idx == "black" & grepl("*_pop$", input$com_map_fill) &
+                 !input$com_map_fill %in% colnames(ol$mwi[["black"]])){
+        gsub("*_pop$", "_black", input$com_map_fill)
+      } else {
+        input$com_map_fill
+      }
+    
+    updateSelectInput(
+      session = session,
+      "com_map_fill",
+      "What measure would you like to focus on?",
+      choices = ol$avail_meas_list[[idx]],
+      selected = fill
+    )
+  })
+  
+  # update the data based on state or population change
+  observeEvent(c(input$idx_type_com, input$zip_choose_com), {
+    # save both of these to evaluate if anything's changed
+    idx <- input$idx_type_com
+    orig_zcta <- com_sub$ZCTA
+    
+    # check that the entered zip is accurate
+    if (input$zip_choose_com != "" & 
+        nchar(input$zip_choose_com) == 5 &
+        !grepl("\\D", input$zip_choose_com) & # only numbers
+        input$zip_choose_com %in% names(zip_to_zcta) # a valid zcta
+    ){
+      # don't change it otherwsie
+      com_sub$ZCTA <- unname(zip_to_zcta[input$zip_choose_com])
+    } 
+    
+    if (com_sub$idx != idx | com_sub$ZCTA != orig_zcta){
+      com_sub$idx <- idx
+      
+      # get coordinates to know the total
+      all_coord <- st_coordinates(ol$geopts[[idx]])
+      zcta_coord <- 
+        st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])
+      
+      # get surrounding community
+      zcta_log <- all_coord[,1] >=
+        zcta_coord[1] - 1 &
+        all_coord[,1] <=
+        zcta_coord[1] + 1 &
+        all_coord[,2] >=
+        zcta_coord[2] - 1 &
+        all_coord[,2] <=
+        zcta_coord[2] + 1 
+      
+      if (sum(zcta_log) <= 1){ # some zctas are very far apart (alaska)
+        zcta_log <- all_coord[,1] >=
+          zcta_coord[1] - 3 &
+          all_coord[,1] <=
+          zcta_coord[1] + 3 &
+          all_coord[,2] >=
+          zcta_coord[2] - 3 &
+          all_coord[,2] <=
+          zcta_coord[2] + 3 
+      }
+      
+      # get within coordinates
+      com_sub$geodat <- ol$geodat[[idx]][zcta_log,]
+      com_sub$mwi <- ol$mwi[[idx]][ol$mwi[[idx]]$ZCTA %in% 
+                                  ol$geodat[[idx]]$GEOID10[zcta_log],]
+      
+      com_sub$com_map_fill <- 
+        if (com_sub$idx == "pop" & grepl("*_black$", input$com_map_fill)){
+          gsub("*_black$", "_pop", input$com_map_fill)
+        } else if (com_sub$idx == "black" & grepl("*_pop$", input$com_map_fill) &
+                   !input$com_map_fill %in% colnames(ol$mwi[["black"]])){
+          gsub("*_pop$", "_black", input$com_map_fill)
+        } else {
+          input$com_map_fill
+        }
+    }
+  })
+  
+  
+  # reset map click focus
+  observeEvent(input$com_map_fill, {
+    com_sub$com_map_fill <- 
+      if (com_sub$idx == "pop" & grepl("*_black$", input$com_map_fill)){
+        gsub("_black", "_pop", input$com_map_fill)
+      } else if (com_sub$idx == "black" & grepl("*_pop$", input$com_map_fill) &
+                 !input$com_map_fill %in% colnames(ol$mwi[["black"]])){
+        gsub("*_pop$", "_black", input$com_map_fill)
+      } else {
+        input$com_map_fill
+      }
+  })
+  
+  # output plots and information: state view ----
+  
+  # watch focus_info updating
+  output$focus_on <- reactive({
+    focus_info$ZCTA != ""
+  })
+  outputOptions(output, "focus_on", suspendWhenHidden = FALSE)
+  
+  output$data_info <- renderUI({
+    withProgress(message = "Rendering data information", {
+      full_name <- ol$measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
+      
+      HTML(paste0(
+        "<font size = '2'>",
+        
+        "A variety of data sources are used for measures comprising the Mental Wellness Index. The data currently pictured for ",
+        full_name,
+        " came from ",
+        ifelse(full_name == "Mental Wellness Index",
+               "",
+               ol$info_dat[st_sub$us_map_fill, "Years"]
+        ),
+        " ",
+        ifelse(full_name == "Mental Wellness Index",
+               "various sources of",
+               ol$info_dat[st_sub$us_map_fill, "Source"]
+        ),
+        " data.<p><p>",
+        ifelse(
+          full_name == "Mental Wellness Index",
+          "",
+          paste0(
+            full_name, " Description: ",
+            ol$info_dat[st_sub$us_map_fill, "Measure.Description"]
+          )),
+        "<p>",
+        "</font>"
+      ))
+    })
+  })
   
   # plot map based on fill
   output$us_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
-      plot_map(st_sub$us_map_fill, st_sub$geodat,
-               st_sub$idx)
+      us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat,
+                           st_sub$idx, ol, is_all = st_sub$is_all)
+      
+      if (focus_info$hl){
+        # add a highlighted polygon
+        us_proxy <- plot_map(st_sub$us_map_fill, st_sub$geodat, 
+                             st_sub$idx, ol, 
+                             is_all = st_sub$is_all,
+                             add_poly = T, us_proxy = us_proxy, 
+                             zcta_choose = focus_info$ZCTA)
+      }
+      
+      us_proxy
     })
   })
   
   # put a legend
-  output$us_map_legend <- renderUI({
+  output$us_map_legend <- output$com_map_legend <- renderUI({
     withProgress(message = "Rendering map legend", {
       HTML(paste0(
         "<center>",
         paste(
           sapply(1:length(meas_max_colors), function(x){
-            paste0("<font color = ", meas_max_colors[x], " size = '3'><b>", 
-                   names(meas_max_colors[x]), "</font></b>")
+            if (names(meas_max_colors[x]) != "Mental Wellness Index"){
+              paste0("<font color = ", meas_max_colors[x], " size = '3'><b>", 
+                     names(meas_max_colors[x]), "</font></b>")
+            } else {
+              paste(
+                sapply(1:nchar(names(meas_max_colors[x])), function(y){
+                  bchar <- strsplit(names(meas_max_colors[x]), "")[[1]][y]
+                  paste0(
+                    "<font color = ", 
+                    meas_colors_pal$`Mental Wellness Index`(nchar("Mental Wellness Index"))[y],
+                    " size = '3'><b>", 
+                    bchar, "</font></b>")
+                }),
+                collapse = ""
+              )
+            }
           }),
           collapse = "<font size = 3'><b> | </b></font>"
         ),
@@ -769,54 +1670,64 @@ server <- function(input, output, session) {
     })
   })
   
-  # put an explanation
+  # put an explanation, no zcta selected
   output$us_map_expl <- renderUI({
     withProgress(message = "Rendering map explanation", {
-      full_name <- measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
-      mc <- meas_max_colors[meas_col_to_type[full_name]]
-      lc <- meas_min_colors[meas_col_to_type[full_name]]
-      # get the orientation for the measure
-      if (st_sub$us_map_fill != "Score"){
-        ori <- info_df[st_sub$us_map_fill, "Direction"]
-        ori <- ifelse(ori > 0, "higher", "lower")
+      full_name <- ol$measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
+      mc <- meas_max_colors[ol$meas_col_to_type[full_name]]
+      lc <- if (st_sub$us_map_fill == "Mental_Wellness_Index"){
+        meas_min_colors[ol$meas_col_to_type[full_name]]
       } else {
-        ori <- "higher"
+        mc
       }
       
-      text <- paste0(
-        "A ", 
-        html_color(mc, "higher"),
-        " value indicates more ",
-        html_color(mc, "assets"),
-        " supporting mental ", 
-        html_color(mc, paste(ori, "wellness")),
-        "."
-      )
-      
-      if (st_sub$us_map_fill != "Mental_Wellness_Index"){
-        wt <- round(info_df[st_sub$us_map_fill, "Effective_Weights"],2)
-        
-        # TODO: COME BACK TO THIS NUMBER
-        text <- paste0(
-          text,
-          " The ", 
-          html_color(mc, full_name),
-          " measure has a weight of ", 
-          html_color(mc, wt),
-          ", indicating a ",
-          html_color(mc, ifelse(wt > 3, "high", "low")),
-          " contribution to the overall Mental Wellness Index."
-        )
+      # get measure directionality
+      dir_val <- if (st_sub$us_map_fill != "Mental_Wellness_Index"){
+        ol$info_dat[st_sub$us_map_fill, "Directionality"]
       } else {
+        1
+      }
+      
+      if (st_sub$us_map_fill == "Mental_Wellness_Index"){
+        text <- paste0(
+          "A ", 
+          html_color(mc, "higher"),
+          " value indicates more ",
+          html_color(mc, "assets"),
+          " supporting ", 
+          html_color(mc, paste("mental wellness")),
+          "."
+        )
+        
         text <- paste0(
           text,
-          " A ", 
+          " A ",
           html_color(lc, "lower"),
           " value indicates more ",
           html_color(lc, "obstacles"),
-          " to mental ", 
-          html_color(lc, "wellness"),
+          " to ",
+          html_color(lc, "mental wellness"),
           "."
+        )
+      } else {
+        text <- paste0(
+          "A ", 
+          html_color(mc, "higher"),
+          " value indicates a ",
+          html_color(mc, "higher"),
+          " national ranking for ", 
+          html_color(mc, full_name),
+          ".",
+          "</font></b><p></p>",
+          "<font size = '2'>",
+          "<i>",
+          ifelse(
+            dir_val == -1, 
+            "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+            ""
+          ),
+          "</i>",
+          "</font>"
         )
       }
       
@@ -830,12 +1741,29 @@ server <- function(input, output, session) {
     })
   })
   
+  output$us_distr_title <- renderUI({
+    HTML(paste0(
+      "<b><center><font size = '3'>",
+      "Distribution of ", ol$measure_to_names[[st_sub$idx]][st_sub$us_map_fill],
+      " for ",
+      ifelse(st_sub$idx != "black", "the ", ""),
+      ifelse(st_sub$idx == "black", "Black ", "Overall "),
+      "Population",
+      ifelse(st_sub$idx == "black", "s", ""),
+      " in ",
+      st_sub$st,
+      "</b></center></font>"
+    ))
+  })
+  
   output$us_distr <- renderPlotly({
     withProgress(message = "Rendering ZCTA data distribution", {
       plot_bee_distr(st_sub$us_map_fill, 
                      st = st_sub$st,
                      mwi = st_sub$mwi,
-                     idx = st_sub$idx,
+                     idx = st_sub$idx, 
+                     ol = ol,
+                     is_all = st_sub$is_all,
                      hl = focus_info$hl, 
                      zcta_hl = focus_info$ZCTA)
     })
@@ -856,52 +1784,529 @@ server <- function(input, output, session) {
   output$us_info <- renderUI({
     withProgress(message = "Rendering ZCTA data distribution explanation", {
       if (focus_info$ZCTA != ""){
-        full_name <- measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
+        full_name <- ol$measure_to_names[[st_sub$idx]][st_sub$us_map_fill]
+        
+        # get measure directionality
+        dir_val <- if (st_sub$us_map_fill != "Mental_Wellness_Index"){
+          ol$info_dat[st_sub$us_map_fill, "Directionality"]
+        } else {
+          1
+        }
         
         # get scores
+        dir_df <-
+        if (st_sub$us_map_fill == "Mental_Wellness_Index"){
+          st_sub$mwi
+        } else {
+          ol$no_dir_perc_meas_df[st_sub$mwi$ZCTA,]
+        }
+        overall_df <- 
+          if (st_sub$us_map_fill == "Mental_Wellness_Index"){
+            ol$mwi[[st_sub$idx]]
+          } else {
+            ol$no_dir_perc_meas_df
+          }
+        
         f_val <- 
-          st_sub$mwi[
-            st_sub$mwi$ZCTA == focus_info$ZCTA, st_sub$us_map_fill]
-        all_st_val <- st_sub$mwi[, st_sub$us_map_fill]
-        all_us_val <- mwi[[st_sub$idx]][, st_sub$us_map_fill]
+          dir_df[
+            dir_df$ZCTA == focus_info$ZCTA, st_sub$us_map_fill]
+        all_st_val <- dir_df[, st_sub$us_map_fill]
+        all_us_val <- overall_df[, st_sub$us_map_fill]
         
         # get colors
         if (st_sub$us_map_fill == "Mental_Wellness_Index"){
           mc <- 
-            if (f_val >= 50){
-              meas_max_colors[meas_col_to_type[full_name]]
+            if (is.na(f_val) | f_val >= 50){
+              meas_max_colors[ol$meas_col_to_type[full_name]]
             } else {
-              meas_min_colors[meas_col_to_type[full_name]]
+              meas_min_colors[ol$meas_col_to_type[full_name]]
             }
         } else {
-          mc <- meas_max_colors[meas_col_to_type[full_name]]
+          mc <- meas_max_colors[ol$meas_col_to_type[full_name]]
         }
         
-        # get percentiles relative to state and us
-        st_perc <- signif(ecdf(all_st_val)(f_val)*100, 4)
-        us_perc <- signif(ecdf(all_us_val)(f_val)*100, 4)
-        
-        # get text value for percentile: very low/high, low/high
-        st_comp <- quant_map(st_perc)
-        us_comp <- quant_map(us_perc)
-        
-        HTML(paste0(
-          "<center><b><font size = '3'>",
-          "ZCTA ", html_color(mc, focus_info$ZCTA),
-          " has a ", html_color(mc, full_name), " of ",
-          html_color(mc, signif(f_val, 4)),
-          ", putting it at the ",
-          html_color(mc, st_perc), 
-          " percentile for the state.",
-          " This is ", 
-          html_color(mc, st_comp), " relative to ",
-          input$st_focus,", and ",
-          html_color(mc, us_comp), " relative to the United States.",
-          "</font></b></center>"
-        ))
+        if (!is.na(f_val)){
+          
+          # get percentiles relative to state and us
+          st_perc <- trunc(ecdf(all_st_val)(f_val)*100)
+          us_perc <- trunc(ecdf(all_us_val)(f_val)*100)
+          
+          # get text value for percentile: very low/high, low/high
+          st_comp <- quant_map(st_perc)
+          us_comp <- quant_map(us_perc)
+          
+          HTML(paste0(
+            "<center>",
+            "<b><font size = '3'>",
+            "ZCTA ", html_color(mc, focus_info$ZCTA),
+            " (ZIP Code",
+            ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
+            html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
+            " has a ", html_color(mc, full_name), " national ranking of ",
+            html_color(mc, trunc(f_val)),
+            ", putting it at the ",
+            html_color(mc, st_perc), 
+            " percentile for the state.",
+            " This is in the ", 
+            html_color(mc, st_comp), " relative to ",
+            input$st_focus,", and in the ",
+            html_color(mc, us_comp), " relative to the United States.",
+            "</font></b><p></p>",
+            "<font size = '2'>",
+            "<i>A higher value indicates a higher national ranking for ",
+            full_name,
+            ". ",
+            ifelse(
+              dir_val == -1, 
+              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+              ""
+            ),
+            "</i>",
+            "</font>",
+            "</center>"
+          ))
+        } else {
+          HTML(paste0(
+            "<center>",
+            "<b><font size = '3'>",
+            "ZCTA ", html_color(mc, focus_info$ZCTA),
+            " (ZIP Code",
+            ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
+            html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
+            " does not have a value for ", 
+            html_color(mc, full_name),
+            ", indicating missing data or no population in this area.",
+            "</font></b><p></p>",
+            "<font size = '2'>",
+            "<i>A higher value indicates a higher national ranking for ",
+            full_name,
+            ". ",
+            ifelse(
+              dir_val == -1, 
+              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.  ",
+              ""
+            ),
+            "</i>",
+            "</font>",
+            "</center>"
+          ))
+        }
       }
     })
   })
+  # output plots and information: community view ----
+  
+  output$data_info_com <- renderUI({
+    withProgress(message = "Rendering data information", {
+      full_name <- ol$measure_to_names[[com_sub$idx]][com_sub$com_map_fill]
+      
+      HTML(paste0(
+        "<font size = '2'>",
+        
+        "A variety of data sources are used for measures comprising the Mental Wellness Index. The data currently pictured for ",
+        full_name,
+        " came from ",
+        ifelse(full_name == "Mental Wellness Index",
+               "",
+               ol$info_dat[com_sub$com_map_fill, "Years"]
+        ),
+        " ",
+        ifelse(full_name == "Mental Wellness Index",
+               "various sources of",
+               ol$info_dat[com_sub$com_map_fill, "Source"]
+        ),
+        " data.<p><p>",
+        ifelse(
+          full_name == "Mental Wellness Index",
+          "",
+          paste0(
+            full_name, " Description: ",
+            ol$info_dat[com_sub$com_map_fill, "Measure.Description"]
+          )),
+        "<p>",
+        "</font>"
+      ))
+    })
+  })
+  
+  # plot map based on fill -- STOP HERE
+  output$com_map <- renderLeaflet({
+    withProgress(message = "Rendering map", {
+      plot_map(com_sub$com_map_fill, com_sub$geodat,
+               com_sub$idx,  ol, is_all = F,
+               is_com = T, zcta_choose = com_sub$ZCTA)
+    })
+  })
+  
+  # put an explanation
+  output$com_map_expl <- renderUI({
+    withProgress(message = "Rendering map explanation", {
+      full_name <- ol$measure_to_names[[com_sub$idx]][com_sub$com_map_fill]
+      mc <- meas_max_colors[ol$meas_col_to_type[full_name]]
+      lc <- meas_min_colors[ol$meas_col_to_type[full_name]]
+      
+      # add ZCTA interpretation
+      # get measure directionality
+      dir_val <- if (com_sub$com_map_fill != "Mental_Wellness_Index"){
+        ol$info_dat[com_sub$com_map_fill, "Directionality"]
+      } else {
+        1
+      }
+      
+      # get scores
+      dir_df <-
+        if (com_sub$com_map_fill == "Mental_Wellness_Index"){
+          com_sub$mwi
+        } else {
+          ol$no_dir_perc_meas_df[com_sub$mwi$ZCTA,]
+        }
+      overall_df <- 
+        if (com_sub$com_map_fill == "Mental_Wellness_Index"){
+          ol$mwi[[com_sub$idx]]
+        } else {
+          ol$no_dir_perc_meas_df
+        }
+      
+      f_val <- 
+        dir_df[
+          dir_df$ZCTA == com_sub$ZCTA, com_sub$com_map_fill]
+      all_com_val <- dir_df[, com_sub$com_map_fill]
+      all_us_val <- overall_df[, com_sub$com_map_fill]
+      
+      # get colors
+      if (com_sub$com_map_fill == "Mental_Wellness_Index"){
+        mc <- 
+          if (is.na(f_val) | f_val >= 50){
+            meas_max_colors[ol$meas_col_to_type[full_name]]
+          } else {
+            meas_min_colors[ol$meas_col_to_type[full_name]]
+          }
+      } else {
+        mc <- meas_max_colors[ol$meas_col_to_type[full_name]]
+      }
+      
+      if (!is.na(f_val)){
+        
+        # get percentiles relative to state and us
+        com_perc <- trunc(ecdf(all_com_val)(f_val)*100)
+        us_perc <- trunc(ecdf(all_us_val)(f_val)*100)
+        
+        # get text value for percentile: very low/high, low/high
+        com_comp <- quant_map(com_perc)
+        us_comp <- quant_map(us_perc)
+        
+        text_2 <- HTML(paste0(
+          "<center><b><font size = '3'>",
+          "ZCTA ", html_color(mc, com_sub$ZCTA),
+          " (ZIP Code",
+          ifelse(nchar(zcta_to_zip[com_sub$ZCTA]) > 5, "s "," "), 
+          html_color(mc, zcta_to_zip[com_sub$ZCTA]), ")",
+          " has a ", html_color(mc, full_name), " national ranking of ",
+          html_color(mc, trunc(f_val)),
+          ", putting it at the ",
+          html_color(mc, com_perc), 
+          " percentile for the state.",
+          " This is in the ", 
+          html_color(mc, com_comp), 
+          " relative to the selected community, and in the ",
+          html_color(mc, us_comp), " relative to the United States.",
+          "</b>",
+          ifelse(
+            full_name != "Mental Wellness Index",
+            paste0(
+              "<p></p>",
+              "<font size = '2'>",
+              "<i>A higher value indicates a higher national ranking for ",
+              full_name,
+              ". ",
+              ifelse(
+                dir_val == -1, 
+                "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                ""
+              ),
+              "</i>",
+              "</font>"
+            ),
+            ""
+          ),
+          "</font></center>"
+        ))
+      } else {
+        text_2 <-
+          HTML(paste0(
+            "<center><b><font size = '3'>",
+            "ZCTA ", html_color(mc, com_sub$ZCTA),
+            " (ZIP Code",
+            ifelse(nchar(zcta_to_zip[com_sub$ZCTA]) > 5, "s "," "), 
+            html_color(mc, zcta_to_zip[com_sub$ZCTA]), ")",
+            " does not have a value for ", 
+            html_color(mc, full_name),
+            ", indicating missing data or no population in this area.",
+            "</b>",
+            ifelse(
+              full_name != "Mental Wellness Index",
+              paste0(
+                "<p></p>",
+                "<font size = '2'>",
+                "<i>A higher value indicates a higher national ranking for ",
+                full_name,
+                ". ",
+                ifelse(
+                  dir_val == -1, 
+                  "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                  ""
+                ),
+                "</i>",
+                "</font>"
+              ),
+              ""
+            ),
+            "</font></center>"
+          ))
+      }
+      
+      HTML(paste0(
+        "<center>",
+        "<font size = '3'>",
+        # text,
+        # "<p><p>",
+        text_2,
+        "</font>",
+        "</center>"
+      ))
+    })
+  })
+  
+  # put a "report card" for the community
+  output$com_map_report_card <- renderUI({
+    mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
+    
+    dn <- "Mental Wellness Index"
+    mc <- meas_max_colors[dn]
+    text_mwi <- paste0(
+      "<b><font size = '3'>",
+      html_color(
+        ifelse(trunc(mwi_zcta[1, "Mental_Wellness_Index"]) >= 50,
+               mc, meas_min_colors[dn]),
+        dn),
+      ifelse(dn == "Mental Wellness Index", 
+             paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
+             ""),
+      "</b></font>",
+      "<br>"
+    )
+    
+    text <- ""
+    for (dn in names(ol$avail_meas_list[[com_sub$idx]])){
+      mc <- meas_max_colors[dn]
+      
+      if (dn != "Mental Wellness Index"){
+        text <- paste0(
+          text,
+          "<b><font size = '3'>",
+          html_color(mc, dn),
+          ifelse(dn == "Mental Wellness Index", 
+                 paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
+                 ""),
+          "</b></font>",
+          "<br>"
+        )
+        
+        for (cn in ol$avail_meas_list[[com_sub$idx]][[dn]]){
+          # get measure directionality
+          dir_val <- ol$info_dat[cn, "Directionality"]
+          
+          text <- paste0(
+            text, 
+            "<b>",
+            html_color(
+              mc, 
+              paste0(
+                # ifelse(ol$info_dat[cn, "Directionality"] > 0, "Higher ", "Lower "),
+                ol$measure_to_names[[com_sub$idx]][cn])),
+            ifelse(dir_val == -1, "*", ""),
+            ": ",
+            "</b>",
+            trunc(mwi_zcta[1, cn]),
+            "<br>"
+          )
+        }
+        
+        text <- paste0(
+          text,
+          "</p>",
+          "<p>"
+        )
+      }
+    }
+    text_meas <- text
+    
+    HTML(paste0(
+      "<font size = '2'>",
+      "<i>A higher MWI value indicates more assets supporting mental wellness. A lower MWI value indicates more obstacles to mental wellness. Range from 0 to 100.</i>",
+      "<p></p>",
+      text_mwi,
+      "<hr/>",
+      "<font size = '3'><b>Measure Rankings:</b></font>",
+      "<i><p>Range from 0 to 100. Measures with * were included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.</p></i>",
+      "<p></p>",
+      text_meas,
+      
+      "</font>"
+    ))
+  })
+  
+  # observe and create custom MWI ----
+  
+  # preallocate download for custom processing
+  overall_list <- reactiveVal()
+  
+  # download the Metadata file
+  output$download_metadata <- downloadHandler(
+    filename = function(){
+      "Metadata.xlsx"
+    },
+    content = function(file){
+      desc <- as.data.frame(
+        read_excel(file.path(data_folder, "Metadata.xlsx"), sheet = 2)
+      )
+      
+      write_xlsx(
+        list(
+          "Measure Registry" = m_reg,
+          "Column Descriptions" = desc
+        ), 
+        file)
+    }
+  )
+  
+  observeEvent(input$custom_mwi_go, {
+    withProgress(
+      message = "Creating custom Mental Wellness Index!", 
+      detail = "Loading data...", {
+        source(file.path("Processing_Pipeline", "pipeline_driver.R"))
+        
+        # testing
+        # input <- list()
+        # input$custom_zip <- "C:/Users/hdelossantos/Downloads/custom_zip.zip"
+        
+        # start by unzipping files
+        zip_true <- T
+        if (!is.null(input$custom_zip)){
+          zip_df <- unzip(input$custom_zip$datapath, list = T)
+        } else {
+          zip_true <- F
+          output$custom_error <- renderText({
+            paste0("ERROR: Please upload a ZIP file as described above.")
+          })
+        }
+        
+        # check that metadata is in the list, that there's something in it,
+        # that the rest of the data is csv
+        if (zip_true &
+          "Metadata.xlsx" %in% zip_df$Name & 
+          (nrow(zip_df) == 1 |
+          (nrow(zip_df) > 1 &
+          all(endsWith(tolower(zip_df$Name[zip_df$Name != "Metadata.xlsx"]),
+                       ".csv"))))){
+          # read the metadata file
+          unzip(zipfile=input$custom_zip$datapath, files = "Metadata.xlsx", exdir=".")
+          m_reg_custom <- as.data.frame(
+            read_xlsx("Metadata.xlsx", sheet = 1)
+          )
+          file.remove("Metadata.xlsx") # clean up
+          
+          # read all custom data
+          custom_data <- lapply(
+            zip_df$Name[zip_df$Name != "Metadata.xlsx"], function(x){
+              read.csv(unz(input$custom_zip$datapath, x), check.names = F)
+            }
+          )
+          names(custom_data) <- zip_df$Name[zip_df$Name != "Metadata.xlsx"]
+          
+          incProgress(detail = "Running pipeline...")
+          
+          # now pass it into the pipeline file
+          overall_out <- tryCatch({
+            mwi_pipeline(m_reg_custom, custom_data, run_custom = T)
+          }, 
+          error = function(cond){
+            output$custom_error <- renderText({
+              paste0(
+                "ERROR: The pipeline returned the following error:\n",
+                cond, "\n",
+                "Please doublecheck your custom data and the metadata file according to the parameters given above, reupload, and re-do."
+              )
+            })
+            
+            return(list())
+          })
+          
+          
+          incProgress(detail = "Processing app data...")
+          
+          # need to also all preceding data, if the list came out correctly
+          if (length(overall_out) > 0){
+            overall_out$mwi <- list()
+            overall_out$mwi[["pop"]] <- overall_out$pop_pm
+            # remove any empty zcta rows (miswriting?) -- TODO: fix in pipeline
+            overall_out$mwi[["pop"]] <-
+              overall_out$mwi[["pop"]][overall_out$mwi[["pop"]]$ZCTA != "",]
+            overall_out$mwi[["black"]] <- overall_out$black_pm
+            # remove any empty zcta rows (miswriting?) -- TODO: fix in pipeline
+            overall_out$mwi[["black"]] <-
+              overall_out$mwi[["black"]][overall_out$mwi[["black"]]$ZCTA != "",]
+            
+            ap <- suppressWarnings(
+              app_preprocess(overall_out$m_reg, 
+                            overall_out$info_dat, overall_out$mwi,
+                            app_start = F)
+            )
+            
+            # add counties/states to mwi
+            for (idx in index_types){
+              overall_out$mwi[[idx]][, colnames(cty_cw)[-1]] <- 
+                cty_cw[overall_out$mwi[[idx]]$ZCTA, -1]
+            }
+            
+            for (a in names(ap)){
+              overall_out[[a]] <- ap[[a]]
+            }
+            
+            incProgress(detail = "Saving results...")
+            
+            # keep in reactive for download
+            overall_list(overall_out)
+            
+            output$custom_error <- renderText({
+              paste0("Complete! Click 'Download Custom MWI' to download. Upload resulting .RData on the 'Custom MWI Upload' section of the 'Explore States' or 'Explore ZIP Codes' page to explore.")
+            })
+          }
+        } else {
+          output$custom_error <- renderText({
+            paste0(
+              "ERROR: One of the following is wrong with your uploaded ZIP:\n",
+              "1: Does not contain Metadata.xlsx\n",
+              "2: Has additional custom data and custom data not in CSV format\n",
+              "3: There is no ZIP file\n",
+              "Please fix the above, reupload, and re-do.")
+          })
+        }
+      })
+  })
+  
+  
+  # download the output file
+  output$download_custom_mwi <- downloadHandler(
+    filename = function(){
+      paste0("Custom_MWI_", Sys.Date(), ".RData")
+    },
+    content = function(file){
+      overall_output <- overall_list()
+      
+      save(overall_output, file = file)
+    }
+  )
 }
 
 # RUN ----
