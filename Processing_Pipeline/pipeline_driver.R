@@ -354,7 +354,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
               info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)])
           )  
         } else if (gl == "ZIP Code"){
-          ct_to_zcta(
+          zip_to_zcta(
             level_data[[gl]], 
             "GEOID", 
             c(info_dat_sub$Numerator, 
