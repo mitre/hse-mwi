@@ -263,6 +263,8 @@ acs_final$ice_numerator_black <-
                        "B19001B_003E",
                        "B19001B_004E",
                        "B19001B_005E")], na.rm = T)
+# Take absolute value of numerator (to align so that all higher numbers indicate more segregation)
+acs_final$iceabs_numerator_black <- abs(acs_final$ice_numerator_black)
 
 acs_final$ice_denom_black <- acs_data$B19001_001E
 
@@ -283,6 +285,8 @@ acs_final$ice_numerator_pop <-
                      "B19001H_003E",
                      "B19001H_004E",
                      "B19001H_005E")], na.rm = T))
+# Take absolute value of numerator (to align so that all higher numbers indicate more segregation)
+acs_final$iceabs_numerator_pop <- abs(acs_final$ice_numerator_pop)
 
 acs_final$ice_denom_pop <- acs_data$B19001_001E
 
