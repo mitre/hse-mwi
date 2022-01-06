@@ -719,12 +719,12 @@ ui <- fluidPage(
               img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
               )),
               HTML(paste0(
-                "All states are included.", 
-                " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p><p>")),
-              HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p><p>"
+                "All states are included.",
+                " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p></p>")),
+              HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p></p>"
               )),
               HTML("</font>")
             )
@@ -833,12 +833,12 @@ ui <- fluidPage(
               img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, each weighted according to relative importance of the measure in estimating mental wellness (mental health and substance use).<p><p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
               )),
               HTML(paste0(
                 "All states are included.",
-                " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p><p>")),
-              HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p><p>"
+                " Selecting \"All\" will show all included states. Note that this is slower to render and will show ZCTAs as points.<p></p>")),
+              HTML(paste0("* ZCTAs are used in the Mental Wellness Index and are represented in maps and plots. ZIP codes are analgous to ZCTAs. When ZIP Codes are entered above, they are mapped to ZCTAs. For more information on ZCTAs, please see <a href='https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html' target = '_blank'>census.gov</a>.<p></p>"
               )),
               HTML("</font>")
             )
@@ -907,7 +907,7 @@ ui <- fluidPage(
             "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see step 2).</li>",
             "<li>Numerators and denominators must be numeric columns.</li>",
             "<li>Missing data should have cells left blank.</li>",
-            "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black population measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
+            "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black populations measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
             "</ul>",
             "<br>",
             "<li> Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
@@ -1745,9 +1745,12 @@ server <- function(input, output, session) {
     HTML(paste0(
       "<b><center><font size = '3'>",
       "Distribution of ", ol$measure_to_names[[st_sub$idx]][st_sub$us_map_fill],
-      " for the ",
+      " for ",
+      ifelse(st_sub$idx != "black", "the ", ""),
       ifelse(st_sub$idx == "black", "Black ", "Overall "),
-      "Population in ",
+      "Population",
+      ifelse(st_sub$idx == "black", "s", ""),
+      " in ",
       st_sub$st,
       "</b></center></font>"
     ))
