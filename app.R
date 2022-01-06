@@ -2065,6 +2065,7 @@ server <- function(input, output, session) {
     mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
     
     dn <- "Mental Wellness Index"
+    mc <- meas_max_colors[dn]
     text_mwi <- paste0(
       "<b><font size = '3'>",
       html_color(
