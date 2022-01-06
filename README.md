@@ -2,9 +2,9 @@
 
 The Mental Wellness Index is a framework and dashboard tool that provides a picture of community-level mental wellness for each zip code\* in the nation. The MWI is comprised of 28 measures from 3 domains: Social Determinants of Health, Healthcare Access, and Health Status. Structural Racism and Community & Cultural Assets are woven around and throughout the domains of the MWI itself, reflecting their influence throughout the measure framework.
 
-<center>
+<p align = "center">
 <img src="https://github.com/mitre/hse-mwi/blob/main/www/media/MWI%20Framework%20(Transparent%20Background).png" width="400" />
-</center>
+</p>
 
 The intent of the Mental Wellness Index is to provide a snapshot of a community's mental wellness so that community leaders, public health officials, and funding entities can understand how they might best direct mental health support to build on a particular community's assets and fill in its gaps.
 
