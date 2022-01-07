@@ -353,8 +353,8 @@ Analytic and face validity verification is in progress to evaluate the robustnes
 ## Downloadable Data and Information
 
 - <a href = 'https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv' target = "_blank">Data Information</a>: The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and directionality.
-- <a href = 'https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv' target = "_blank">Mental Wellness Index for Black Americans</a>: The calculated MWI for Black Americans for each ZCTA.
-- <a href = 'https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv' target = "_blank">Mental Wellness Index for American Population</a>: The calculated MWI for all Americans for each ZCTA.
+- <a href = 'https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv' target = "_blank">Mental Wellness Index for Black Populations</a>: The calculated MWI for Black populations for each ZCTA.
+- <a href = 'https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv' target = "_blank">Mental Wellness Index for Overall Population</a>: The calculated MWI for the overall population for each ZCTA.
 - <a href = 'https://github.com/mitre/hse-mwi' target = "_blank">MWI Project Github Page</a>: This page is home to all of the raw data, code to manipulate the data, documentation concerning each measures, and everything else concerned with the creation of the MWI Tool.
 
 ## Acknowledgements and Contact Information
