@@ -19,8 +19,10 @@ resource_folder <-file.path(
   "Health and Social Equity - SJP - BHN Score Creation",
   "Data", "Resources")
 
-# Spreadsheet with zipcodes and state FIPS
-
+# Import ZCTAs & polygons
+load(file.path(resource_folder,"ZCTAs_shapefile_US.RData"))
+zctas <- zips
+rm(zips)
 
 # Spreadsheet with state by state Grocery Laws
 grocery_states <- read_xlsx(file.path(resource_folder, "BWL_Grocery_Laws.xlsx"),
@@ -44,4 +46,5 @@ get_zbp <- function(naics, name){
   colnames(dat) <- c("zip", name)
   return(dat)
 }
+
 
