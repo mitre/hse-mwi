@@ -32,7 +32,7 @@ grocery_states <- read_xlsx(file.path(resource_folder, "BWL_Grocery_Laws.xlsx"),
 grocery_states[,3:5] <- ifelse(grocery_states[,3:5] == "Y", TRUE, FALSE)
 grocery_states$any_alc_sales <- ifelse(rowSums(grocery_states[,3:5] , na.rm = T) > 0, TRUE, FALSE)
 
-# Function to get cbp code from api, and return df with zipcode FIPS and number of establishments   
+# Function to get zbp code from api, and return df with zipcode FIPS and number of establishments   
 get_zbp <- function(naics, name){
   dat <- getCensus(name = "cbp",
                    key = Sys.getenv("CENSUS_API_KEY"),
@@ -46,5 +46,23 @@ get_zbp <- function(naics, name){
   colnames(dat) <- c("zip", name)
   return(dat)
 }
+
+# Pull all counts for BWL, convenience stores, and convenience and gas stores
+bwl <- get_zbp(445310, "bwl") #4557 zip codes
+convenience <- get_zbp(445120, "convenience") #3785 zip codes
+convenience_gas <- get_zbp(447110, "convenience_gas") #11135 zip codes
+grocery <- get_zbp(445110, "grocery") #7005 zip codes
+
+# Pull counts for convenience, convenience/gas, grocery stores within allowed states
+allowed_states <- sapply(grocery_states[grocery_states$any_alc_sales,"Abbrev"], 
+                         as.character)
+state_fips <- unique(fips_codes[,1:2])
+allowed_zips <- zip_cw %>% 
+  left_join(state_fips, by = c("STATE" = "state")) %>%
+  filter(STATE %in% allowed_states)
+
+convenience <- convenience %>% filter(zip %in% allowed_zips$ZIP_CODE) #3459 zip codes
+convenience_gas <- convenience_gas %>% filter(zip %in% allowed_zips$ZIP_CODE) #10745 zip codes
+grocery <- grocery %>% filter(zip %in% allowed_zips$ZIP_CODE) #6542 zip codes
 
 
