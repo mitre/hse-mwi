@@ -24,7 +24,9 @@ resource_folder <-file.path(
 
 # Import ZCTAs & polygons
 load(file.path(resource_folder,"ZCTAs_shapefile_US.RData"))
-zctas <- zips
+zctas <- zips %>%
+  st_as_sf(coords = c("longitude", "latitude"),
+           crs = st_crs(poly)) 
 rm(zips)
 
 # Spreadsheet with state by state Grocery Laws
