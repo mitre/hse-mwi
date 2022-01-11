@@ -76,3 +76,8 @@ all[is.na(all)] <- 0
 all <- all %>%
   mutate(ESTAB = bwl + convenience + convenience_gas + grocery) %>%
   select(ESTAB, zip)
+
+# Convert zips to zctas
+all <- all %>%
+  left_join(zip_cw, by = c("zip" = "ZIP_CODE")) %>%
+  select(ESTAB, ZCTA)
