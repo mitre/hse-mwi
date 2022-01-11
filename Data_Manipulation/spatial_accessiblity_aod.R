@@ -89,6 +89,7 @@ all <- all %>%
   left_join(zctas, by = c("ZCTA" = "ZCTA5CE10")) %>%
   mutate(centroid = st_centroid(geometry)) %>%
   dplyr::select(ESTAB, ZCTA, centroid) 
+all <- st_as_sf(all)
   
 # Create inverse distance column
 zctas$iDistance <- 0
