@@ -27,7 +27,8 @@ resource_folder <-file.path(
 load(file.path(resource_folder,"ZCTAs_shapefile_US.RData"))
 zctas <- zips %>%
   st_as_sf(coords = c("longitude", "latitude"),
-           crs = st_crs(poly)) 
+           crs = st_crs(poly)) %>%
+  mutate(centroid = st_centroid(geometry))
 rm(zips)
 
 # Spreadsheet with state by state Grocery Laws
@@ -84,4 +85,6 @@ all <- all %>%
 all <- all %>%
   left_join(zip_cw, by = c("zip" = "ZIP_CODE")) %>%
   left_join(zctas, by = c("ZCTA" = "ZCTA5CE10")) %>%
-  select(ESTAB, ZCTA, geometry)
+  mutate(centroid = st_centroid(geometry)) %>%
+  select(ESTAB, ZCTA, centroid) 
+  
