@@ -30,7 +30,7 @@ zctas <- zips %>%
   st_as_sf(coords = c("longitude", "latitude"),
            crs = st_crs(poly)) %>%
   mutate(centroid = st_centroid(geometry)) %>%
-  select(ZCTA5CE10, centroid)
+  dplyr::select(ZCTA5CE10, centroid)
 rm(zips)
 
 # Spreadsheet with state by state Grocery Laws
@@ -51,7 +51,7 @@ get_zbp <- function(naics, name){
                    NAICS2017 = naics
   ) %>%
     mutate(zip = paste0(zip_code)) %>%
-    select(zip, ESTAB) 
+    dplyr::select(zip, ESTAB) 
   colnames(dat) <- c("zip", name)
   return(dat)
 }
@@ -81,14 +81,15 @@ all <- full_join(bwl, convenience, by = "zip") %>%
 all[is.na(all)] <- 0
 all <- all %>%
   mutate(ESTAB = bwl + convenience + convenience_gas + grocery) %>%
-  select(ESTAB, zip)
+  dplyr::select(ESTAB, zip)
 
 # Convert zips to zctas
 all <- all %>%
   left_join(zip_cw, by = c("zip" = "ZIP_CODE")) %>%
   left_join(zctas, by = c("ZCTA" = "ZCTA5CE10")) %>%
   mutate(centroid = st_centroid(geometry)) %>%
-  select(ESTAB, ZCTA, centroid) 
+  dplyr::select(ESTAB, ZCTA, centroid) 
   
 # Create inverse distance column
 zctas$iDistance <- 0
+
