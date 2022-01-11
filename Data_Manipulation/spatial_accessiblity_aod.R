@@ -5,6 +5,7 @@ library(dplyr)
 library(tidycensus)
 library(censusapi)
 library(readxl)
+library(sf)
 
 # Set system environment
 # Sys.setenv("OneDrive" = "/Users/mstrahlman/The MITRE Corporation")
