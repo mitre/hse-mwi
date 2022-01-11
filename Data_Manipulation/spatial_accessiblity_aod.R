@@ -82,4 +82,5 @@ all <- all %>%
 # Convert zips to zctas
 all <- all %>%
   left_join(zip_cw, by = c("zip" = "ZIP_CODE")) %>%
-  select(ESTAB, ZCTA)
+  left_join(zctas, by = c("ZCTA" = "ZCTA5CE10")) %>%
+  select(ESTAB, ZCTA, geometry)
