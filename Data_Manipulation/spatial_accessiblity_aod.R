@@ -6,6 +6,9 @@ library(tidycensus)
 library(censusapi)
 library(readxl)
 
+# Set system environment
+# Sys.setenv("OneDrive" = "/Users/mstrahlman/The MITRE Corporation")
+
 source("Processing_Pipeline/crosswalk_func.R")
 
 # Set Data & Resource Folders
