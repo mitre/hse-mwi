@@ -68,4 +68,11 @@ convenience <- convenience %>% filter(zip %in% allowed_zips$ZIP_CODE) #3459 zip 
 convenience_gas <- convenience_gas %>% filter(zip %in% allowed_zips$ZIP_CODE) #10745 zip codes
 grocery <- grocery %>% filter(zip %in% allowed_zips$ZIP_CODE) #6542 zip codes
 
-
+# Combine outlets together into ESTAB count
+all <- full_join(bwl, convenience, by = "zip") %>%
+  full_join(convenience_gas, by = "zip") %>%
+  full_join(grocery, by = "zip") 
+all[is.na(all)] <- 0
+all <- all %>%
+  mutate(ESTAB = bwl + convenience + convenience_gas + grocery) %>%
+  select(ESTAB, zip)
