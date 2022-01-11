@@ -90,3 +90,5 @@ all <- all %>%
   mutate(centroid = st_centroid(geometry)) %>%
   select(ESTAB, ZCTA, centroid) 
   
+# Create inverse distance column
+zctas$iDistance <- 0
