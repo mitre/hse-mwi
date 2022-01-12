@@ -94,3 +94,25 @@ all <- st_as_sf(all)
 # Create inverse distance column
 zctas$iDistance <- 0
 
+# Calculate inverse distances
+for (i in 1:nrow(zctas)) {
+  # print every 50
+  if (i %% 50 == 0){
+    print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
+  }
+  # Set the coordinates
+  zcta_coord <- st_coordinates(zctas)
+  aod_coord <- st_coordinates(all)
+  # Only search zctas within +/-1 lat/long to save time and computational memory
+  prox_log <- aod_coord[,2] < zcta_coord[i,2] + 1 &
+    aod_coord[,2] > zcta_coord[i,2] - 1 &
+    aod_coord[,1] < zcta_coord[i,1] + 1 &
+    aod_coord[,1] > zcta_coord[i,1] - 1
+  # Inverse Distance Calculation + store each calculation in dataframe
+  zctas$iDistance[i] <- 1/(min(pointDistance(as_Spatial(all[prox_log, ]),
+                                                    as_Spatial(zctas$centroid[i]),
+                                                    lonlat = T))*0.0006213712)
+}
+
+
+
