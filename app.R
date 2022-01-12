@@ -920,9 +920,9 @@ ui <- fluidPage(
             "<ol>",
             if (!app_local){
               tagList(HTML(paste0(
-                "<li> Download <a href = '' target = '_blank'>R</a> and <a href = '' target = '_blank'>RStudio</a>. Download a modern browser (Firefox, Chrome, Edge, etc.) and make that your default browser if you haven't already.</li>",
+                "<li> Download <a href = 'https://www.r-project.org/' target = '_blank'>R</a> and <a href = 'https://www.rstudio.com/products/rstudio/download/' target = '_blank'>RStudio</a>. Download a modern browser (Firefox, Chrome, Edge, etc.) and make that your default browser if you haven't already.</li>",
                 "<br>",
-                "<li> Go to the <a href = '' target = '_blank'>Mental Wellness Index GitHub page</a> and download the repository by clicking \"Code\" in the top right corner, then clicking \"Download ZIP\" from the dropdown menu. This should download a ZIP file of the MWI repository into your downloads folder, called \"hse-mwi-main.zip\".</li>",
+                "<li> Go to the <a href = 'https://github.com/mitre/hse-mwi' target = '_blank'>Mental Wellness Index GitHub page</a> and download the repository by clicking \"Code\" in the top right corner, then clicking \"Download ZIP\" from the dropdown menu. This should download a ZIP file of the MWI repository into your downloads folder, called \"hse-mwi-main.zip\".</li>",
                 "<br>",
                 "<li> Unzip \"hse-mwi-main.zip\".</li>",
                 "<br>",
