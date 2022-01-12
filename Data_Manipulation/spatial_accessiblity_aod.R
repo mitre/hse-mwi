@@ -126,3 +126,30 @@ for (i in 1:nrow(zctas)) {
 }
 }
 
+# Calculate inverse distances with weighting scheme based on # of outlets
+zctas$weightediD <- 0
+for (i in 1:nrow(zctas)) {
+  if (sum(prox_log) != 0) {
+    all$d[prox_log] <- 
+      pointDistance(
+        as_Spatial(zctas$centroid[i,]), 
+        as_Spatial(all[prox_log, ]), lonlat = T) * .0006213712
+    if (filter(all, min(d))$ESTAB <= 4) {
+      zctas$weightediD[i] <- zctas$iDistance * 1
+    } else {
+      filter(all, min(d)$ESTAB) > 5 
+      zctas$weightediD[i] <- zctas$iDistance * 1.1
+    }
+  } else {
+    all$d[prox_log_big] <- 
+      pointDistance(
+        as_Spatial(zctas$centroid[i,]), 
+        as_Spatial(all[prox_log_big, ]), lonlat = T) * .0006213712
+    if (filter(all, min(d))$ESTAB <= 4) {
+      zctas$weightediD[i] <- zctas$iDistance * 1
+    } else {
+      filter(all, min(d)$ESTAB) > 5
+      zctas$weightediD[i] <- zctas$iDistance * 1.1
+    }
+  }
+}
