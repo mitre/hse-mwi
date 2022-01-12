@@ -1,5 +1,14 @@
 # Mental Wellness Index™ (MWI)
 
+# Outline
+
+- [Mental Wellness Index (MWI)](Mental-Wellness-Index-(MWI))
+- [Instructions to Create Your Own MWI](Instructions-to-Create-Your-Own-MWI)
+- [Techinical Set Up](Technical-Set-Up) (only useful for contributors)
+- [Contact and Attribution](Contact-and-Attribution)
+
+# Mental Wellness Index (MWI)
+
 The Mental Wellness Index is a framework and dashboard tool that provides a picture of community-level mental wellness for each zip code\* in the nation. The MWI is comprised of 28 measures from 3 domains: Social Determinants of Health, Healthcare Access, and Health Status. Structural Racism and Community & Cultural Assets are woven around and throughout the domains of the MWI itself, reflecting their influence throughout the measure framework.
 
 <p align = "center">
@@ -9,6 +18,7 @@ The Mental Wellness Index is a framework and dashboard tool that provides a pict
 The intent of the Mental Wellness Index is to provide a snapshot of a community's mental wellness so that community leaders, public health officials, and funding entities can understand how they might best direct mental health support to build on a particular community's assets and fill in its gaps.
 
 \*ZIP Code Tabulation Area (ZCTA)
+
 
 ## MWI Domains & Measures
 
@@ -25,6 +35,53 @@ The MWI creates a score for each zip code between 0 and 100, such that:
 ## Focus on Black Americans
 
 The MWI was developed with the mental health status of Black Americans in mind. We selected Black Americans as a priority population in order to center at the margins and avoid creating an index that is focused to the 'average community.'  We believe that focusing on Black Americans in this way allows all groups experiencing disparities to benefit because none of us are well until all of us are well. We also recognize the need to identify, recognize, and adapt the MWI for additional priority populations.
+
+# Instructions to Create Your Own MWI
+
+To create your own Mental Wellness Index, you must be running the Mental Wellness Index Tool on your local computer in order to protect your data. Follow the instructions below to create your own MWI for your community below by adjusting weights and/or adding your own data and metadata.
+
+1. Download R and RStudio. Download a modern browser (Firefox, Chrome, Edge, etc.) and make that your default browser if you haven't already.
+
+2. Go to the Mental Wellness Index GitHub page and download the repository by clicking "Code" in the top right corner, then clicking "Download ZIP" from the dropdown menu. This should download a ZIP file of the MWI repository into your downloads folder, called "hse-mwi-main.zip".
+
+3. Unzip "hse-mwi-main.zip".
+
+4. In the unzipped folder, open "app.R" in RStudio. This should open RStudio and the "app.R" script in the top left hand corner of the application.
+
+5. In the console window, which is in the bottom left hand corner, enter the following line and answer "yes" to all prompts in the console as you install these packages:
+   * install.packages('readxl', 'writexl', 'htmltools', 'shiny', 'tigris', 'leaflet', 'RColorBrewer', 'sf', 'plotly', 'ggbeeswarm', 'shinyWidgets', 'sass', 'shinycssloaders', 'shinyBS')
+
+6. In "app.R", navigate to line 11, which should say "app_local <- FALSE". Change FALSE to TRUE.
+
+7. In the top right hand corner of the "app.R" window, you should see "Run App". Click the small downard arrow to the right of that and click "Run External". Then click "Run App".
+
+8. After a delay (this will be slow the first time, then quicker after that), the Mental Wellness Index Tool should open in your browser. Click on the "Create Your Own MWI" tab and follow the remaining steps to create your own MWI.
+
+9. If you are only adjusting weights for included data, skip the next step.
+
+10. Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).
+   * Accepted geographical ID types are always numeric and include the following:
+      * ZCTA (example: 35406)
+      * County (example: 01001)
+      * ZIP Code (example: 35051)
+      * Census Tract (example: 01001020100)
+   * If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see next step).
+   * Numerators and denominators must be numeric columns.
+   * Missing data should have cells left blank.
+   * If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black populations measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.
+
+11. Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that all column names, with the exception of 'denominator', must be filled out.
+   * If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.
+   * If you would not like to include a measure in your MWI, either delete the measure row or set its weight to 0.
+   * If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.
+
+12. Put your data (if using) and the updated Metadata.xlsx file in a ZIP file (.zip).
+
+13. Upload your ZIP file and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.
+
+14. Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.
+
+15. To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.
 
 # Technical Set Up
 
@@ -118,7 +175,7 @@ Final scores for each ZCTA will be created by combining the weights and combined
 
 -   Black Population Score: `HSE_BHN_ZCTA_Score_Population.csv`
 
-## Contact and Attribution
+# Contact and Attribution
 
 For any questions or concerns, please contact socialjustice@mitre.org.
 

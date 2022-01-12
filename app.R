@@ -955,7 +955,7 @@ ui <- fluidPage(
             "<li>ZIP Code (example: 35051)</li>",
             "<li>Census Tract (example: 01001020100)</li>",
             "</ul>",
-            "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see step 2).</li>",
+            "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see next step).</li>",
             "<li>Numerators and denominators must be numeric columns.</li>",
             "<li>Missing data should have cells left blank.</li>",
             "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black populations measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
