@@ -40,9 +40,9 @@ The MWI was developed with the mental health status of Black Americans in mind. 
 
 To create your own Mental Wellness Index, you must be running the Mental Wellness Index Tool on your local computer in order to protect your data. Follow the instructions below to create your own MWI for your community below by adjusting weights and/or adding your own data and metadata.
 
-1. Download R and RStudio. Download a modern browser (Firefox, Chrome, Edge, etc.) and make that your default browser if you haven't already.
+1. Download free versions of [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/). Download a modern browser (Firefox, Chrome, Edge, etc.) and make that your default browser if you haven't already.
 
-2. Go to the Mental Wellness Index GitHub page and download the repository by clicking "Code" in the top right corner, then clicking "Download ZIP" from the dropdown menu. This should download a ZIP file of the MWI repository into your downloads folder, called "hse-mwi-main.zip".
+2. Go to the [Mental Wellness Index GitHub page](https://github.com/mitre/hse-mwi) and download the repository by clicking "Code" in the top right corner, then clicking "Download ZIP" from the dropdown menu. This should download a ZIP file of the MWI repository into your downloads folder, called "hse-mwi-main.zip".
 
 3. Unzip "hse-mwi-main.zip".
 
@@ -53,7 +53,7 @@ To create your own Mental Wellness Index, you must be running the Mental Wellnes
 
 6. In "app.R", navigate to line 11, which should say "app_local <- FALSE". Change FALSE to TRUE.
 
-7. In the top right hand corner of the "app.R" window, you should see "Run App". Click the small downard arrow to the right of that and click "Run External". Then click "Run App".
+7. In the top right hand corner of the "app.R" window, you should see "Run App". Click the small downward arrow to the right of that and click "Run External". Then click "Run App".
 
 8. After a delay (this will be slow the first time, then quicker after that), the Mental Wellness Index Tool should open in your browser. Click on the "Create Your Own MWI" tab and follow the remaining steps to create your own MWI.
 
@@ -61,10 +61,10 @@ To create your own Mental Wellness Index, you must be running the Mental Wellnes
 
 10. Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).
    * Accepted geographical ID types are always numeric and include the following:
-      * ZCTA (example: 35406)
-      * County (example: 01001)
-      * ZIP Code (example: 35051)
-      * Census Tract (example: 01001020100)
+      * ZCTA: 5 digit ZCTA (example: 35406)
+      * County: 5 digit County FIPS Code (2 digits state code and 3 digit county code, example: 01001)
+      * ZIP Code: US Postal Service ZIP Code (example: 35051)
+      * Census Tract: 11 digit Census Tract FIPS Code (2 digits state code, 3 digit county code, and 6 digit tract code, example: 01001020100)
    * If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see next step).
    * Numerators and denominators must be numeric columns.
    * Missing data should have cells left blank.
@@ -72,7 +72,7 @@ To create your own Mental Wellness Index, you must be running the Mental Wellnes
 
 11. Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that all column names, with the exception of 'denominator', must be filled out.
    * If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.
-   * If you would not like to include a measure in your MWI, either delete the measure row or set its weight to 0.
+   * If you would like to remove a measure in your MWI, either delete the measure row or set its weight to 0.
    * If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.
 
 12. Put your data (if using) and the updated Metadata.xlsx file in a ZIP file (.zip).
