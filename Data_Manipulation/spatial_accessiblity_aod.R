@@ -108,11 +108,21 @@ for (i in 1:nrow(zctas)) {
     aod_coord[,2] > zcta_coord[i,2] - 1 &
     aod_coord[,1] < zcta_coord[i,1] + 1 &
     aod_coord[,1] > zcta_coord[i,1] - 1
+  # Some ZCTAs are bigger than +/- 1 lat/long, so they'll need to be searched by
+  # +/- 5 lat/long
+  prox_log_big <- aod_coord[,2] < zcta_coord[i,2] + 5 &
+    aod_coord[,2] > zcta_coord[i,2] - 5 &
+    aod_coord[,1] < zcta_coord[i,1] + 5 &
+    aod_coord[,1] > zcta_coord[i,1] - 5
   # Inverse Distance Calculation + store each calculation in dataframe
+  if (sum(prox_log) != 0) {
   zctas$iDistance[i] <- 1/(min(pointDistance(as_Spatial(all[prox_log, ]),
                                                     as_Spatial(zctas$centroid[i]),
                                                     lonlat = T))*0.0006213712)
+  } else {
+    zctas$iDistance[i] <- 1/(min(pointDistance(as_Spatial(all[prox_log_big, ]),
+                                                     as_Spatial(zctas$centroid[i]),
+                                                     lonlat = T))*0.0006213712)
 }
-
-
+}
 
