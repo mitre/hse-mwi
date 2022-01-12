@@ -222,32 +222,32 @@ The table below summarizes the measures that are included in the MWI, their doma
 |:---:|:---:|:---:|:---:|:---:|
 | Access to Financial Services | <span style="color:#5d499e">SDOH</span> | Financial Access | Not Applicable | New America, Mapping Financial Opportunity Project |
 | Alcohol Outlet Density | <span style="color:#5d499e">SDOH</span> | Built Environment | Not Applicable | CBP |
-|Below 100% Federal Poverty Level|<span style="color:#5d499e">SDOH</span> |Income & Unemployment|Black Population|ACS|
-|Broadband Access|<span style="color:#5d499e">SDOH</span> |Built Environment|Black Population|ACS|
-|Housing Stress|<span style="color:#5d499e">SDOH</span> |Housing|Black Population|HUD CHAS|
+|Below 100% Federal Poverty Level|<span style="color:#5d499e">SDOH</span> |Income & Employment|Black Populations|ACS|
+|Broadband Access|<span style="color:#5d499e">SDOH</span> |Built Environment|Black Populations|ACS|
+|Housing Stress|<span style="color:#5d499e">SDOH</span> |Housing|Black Populations|HUD CHAS|
 |Living Within a Half-Mile of a Park|<span style="color:#5d499e">SDOH</span> |Built Environment|Not Applicable|CDC Environmental Public Health Tracking Network|
-|Mortgage Acceptance Rate|<span style="color:#5d499e">SDOH</span> |Financial Access|Black Population|HMDA, Consumer Financial Protection Bureau|
-|No High School Diploma|<span style="color:#5d499e">SDOH</span> |Education|Black Population|ACS|
-|Nursery and Preschool Enrollment|<span style="color:#5d499e">SDOH</span> |Education|Black Population|ACS|
-|Police Killings|<span style="color:#5d499e">SDOH</span> |Safety & Community Trauma|Black Population|Mapping Police Violence|
-|Residential Segregation|<span style="color:#5d499e">SDOH</span> |Housing|Black Population|ACS|
+|Mortgage Acceptance Rate|<span style="color:#5d499e">SDOH</span> |Financial Access|Black Populations|HMDA, Consumer Financial Protection Bureau|
+|No High School Diploma|<span style="color:#5d499e">SDOH</span> |Education|Black Populations|ACS|
+|Nursery and Preschool Enrollment|<span style="color:#5d499e">SDOH</span> |Education|Black Populations|ACS|
+|Police Killings|<span style="color:#5d499e">SDOH</span> |Safety & Community Trauma|Black Populations|Mapping Police Violence|
+|Residential Segregation|<span style="color:#5d499e">SDOH</span> |Housing|Black Populations|ACS|
 |Third Places|<span style="color:#5d499e">SDOH</span> |Social Capital|Not applicable|CBP|
-|Unemployment|<span style="color:#5d499e">SDOH</span> |Income & Unemployment|Black Population|ACS|
+|Unemployment|<span style="color:#5d499e">SDOH</span> |Income & Unemployment|Black Populations|ACS|
 |Violent Crime|<span style="color:#5d499e">SDOH</span> |Safety & Community Trauma|Not available|County Health Rankings|
 |Voter Participation|<span style="color:#5d499e">SDOH</span> |Social Capital|Not Available|TBD|
 |Mental Health Treatment Facility Access|<span style="color:#70ad47">Healthcare Access</span>|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator
 |Substance Use Treatment Facility Access|<span style="color:#70ad47">Healthcare Access</span>|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator|
-|Uninsured|<span style="color:#70ad47">Healthcare Access</span>|Health Insurance|Black Population|ACS|
+|Uninsured|<span style="color:#70ad47">Healthcare Access</span>|Health Insurance|Black Populations|ACS|
 |Adult Binge Drinking|<span style="color:#157ba7">Health Status</span>|Substance Use|Not available|CDC BRFSS, PLACES|
-|Alcohol-Related Mortality|<span style="color:#157ba7">Health Status</span>|Substance Use|Black Population|CDC WONDER
-|Estimated Drug Poisoning|<span style="color:#157ba7">Health Status</span>|Substance Use|Black Population|CDC WONDER|
+|Alcohol-Related Mortality|<span style="color:#157ba7">Health Status</span>|Substance Use|Black Populations|CDC WONDER
+|Estimated Drug Poisoning|<span style="color:#157ba7">Health Status</span>|Substance Use|Black Populations|CDC WONDER|
 |Insufficient Sleep|<span style="color:#157ba7">Health Status</span>|Other Morbidity & Mortality|Not available|CDC BRFSS, PLACES|
-|Life Expectancy|<span style="color:#157ba7">Health Status</span>|Other Morbidity & Mortality|Black Population (extrapolated)|CDC USALEEP, NVSS|
+|Life Expectancy|<span style="color:#157ba7">Health Status</span>|Other Morbidity & Mortality|Black Populations (extrapolated)|CDC USALEEP, NVSS|
 |Obesity|<span style="color:#157ba7">Health Status</span>|Other Morbidity & Mortality|Not Available|CDC BRFSS, PLACES Data Portal|
 |Poor Mental Health|<span style="color:#157ba7">Health Status</span>|Mental Health|Not Available|CDC BRFSS, PLACES|
 |Smoking Status|<span style="color:#157ba7">Health Status</span>|Substance Use|Not available|CDC BRFSS, PLACES|
 |Suicidal Ideation|<span style="color:#157ba7">Health Status</span>|Mental Health|Not Available|NSDUH|
-|Suicide Mortality|<span style="color:#157ba7">Health Status</span>|Mental Health|Black Population|CDC WONDER|
+|Suicide Mortality|<span style="color:#157ba7">Health Status</span>|Mental Health|Black Populations|CDC WONDER|
 _Notes_:
 
 - ACS – American Community Survey

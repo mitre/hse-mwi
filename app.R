@@ -5,6 +5,11 @@
 # NOTE: Styling by Sarah Ober of Case Study for using health equity framework
 # in population health team.
 
+# running locally? for custom MWI ----
+
+# change to TRUE if running locally
+app_local <- FALSE
+
 # load libraries ----
 
 library(readxl)
@@ -696,22 +701,32 @@ ui <- fluidPage(
             ),
             bsCollapsePanel(
               "Custom MWI Upload",
-              HTML("<font size = '2'><p>"),
-              "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
-              HTML("<p></font>"),
-              fileInput(
-                "custom_data_st",
-                label = "Upload Custom Mental Wellness Index (.RData)",
-                accept = ".RData"
-              ),
-              actionButton(
-                "custom_data_load_st",
-                "Upload"
-              ),
-              actionButton(
-                "custom_data_reset_st",
-                "Reset"
-              )
+              if (app_local){
+                tagList(
+                  HTML("<font size = '2'><p>"),
+                  "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
+                  HTML("<p></font>"),
+                  fileInput(
+                    "custom_data_st",
+                    label = "Upload Custom Mental Wellness Index (.RData)",
+                    accept = ".RData"
+                  ),
+                  actionButton(
+                    "custom_data_load_st",
+                    "Upload"
+                  ),
+                  actionButton(
+                    "custom_data_reset_st",
+                    "Reset"
+                  )
+                )
+              } else {
+                tagList(
+                  HTML("<font size = '2'><p>"),
+                  "To create and view the necessary custom Mental Wellness Index file, you will need to run the Mental Wellness Index Tool on your local computer in order to protect your data. Please see the \"Create Your Own MWI\" tab for more information.",
+                  HTML("<p></font>")
+                )
+              }
             ),
             bsCollapsePanel(
               "About the Mental Wellness Index",
@@ -810,22 +825,32 @@ ui <- fluidPage(
             ),
             bsCollapsePanel(
               "Custom MWI Upload",
-              HTML("<font size = '2'><p>"),
-              "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
-              HTML("</p></font>"),
-              fileInput(
-                "custom_data_com",
-                label = "Upload Custom Mental Wellness Index (.RData)",
-                accept = ".RData"
-              ),
-              actionButton(
-                "custom_data_load_com",
-                "Upload"
-              ),
-              actionButton(
-                "custom_data_reset_com",
-                "Reset"
-              )
+              if (app_local){
+                tagList(
+                  HTML("<font size = '2'><p>"),
+                  "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
+                  HTML("</p></font>"),
+                  fileInput(
+                    "custom_data_com",
+                    label = "Upload Custom Mental Wellness Index (.RData)",
+                    accept = ".RData"
+                  ),
+                  actionButton(
+                    "custom_data_load_com",
+                    "Upload"
+                  ),
+                  actionButton(
+                    "custom_data_reset_com",
+                    "Reset"
+                  )
+                )
+              } else {
+                tagList(
+                  HTML("<font size = '2'><p>"),
+                  "To create and view the necessary custom Mental Wellness Index file, you will need to run the Mental Wellness Index Tool on your local computer in order to protect your data. Please see the \"Create Your Own MWI\" tab for more information.",
+                  HTML("<p></font>")
+                )
+              }
             ),
             bsCollapsePanel(
               "About the Mental Wellness Index",
@@ -885,26 +910,52 @@ ui <- fluidPage(
     tabPanel(
       title = div("Create Your Own MWI", class = "explore"),
       fluidRow(
-        column(width = 3),
+        column(width = 2),
         column(
-          width = 6,
+          width = 8,
           HTML("<center><h2>Create your own Mental Wellness Index (MWI)!</h2></center>"),
           HTML(paste0(
             "<p align = 'justify'>",
-            "Create your own Mental Wellness Index for your community below by adjusting weights and/or adding your own data and metadata. To do so, take the following steps:",
+            "To create your own Mental Wellness Index, you must be running the Mental Wellness Index Tool on your local computer in order to protect your data. Follow the instructions below to create your own MWI for your community below by adjusting weights and/or adding your own data and metadata.",
             "<ol>",
-            "<li> If you are only adjusting weights for included data, skip to step 3.</li>",
+            if (!app_local){
+              tagList(HTML(paste0(
+                "<li> Download free versions of <a href = 'https://www.r-project.org/' target = '_blank'>R</a> and <a href = 'https://www.rstudio.com/products/rstudio/download/' target = '_blank'>RStudio</a>. Download a modern browser (Firefox, Chrome, Edge, etc.) and make that your default browser if you haven't already.</li>",
+                "<br>",
+                "<li> Go to the <a href = 'https://github.com/mitre/hse-mwi' target = '_blank'>Mental Wellness Index GitHub page</a> and download the repository by clicking \"Code\" in the top right corner, then clicking \"Download ZIP\" from the dropdown menu. This should download a ZIP file of the MWI repository into your downloads folder, called \"hse-mwi-main.zip\".</li>",
+                "<br>",
+                "<li> Unzip \"hse-mwi-main.zip\".</li>",
+                "<br>",
+                "<li> In the unzipped folder, open \"app.R\" in RStudio. This should open RStudio and the \"app.R\" script in the top left hand corner of the application.</li>",
+                "<br>",
+                "<li> In the console window, which is in the bottom left hand corner, enter the following line and answer \"yes\" to all prompts in the console as you install these packages:</li>",
+                "<ul>",
+                "<li>install.packages('readxl', 'writexl', 'htmltools', 'shiny', 'tigris', 'leaflet', 'RColorBrewer', 'sf', 'plotly', 'ggbeeswarm', 'shinyWidgets', 'sass', 'shinycssloaders', 'shinyBS')</li>",
+                "</ul>",
+                "<br>",
+                "<li> In \"app.R\", navigate to line 11, which should say \"app_local <- FALSE\". Change FALSE to TRUE.</li>",
+                "<br>",
+                "<li> In the top right hand corner of the \"app.R\" window, you should see \"Run App\". Click the small downward arrow to the right of that and click \"Run External\". Then click \"Run App\".</li>",
+                "<br>",
+                "<li> After a delay (this will be slow the first time, then quicker after that), the Mental Wellness Index Tool should open in your browser. Click on the \"Create Your Own MWI\" tab and follow the remaining steps to create your own MWI.</li>",
+                "<br>"
+              )))
+            } else {
+              tagList()
+            },
+            
+            "<li> If you are only adjusting weights for included data, skip the next step.</li>",
             "<br>",
             "<li> Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).</li>",
             "<ul>",
             "<li>Accepted geographical ID types are always numeric and include the following:</li>",
             "<ul>",
-            "<li>ZCTA (example: 35406)</li>",
-            "<li>County (example: 01001)</li>",
-            "<li>ZIP Code (example: 35051)</li>",
-            "<li>Census Tract (example: 01001020100)</li>",
+            "<li>ZCTA: 5 digit ZCTA (example: 35406)</li>",
+            "<li>County: 5 digit County FIPS Code (2 digits state code and 3 digit county code, example: 01001)</li>",
+            "<li>ZIP Code: US Postal Service ZIP Code (example: 35051)</li>",
+            "<li>Census Tract: 11 digit Census Tract FIPS Code (2 digits state code, 3 digit county code, and 6 digit tract code, example: 01001020100)</li>",
             "</ul>",
-            "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see step 2).</li>",
+            "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see next step).</li>",
             "<li>Numerators and denominators must be numeric columns.</li>",
             "<li>Missing data should have cells left blank.</li>",
             "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black populations measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
@@ -913,7 +964,7 @@ ui <- fluidPage(
             "<li> Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
             "<ul>",
             "<li>If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.</li>",
-            "<li>If you would not like to include a measure in your MWI, either delete the measure row or set its weight to 0.</li>",
+            "<li>If you would like to remove a measure in your MWI, either delete the measure row or set its weight to 0.</li>",
             "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
             "</ul>",
             "<br>",
@@ -927,22 +978,28 @@ ui <- fluidPage(
             "</ol>",
             "</p>"
           )),
-          hr(),
-          HTML("<center>"),
-          downloadButton("download_metadata", "Download Metadata.xlsx"),
-          HTML("<br><br>"),
-          fileInput(
-            "custom_zip", 
-            "Upload Custom Data ZIP File (.zip)",
-            accept = ".zip"
-          ),
-          actionButton("custom_mwi_go", "Create Custom MWI"),
-          downloadButton("download_custom_mwi", "Download Custom MWI"),
-          HTML("<br><br>"),
-          verbatimTextOutput("custom_error"),
-          HTML("</center>")
+          if (app_local){
+            tagList(
+              hr(),
+              HTML("<center>"),
+              downloadButton("download_metadata", "Download Metadata.xlsx"),
+              HTML("<br><br>"),
+              fileInput(
+                "custom_zip", 
+                "Upload Custom Data ZIP File (.zip)",
+                accept = ".zip"
+              ),
+              actionButton("custom_mwi_go", "Create Custom MWI"),
+              downloadButton("download_custom_mwi", "Download Custom MWI"),
+              HTML("<br><br>"),
+              verbatimTextOutput("custom_error"),
+              HTML("</center>")
+            )
+          } else {
+            tagList()
+          }
         ),
-        column(width = 3)
+        column(width = 2)
       )
     ),
     
@@ -1929,7 +1986,6 @@ server <- function(input, output, session) {
     })
   })
   
-  # plot map based on fill -- STOP HERE
   output$com_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
       plot_map(com_sub$com_map_fill, com_sub$geodat,
