@@ -33,6 +33,7 @@ Each measure used in the MWI Tool was assessed based on its strengths, limitatio
 - [Violent Crime](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Violent_crime.pdf?raw=true){target="_blank"}
 - [Housing Stress](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Housing_Stress.pdf?raw=true){target="_blank"}
 - [Living Within a Half-Mile of a Park](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Living_Within_a_Half_Mile_of_a_Park.pdf?raw=true){target="_blank"}
+- [Voter Participation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Voter_Participation.pdf?raw=true){target="_blank"}
 
 ## Healthcare Access
 - [Uninsured](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Uninsured.pdf?raw=true){target="_blank"}
