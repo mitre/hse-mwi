@@ -176,7 +176,6 @@ for (i in 1:nrow(zctas)) {
   all$d[prox_log] <- NA
 }
 
-
 # Distributions of both variables
 ggplot(zctas, aes(x = log(iDistance))) +
   geom_density(color="darkblue", fill="lightblue") +
@@ -189,3 +188,19 @@ ggplot(zctas, aes(x = log(weightediD))) +
   labs(title = "Weighted Inverse Distances",
        y = "Density",
        x = "Log of Weighted Inverse Distances")
+
+# Write Out
+data_folder <- file.path(
+  gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
+  "Health and Social Equity - SJP - BHN Score Creation",
+  "Data", "Preprocessed")
+
+write.csv(zctas %>%
+            rename(zcta = ZCTA5CE10) %>%
+            dplyr::select(zcta, iDistance, weightediD), 
+          file = file.path(
+            data_folder,
+            "CBP_ZCTA_AlcoholOutlet_Spatial.csv"
+          ), 
+          row.names = F, 
+          na = "")
