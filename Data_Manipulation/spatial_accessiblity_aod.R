@@ -7,6 +7,7 @@ library(censusapi)
 library(readxl)
 library(sf)
 library(raster)
+library(ggplot2)
 
 # Set system environment
 # Sys.setenv("OneDrive" = "/Users/mstrahlman/The MITRE Corporation")
