@@ -1,5 +1,5 @@
 # Alcohol Outlet Density - Spatial Accessibility Method for CBP Data (County Business Patterns)
-
+# Library Load----
 # Packages
 library(dplyr)
 library(tidycensus)
@@ -9,6 +9,7 @@ library(sf)
 library(raster)
 library(ggplot2)
 
+# Data Import----
 # Set system environment
 # Sys.setenv("OneDrive" = "/Users/mstrahlman/The MITRE Corporation")
 
@@ -38,6 +39,7 @@ rm(zips)
 grocery_states <- read_xlsx(file.path(resource_folder, "BWL_Grocery_Laws.xlsx"),
                             skip = 1)
 
+# Data Cleaning----
 # Create column with indicator if state allows ANY type of alc sales
 grocery_states[,3:5] <- ifelse(grocery_states[,3:5] == "Y", TRUE, FALSE)
 grocery_states$any_alc_sales <- ifelse(rowSums(grocery_states[,3:5] , na.rm = T) > 0, TRUE, FALSE)
@@ -92,6 +94,7 @@ all <- all %>%
   dplyr::select(ESTAB, ZCTA, centroid) 
 all <- st_as_sf(all)
   
+# Calculate AOD Variables----
 # Create inverse distance column
 zctas$iDistance <- 0
 
@@ -176,7 +179,7 @@ for (i in 1:nrow(zctas)) {
   all$d[prox_log] <- NA
 }
 
-# Distributions of both variables
+# Distributions of both variables----
 ggplot(zctas, aes(x = log(iDistance))) +
   geom_density(color="darkblue", fill="lightblue") +
   labs(title = "Inverse Distances",
@@ -189,7 +192,7 @@ ggplot(zctas, aes(x = log(weightediD))) +
        y = "Density",
        x = "Log of Weighted Inverse Distances")
 
-# Write Out
+# Write Out----
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
   "Health and Social Equity - SJP - BHN Score Creation",
