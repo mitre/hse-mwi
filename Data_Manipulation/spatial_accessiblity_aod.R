@@ -175,3 +175,17 @@ for (i in 1:nrow(zctas)) {
   # Preallocate and reuse distance values
   all$d[prox_log] <- NA
 }
+
+
+# Distributions of both variables
+ggplot(zctas, aes(x = log(iDistance))) +
+  geom_density(color="darkblue", fill="lightblue") +
+  labs(title = "Inverse Distances",
+       y = "Density",
+       x = "Log of Inverse Distances")
+
+ggplot(zctas, aes(x = log(weightediD))) +
+  geom_density(color="darkgreen", fill="lightgreen") +
+  labs(title = "Weighted Inverse Distances",
+       y = "Density",
+       x = "Log of Weighted Inverse Distances")
