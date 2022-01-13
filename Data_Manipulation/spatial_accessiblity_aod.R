@@ -126,6 +126,11 @@ for (i in 1:nrow(zctas)) {
 }
 }
 
+# Impute Infs with maximum value
+zctas$iDistance[is.infinite(zctas$iDistance)] <- (zctas %>%
+                                                    subset(iDistance != Inf) %>%
+                                                    subset(iDistance == max(iDistance)))$iDistance
+
 # Calculate inverse distances with weighting scheme based on # of outlets
 zctas$weightediD <- 0
 all$d <- 0
