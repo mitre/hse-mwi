@@ -142,7 +142,8 @@ zctas <- zctas %>%
   mutate(iDistance = case_when(iDistance == Inf ~
                                (zctas %>%
                                   subset(iDistance != Inf) %>%
-                                  subset(iDistance == max(iDistance)))$iDistance)*ESTAB)
+                                  subset(iDistance == max(iDistance)))$iDistance*ESTAB,
+                               TRUE ~ iDistance))
 
 # Calculate inverse distances with weighting scheme based on # of outlets
 zctas$weightediD <- 0
