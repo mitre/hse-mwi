@@ -747,6 +747,7 @@ ui <- fluidPage(
         ),
         mainPanel(
           width = 9,
+          tags$head(tags$script(src = "msg_api.js")),
           column(
             width = 8,
             uiOutput("us_map_legend"),
