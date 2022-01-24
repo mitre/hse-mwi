@@ -93,7 +93,14 @@ all <- all %>%
   mutate(centroid = st_centroid(geometry)) %>%
   dplyr::select(ESTAB, ZCTA, centroid) 
 all <- st_as_sf(all)
-  
+
+# Merge ESTABs into zctas dataset
+zctas <- zctas %>%
+  left_join(as.data.frame(all), by = c("ZCTA5CE10" = "ZCTA")) %>%
+  dplyr::select(-c(centroid.y)) %>%
+  rename(centroid = centroid.x) %>%
+  mutate(ESTAB = ifelse(is.na(ESTAB), 0, ESTAB))
+
 # Calculate AOD Variables----
 # Create inverse distance column
 zctas$iDistance <- 0
@@ -134,6 +141,10 @@ for (i in 1:nrow(zctas)) {
 zctas$iDistance[is.infinite(zctas$iDistance)] <- (zctas %>%
                                                     subset(iDistance != Inf) %>%
                                                     subset(iDistance == max(iDistance)))$iDistance
+
+
+# Impute Infs with value accounting for number of outlets
+
 
 # Calculate inverse distances with weighting scheme based on # of outlets
 zctas$weightediD <- 0
