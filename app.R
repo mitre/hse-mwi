@@ -2152,6 +2152,7 @@ server <- function(input, output, session) {
       "</b></font>",
       "<br>"
     )
+    mwi_zcta <- ol$no_dir_perc_meas_df[com_sub$ZCTA, , drop = F]
     
     text <- ""
     for (dn in names(ol$avail_meas_list[[com_sub$idx]])){
