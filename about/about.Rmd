@@ -94,11 +94,11 @@ Selecting Black populations as a priority population guided the way we construct
 
 ## How to Use the MWI Tool
 
-The MWI tool is an interactive, web-based application that allows users to explore the MWI and its 28 measures in all ZIP codes* in the United States, upload community-specific data (effectively add or remove measures), and customize measure weights to reflect their perspectives.  
+The MWI tool is an interactive, web-based application that allows users to explore the MWI and its 28 measures in all ZIP Codes* in the United States, upload community-specific data (effectively add or remove measures), and customize measure weights to reflect their perspectives.  
 
 ### Interpreting the MWI and its Measures 
 
-The MWI and its individual measures are displayed as rankings that show how a given ZIP code compares to all other ZIP codes in the nation on a range between 0 and 100. For example, a Broadband Access measure ranking of 75 means that this ZIP code ranks higher than 75% of the ZIP codes in the nation for this measure (not that 75% of individuals in the ZIP code have broadband access).  
+The MWI and its individual measures are displayed as rankings that show how a given ZIP Code compares to all other ZIP Codes in the nation on a range between 0 and 100. For example, a Broadband Access measure ranking of 75 means that this ZIP Code ranks higher than 75% of the ZIP Codes in the nation for this measure (not that 75% of individuals in the ZIP Code have broadband access).  
 
 For both the MWI and individual measures, a higher ranking (closer to 100) indicates more assets to mental wellness, while a lower ranking (closer to 0) indicates more obstacles to mental wellness.  
 
@@ -132,15 +132,15 @@ Users should:
 ![](selectmeasure.png){width=400px}
 </center>
 
-Then, users can select a ZIP code within their selected state by either:
+Then, users can select a ZIP Code within their selected state by either:
 
-1. Entering the numeric ZIP code under “Exploration Options”,
+1. Entering the numeric ZIP Code under “Exploration Options”,
 
 <center>
 ![](enterzipcode.png){width=400px}
 </center>
 
-2. Or by clicking on a ZIP code on the interactive map.
+2. Or by clicking on a ZIP Code on the interactive map.
 
 <center>
 ![](clickonzipcode.png){width=400px}
@@ -148,7 +148,7 @@ Then, users can select a ZIP code within their selected state by either:
 
 <br>
 
-Users can also explore the MWI by hovering over ZIP codes on the map, or by hovering over points on the interactive distribution. 
+Users can also explore the MWI by hovering over ZIP Codes on the map, or by hovering over points on the interactive distribution. 
 
 <center>
 ![](distribution.png){height=400px}
@@ -156,7 +156,7 @@ Users can also explore the MWI by hovering over ZIP codes on the map, or by hove
 
 ### Explore ZIP Codes
 
-In addition to an interactive map, the Explore ZIP Codes page provides a community overview that shows the MWI and each individual measure for a specified ZIP code. This page is useful to see all measures for a ZIP code, or to focus on areas (which may cross state lines) surrounding a ZIP code.
+In addition to an interactive map, the Explore ZIP Codes page provides a community overview that shows the MWI and each individual measure for a specified ZIP Code. This page is useful to see all measures for a ZIP Code, or to focus on areas (which may cross state lines) surrounding a ZIP Code.
 
 <center>
 ![](explorezipcodes.png){width=400px}
@@ -176,13 +176,13 @@ Users should:
 ![](selectmeasure.png){width=400px}
 </center>
 
-3. Enter a numeric ZIP code under “Exploration Options”.
+3. Enter a numeric ZIP Code under “Exploration Options”.
 
 <center>
 ![](enterzipcode.png){width=400px}
 </center>
 
-Then, users can explore further by hovering their mouse over ZIP codes on the map.
+Then, users can explore further by hovering their mouse over ZIP Codes on the map.
 
 <center>
 ![](hoverzipcode.png){width=400px}
