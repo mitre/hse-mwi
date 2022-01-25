@@ -685,7 +685,7 @@ ui <- fluidPage(
                 "st_focus",
                 "Which state would you like to focus on?",
                 choices = c(unname(f_st), "All"),
-                selected = "Alabama"
+                selected = "Virginia"
               ),
               selectInput(
                 "us_map_fill",
@@ -747,6 +747,7 @@ ui <- fluidPage(
         ),
         mainPanel(
           width = 9,
+          tags$head(tags$script(src = "msg_api.js")),
           column(
             width = 8,
             uiOutput("us_map_legend"),
@@ -1050,9 +1051,9 @@ server <- function(input, output, session) {
   
   st_sub <- reactiveValues(
     "idx" = "pop",
-    "st" = "Alabama",
-    "geodat" = overall$geodat[["pop"]][overall$geodat[["pop"]]$STATE_NAME == "Alabama",],
-    "mwi" = overall$mwi[["pop"]][overall$mwi[["pop"]]$STATE_NAME == "Alabama",],
+    "st" = "Virginia",
+    "geodat" = overall$geodat[["pop"]][overall$geodat[["pop"]]$STATE_NAME == "Virginia",],
+    "mwi" = overall$mwi[["pop"]][overall$mwi[["pop"]]$STATE_NAME == "Virginia",],
     "us_map_fill" = "Mental_Wellness_Index",
     "is_all" = F
   )
@@ -1063,28 +1064,28 @@ server <- function(input, output, session) {
   
   com_sub <- reactiveValues(
     "idx" = "pop",
-    "ZCTA" = "35214", 
+    "ZCTA" = "23936", 
     "geodat" = overall$geodat[["pop"]][ # community -- within +/- .5
       st_coordinates(overall$geopts$pop)[,1] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] - 1 &
         st_coordinates(overall$geopts$pop)[,1] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] + 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] + 1 &
         st_coordinates(overall$geopts$pop)[,2] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] - 1 &
         st_coordinates(overall$geopts$pop)[,2] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] + 1 
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] + 1 
       ,],
     "mwi" = overall$mwi[["pop"]][# community -- within +/- .5
       overall$mwi[["pop"]]$ZCTA %in% 
         overall$geodat[["pop"]]$GEOID10[
           st_coordinates(overall$geopts$pop)[,1] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] - 1 &
             st_coordinates(overall$geopts$pop)[,1] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[1] + 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] + 1 &
             st_coordinates(overall$geopts$pop)[,2] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] - 1 &
             st_coordinates(overall$geopts$pop)[,2] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "35214",])[2] + 1 
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] + 1 
         ]
       ,],
     "com_map_fill" = "Mental_Wellness_Index"
@@ -1136,7 +1137,7 @@ server <- function(input, output, session) {
       "start_st",
       "Choose your state and click below to get started!",
       choices = c(unname(f_st), "All"),
-      selected = "Alabama",
+      selected = "Virginia",
       width = "400px"
     ),
     HTML("</center>"),
@@ -1337,7 +1338,7 @@ server <- function(input, output, session) {
       )
       
       # update selected defaults for community view
-      com_sub$ZCTA <- "35214"
+      com_sub$ZCTA <- "23936"
       com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
         st_coordinates(ol$geopts$pop)[,1] >=
           st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
@@ -2151,6 +2152,7 @@ server <- function(input, output, session) {
       "</b></font>",
       "<br>"
     )
+    mwi_zcta <- ol$no_dir_perc_meas_df[com_sub$ZCTA, , drop = F]
     
     text <- ""
     for (dn in names(ol$avail_meas_list[[com_sub$idx]])){
