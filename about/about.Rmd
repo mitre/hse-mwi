@@ -74,7 +74,7 @@ Structural racism influences all measures in the MWI. Structural racism harms so
 
 ### How is the MWI Calculated?
 
-The MWI is calculated for each ZIP Code* in the country. If the MWI is missing for a ZIP Code, this indicates either missing data or no population in this area. For more details, please see the project <a href = 'https://github.com/mitre/hse-mwi' target = "_blank">code</a>.  The MWI for a ZIP Code is calculated by multiplying the percentile ranked value of each of the 28 measures in that ZIP Code by the weight assigned to each measure, then summing these resulting values as shown in the equation below where m designates a measure. See the Weighting Methods document for more information about measure weights, including how placeholder weights have been assigned. 
+The MWI is calculated for each ZIP Code* in the country. If the MWI is missing for a ZIP Code, this indicates either missing data or no population in this area. For more details, please see the project <a href = 'https://github.com/mitre/hse-mwi' target = "_blank">code</a>.  The MWI for a ZIP Code is calculated by multiplying the percentile ranked value of each of the 28 measures in that ZIP Code by the weight assigned to each measure, then summing these resulting values as shown in the equation below where m designates a measure. See the <a href = 'https://raw.githubusercontent.com/mitre/hse-mwi/main/Documentation/Methods/Weighting_Methods.pdf' target = "_blank">Weighting Methods</a> document for more information about measure weights, including how placeholder weights have been assigned. 
 
 <!--$$MWI = \sum_{m = 1}^{28} percentile\space ranked\space value_m * weight_m$$-->
 <!--replace since it looks odd in browsers-->
