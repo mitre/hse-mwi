@@ -309,31 +309,31 @@ The MWI should not be used:
 
 __Strengths__ of the MWI include the following:
 
-- <u>There is no existing tool that summarizes the factors influencing mental wellness of communities for the entire nation at a geographically granular level</u> (such as the ZIP code level). The MWI fills this gap. 
+- <u>The MWI fills a gap</u> - There is no existing tool that summarizes the factors influencing mental wellness of communities for the entire nation at a geographically granular level (such as the ZIP Code level). The MWI fills this gap. 
 
-- <u>A focus on equity</u> by embedding equity focused language into the MWI framework through the dynamic factors of structural racism and community and cultural assets. In creating a tool meant to support decision-makers and equitable allocation of resources to improve mental wellness outcomes, we acknowledge that it is essential to address the role of structural racism and disinvestment in people and communities, which have led to the accumulation of obstacles that hinder mental wellness. Nevertheless, our focus on including community and cultural assets within the framework seeks to make explicit the strengths, identities, and aspirations that individuals and communities hold about themselves that promote mental wellness.
+- <u>A focus on equity</u> by embedding equity focused language into the MWI framework through the dynamic factors of structural racism and community and cultural assets. In creating a tool meant to support decision-makers and equitable allocation of resources to improve mental wellness outcomes, we acknowledge that it is essential to address the role of structural racism and disinvestment in people and communities, which have led to the accumulation of obstacles that hinder mental wellness. Nevertheless, our focus on including community & cultural assets within the framework seeks to make explicit the strengths, identities, and aspirations that individuals and communities hold about themselves that promote mental wellness.
 
 - <u>Adjustable and modifiable for various use cases</u>. The MWI allows users to modify the index by either uploading their own local or use-case specific data, and by adjusting the placeholder weights based on their preferences, use case, or priorities. The measures and overall MWI calculation can be viewed for both Black populations and the overall population. 
 
-- <u>Objective, data-based dashboard</u> of the factors that influence mental well-being allows for a “like to like” comparison of areas and can help inform users (in partnership with impacted communities) about how best to distribute resources for the highest impact, and to advocate for their community. The MWI can provide valuable information to communities, public health practitioners, government agencies, and funders seeking to improve or understand community mental wellness. 
+- <u>Objective, data-based dashboard</u> of the factors that influence mental well-being allows for a “like to like” comparison of areas and can help inform users (in partnership with impacted communities) about how best to distribute resources for the highest impact, and to advocate for their communities. The MWI can provide valuable information to communities, public health practitioners, government agencies, and funders seeking to improve or understand community mental wellness. 
 
 __Limitations__ of the MWI: 
 
-<u>Limited by challenges in data availability</u>. We faced limitations based on the types of data that are available and collected in national datasets such as:
+<u>Limited by challenges in data availability</u>. Limitations that we faced based on the types of data that are available and collected in national datasets include the following:
 
 - Lack of access to geographically granular data on certain topics
 
 - Lack of data stratified by demographics such as race, ethnicity, sexual orientation, English proficiency/language, etc. 
 
-- Most data is deficit-focused, and deficit-focused data may not represent community-based perspectives and lacks a focus on assets and strengths.
+- Most data are deficit-focused, and deficit-focused data may not represent community-based perspectives and lack a focus on assets and strengths.
 
  - Impact of structural racism inherent to the research enterprise, which impacts areas such as survey development, sampling, data collection and analysis, etc.
  
 - Some populations, such as individuals experiencing homelessness, may not be represented in various national datasets
 
-Because data were aggregated from multiple data sources, we note that all data is not from the same year or range of years. Additionally, some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race, so calculations based on these measures may have lower validity for Black populations. Race stratified data were available for 14 measures, unavailable for 8 measures, and not applicable for 6 measures.
+Because data were aggregated from multiple data sources, we note that all data are not from the same year or range of years. Additionally, some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race, so calculations based on these measures may have lower validity for Black populations. Race stratified data were available for 14 measures, unavailable for 8 measures, and not applicable for 6 measures.
 
-Nationally representative, geographically granular data were unavailable for a wide range of topics that impact mental wellness, such as social connectedness^[Office of Disease Prevention and Health Promotion (n.d.). Social Cohesion. Healthy People 2030. <a href = "https://health.gov/healthypeople/objectives-and-data/social-determinants-health/literature-summaries/social-cohesion" target = "_blank">(link)</a>],  sense of belonging, access to safe, reliable, and efficient transportation, community allostatic load^[Chandra, A., Cahill, M., Yeung, D., and Ross,R. (2018) Toward an Initial Conceptual Framework to Assess Community Allostatic Load: Early Themes from Literature Review and Community Analyses on the Role of Cumulative Community Stress. RAND Corporation. Available at: <a href = "https://www.rand.org/pubs/research_reports/RR2559.html" target = "_blank">(link)</a>],  and access to culturally and linguistically appropriate care, among others. If data on these, or other topics, are available at the local level, using the MWI tool data upload feature can enhance the results of the MWI. 
+Nationally representative, geographically granular data were unavailable for a wide range of topics that impact mental wellness, such as social connectedness^[Office of Disease Prevention and Health Promotion (n.d.). Social Cohesion. Healthy People 2030. <a href = "https://health.gov/healthypeople/objectives-and-data/social-determinants-health/literature-summaries/social-cohesion" target = "_blank">(link)</a>];  sense of belonging; access to safe, reliable, and efficient transportation; community allostatic load^[Chandra, A., Cahill, M., Yeung, D., and Ross,R. (2018) Toward an Initial Conceptual Framework to Assess Community Allostatic Load: Early Themes from Literature Review and Community Analyses on the Role of Cumulative Community Stress. RAND Corporation. Available at: <a href = "https://www.rand.org/pubs/research_reports/RR2559.html" target = "_blank">(link)</a>];  and access to culturally and linguistically appropriate care, among others. If data on these, or other topics, are available at the local level, using the MWI tool data upload feature can enhance the results of the MWI. 
 
 <u>We had a limited ability to consult directly with communities in the creation of the MWI</u>. Input from communities that are directly impacted is vital to ensure a tool will be most useful for them. While we consulted with and had input from selected community leaders and program providers in Black communities, we did not have direct input from community residents. In our next steps, we hope to engage directly with communities to understand their priorities and preferences, incorporate participatory approaches, and work with communities to understand how the MWI can best address their needs. 
 
@@ -341,14 +341,14 @@ Nationally representative, geographically granular data were unavailable for a w
 
 - Prioritizing race-stratified measures. 
 - Building adaptive features into the MWI tool that allow users to upload community-specific data (effectively adding and removing measures), and weight measures according to their values and preferences.
-- Incorporating creative measure constructs by including measures of assets that are not “traditionally” included in health indices (ex: third places, access to financial services, voter participation, etc.), and application of novel methodologies to represent key constructs (ex: using data about treatment facility characteristics in addition to location data). 
+- Incorporating creative measure constructs by including measures of assets that are not “traditionally” included in health indices (e.g., third places, access to financial services, voter participation, etc.), and application of novel methodologies to represent key constructs (e.g., using data about treatment facility characteristics in addition to location data). 
 - Committing to document and share recommendations related to challenges with others to positively influence change.
 
 Please see <a href = 'https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures' target = "_blank">measure documentation</a> for more information on the strengths and limitations of specific measures selected. 
 
 ## Validity Testing
 
-Analytic and face validity verification is in progress to evaluate the robustness, validity, and accuracy of the MWI. As part of the analytic validity testing, the team will examine the correlation of the MWI with other major health indices, such as the Social Vulnerability Index (SVI), County Health Rankings (CHR), HRSA’s Service Area Status (SAS), and others.  To test its face validity, listening sessions will be held with community key informants and others to solicit feedback on ways to improve the MWI and the MWI tool to increase its validity and usefulness.  The MWI team will update this page with results as they become available.
+Analytic and face validity verification is in progress to evaluate the robustness, validity, and accuracy of the MWI. As part of the analytic validity testing, the team will examine the correlation of the MWI with other major health indices, such as the Social Vulnerability Index, County Health Rankings, the Health Resources and Service Administration's Service Area Status, and others.  To test its face validity, listening sessions will be held with community key informants and others to solicit feedback on ways to improve the MWI and the MWI tool to increase its validity and usefulness.  The MWI team will update this page with results as they become available.
 
 ## Downloadable Data and Information
 
