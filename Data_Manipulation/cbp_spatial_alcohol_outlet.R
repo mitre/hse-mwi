@@ -101,6 +101,16 @@ zctas <- zctas %>%
   rename(centroid = centroid.x) %>%
   mutate(ESTAB = ifelse(is.na(ESTAB), 0, ESTAB))
 
+# Get population denominators from ACS 
+pop <- get_acs(geography = "zcta",
+               output = "wide",
+               year = 2019,
+               survey = "acs5",
+               variables = "B01001_001",
+               geometry = F
+) %>%
+  dplyr::select(GEOID, B01001_001E)
+
 # Calculate AOD Variables----
 # Create inverse distance column
 zctas$iDistance <- 0
