@@ -198,13 +198,13 @@ Additionally, the Create Your Own MWI page can be used to upload custom data, or
 
 To select measures to include in the MWI, we leveraged data and expertise from existing MITRE projects and work; researched factors associated with mental wellness based on national and community studies; and engaged with external subject matter experts, funding organizations, and potential users. 
 
-**Measure selection requirements**: selected measures were limited to topics for which nationally available, public data are available at a geographically granular level (ideally the ZIP code level or lower).
+**Measure selection requirements**: selected measures were limited to topics for which nationally available, public data are available at a geographically granular level (ideally the ZIP Code level or lower).
 
-Though race stratified data are not available for all measures in the MWI, preference was given in the selection process to measures with data that can be stratified by race for Black populations. For data that is stratified by Black populations – the measure is calculated for both Black populations and the overall population (see <a href = 'https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures' target = "_blank">measure documentation</a> for more information on these calculations). For data that cannot be stratified, the overall population values are used for both calculations. Some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race. 
+Though race stratified data are not available for all measures in the MWI, preference was given in the selection process to measures with data that can be stratified by race for Black populations. For data that is stratified by Black populations, the measure is calculated for both Black populations and the overall population (see <a href = 'https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures' target = "_blank">measure documentation</a> for more information on these calculations). For data that cannot be stratified, the overall population values are used for both calculations. Some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race. 
 
 **Measure evaluation and selection criteria** that were considered during measure selection are shown below: 
 
-* __Equity__: Does the measure capture inequities between populations, value group differences, and build on best science and community experience without introducing bias? Is the measure in line with a “do no harm” approach?
+* __Equity__: Does the measure capture inequities between populations, value group differences, and build on best science and community experience without introducing bias? Is the measure in line with a “do-no-harm” approach?
 
 * __Importance__: IIs the measure an important indicator of mental wellness, supported by a consensus of evidence in literature? 
 
@@ -216,7 +216,7 @@ Though race stratified data are not available for all measures in the MWI, prefe
 
 ### MWI Measures
 
-The table below summarizes the measures that are included in the MWI, their domain (and sub-domain), whether race stratified data is available, and the data sources. Please see the <a href = 'https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures' target = "_blank">measure documentation</a> for more information about each measure. For stratification, “N/A” signifies that race stratification was not applicable for the measure, while “No” signifies that race stratified data was not available for the measures. 
+The table below summarizes the measures that are included in the MWI, their domain (and sub-domain), whether race-stratified data are available, and the data sources. Please see the <a href = 'https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures' target = "_blank">measure documentation</a> for more information about each measure. For stratification, “N/A” signifies that race stratification was not applicable for the measure, while “No” signifies that race stratified data was not available for the measures. 
 
 | **Measure Name** | **Domain** | **Sub-Domain** | **Stratification** | **Data Source** |
 |:---:|:---:|:---:|:---:|:---:|
@@ -252,11 +252,11 @@ _Notes_:
 
 - ACS – American Community Survey
 
-- BRFSS – Behavioral Risk Factor Surveillance System (BRFSS)
-
-- CDC – Centers for Disease Control 
+- BRFSS – Behavioral Risk Factor Surveillance System 
 
 - CBP – County Business Patterns
+
+- CDC – Centers for Disease Control 
 
 - CHAS – Consolidated Planning/Comprehensive Housing Affordability Strategy
 
@@ -276,19 +276,19 @@ The table below summarizes the years and geographic levels for the data sources 
 
 | **Data Source Name** | **Year(s)** | **Source Geographic Levels** |
 |:---:|:---:|:---:|
-|American Community Survey (ACS)|2015-2019|ZIP code tabulation area (ZCTA)|
-|Centers for Disease Control and Prevention (CDC) Behavioral Risk Factor Surveillance System (BRFSS), accessed via the PLACES Project Data Portal|2018|ZIP code tabulation area (ZCTA)|
-|Centers for Disease Control and Prevention (CDC) U.S. Small-area Life Expectancy Estimates Project (USALEEP)|2010-2015|Census tract
-|Centers for Disease Control and Prevention (CDC) National Environmental Public Health (EPH), Tracking Network Query Tool|2015|Census tract|
+|American Community Survey (ACS)|2015-2019|ZIP Code Tabulation Area (ZCTA)|
+|Centers for Disease Control and Prevention (CDC) Behavioral Risk Factor Surveillance System (BRFSS), accessed via the PLACES Project Data Portal|2018|ZIP Code Tabulation Area (ZCTA)|
+|Centers for Disease Control and Prevention (CDC) U.S. Small-area Life Expectancy Estimates Project (USALEEP)|2010-2015|Census Tract
+|Centers for Disease Control and Prevention (CDC) National Environmental Public Health (EPH), Tracking Network Query Tool|2015|Census Tract|
 |Centers for Disease Control and Prevention (CDC) Wide-ranging Online Data for Epidemiologic Research (WONDER)|2010-2019|County|
-|County Business Patterns (CBP)|2019|ZIP code, County|
+|County Business Patterns (CBP)|2019|ZIP Code, County|
 |County Health Rankings|2014, 2016, 2017-2019|County|
-|Home Mortgage Disclosure Act (HMDA) Dataset, Consumer Financial Protection Bureau|2020|ZIP code tabulation area (ZCTA)|
+|Home Mortgage Disclosure Act (HMDA) Dataset, Consumer Financial Protection Bureau|2020|ZIP Code Tabulation Area (ZCTA)|
 |Mapping Police Violence|2015-2019|ZIP code|
 |New America, Mapping Financial Opportunity (MFO) Project|2019, 2021|County|
-|Interactive National Survey on Drug Use and Health (NSDUH) Substate Estimates|2016-2018|Substate region|
+|Interactive National Survey on Drug Use and Health (NSDUH) Substate Estimates|2016-2018|Substate Region|
 |Substance Abuse and Mental Health Services Administration (SAMHSA), Behavioral Health Treatment Services Locator|2021 (as of May 18)|	Latitude/Longitude|
-|United States Department of Housing and Urban Development, Consolidated Planning/Comprehensive Housing Affordability Strategy (CHAS)	|2013-2017|Census tract
+|United States Department of Housing and Urban Development, Consolidated Planning/Comprehensive Housing Affordability Strategy (CHAS)	|2013-2017|Census Tract
 
 ## Recommended Uses
 
@@ -300,9 +300,9 @@ Recommended uses for the MWI include:
 
 The MWI should not be used:
 
-*	as the only tool used to allocate resources,
-*	to make decisions on behalf on communities without their input, or
-*	for program evaluation or tracking progress over time (because the MWI provides point in time data and does not contain time series data to show progress over time).
+*	As the only tool used to allocate resources,
+*	To make decisions on behalf on communities without their input, or
+*	For program evaluation or tracking progress over time (because the MWI provides point in time data and does not contain time series data to show progress over time).
 
 
 ## Strengths, Limitations, and Challenges
