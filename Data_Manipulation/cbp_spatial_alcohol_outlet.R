@@ -94,6 +94,11 @@ all <- all %>%
   dplyr::select(ESTAB, ZCTA, centroid) 
 all <- st_as_sf(all)
 
+# Combine ZCTAs with multiple zip codes
+all <- all %>% 
+  group_by(ZCTA) %>% 
+  summarize(sum(ESTAB)) 
+
 # Merge ESTABs into zctas dataset
 zctas <- zctas %>%
   left_join(as.data.frame(all), by = c("ZCTA5CE10" = "ZCTA")) %>%
