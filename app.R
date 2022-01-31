@@ -29,6 +29,8 @@ library(shinyBS)
 
 options(shiny.maxRequestSize=300*1024^2)
 
+source("app_config.R")
+
 # styling ----
 
 # Applies css to rShiny app
@@ -649,14 +651,22 @@ ui <- fluidPage(
   ),
   
   navbarPage(
-    title=div(
-      a(
-        href="https://www.mitre.org/",
-        img(src="media/MITRE_logo.png", height="30"),
-        target="blank",
-      ),
-      HTML(paste0("Mental Wellness Index™ Tool")),
-    ),
+    title=
+      if (show_mitre){
+        div(
+          a(
+            href="https://www.mitre.org/",
+            img(src="media/MITRE_logo.png", height="30"),
+            target="blank",
+          ),
+          HTML(paste0("Mental Wellness Index™ Tool"))
+        )
+      } else {
+        div(
+          HTML(paste0("Mental Wellness Index™ Tool")),
+          "style" = "padding-top:5px"
+        )
+      },
     theme="stylesheets/app.css",
     
     # explore states ----
@@ -1026,12 +1036,15 @@ ui <- fluidPage(
   ),
   
   # Copyright footer
+  if (show_mitre){
   HTML(paste0(
     "<span class = 'copyright-footer'>&copy; ",
     format(Sys.Date(), "%Y"),
-    ", The MITRE Corporation</span>"
+    
+    ", The MITRE Corporation",
+    "</span>"
   ))
-  
+  }
 )
 
 # SERVER ----
