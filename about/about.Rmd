@@ -23,10 +23,7 @@ The Mental Wellness Index™ (MWI) quantifies factors that influence community-l
 
 ### What Do We Mean by Mental Wellness?
 
-Mental wellness:
-
-* Is more than having physiological needs met, and means everyone in a community has opportunities to achieve, experience joy, have their value recognized and can actualize their self-agency and power in their environments 
-* Means thriving regardless of a mental health or substance use challenge and giving everyone the opportunity to flourish^[National Council for Mental Wellbeing (n.d.) We Are Mental Wellbeing. The National Council for Mental Wellbeing. <a href = 'https://www.thenationalcouncil.org/about/we-are-mental-wellbeing/' target = "_blank">(link)</a>]
+Mental wellness means means everyone in a community can thrive and have the opportunity to flourish, regardless of a mental health or substance use challenge.^[National Council for Mental Wellbeing (n.d.) We Are Mental Wellbeing. The National Council for Mental Wellbeing. <a href = 'https://www.thenationalcouncil.org/about/we-are-mental-wellbeing/' target = "_blank">(link)</a>]
 
 In the MWI, mental wellness is a composite of social determinants of health, healthcare access, and health status.  
 
