@@ -97,7 +97,8 @@ all <- st_as_sf(all)
 # Combine ZCTAs with multiple zip codes
 all <- all %>% 
   group_by(ZCTA) %>% 
-  summarize(sum(ESTAB)) 
+  summarize(sum(ESTAB)) %>%
+  rename(outlets = `sum(ESTAB)`)
 
 # Merge ESTABs into zctas dataset
 zctas <- zctas %>%
