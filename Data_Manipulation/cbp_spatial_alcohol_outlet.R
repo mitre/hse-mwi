@@ -8,6 +8,8 @@ library(readxl)
 library(sf)
 library(raster)
 library(ggplot2)
+library(sp)
+library(rgeos)
 
 # Data Import----
 # Set system environment
