@@ -106,8 +106,7 @@ all <- all %>%
 zctas <- zctas %>%
   left_join(as.data.frame(all), by = c("ZCTA5CE10" = "ZCTA")) %>%
   dplyr::select(-c(centroid.y)) %>%
-  rename(centroid = centroid.x,
-         zcta = ZCTA5CE10) %>%
+  rename(centroid = centroid.x) %>%
   mutate(outlets = ifelse(is.na(outlets), 0, outlets))
 
 # Calculate distances to the x (# of outlets) number of nearest zctas
