@@ -107,8 +107,11 @@ zctas <- zctas %>%
   left_join(as.data.frame(all), by = c("ZCTA5CE10" = "ZCTA")) %>%
   dplyr::select(-c(centroid.y)) %>%
   rename(centroid = centroid.x,
-         zcta = ZCTA5EC10) %>%
+         zcta = ZCTA5CE10) %>%
   mutate(outlets = ifelse(is.na(outlets), 0, outlets))
+
+# Calculate distances to the x (# of outlets) number of nearest zctas
+
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
