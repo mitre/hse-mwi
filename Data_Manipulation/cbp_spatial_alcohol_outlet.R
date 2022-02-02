@@ -104,7 +104,8 @@ all <- all %>%
 zctas <- zctas %>%
   left_join(as.data.frame(all), by = c("ZCTA5CE10" = "ZCTA")) %>%
   dplyr::select(-c(centroid.y)) %>%
-  rename(centroid = centroid.x) %>%
+  rename(centroid = centroid.x,
+         zcta = ZCTA5EC10) %>%
   mutate(outlets = ifelse(is.na(outlets), 0, outlets))
 
 # Get population denominators from ACS 
