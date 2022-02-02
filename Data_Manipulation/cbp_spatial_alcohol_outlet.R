@@ -109,6 +109,9 @@ zctas <- zctas %>%
   rename(centroid = centroid.x) %>%
   mutate(outlets = ifelse(is.na(outlets), 0, outlets))
 
+# Convert sf to sp
+zctas$geometry <- as_Spatial(zctas$geometry)
+
 # Calculate distances to the x (# of outlets) number of nearest zctas
 
 
