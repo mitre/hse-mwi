@@ -115,6 +115,11 @@ slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
           n = 4,
           order_by = eval(as.symbol(paste0("V",1))))[-1,1]
 
+# Temporarily Replace 0 outlets for 1 outlet
+zctas$outlets <- as.numeric(plyr::revalue(as.character(zctas$outlets),
+                                          c("0" = "1")))
+
+
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
                output = "wide",
