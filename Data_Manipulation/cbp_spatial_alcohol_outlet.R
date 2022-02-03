@@ -122,6 +122,10 @@ zctas$outlets <- as.numeric(plyr::revalue(as.character(zctas$outlets),
 # Add necessary amount of rows based on number of outlets
 zctas <- zctas %>%
   uncount(outlets, .remove = F)
+
+# Replace 1 outlets with 0 outlets
+zctas$outlets <- as.numeric(plyr::revalue(as.character(zctas$outlets),
+                                          c("1" = "0")))
   
 
 # Get population denominators from ACS 
