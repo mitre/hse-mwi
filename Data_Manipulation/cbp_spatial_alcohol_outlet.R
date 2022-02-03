@@ -3,6 +3,7 @@
 # Packages
 library(dplyr)
 library(tidycensus)
+library(tidyr)
 library(censusapi)
 library(readxl)
 library(sf)
