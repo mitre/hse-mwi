@@ -119,6 +119,10 @@ slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
 zctas$outlets <- as.numeric(plyr::revalue(as.character(zctas$outlets),
                                           c("0" = "1")))
 
+# Add necessary amount of rows based on number of outlets
+zctas <- zctas %>%
+  uncount(outlets, .remove = F)
+  
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
