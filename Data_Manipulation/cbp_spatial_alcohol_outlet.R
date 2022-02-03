@@ -8,8 +8,6 @@ library(readxl)
 library(sf)
 library(raster)
 library(ggplot2)
-library(sp)
-library(rgeos)
 library(geosphere)
 
 # Data Import----
@@ -109,9 +107,6 @@ zctas <- zctas %>%
   dplyr::select(-c(centroid.y)) %>%
   rename(centroid = centroid.x) %>%
   mutate(outlets = ifelse(is.na(outlets), 0, outlets))
-
-# Convert sf to sp
-zctas$geometry <- as_Spatial(zctas$geometry)
 
 # Calculate distances to the x (# of outlets) number of nearest zctas
 
