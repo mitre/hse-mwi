@@ -110,11 +110,6 @@ zctas <- zctas %>%
   mutate(outlets = ifelse(is.na(outlets), 0, outlets))
 
 # Calculate distances to the x (# of outlets) number of nearest zctas
-# Return x amount of closest distances
-slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
-          n = 4,
-          order_by = eval(as.symbol(paste0("V",1))))[-1,1]
-
 # Temporarily Replace 0 outlets for 1 outlet
 zctas$outlets <- as.numeric(plyr::revalue(as.character(zctas$outlets),
                                           c("0" = "1")))
@@ -127,6 +122,13 @@ zctas <- zctas %>%
 zctas$outlets <- as.numeric(plyr::revalue(as.character(zctas$outlets),
                                           c("1" = "0")))
   
+# Return x amount of closest distances
+# Create Distance Variable
+zctas$d <- 0
+slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
+          n = 4,
+          order_by = eval(as.symbol(paste0("V",1))))[-1,1]
+
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
