@@ -115,20 +115,16 @@ zctas$outlets <- as.numeric(plyr::revalue(as.character(zctas$outlets),
                                           c("0" = "1")))
 
 # Add necessary amount of rows based on number of outlets
-zctas <- zctas %>%
+zctas_exp <- zctas %>%
   uncount(outlets, .remove = F)
 
 # Replace 1 outlets with 0 outlets
-zctas$outlets <- as.numeric(plyr::revalue(as.character(zctas$outlets),
+zctas_exp$outlets <- as.numeric(plyr::revalue(as.character(zctas_exp$outlets),
                                           c("1" = "0")))
   
 # Return x amount of closest distances
 # Create Distance Variable
 zctas$d <- 0
-slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
-          n = 4,
-          order_by = eval(as.symbol(paste0("V",1))))[-1,1]
-
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
