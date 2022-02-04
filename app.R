@@ -651,6 +651,7 @@ ui <- fluidPage(
   ),
   
   navbarPage(
+    collapsible = T,
     title=
       if (show_mitre){
         div(
@@ -758,6 +759,7 @@ ui <- fluidPage(
         mainPanel(
           width = 9,
           tags$head(tags$script(src = "msg_api.js")),
+          tags$head(tags$script(src = "web_content.js")),
           column(
             width = 8,
             uiOutput("us_map_legend"),
