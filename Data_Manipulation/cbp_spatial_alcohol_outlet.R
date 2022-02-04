@@ -124,7 +124,22 @@ zctas_exp$outlets <- as.numeric(plyr::revalue(as.character(zctas_exp$outlets),
   
 # Return x amount of closest distances
 # Create Distance Variable
-zctas$d <- 0
+distances <- data.frame(matrix(NA,
+                               nrow = 0,
+                               ncol = 1))
+for (i in 1:5) {
+  if (zctas$outlets[i] == 0) {
+    distances <- rbind(distances,
+                       data.frame(X0 = slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
+                                 n = zctas$outlet[i] + 1,
+                                 order_by = eval(as.symbol(paste0("V",i))))[1,i]))
+  } else {
+    distances <- rbind(distances,
+                       data.frame(X0 = slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
+                                             n = zctas$outlet[i] + 1,
+                                             order_by = eval(as.symbol(paste0("V",i))))[-1,i]))
+  }
+}
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
