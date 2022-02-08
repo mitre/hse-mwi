@@ -10,6 +10,7 @@ library(sf)
 library(raster)
 library(ggplot2)
 library(geosphere)
+library(od)
 
 # Data Import----
 # Set system environment
@@ -127,15 +128,22 @@ zctas_exp$outlets <- as.numeric(plyr::revalue(as.character(zctas_exp$outlets),
 distances <- data.frame(matrix(NA,
                                nrow = 0,
                                ncol = 1))
-for (i in 1:5) {
+
+# Only search zctas within +/-10 lat/long to save time and computational memory
+prox_log <- sfc_point_to_matrix(zctas$centroid)[,1] < zctas$centroid[[1]][i] + 10 &
+  sfc_point_to_matrix(zctas$centroid)[,1] > zctas$centroid[[1]][i] - 10 &
+  sfc_point_to_matrix(zctas$centroid)[,2] < zctas$centroid[[2]][i] + 10 &
+  sfc_point_to_matrix(zctas$centroid)[,2] > zctas$centroid[[2]][i] - 10
+
+for (i in 1:10) {
   if (zctas$outlets[i] == 0) {
     distances <- rbind(distances,
-                       data.frame(X0 = slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
+                       data.frame(X0 = slice_min(as.data.frame(distm(as_Spatial(zctas$centroid))),
                                  n = zctas$outlet[i] + 1,
                                  order_by = eval(as.symbol(paste0("V",i))))[1,i]))
   } else {
     distances <- rbind(distances,
-                       data.frame(X0 = slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[1:5]))),
+                       data.frame(X0 = slice_min(as.data.frame(distm(as_Spatial(zctas$centroid))),
                                              n = zctas$outlet[i] + 1,
                                              order_by = eval(as.symbol(paste0("V",i))))[-1,i]))
   }
