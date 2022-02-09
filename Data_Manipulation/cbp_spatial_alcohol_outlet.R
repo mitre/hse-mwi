@@ -131,19 +131,19 @@ distances <- data.frame(matrix(NA,
 
 for (i in 1:nrow(zctas)) {
   # Only search zctas within +/-10 lat/long to save time and computational memory
-  prox_log <- sfc_point_to_matrix(zctas$centroid)[,2] < zctas$centroid[[i]][2] + 1 &
-    sfc_point_to_matrix(zctas$centroid)[,2] > zctas$centroid[[i]][2] - 1 &
-    sfc_point_to_matrix(zctas$centroid)[,1] < zctas$centroid[[i]][1] + 1 &
-    sfc_point_to_matrix(zctas$centroid)[,1] > zctas$centroid[[i]][1] - 1
+  prox_log <- sfc_point_to_matrix(zctas$centroid)[,2] < zctas$centroid[[i]][2] + 10 &
+    sfc_point_to_matrix(zctas$centroid)[,2] > zctas$centroid[[i]][2] - 10 &
+    sfc_point_to_matrix(zctas$centroid)[,1] < zctas$centroid[[i]][1] + 10 &
+    sfc_point_to_matrix(zctas$centroid)[,1] > zctas$centroid[[i]][1] - 10
   
   if (zctas$outlets[i] == 0) {
     distances <- rbind(distances, 0)
     
   } else {
     distances <- rbind(distances,
-                       data.frame(X0 = slice_min(as.data.frame(distm(as_Spatial(zctas$centroid[prox_log]))),
-                                             n = zctas$outlet[i] + 1,
-                                             order_by = eval(as.symbol(paste0("V",sum(prox_log)))))[-1,i]))
+                       data.frame(X0 = sort(pointDistance(as_Spatial(zctas$centroid[i]),
+                                          as_Spatial(zctas$centroid[prox_log]),
+                                          lonlat = T))[2:(zctas$outlets[i] + 1)]))
   }
 }
 
