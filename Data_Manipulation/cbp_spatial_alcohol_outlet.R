@@ -147,6 +147,10 @@ for (i in 1:nrow(zctas)) {
   }
 }
 
+# Slot in nearest n (# of outlets) distances to each zcta
+zctas_exp <- cbind(zctas_exp, distances) %>%
+  rename(aod = X0)
+
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
                output = "wide",
