@@ -160,7 +160,8 @@ aod_values <- zctas_exp %>%
 
 # Merge aod values into zcta dataset
 zctas <- as.data.frame(zctas) %>%
-  left_join(as.data.frame(aod_values), by = "ZCTA5CE10")
+  left_join(as.data.frame(aod_values), by = "ZCTA5CE10") %>%
+  recode(aod, `Inf` = 0) # impute Infs with 0s
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
