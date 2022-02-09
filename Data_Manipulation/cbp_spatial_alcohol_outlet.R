@@ -173,6 +173,12 @@ pop <- get_acs(geography = "zcta",
 ) %>%
   dplyr::select(GEOID, B01001_001E)
 
+# Merge poplation values into zctas dataset
+zctas <- left_join(zctas,
+                   pop,
+                   by = c("ZCTA5CE10" = "GEOID")) %>%
+  rename(pop = "B01001_001E")
+
 # Calculate AOD Variables----
 # Create inverse distance column
 zctas$iDistance <- 0
