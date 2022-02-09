@@ -159,8 +159,8 @@ aod_values <- zctas_exp %>%
   summarzie(aod = sum(aod))
 
 # Merge aod values into zcta dataset
-zctas <- zctas %>%
-  st_join(aod_values)
+zctas <- as.data.frame(zctas) %>%
+  left_join(as.data.frame(aod_values), by = "ZCTA5CE10")
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
