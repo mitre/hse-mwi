@@ -160,8 +160,10 @@ aod_values <- zctas_exp %>%
 
 # Merge aod values into zcta dataset
 zctas <- as.data.frame(zctas) %>%
-  left_join(as.data.frame(aod_values), by = "ZCTA5CE10") %>%
-  recode(aod, `Inf` = 0) # impute Infs with 0s
+  left_join(as.data.frame(aod_values), by = "ZCTA5CE10")
+  
+# Impute Infs with 0s
+zctas$aod <- recode(zctas$aod, `Inf` = 0) 
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
@@ -179,6 +181,11 @@ zctas <- left_join(zctas,
                    by = c("ZCTA5CE10" = "GEOID")) %>%
   rename(pop = "B01001_001E") %>%
   mutate(aod = aod * pop) # Account for population
+
+# Impute NA values with 0
+# This is due to no population value being reported and 0 outlets
+zctas[is.na(zctas)] <- 0
+
 
 # Calculate AOD Variables----
 # Create inverse distance column
