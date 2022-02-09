@@ -153,6 +153,11 @@ zctas_exp <- cbind(zctas_exp, distances) %>%
   mutate(aod = 1/aod) %>%
   mutate(aod = aod * outlets) # multiply value by # of outlets
 
+# Sum values per ZCTA
+aod_values <- zctas_exp %>%
+  group_by(ZCTA5CE10) %>%
+  summarzie(aod = sum(aod))
+
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
                output = "wide",
