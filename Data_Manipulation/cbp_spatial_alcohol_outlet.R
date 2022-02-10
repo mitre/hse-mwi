@@ -149,10 +149,10 @@ for (i in 1:nrow(zctas)) {
 }
 
 # Return Associated Number of Outlets to Each Distance
+distances <- cbind(distances, out = 0) # add outlets column
 for (i in nrow(zctas)) {
   if (zctas$outlets[i] == 0) {
-    distances <- cbind(distances, X1 = zctas$outlets[i])
-    
+    distances[i,2] <- zctas$outlets[i]
   } else {
     
   }
