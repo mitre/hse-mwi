@@ -122,7 +122,8 @@ zctas_exp <- zctas %>%
 # Replace 1 outlets with 0 outlets
 zctas_exp$outlets <- as.numeric(plyr::revalue(as.character(zctas_exp$outlets),
                                           c("1" = "0")))
-  
+
+# Calculate Spatial Alcohol Outlet Density----
 # Return x amount of closest distances
 # Create Distance Variable
 distances <- data.frame(matrix(NA,
@@ -186,109 +187,15 @@ zctas <- left_join(zctas,
 # This is due to no population value being reported and 0 outlets
 zctas[is.na(zctas)] <- 0
 
-
-# Calculate AOD Variables----
-# Create inverse distance column
-zctas$iDistance <- 0
-
-# Calculate inverse distances
-for (i in 1:nrow(zctas)) {
-  # print every 50
-  if (i %% 50 == 0){
-    print(paste0("[", Sys.time(), "] Currently on iteration: ", i))
-  }
-  # Set the coordinates
-  zcta_coord <- st_coordinates(zctas)
-  aod_coord <- st_coordinates(all)
-  # Only search zctas within +/-1 lat/long to save time and computational memory
-  prox_log <- aod_coord[,2] < zcta_coord[i,2] + 1 &
-    aod_coord[,2] > zcta_coord[i,2] - 1 &
-    aod_coord[,1] < zcta_coord[i,1] + 1 &
-    aod_coord[,1] > zcta_coord[i,1] - 1
-  # Some ZCTAs are bigger than +/- 1 lat/long, so they'll need to be searched by
-  # +/- 12 lat/long
-  prox_log_big <- aod_coord[,2] < zcta_coord[i,2] + 12 &
-    aod_coord[,2] > zcta_coord[i,2] - 12 &
-    aod_coord[,1] < zcta_coord[i,1] + 12 &
-    aod_coord[,1] > zcta_coord[i,1] - 12
-  # Inverse Distance Calculation + store each calculation in dataframe
-  if (sum(prox_log) != 0) {
-  zctas$iDistance[i] <- 1/(min(pointDistance(as_Spatial(all[prox_log, ]),
-                                                    as_Spatial(zctas$centroid[i]),
-                                                    lonlat = T))*0.0006213712)
-  } else {
-    zctas$iDistance[i] <- 1/(min(pointDistance(as_Spatial(all[prox_log_big, ]),
-                                                     as_Spatial(zctas$centroid[i]),
-                                                     lonlat = T))*0.0006213712)
-}
-}
-
-# Impute Infs with value accounting for number of outlets
-zctas <- zctas %>%
-  mutate(iDistance = case_when(iDistance == Inf ~
-                               (zctas %>%
-                                  subset(iDistance != Inf) %>%
-                                  subset(iDistance == max(iDistance)))$iDistance*ESTAB,
-                               TRUE ~ iDistance))
-
-# Calculate inverse distances with weighting scheme based on # of outlets
-zctas$weightediD <- 0
-all$d <- 0
-for (i in 1:nrow(zctas)) {
-  # Only search zctas within +/-1 lat/long to save time and computational memory
-  prox_log <- aod_coord[,2] < zcta_coord[i,2] + 1 &
-    aod_coord[,2] > zcta_coord[i,2] - 1 &
-    aod_coord[,1] < zcta_coord[i,1] + 1 &
-    aod_coord[,1] > zcta_coord[i,1] - 1
-  # Some ZCTAs are bigger than +/- 1 lat/long, so they'll need to be searched by
-  # +/- 12 lat/long
-  prox_log_big <- aod_coord[,2] < zcta_coord[i,2] + 12 &
-    aod_coord[,2] > zcta_coord[i,2] - 12 &
-    aod_coord[,1] < zcta_coord[i,1] + 12 &
-    aod_coord[,1] > zcta_coord[i,1] - 12
-  if (sum(prox_log) != 0) {
-    all$d[prox_log] <- 
-      pointDistance(
-        as_Spatial(zctas$centroid[i]), 
-        as_Spatial(all[prox_log, ]), lonlat = T) * .0006213712
-    if ((all %>%
-        subset(d != 0) %>% 
-        subset(d == min(d)))$ESTAB <= 4) {
-      zctas$weightediD[i] <- zctas$iDistance[i] * 1
-    } else {
-      zctas$weightediD[i] <- zctas$iDistance[i] * 1.1
-    }
-  } else {
-    all$d[prox_log_big] <- 
-      pointDistance(
-        as_Spatial(zctas$centroid[i]), 
-        as_Spatial(all[prox_log_big, ]), lonlat = T) * .0006213712
-    if ((all %>%
-         subset(d != 0) %>% 
-         subset(d == min(d)))$ESTAB <= 4) {
-      zctas$weightediD[i] <- zctas$iDistance[i] * 1
-    } else {
-      zctas$weightediD[i] <- zctas$iDistance[i] * 1.1
-    }
-  }
-  # Preallocate and reuse distance values
-  all$d[prox_log] <- NA
-}
-
-# Distributions of both variables----
+# Distributions----
 ggplot(zctas, aes(x = log(iDistance))) +
   geom_density(color="darkblue", fill="lightblue") +
   labs(title = "Inverse Distances",
        y = "Density",
        x = "Log of Inverse Distances")
 
-ggplot(zctas, aes(x = log(weightediD))) +
-  geom_density(color="darkgreen", fill="lightgreen") +
-  labs(title = "Weighted Inverse Distances",
-       y = "Density",
-       x = "Log of Weighted Inverse Distances")
-
 # Write Out----
+# Write Out Inverse Distances
 data_folder <- file.path(
   gsub("\\\\","/", gsub("OneDrive - ","", Sys.getenv("OneDrive"))), 
   "Health and Social Equity - SJP - BHN Score Creation",
