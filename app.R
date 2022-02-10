@@ -26,6 +26,8 @@ library(shinyWidgets)
 library(sass)
 library(shinycssloaders)
 library(shinyBS)
+library(DT)
+library(formattable)
 
 options(shiny.maxRequestSize=300*1024^2)
 
@@ -899,7 +901,7 @@ ui <- fluidPage(
               ),
               bsCollapsePanel(
                 "ZCTA Measure Results",
-                uiOutput("com_map_report_card")
+                DTOutput("com_report_card_table")
               )
             )
           )
@@ -2134,6 +2136,57 @@ server <- function(input, output, session) {
     })
   })
   
+  ## KAREN ------
+ # put a "report card" for the community (in TABLE format)
+
+  output$com_report_card_table <- renderDataTable({
+
+    # Create Report Card Table
+    reportcard <- ol$m_reg[,c("Measure", "Category", "Directionality")]
+    
+    # Add column of measure values based on selected ZCTA and index type (Pop/Black)
+    Rank <- t(ol$no_dir_perc_meas_df[com_sub$ZCTA, ol$avail_measures[[com_sub$idx]][-1]])
+    
+    colnames(Rank) <- "Rank"
+    rownames(Rank) <- gsub("_pop", "", rownames(Rank))
+    
+    reportcard <- merge(reportcard, Rank, by = "row.names",sort = FALSE) %>%
+      as.data.frame() %>%
+      mutate(Directionality = ifelse(Directionality == -1, "Obstacle", "Asset"),
+             Rank = as.numeric(round(Rank)))  %>%
+      select(Measure, Category, Directionality, Rank)
+    
+    rownames(reportcard) <- NULL
+    
+    measure_formatter <- formatter("span",
+                                   style = x ~ icontext(ifelse(x == com_sub$com_map_fill,
+                                                               "star",
+                                                               ""), x))
+    category_formatter <- formatter("span",
+                style = x ~ style(
+                  color = ifelse(x == "Healthcare Access", 
+                                 meas_max_colors[2],
+                                 ifelse(x == "Health Status", 
+                                        meas_max_colors[3],
+                                        meas_max_colors[1])
+                                 )
+                  )
+                )
+    
+    
+    as.datatable(
+      formattable(reportcard, 
+                  align = c("l","l","l","r"),
+                  list(Measure = measure_formatter,
+                       Category = category_formatter,
+                       Rank = color_bar("lightblue")
+                  ),
+                  table.attr = 'style="font-size: 16px;";\"')
+      )
+
+
+  })
+
   # put a "report card" for the community
   output$com_map_report_card <- renderUI({
     mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
