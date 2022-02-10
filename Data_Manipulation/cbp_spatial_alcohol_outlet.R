@@ -148,6 +148,16 @@ for (i in 1:nrow(zctas)) {
   }
 }
 
+# Return Associated Number of Outlets to Each Distance
+for (i in nrow(zctas)) {
+  if (zctas$outlets[i] == 0) {
+    distances <- cbind(distances, X1 = zctas$outlets[i])
+    
+  } else {
+    
+  }
+}
+
 # Slot in nearest n (# of outlets) distances to each zcta
 zctas_exp <- cbind(zctas_exp, distances) %>%
   rename(aod = X0) %>%
