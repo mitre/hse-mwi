@@ -188,11 +188,11 @@ zctas <- left_join(zctas,
 zctas[is.na(zctas)] <- 0
 
 # Distributions----
-ggplot(zctas, aes(x = log(iDistance))) +
-  geom_density(color="darkblue", fill="lightblue") +
-  labs(title = "Inverse Distances",
+ggplot(zctas, aes(x = `^`(aod, 1/3))) +
+  geom_density(color = "darkblue", fill = "lightblue") +
+  labs(title = "Distribution of Alcohol Outlet Density by ZCTA",
        y = "Density",
-       x = "Log of Inverse Distances")
+       x = "Cubed Root of Alcohol Outlet Density")
 
 # Write Out----
 # Write Out Inverse Distances
@@ -203,7 +203,7 @@ data_folder <- file.path(
 
 write.csv(zctas %>%
             rename(zcta = ZCTA5CE10) %>%
-            dplyr::select(zcta, iDistance, weightediD), 
+            dplyr::select(zcta, aod), 
           file = file.path(
             data_folder,
             "CBP_ZCTA_AlcoholOutlet_Spatial.csv"
