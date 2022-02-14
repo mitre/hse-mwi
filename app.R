@@ -981,9 +981,7 @@ ui <- fluidPage(
             "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
             "</ul>",
             "<br>",
-            "<li>Put your data (if using) and the updated Metadata.xlsx file in a ZIP file (.zip).</li>",
-            "<br>",
-            "<li>Upload your ZIP file and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
+            "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
             "<br>",
             "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
             "<br>",
@@ -999,8 +997,9 @@ ui <- fluidPage(
               HTML("<br><br>"),
               fileInput(
                 "custom_zip", 
-                "Upload Custom Data ZIP File (.zip)",
-                accept = ".zip"
+                "Upload Custom Data Files (.xlsx, .csv)",
+                accept = c(".xlsx", ".csv"),
+                multiple = T
               ),
               actionButton("custom_mwi_go", "Create Custom MWI"),
               downloadButton("download_custom_mwi", "Download Custom MWI"),
@@ -1205,7 +1204,10 @@ server <- function(input, output, session) {
   # observe custom data upload: state
   observeEvent(input$custom_data_load_st, {
     if (!is.null(input$custom_data_st)){
-      # load the RData file
+      validate(need(endsWith(tolower(input$custom_data_st$datapath), ".rdata"),
+                    "Must upload .RData File"))
+      
+      # load the RData file -- contains ov
       load(input$custom_data_st$datapath)
       
       for (ov in names(ol)){
@@ -2263,39 +2265,37 @@ server <- function(input, output, session) {
         # input <- list()
         # input$custom_zip <- "C:/Users/hdelossantos/Downloads/custom_zip.zip"
         
-        # start by unzipping files
+        # start by checking files
         zip_true <- T
         if (!is.null(input$custom_zip)){
-          zip_df <- unzip(input$custom_zip$datapath, list = T)
+          zip_df <- input$custom_zip # a list of files
         } else {
-          zip_true <- F
           output$custom_error <- renderText({
-            paste0("ERROR: Please upload a ZIP file as described above.")
+            paste0("ERROR: Please upload multiple files as described above.")
           })
         }
         
         # check that metadata is in the list, that there's something in it,
         # that the rest of the data is csv
         if (zip_true &
-          "Metadata.xlsx" %in% zip_df$Name & 
+          "Metadata.xlsx" %in% zip_df$name & 
+          all(endsWith(tolower(zip_df$datapath), c(".csv", ".xlsx"))) & 
           (nrow(zip_df) == 1 |
           (nrow(zip_df) > 1 &
-          all(endsWith(tolower(zip_df$Name[zip_df$Name != "Metadata.xlsx"]),
+          all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
                        ".csv"))))){
           # read the metadata file
-          unzip(zipfile=input$custom_zip$datapath, files = "Metadata.xlsx", exdir=".")
           m_reg_custom <- as.data.frame(
-            read_xlsx("Metadata.xlsx", sheet = 1)
+            read_xlsx(zip_df$datapath[zip_df$name == "Metadata.xlsx"], sheet = 1)
           )
-          file.remove("Metadata.xlsx") # clean up
           
           # read all custom data
           custom_data <- lapply(
-            zip_df$Name[zip_df$Name != "Metadata.xlsx"], function(x){
+            zip_df$name[zip_df$name != "Metadata.xlsx"], function(x){
               read.csv(unz(input$custom_zip$datapath, x), check.names = F)
             }
           )
-          names(custom_data) <- zip_df$Name[zip_df$Name != "Metadata.xlsx"]
+          names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
           
           incProgress(detail = "Running pipeline...")
           
@@ -2358,10 +2358,11 @@ server <- function(input, output, session) {
         } else {
           output$custom_error <- renderText({
             paste0(
-              "ERROR: One of the following is wrong with your uploaded ZIP:\n",
+              "ERROR: One of the following is wrong with your uploaded files:\n",
               "1: Does not contain Metadata.xlsx\n",
               "2: Has additional custom data and custom data not in CSV format\n",
-              "3: There is no ZIP file\n",
+              "3: There are no files\n",
+              "4: Additional files uploaded that are not CSV or XLSX format\n",
               "Please fix the above, reupload, and re-do.")
           })
         }
