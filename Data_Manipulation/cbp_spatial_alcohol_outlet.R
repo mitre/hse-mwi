@@ -155,9 +155,10 @@ for (i in 24398:nrow(zctas)) {
 
 # Slot in nearest n (# of outlets) distances to each zcta
 zctas_exp <- cbind(zctas_exp, distances) %>%
-  rename(aod = X0) %>%
+  rename(aod = X0,
+         out_dist = X1) %>%
   mutate(aod = 1/aod) %>%
-  mutate(aod = aod * outlets) # multiply value by # of outlets
+  mutate(aod = aod * out_dist) # multiply value by # of outlets
 
 # Sum values per ZCTA
 aod_values <- zctas_exp %>%
