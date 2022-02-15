@@ -160,17 +160,17 @@ zctas_exp <- cbind(zctas_exp, distances) %>%
   mutate(aod = 1/aod) %>%
   mutate(aod = aod * out_dist) # multiply value by # of outlets
 
+# Impute NaNs with 0s
+zctas_exp$aod[is.nan(zctas_exp$aod)] <- 0
+
 # Sum values per ZCTA
 aod_values <- zctas_exp %>%
   group_by(ZCTA5CE10) %>%
-  summarzie(aod = sum(aod))
+  summarize(aod = sum(aod))
 
 # Merge aod values into zcta dataset
 zctas <- as.data.frame(zctas) %>%
   left_join(as.data.frame(aod_values), by = "ZCTA5CE10")
-  
-# Impute Infs with 0s
-zctas$aod <- recode(zctas$aod, `Inf` = 0) 
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
