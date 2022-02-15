@@ -125,12 +125,14 @@ zctas_exp$outlets <- as.numeric(plyr::revalue(as.character(zctas_exp$outlets),
 
 # Calculate Spatial Alcohol Outlet Density----
 # Return x amount of closest distances
-# Create Distance Variable
+# Create Distance Dataset
 distances <- data.frame(matrix(NA,
                                nrow = 0,
-                               ncol = 1))
+                               ncol = 2))
+# Create Distance Variable
+zctas <- cbind(zctas, d = NA)
 
-for (i in 1:nrow(zctas)) {
+for (i in 24398:nrow(zctas)) {
   # Only search zctas within +/-10 lat/long to save time and computational memory
   prox_log <- sfc_point_to_matrix(zctas$centroid)[,2] < zctas$centroid[[i]][2] + 10 &
     sfc_point_to_matrix(zctas$centroid)[,2] > zctas$centroid[[i]][2] - 10 &
@@ -138,24 +140,17 @@ for (i in 1:nrow(zctas)) {
     sfc_point_to_matrix(zctas$centroid)[,1] > zctas$centroid[[i]][1] - 10
   
   if (zctas$outlets[i] == 0) {
-    distances <- rbind(distances, 0)
+    distances <- rbind(distances, data.frame(X0 = 0,X1 = 0))
     
   } else {
     distances <- rbind(distances,
                        data.frame(X0 = sort(pointDistance(as_Spatial(zctas$centroid[i]),
                                           as_Spatial(zctas$centroid[prox_log]),
-                                          lonlat = T))[2:(zctas$outlets[i] + 1)]))
+                                          lonlat = T))[2:(zctas$outlets[i] + 1)],
+                                  X1 = zctas[prox_log,][order(zctas$d),]$outlets[2:(zctas$outlets[i] + 1)]))
   }
-}
-
-# Return Associated Number of Outlets to Each Distance
-distances <- cbind(distances, out = 0) # add outlets column
-for (i in nrow(zctas)) {
-  if (zctas$outlets[i] == 0) {
-    distances[i,2] <- zctas$outlets[i]
-  } else {
-    
-  }
+  # Preallocate and reuse distance values
+  zctas$d[prox_log] <- NA
 }
 
 # Slot in nearest n (# of outlets) distances to each zcta
