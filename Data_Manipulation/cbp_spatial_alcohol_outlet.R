@@ -129,8 +129,6 @@ zctas_exp$outlets <- as.numeric(plyr::revalue(as.character(zctas_exp$outlets),
 distances <- data.frame(matrix(NA,
                                nrow = 0,
                                ncol = 2))
-# Create Distance Variable
-zctas <- cbind(zctas, d = NA)
 
 for (i in 24398:nrow(zctas)) {
   # Only search zctas within +/-10 lat/long to save time and computational memory
@@ -166,11 +164,15 @@ zctas_exp$aod[is.nan(zctas_exp$aod)] <- 0
 # Sum values per ZCTA
 aod_values <- zctas_exp %>%
   group_by(ZCTA5CE10) %>%
-  summarize(aod_summed = sum(aod))
+  summarize(aod = sum(aod))
 
 # Merge aod values into zcta dataset
 zctas <- as.data.frame(zctas) %>%
   left_join(as.data.frame(aod_values), by = "ZCTA5CE10")
+
+# Add original outlet value to aod value
+zctas <- zctas %>%
+  mutate(aod = aod + outlets)
 
 # Get population denominators from ACS 
 pop <- get_acs(geography = "zcta",
