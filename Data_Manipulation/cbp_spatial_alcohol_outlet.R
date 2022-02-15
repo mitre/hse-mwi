@@ -166,7 +166,7 @@ zctas_exp$aod[is.nan(zctas_exp$aod)] <- 0
 # Sum values per ZCTA
 aod_values <- zctas_exp %>%
   group_by(ZCTA5CE10) %>%
-  summarize(aod = sum(aod))
+  summarize(aod_summed = sum(aod))
 
 # Merge aod values into zcta dataset
 zctas <- as.data.frame(zctas) %>%
