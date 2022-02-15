@@ -151,6 +151,7 @@ for (i in 24398:nrow(zctas)) {
   zctas$d[prox_log] <- NA
 }
 
+# Additional Data Cleaning----
 # Slot in nearest n (# of outlets) distances to each zcta
 zctas_exp <- cbind(zctas_exp, distances) %>%
   rename(aod = X0,
