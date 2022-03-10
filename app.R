@@ -1798,7 +1798,7 @@ server <- function(input, output, session) {
           "<i>",
           ifelse(
             dir_val == -1, 
-            "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+            "Note: this measure was included with the opposite orientation in the MWI, as a higher value in the MWI indicates more assets supporting mental wellness. ",
             ""
           ),
           "</i>",
