@@ -109,7 +109,7 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     
     # get zip code data
     # NOTE: cb = T will download a generalized file
-    zips <- zctas(cb = T)
+    zips <- zctas(cb = T, year = 2019)
     zips <- zips[zips$GEOID10 %in% mwi$pop$ZCTA,]
     zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
     
