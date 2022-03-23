@@ -879,7 +879,7 @@ ui <- fluidPage(
             bsCollapsePanel(
               "About the Mental Wellness Index",
               HTML("<center>"),
-              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
               HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
@@ -1136,7 +1136,7 @@ server <- function(input, output, session) {
       column(
         width = 5,
         HTML("<center>"),
-        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
         HTML("</center>")
       )
     ),
