@@ -260,6 +260,15 @@ mwi[["black"]] <- mwi[["black"]][mwi[["black"]]$ZCTA != "",]
 st_abbrev_to_full <- c(state.name, "District of Columbia", "All States")
 names(st_abbrev_to_full) <- c(state.abb, "DC", "All")
 
+# load population totals
+all_pop_df <- read.csv(
+  file.path(data_folder, "Resources", "ACS_ZCTA_Total_Populations.csv"),
+  colClasses = c("GEOID" = "character")
+)
+all_pop_df$perc_black <- all_pop_df$total_black/all_pop_df$total_pop*100
+all_pop_df$perc_pop <- 100
+rownames(all_pop_df) <- all_pop_df$GEOID
+
 # plotting information ----
 
 # get measure colors
@@ -316,8 +325,6 @@ meas_max_colors["Mental Wellness Index"] <-
 meas_min_colors["Mental Wellness Index"] <-
   meas_colors_pal[["Mental Wellness Index"]](7)[2]
 
-
-
 overall <- app_preprocess(m_reg, info_df, mwi, app_start = T)
 # add other specific data
 overall[["m_reg"]] <- m_reg
@@ -344,6 +351,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
     # replace data with no directionality data
     gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID10, fill]
   }
+  gd_map[, colnames(all_pop_df)[-c(1:2)]] <- all_pop_df[gd_map$GEOID10, -c(1:2)]
   
   # get rid of empty polygons
   gd_map <- gd_map[!is.na(gd_map$GEOID10),]
@@ -377,6 +385,9 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
       "State: ", gd_map$STATE_NAME, "<br>",
       "ZCTA: ", gd_map$GEOID10, "<br>", 
       "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
+      "Population: ", as.data.frame(gd_map)[, paste0("total_",idx)], 
+      # " (", trunc(as.data.frame(gd_map)[, paste0("perc_",idx)]), "%)",
+      "<br>",
       full_name,": ", trunc(gd_map$Fill)) %>%
     lapply(htmltools::HTML)
   
@@ -742,7 +753,7 @@ ui <- fluidPage(
             bsCollapsePanel(
               "About the Mental Wellness Index",
               HTML("<center>"),
-              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
               HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
@@ -868,7 +879,7 @@ ui <- fluidPage(
             bsCollapsePanel(
               "About the Mental Wellness Index",
               HTML("<center>"),
-              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
               HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
@@ -1125,7 +1136,7 @@ server <- function(input, output, session) {
       column(
         width = 5,
         HTML("<center>"),
-        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
         HTML("</center>")
       )
     ),
@@ -1798,7 +1809,7 @@ server <- function(input, output, session) {
           "<i>",
           ifelse(
             dir_val == -1, 
-            "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+            "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
             ""
           ),
           "</i>",
@@ -1933,7 +1944,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+              "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
               ""
             ),
             "</i>",
@@ -1958,7 +1969,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.  ",
+              "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
               ""
             ),
             "</i>",
@@ -2095,7 +2106,7 @@ server <- function(input, output, session) {
               ". ",
               ifelse(
                 dir_val == -1, 
-                "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
                 ""
               ),
               "</i>",
@@ -2127,7 +2138,7 @@ server <- function(input, output, session) {
                 ". ",
                 ifelse(
                   dir_val == -1, 
-                  "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                  "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
                   ""
                 ),
                 "</i>",
@@ -2223,7 +2234,7 @@ server <- function(input, output, session) {
       text_mwi,
       "<hr/>",
       "<font size = '3'><b>Measure Rankings:</b></font>",
-      "<i><p>Range from 0 to 100. Measures with * were included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.</p></i>",
+      "<i><p>Range from 0 to 100. Measure values with * were included with the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness.</p></i>",
       "<p></p>",
       text_meas,
       
