@@ -1944,7 +1944,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+              "Note: this measure was included with the opposite orientation in the MWI, as a higher value in the MWI indicates more assets supporting mental wellness. ",
               ""
             ),
             "</i>",
@@ -1969,7 +1969,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.  ",
+              "Note: this measure was included with the opposite orientation in the MWI, as a higher value in the MWI indicates more assets supporting mental wellness.  ",
               ""
             ),
             "</i>",
@@ -2106,7 +2106,7 @@ server <- function(input, output, session) {
               ". ",
               ifelse(
                 dir_val == -1, 
-                "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                "Note: this measure was included with the opposite orientation in the MWI, as a higher value in the MWI indicates more assets supporting mental wellness. ",
                 ""
               ),
               "</i>",
@@ -2138,7 +2138,7 @@ server <- function(input, output, session) {
                 ". ",
                 ifelse(
                   dir_val == -1, 
-                  "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                  "Note: this measure was included with the opposite orientation in the MWI, as a higher value in the MWI indicates more assets supporting mental wellness. ",
                   ""
                 ),
                 "</i>",
@@ -2234,7 +2234,7 @@ server <- function(input, output, session) {
       text_mwi,
       "<hr/>",
       "<font size = '3'><b>Measure Rankings:</b></font>",
-      "<i><p>Range from 0 to 100. Measures with * were included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.</p></i>",
+      "<i><p>Range from 0 to 100. Measures with * were included with the opposite orientation in the MWI, as a higher value in the MWI indicates more assets supporting mental wellness.</p></i>",
       "<p></p>",
       text_meas,
       
