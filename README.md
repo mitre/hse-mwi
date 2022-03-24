@@ -2,10 +2,10 @@
 
 # Outline
 
-- [Mental Wellness Index (MWI)](Mental-Wellness-Index-(MWI))
-- [Instructions to Create Your Own MWI](Instructions-to-Create-Your-Own-MWI)
-- [Techinical Set Up](Technical-Set-Up) (only useful for contributors)
-- [Contact and Attribution](Contact-and-Attribution)
+- [Mental Wellness Index (MWI)](#Mental-Wellness-Index-(MWI))
+- [Instructions to Create Your Own MWI](#Instructions-to-Create-Your-Own-MWI)
+- [Technical Set Up](#Technical-Set-Up) (only useful for contributors)
+- [Contact and Attribution](#Contact-and-Attribution)
 
 # Mental Wellness Index (MWI)
 
