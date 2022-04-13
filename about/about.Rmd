@@ -231,7 +231,7 @@ The table below summarizes the measures that are included in the MWI, their doma
 |Third Places|<span style="color:#5d499e">SDOH</span> |Social Capital|Not applicable|CBP|
 |Unemployment|<span style="color:#5d499e">SDOH</span> |Income & Unemployment|Black Populations|ACS|
 |Violent Crime|<span style="color:#5d499e">SDOH</span> |Safety & Community Trauma|Not available|County Health Rankings|
-|Voter Participation|<span style="color:#5d499e">SDOH</span> |Social Capital|Not Available|TBD|
+|Voter Participation|<span style="color:#5d499e">SDOH</span> |Social Capital|Not Available|United States Election Project, New York Times|
 |Mental Health Treatment Facility Access|<span style="color:#70ad47">Healthcare Access</span>|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator
 |Substance Use Treatment Facility Access|<span style="color:#70ad47">Healthcare Access</span>|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator|
 |Uninsured|<span style="color:#70ad47">Healthcare Access</span>|Health Insurance|Black Populations|ACS|
