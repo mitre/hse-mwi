@@ -71,7 +71,7 @@ Structural racism influences all measures in the MWI. Structural racism harms so
 
 ### How is the MWI Calculated?
 
-The MWI is calculated for each ZIP Code* in the country. If the MWI is missing for a ZIP Code, this indicates either missing data or no population in this area. For more details, please see the project <a href = 'https://github.com/mitre/hse-mwi' target = "_blank">code</a>.  The MWI for a ZIP Code is calculated by multiplying the percentile ranked value of each of the 28 measures in that ZIP Code by the weight assigned to each measure, then summing these resulting values as shown in the equation below where m designates a measure. See the <a href = 'https://raw.githubusercontent.com/mitre/hse-mwi/main/Documentation/Methods/Weighting_Methods.pdf' target = "_blank">Weighting Methods</a> document for more information about measure weights, including how placeholder weights have been assigned. 
+The MWI is calculated for each ZIP Code* in the country. If the MWI is missing for a ZIP Code, this indicates either missing data or no population in this area. For more details, please see the project <a href = 'https://github.com/mitre/hse-mwi' target = "_blank">code</a>.  The MWI for a ZIP Code is calculated by multiplying the percentile ranked value of each of the 28 measures in that ZIP Code by the weight assigned to each measure, then summing these resulting values as shown in the equation below where m designates a measure. See the <a href = 'https://raw.githubusercontent.com/mitre/hse-mwi/main/Documentation/Methods/Weighting_Methods.pdf' target = "_blank">Weighting Methods</a> document for more information about measure weights, including how default weights have been assigned. 
 
 <!--$$MWI = \sum_{m = 1}^{28} percentile\space ranked\space value_m * weight_m$$-->
 <!--replace since it looks odd in browsers-->
@@ -231,7 +231,7 @@ The table below summarizes the measures that are included in the MWI, their doma
 |Third Places|<span style="color:#5d499e">SDOH</span> |Social Capital|Not applicable|CBP|
 |Unemployment|<span style="color:#5d499e">SDOH</span> |Income & Unemployment|Black Populations|ACS|
 |Violent Crime|<span style="color:#5d499e">SDOH</span> |Safety & Community Trauma|Not available|County Health Rankings|
-|Voter Participation|<span style="color:#5d499e">SDOH</span> |Social Capital|Not Available|TBD|
+|Voter Participation|<span style="color:#5d499e">SDOH</span> |Social Capital|Not Available|United States Election Project, New York Times|
 |Mental Health Treatment Facility Access|<span style="color:#70ad47">Healthcare Access</span>|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator
 |Substance Use Treatment Facility Access|<span style="color:#70ad47">Healthcare Access</span>|Treatment Facilities|Not applicable|SAMHSA Behavioral Health Treatment Services Locator|
 |Uninsured|<span style="color:#70ad47">Healthcare Access</span>|Health Insurance|Black Populations|ACS|
@@ -310,7 +310,7 @@ __Strengths__ of the MWI include the following:
 
 - <u>A focus on equity</u> by embedding equity focused language into the MWI framework through the dynamic factors of structural racism and community and cultural assets. In creating a tool meant to support decision-makers and equitable allocation of resources to improve mental wellness outcomes, we acknowledge that it is essential to address the role of structural racism and disinvestment in people and communities, which have led to the accumulation of obstacles that hinder mental wellness. Nevertheless, our focus on including community & cultural assets within the framework seeks to make explicit the strengths, identities, and aspirations that individuals and communities hold about themselves that promote mental wellness.
 
-- <u>Adjustable and modifiable for various use cases</u>. The MWI allows users to modify the index by either uploading their own local or use-case specific data, and by adjusting the placeholder weights based on their preferences, use case, or priorities. The measures and overall MWI calculation can be viewed for both Black populations and the overall population. 
+- <u>Adjustable and modifiable for various use cases</u>. The MWI allows users to modify the index by either uploading their own local or use-case specific data, and by adjusting the default weights based on their preferences, use case, or priorities. The measures and overall MWI calculation can be viewed for both Black populations and the overall population. 
 
 - <u>Objective, data-based dashboard</u> of the factors that influence mental well-being allows for a “like to like” comparison of areas and can help inform users (in partnership with impacted communities) about how best to distribute resources for the highest impact, and to advocate for their communities. The MWI can provide valuable information to communities, public health practitioners, government agencies, and funders seeking to improve or understand community mental wellness. 
 
