@@ -183,7 +183,7 @@ acs_data <- get_acs(
     "B19001H_016", # Estimate!!Total:!!$150,000 to $199,999
     "B19001H_017"  # Estimate!!Total:!!$200,000 or more
   ), 
-  year = 2019,
+  year = 2020,
   output = "wide"
 )
 
