@@ -181,6 +181,14 @@ info_df <- read.csv(
   row.names = "Numerator"
 )
 
+# load mapped measure data excat values
+meas_df <- read.csv(
+  file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_Converted_Measures.csv"),
+  colClasses = c("GEOID" = "character")
+)
+meas_df <- meas_df[meas_df$GEOID != "",]
+rownames(meas_df) <- meas_df$GEOID
+
 # load zip codes to zcta
 zip_cw <- read.csv(
   file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2020.csv"),
@@ -330,6 +338,7 @@ meas_min_colors["Mental Wellness Index"] <-
 overall <- app_preprocess(m_reg, info_df, mwi, app_start = T)
 # add other specific data
 overall[["m_reg"]] <- m_reg
+overall[["meas_df"]] <- meas_df
 overall[["info_dat"]] <- info_df
 overall[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
 
@@ -940,7 +949,7 @@ ui <- fluidPage(
                 open = c("ZCTA Measure Results"),
                 bsCollapsePanel(
                   "ZCTA Measure Results",
-                  HTML("<p><i>Measures have ranks from 0 to 100. All measures are oriented in the MWI so that higher values in the MWI indicate more assets supporting mental wellness. Measures designated as obstacles to mental wellness were included with the opposite orientation when calculating the MWI.</i></p>"),
+                  HTML("<p><i>Measures have ranks from 0 to 100. All measures are oriented in the MWI so that higher values in the MWI indicate more assets supporting mental wellness. Measures designated as obstacles to mental wellness were included with the opposite orientation when calculating the MWI. Measure value corrsponds to the exact value in the data, corresponding to the measure description. For more information, please see Measure and Data Documentation.</i></p>"),
                   DTOutput("com_report_card_table")
                 )
               )
@@ -2183,31 +2192,45 @@ server <- function(input, output, session) {
     })
   })
   
-  ## KAREN ------
   # put a "report card" for the community (in TABLE format)
   output$com_report_card_table <- renderDataTable({
     
     # Create Report Card Table
-    reportcard <- ol$m_reg[,c("Measure", "Category", "Directionality")]
+    reportcard <- ol$m_reg[,c("Measure", "Measure Description", "Category", "Directionality")]
     
     # Add column of measure values based on selected ZCTA and index type (Pop/Black)
-    Rank <- t(ol$no_dir_perc_meas_df[com_sub$ZCTA, ol$avail_measures[[com_sub$idx]][-1]])
-    
+    Rank <- t(ol$no_dir_perc_meas_df[com_sub$ZCTA,
+                                     ol$avail_measures[[com_sub$idx]][-1]])
     colnames(Rank) <- "Rank"
     rownames(Rank) <- gsub("_pop", "", rownames(Rank))
+    
+    # similarly, add the values
+    val <- t(ol$meas_df[com_sub$ZCTA,
+                        ol$avail_measures[[com_sub$idx]][-1]])
+    colnames(val) <- "Value"
+    rownames(val) <- gsub("_pop", "", rownames(val))
+    
+    # add values to report card
+    reportcard[rownames(val), "Value"] <- val
+    reportcard <- reportcard[!is.na(reportcard$Measure),]
     
     reportcard <- merge(reportcard, Rank, by = "row.names",sort = FALSE) %>%
       as.data.frame() %>%
       mutate(Directionality = ifelse(Directionality == -1, "Obstacle", "Asset"),
-             Rank = as.numeric(round(Rank)))  %>%
-      select(Measure, Category, Directionality, Rank)
+             Rank = as.numeric(round(Rank)),
+             Value = format(as.numeric(round(Value, 2)), scientific = F),
+             )  %>%
+      select(Measure, `Measure Description`, Category, Directionality, Rank, Value)
     
     rownames(reportcard) <- NULL
     
-    measure_formatter <- formatter("span",
-                                   style = x ~ icontext(ifelse(x == com_sub$com_map_fill,
-                                                               "star",
-                                                               ""), x))
+    measure_formatter <- formatter(
+      "span",
+      style = x ~ icontext(
+        ifelse(x == com_sub$com_map_fill,
+               "star",
+               ""),
+        x))
     category_formatter <- formatter(
       "span",
       style = x ~ style(
@@ -2223,14 +2246,16 @@ server <- function(input, output, session) {
     
     as.datatable(
       formattable(reportcard, 
-                  align = c("l","l","l","r"),
+                  align = c("l","l","l","l","r","l"),
                   list(Measure = measure_formatter,
                        Category = category_formatter,
                        Rank = color_bar("lightblue")
                   ),
                   table.attr = 'style="font-size: 16px;";\"'), 
+      rownames = F,
       options = list(
-        "pageLength" = nrow(reportcard) # show all
+        "pageLength" = nrow(reportcard), # show all
+        columnDefs = list(list(width = '250px', targets = c(2))) # wrap column descriptions
       )
     )
   })
