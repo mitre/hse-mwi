@@ -31,6 +31,8 @@ library(formattable)
 
 options(shiny.maxRequestSize=300*1024^2)
 
+source("app_config.R")
+
 # styling ----
 
 # Applies css to rShiny app
@@ -109,7 +111,7 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     
     # get zip code data
     # NOTE: cb = T will download a generalized file
-    zips <- zctas(cb = T)
+    zips <- zctas(cb = T, year = 2019)
     zips <- zips[zips$GEOID10 %in% mwi$pop$ZCTA,]
     zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
     
@@ -260,6 +262,15 @@ mwi[["black"]] <- mwi[["black"]][mwi[["black"]]$ZCTA != "",]
 st_abbrev_to_full <- c(state.name, "District of Columbia", "All States")
 names(st_abbrev_to_full) <- c(state.abb, "DC", "All")
 
+# load population totals
+all_pop_df <- read.csv(
+  file.path(data_folder, "Resources", "ACS_ZCTA_Total_Populations.csv"),
+  colClasses = c("GEOID" = "character")
+)
+all_pop_df$perc_black <- all_pop_df$total_black/all_pop_df$total_pop*100
+all_pop_df$perc_pop <- 100
+rownames(all_pop_df) <- all_pop_df$GEOID
+
 # plotting information ----
 
 # get measure colors
@@ -316,8 +327,6 @@ meas_max_colors["Mental Wellness Index"] <-
 meas_min_colors["Mental Wellness Index"] <-
   meas_colors_pal[["Mental Wellness Index"]](7)[2]
 
-
-
 overall <- app_preprocess(m_reg, info_df, mwi, app_start = T)
 # add other specific data
 overall[["m_reg"]] <- m_reg
@@ -344,6 +353,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
     # replace data with no directionality data
     gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID10, fill]
   }
+  gd_map[, colnames(all_pop_df)[-c(1:2)]] <- all_pop_df[gd_map$GEOID10, -c(1:2)]
   
   # get rid of empty polygons
   gd_map <- gd_map[!is.na(gd_map$GEOID10),]
@@ -377,6 +387,9 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
       "State: ", gd_map$STATE_NAME, "<br>",
       "ZCTA: ", gd_map$GEOID10, "<br>", 
       "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
+      "Population: ", as.data.frame(gd_map)[, paste0("total_",idx)], 
+      # " (", trunc(as.data.frame(gd_map)[, paste0("perc_",idx)]), "%)",
+      "<br>",
       full_name,": ", trunc(gd_map$Fill)) %>%
     lapply(htmltools::HTML)
   
@@ -651,14 +664,23 @@ ui <- fluidPage(
   ),
   
   navbarPage(
-    title=div(
-      a(
-        href="https://www.mitre.org/",
-        img(src="media/MITRE_logo.png", height="30"),
-        target="blank",
-      ),
-      HTML(paste0("Mental Wellness Index™ Tool")),
-    ),
+    collapsible = T,
+    title=
+      if (show_mitre){
+        div(
+          a(
+            href="https://www.mitre.org/",
+            img(src="media/MITRE_logo.png", height="30"),
+            target="blank",
+          ),
+          HTML(paste0("Mental Wellness Index™ Tool"))
+        )
+      } else {
+        div(
+          HTML(paste0("Mental Wellness Index™ Tool")),
+          "style" = "padding-top:5px"
+        )
+      },
     theme="stylesheets/app.css",
     
     # explore states ----
@@ -733,10 +755,10 @@ ui <- fluidPage(
             bsCollapsePanel(
               "About the Mental Wellness Index",
               HTML("<center>"),
-              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About the MWI' page.<p></p>"
               )),
               HTML(paste0(
                 "All states are included.",
@@ -750,6 +772,7 @@ ui <- fluidPage(
         mainPanel(
           width = 9,
           tags$head(tags$script(src = "msg_api.js")),
+          tags$head(tags$script(src = "web_content.js")),
           column(
             width = 8,
             uiOutput("us_map_legend"),
@@ -784,7 +807,7 @@ ui <- fluidPage(
                 uiOutput("data_info"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"About\" page.",
+                  "For more information on data and overall methodology, please see the \"About the MWI\" page.",
                   "</font>"
                 ))
               )
@@ -858,10 +881,10 @@ ui <- fluidPage(
             bsCollapsePanel(
               "About the Mental Wellness Index",
               HTML("<center>"),
-              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+              img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About' page.<p></p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About the MWI' page.<p></p>"
               )),
               HTML(paste0(
                 "All states are included.",
@@ -895,7 +918,7 @@ ui <- fluidPage(
                 uiOutput("data_info_com"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"About\" page.",
+                  "For more information on data and overall methodology, please see the \"About the MWI\" page.",
                   "</font>"
                 ))
               ),
@@ -971,9 +994,7 @@ ui <- fluidPage(
             "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
             "</ul>",
             "<br>",
-            "<li>Put your data (if using) and the updated Metadata.xlsx file in a ZIP file (.zip).</li>",
-            "<br>",
-            "<li>Upload your ZIP file and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
+            "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
             "<br>",
             "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
             "<br>",
@@ -989,8 +1010,9 @@ ui <- fluidPage(
               HTML("<br><br>"),
               fileInput(
                 "custom_zip", 
-                "Upload Custom Data ZIP File (.zip)",
-                accept = ".zip"
+                "Upload Custom Data Files (.xlsx, .csv)",
+                accept = c(".xlsx", ".csv"),
+                multiple = T
               ),
               actionButton("custom_mwi_go", "Create Custom MWI"),
               downloadButton("download_custom_mwi", "Download Custom MWI"),
@@ -1008,9 +1030,9 @@ ui <- fluidPage(
     
     # about ----
     navbarMenu(
-      "About",
+      "About the MWI",
       tabPanel(
-        title = div("About", class="about"),
+        title = div("About the MWI", class="about"),
         # NOTE: when making changes to about.Rmd, move result to www
         htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
                                class="about-panel",
@@ -1028,12 +1050,15 @@ ui <- fluidPage(
   ),
   
   # Copyright footer
+  if (show_mitre){
   HTML(paste0(
     "<span class = 'copyright-footer'>&copy; ",
     format(Sys.Date(), "%Y"),
-    ", The MITRE Corporation</span>"
+    
+    ", The MITRE Corporation",
+    "</span>"
   ))
-  
+  }
 )
 
 # SERVER ----
@@ -1113,7 +1138,7 @@ server <- function(input, output, session) {
       column(
         width = 5,
         HTML("<center>"),
-        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", height = "270px"),
+        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
         HTML("</center>")
       )
     ),
@@ -1192,7 +1217,10 @@ server <- function(input, output, session) {
   # observe custom data upload: state
   observeEvent(input$custom_data_load_st, {
     if (!is.null(input$custom_data_st)){
-      # load the RData file
+      validate(need(endsWith(tolower(input$custom_data_st$datapath), ".rdata"),
+                    "Must upload .RData File"))
+      
+      # load the RData file -- contains ov
       load(input$custom_data_st$datapath)
       
       for (ov in names(ol)){
@@ -1783,7 +1811,7 @@ server <- function(input, output, session) {
           "<i>",
           ifelse(
             dir_val == -1, 
-            "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+            "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
             ""
           ),
           "</i>",
@@ -1918,7 +1946,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+              "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
               ""
             ),
             "</i>",
@@ -1943,7 +1971,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.  ",
+              "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
               ""
             ),
             "</i>",
@@ -2080,7 +2108,7 @@ server <- function(input, output, session) {
               ". ",
               ifelse(
                 dir_val == -1, 
-                "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
                 ""
               ),
               "</i>",
@@ -2112,7 +2140,7 @@ server <- function(input, output, session) {
                 ". ",
                 ifelse(
                   dir_val == -1, 
-                  "Note: this measure was included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness. ",
+                  "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
                   ""
                 ),
                 "</i>",
@@ -2259,7 +2287,7 @@ server <- function(input, output, session) {
       text_mwi,
       "<hr/>",
       "<font size = '3'><b>Measure Rankings:</b></font>",
-      "<i><p>Range from 0 to 100. Measures with * were included with the opposite orientation in the MWI, as a higher value indicates more assets supporting mental wellness.</p></i>",
+      "<i><p>Range from 0 to 100. Measure values with * were included with the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness.</p></i>",
       "<p></p>",
       text_meas,
       
@@ -2301,39 +2329,37 @@ server <- function(input, output, session) {
         # input <- list()
         # input$custom_zip <- "C:/Users/hdelossantos/Downloads/custom_zip.zip"
         
-        # start by unzipping files
+        # start by checking files
         zip_true <- T
         if (!is.null(input$custom_zip)){
-          zip_df <- unzip(input$custom_zip$datapath, list = T)
+          zip_df <- input$custom_zip # a list of files
         } else {
-          zip_true <- F
           output$custom_error <- renderText({
-            paste0("ERROR: Please upload a ZIP file as described above.")
+            paste0("ERROR: Please upload multiple files as described above.")
           })
         }
         
         # check that metadata is in the list, that there's something in it,
         # that the rest of the data is csv
         if (zip_true &
-          "Metadata.xlsx" %in% zip_df$Name & 
+          "Metadata.xlsx" %in% zip_df$name & 
+          all(endsWith(tolower(zip_df$datapath), c(".csv", ".xlsx"))) & 
           (nrow(zip_df) == 1 |
           (nrow(zip_df) > 1 &
-          all(endsWith(tolower(zip_df$Name[zip_df$Name != "Metadata.xlsx"]),
+          all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
                        ".csv"))))){
           # read the metadata file
-          unzip(zipfile=input$custom_zip$datapath, files = "Metadata.xlsx", exdir=".")
           m_reg_custom <- as.data.frame(
-            read_xlsx("Metadata.xlsx", sheet = 1)
+            read_xlsx(zip_df$datapath[zip_df$name == "Metadata.xlsx"], sheet = 1)
           )
-          file.remove("Metadata.xlsx") # clean up
           
           # read all custom data
           custom_data <- lapply(
-            zip_df$Name[zip_df$Name != "Metadata.xlsx"], function(x){
+            zip_df$name[zip_df$name != "Metadata.xlsx"], function(x){
               read.csv(unz(input$custom_zip$datapath, x), check.names = F)
             }
           )
-          names(custom_data) <- zip_df$Name[zip_df$Name != "Metadata.xlsx"]
+          names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
           
           incProgress(detail = "Running pipeline...")
           
@@ -2396,10 +2422,11 @@ server <- function(input, output, session) {
         } else {
           output$custom_error <- renderText({
             paste0(
-              "ERROR: One of the following is wrong with your uploaded ZIP:\n",
+              "ERROR: One of the following is wrong with your uploaded files:\n",
               "1: Does not contain Metadata.xlsx\n",
               "2: Has additional custom data and custom data not in CSV format\n",
-              "3: There is no ZIP file\n",
+              "3: There are no files\n",
+              "4: Additional files uploaded that are not CSV or XLSX format\n",
               "Please fix the above, reupload, and re-do.")
           })
         }
