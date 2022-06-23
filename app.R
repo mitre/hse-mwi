@@ -826,7 +826,7 @@ ui <- fluidPage(
       )
     ),
     
-    # explore communities ----
+    # explore ZIP codes ----
     tabPanel(
       title = div("Explore ZIP Codes", class="explore"),
       class = "explore-panel",
@@ -950,6 +950,8 @@ ui <- fluidPage(
                 bsCollapsePanel(
                   "ZCTA Measure Results",
                   HTML("<p><i>Measures have ranks from 0 to 100. All measures are oriented in the MWI so that higher values in the MWI indicate more assets supporting mental wellness. Measures designated as obstacles to mental wellness were included with the opposite orientation when calculating the MWI. Measure value corrsponds to the exact value in the data, corresponding to the measure description. For more information, please see Measure and Data Documentation.</i></p>"),
+                  uiOutput("com_report_card_table_mwi"),
+                  HTML("<p></p>"),
                   DTOutput("com_report_card_table")
                 )
               )
@@ -2009,7 +2011,7 @@ server <- function(input, output, session) {
       }
     })
   })
-  # output plots and information: community view ----
+  # output plots and information: ZIP code view ----
   
   output$data_info_com <- renderUI({
     withProgress(message = "Rendering data information", {
@@ -2192,6 +2194,32 @@ server <- function(input, output, session) {
     })
   })
   
+  # above the "table" version, add text for the MWI
+  output$com_report_card_table_mwi <- renderUI({
+    mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
+    
+    dn <- "Mental Wellness Index"
+    mc <- meas_max_colors[dn]
+    text_mwi <- paste0(
+      "<b><font size = '3'>",
+      html_color(
+        ifelse(trunc(mwi_zcta[1, "Mental_Wellness_Index"]) >= 50,
+               mc, meas_min_colors[dn]),
+        dn),
+      ifelse(dn == "Mental Wellness Index", 
+             paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
+             ""),
+      "</b></font>",
+      "<br>"
+    )
+    
+    HTML(paste0(
+      "<p><b><font size = '3'>",
+      "ZCTA: ", com_sub$ZCTA,
+      "</b></font></p>",
+      text_mwi))
+  })
+  
   # put a "report card" for the community (in TABLE format)
   output$com_report_card_table <- renderDataTable({
     
@@ -2202,13 +2230,13 @@ server <- function(input, output, session) {
     Rank <- t(ol$no_dir_perc_meas_df[com_sub$ZCTA,
                                      ol$avail_measures[[com_sub$idx]][-1]])
     colnames(Rank) <- "Rank"
-    rownames(Rank) <- gsub("_pop", "", rownames(Rank))
+    rownames(Rank) <- gsub("_pop$", "", rownames(Rank))
     
     # similarly, add the values
     val <- t(ol$meas_df[com_sub$ZCTA,
                         ol$avail_measures[[com_sub$idx]][-1]])
     colnames(val) <- "Value"
-    rownames(val) <- gsub("_pop", "", rownames(val))
+    rownames(val) <- gsub("_pop$", "", rownames(val))
     
     # add values to report card
     reportcard[rownames(val), "Value"] <- val
@@ -2220,7 +2248,7 @@ server <- function(input, output, session) {
              Rank = as.numeric(round(Rank)),
              Value = format(as.numeric(round(Value, 2)), scientific = F),
              )  %>%
-      select(Measure, `Measure Description`, Category, Directionality, Rank, Value)
+      select(Measure, Rank, Value, `Measure Description`, Category, Directionality)
     
     rownames(reportcard) <- NULL
     
@@ -2246,7 +2274,6 @@ server <- function(input, output, session) {
     
     as.datatable(
       formattable(reportcard, 
-                  align = c("l","l","l","l","r","l"),
                   list(Measure = measure_formatter,
                        Category = category_formatter,
                        Rank = color_bar("lightblue")
@@ -2255,7 +2282,7 @@ server <- function(input, output, session) {
       rownames = F,
       options = list(
         "pageLength" = nrow(reportcard), # show all
-        columnDefs = list(list(width = '250px', targets = c(2))) # wrap column descriptions
+        columnDefs = list(list(width = c('250px'), targets = c(4))) # wrap column descriptions
       )
     )
   })
