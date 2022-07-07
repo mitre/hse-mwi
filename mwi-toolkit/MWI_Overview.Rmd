@@ -20,7 +20,7 @@ The MWI is composed of 28 measures organized under 3 domains: *Social Determinan
 
 <center>
 
-![MWI Framework and Explanation](supporting_images/mwi_framework_w_explanation.png)
+![MWI Framework and Explanation](supporting_images/mwi_framework_w_explanation.png)\
 
 </center>
 
