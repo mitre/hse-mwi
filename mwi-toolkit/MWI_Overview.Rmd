@@ -1,0 +1,39 @@
+---
+title: "MWI Overview"
+output: 
+  html_document:
+    theme: cerulean
+    # toc: true
+    # toc_depth: 4
+    # toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+# NOTE: once knit, move html output to www/
+```
+
+The Mental Wellness Index (MWI) is a framework and tool that provides data on factors influencing community-level mental wellness for each ZIP code\* in the nation. Mental Wellness means everyone in a community can thrive, regardless of a mental health or a substance use challenge.[^1] The MWI is composed of 28 measures organized under 3 domains: *Social Determinants of Health*, *Healthcare Access*, and *Health Status*. Additionally, the framework includes two dynamic factors: *Structural Racism* and *Community & Cultural Assets*. These factors are woven around and throughout the MWI domains, reflecting their influence throughout the framework.
+
+[^1]: National Council for Mental Wellbeing (n.d.) We Are Mental Wellbeing. The National Council for Mental Wellbeing. <a href = 'https://www.thenationalcouncil.org/about/we-are-mental-wellbeing/' target = "_blank">(link)</a>
+
+<center>
+
+![MWI Framework and Explanation](supporting_images/mwi_framework_w_explanation.png)
+
+</center>
+
+The MWI is not intended to be a comprehensive evaluation of a community's mental wellness. We recommend use of the MWI in combination with local data and working alongside community groups to identify, account for, and include local-level factors that shape community mental wellness.
+
+***Why MITRE Created the MWI***
+
+-   MITRE built the MWI because it fills a gap---there is no existing resource or health index to understand factors influencing mental wellness at the community or ZIP code level.
+-   The MWI is intended to enable local, state, and federal government agencies, non-profits, and communities, to visualize the factors that contribute to mental wellness.
+-   The MWI promotes data-informed decisions.
+
+***The MWI Provides a Unique Perspective***
+
+-   The MWI **focuses on equity** by considering the influence of structural racism and community and cultural assets. Structural racism can have a negative impact on mental wellness. On the other hand, it is important to consider the strengths, identities, and aspirations that individuals and communities hold about themselves that promote mental wellness.
+-   The MWI can be **modified to meet community needs**. Anyone interested in using the MWI can upload their own data and adjust the level of importance given to each measure.
+-   The MWI allows you to see **comparisons** of geographic areas using objective data. This provides valuable information to communities, public health practitioners, government agencies, and funders seeking to improve mental wellness.
