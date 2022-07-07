@@ -21,6 +21,7 @@ library(shinyWidgets)
 library(sass)
 library(shinycssloaders)
 library(shinyBS)
+library(DT)
 
 options(shiny.maxRequestSize=300*1024^2)
 
@@ -913,6 +914,42 @@ ui <- fluidPage(
     
     navbarMenu(
       "Create Your Own MWI",
+      tabPanel(
+        title = div("Adjust MWI Weights", class = "explore"),
+        fluidRow(
+          column(width = 2),
+          column(
+            width = 8,
+            HTML("<center><h2>Change weights to create your own Mental Wellness Index (MWI)!</h2></center>"),
+            HTML(paste0(
+              "<p align = 'justify'>",
+              "To adjust the weights in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
+              "<ol>",
+              "<li>Update weights for each measure in the table below as desired.</li>",
+              "<br>",
+              "<li>Click 'Create Custom MWI' below. This will take some time.</li>",
+              "<br>",
+              "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing will be lost! Nothing is stored within this application.</b></li>",
+              "<br>",
+              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
+              "</ol>",
+              "</p>"
+              )),
+            tagList(
+              hr(),
+              HTML("<center>"),
+              DTOutput("custom_mwi_weights"),
+              HTML("<br><br>"),
+              actionButton("custom_mwi_go_weights", "Create Custom MWI"),
+              downloadButton("download_custom_mwi_weights", "Download Custom MWI"),
+              HTML("<br><br>"),
+              verbatimTextOutput("custom_error_weights"),
+              HTML("</center>")
+            )
+          ),
+          column(width = 2)
+        )
+      ),
       tabPanel(
         title = div("Add Local Data to MWI", class = "explore"),
         fluidRow(
@@ -2280,6 +2317,10 @@ server <- function(input, output, session) {
   
   # preallocate download for custom processing
   overall_list <- reactiveVal()
+  
+  output$custom_mwi_weights <- renderDT(editable = "column", {
+    m_reg[, c("Measure", "Weights")]
+  })
   
   # download the Metadata file
   output$download_metadata <- output$download_metadata_comp <- downloadHandler(
