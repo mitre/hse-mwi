@@ -923,6 +923,8 @@ ui <- fluidPage(
             HTML("<center><h2>Change weights to create your own Mental Wellness Index (MWI)!</h2></center>"),
             HTML(paste0(
               "<p align = 'justify'>",
+              "Weights used in the Mental Wellness Index control the relative influence each measure has on the total MWI; higher numbers inidcate a higher influence. If you adjust the weights to 0, a measure has no influence on the MWI.",
+              "<br><br>",
               "To adjust the weights in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
               "<ol>",
               "<li>Update weights for each measure in the table below as desired.</li>",
@@ -2315,11 +2317,16 @@ server <- function(input, output, session) {
   
   # observe and create custom MWI ----
   
+  # STOPHERE: https://stackoverflow.com/questions/63834508/update-shiny-dt-based-on-editable-cells-user-input
+  
   # preallocate download for custom processing
   overall_list <- reactiveVal()
   
+  # output for the customizing just the weights
   output$custom_mwi_weights <- renderDT(editable = "column", {
-    m_reg[, c("Measure", "Weights")]
+    sub_m <- m_reg[, c("Measure", "Domain", "Weights", "Weights")]
+    colnames(sub_m)[ncol(sub_m)-1] <- "Original Weights"
+    colnames(sub_m)[ncol(sub_m)] <- "Updated Weights"
   })
   
   # download the Metadata file
@@ -2341,53 +2348,81 @@ server <- function(input, output, session) {
     }
   )
   
-  observeEvent(c(input$custom_mwi_go, input$custom_mwi_go_comp), {
+  custom_weights_proxy <- dataTableProxy("custom_mwi_weights")
+  
+  observeEvent(c(input$custom_mwi_go, input$custom_mwi_go_comp, input$custom_mwi_go_weights), {
     withProgress(
       message = "Creating custom Mental Wellness Index!", 
       detail = "Loading data...", {
         source(file.path("Processing_Pipeline", "pipeline_driver.R"))
         
-        req(isTruthy(input$custom_mwi_go) || isTruthy(input$custom_mwi_comp))
+        req(isTruthy(input$custom_mwi_go) || isTruthy(input$custom_mwi_comp) ||
+              isTruthy(input$custom_mwi_go_weights))
         
         # testing
         # input <- list()
         # input$custom_zip <- "C:/Users/hdelossantos/Downloads/custom_zip.zip"
         
         # start by checking files
+        error <- F
         zip_true <- T
-        if (!is.null(input$custom_zip)){
-          zip_df <- input$custom_zip # a list of files
-        } else if (!is.null(input$custom_zip_comp)) {
-          zip_df <- input$custom_zip_comp # a list of files
-        } else {
-          zip_true <- F
-          output$custom_error <- output$custom_error_comp <- renderText({
-            paste0("ERROR: Please upload ZIP files as described above.")
-          })
+        # only look for a zip file for custom data
+        if (!isTruthy(input$custom_mwi_weights)){
+          if (!is.null(input$custom_zip)){
+            zip_df <- input$custom_zip # a list of files
+          } else if (!is.null(input$custom_zip_comp)) {
+            zip_df <- input$custom_zip_comp # a list of files
+          } else {
+            zip_true <- F
+            error <- T
+            output$custom_error <- output$custom_error_comp <- renderText({
+              paste0("ERROR: Please upload ZIP files as described above.")
+            })
+          }
         }
         
-        # check that metadata is in the list, that there's something in it,
-        # that the rest of the data is csv
-        if (zip_true &
-          "Metadata.xlsx" %in% zip_df$name & 
-          all(endsWith(tolower(zip_df$datapath), c(".csv", ".xlsx"))) & 
-          (nrow(zip_df) == 1 |
-          (nrow(zip_df) > 1 &
-          all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
-                       ".csv"))))){
-          # read the metadata file
-          m_reg_custom <- as.data.frame(
-            read_xlsx(zip_df$datapath[zip_df$name == "Metadata.xlsx"], sheet = 1)
-          )
-          
-          # read all custom data
-          custom_data <- lapply(
-            zip_df$name[zip_df$name != "Metadata.xlsx"], function(x){
-              read.csv(unz(input$custom_zip$datapath, x), check.names = F)
-            }
-          )
-          names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
-          
+        # for custom data
+        if (!isTruthy(input$custom_mwi_go_weights)){
+          # check that metadata is in the list, that there's something in it,
+          # that the rest of the data is csv
+          if (zip_true &
+              "Metadata.xlsx" %in% zip_df$name & 
+              all(endsWith(tolower(zip_df$datapath), c(".csv", ".xlsx"))) & 
+              (nrow(zip_df) == 1 |
+               (nrow(zip_df) > 1 &
+                all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
+                             ".csv"))))){
+            # read the metadata file
+            m_reg_custom <- as.data.frame(
+              read_xlsx(zip_df$datapath[zip_df$name == "Metadata.xlsx"], sheet = 1)
+            )
+            
+            # read all custom data
+            custom_data <- lapply(
+              zip_df$name[zip_df$name != "Metadata.xlsx"], function(x){
+                read.csv(unz(input$custom_zip$datapath, x), check.names = F)
+              }
+            )
+            names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
+            
+          } else {
+            error <- T
+            output$custom_error <- output$custom_error_comp <- renderText({
+              paste0(
+                "ERROR: One of the following is wrong with your uploaded files:\n",
+                "1: Does not contain Metadata.xlsx\n",
+                "2: Has additional custom data and custom data not in CSV format\n",
+                "3: There are no files\n",
+                "4: Additional files uploaded that are not CSV or XLSX format\n",
+                "Please fix the above, reupload, and re-do.")
+            })
+          }
+        } else {
+          # for custom weights
+          m_reg_custom <- input
+        }
+        
+        if (!error){
           incProgress(detail = "Running pipeline...")
           
           # now pass it into the pipeline file
@@ -2395,6 +2430,7 @@ server <- function(input, output, session) {
             mwi_pipeline(m_reg_custom, custom_data, run_custom = T)
           }, 
           error = function(cond){
+            error <- T 
             output$custom_error <- output$custom_error_comp <- renderText({
               paste0(
                 "ERROR: The pipeline returned the following error:\n",
@@ -2405,8 +2441,9 @@ server <- function(input, output, session) {
             
             return(list())
           })
-          
-          
+        }
+        
+        if (!error){
           incProgress(detail = "Processing app data...")
           
           # need to also all preceding data, if the list came out correctly
@@ -2423,8 +2460,8 @@ server <- function(input, output, session) {
             
             ap <- suppressWarnings(
               app_preprocess(overall_out$m_reg, 
-                            overall_out$info_dat, overall_out$mwi,
-                            app_start = F)
+                             overall_out$info_dat, overall_out$mwi,
+                             app_start = F)
             )
             
             # add counties/states to mwi
@@ -2446,16 +2483,6 @@ server <- function(input, output, session) {
               paste0("Complete! Click 'Download Custom MWI' to download. Upload resulting .RData on the 'Custom MWI Upload' section of the 'Explore States' or 'Explore ZIP Codes' page to explore.")
             })
           }
-        } else {
-          output$custom_error <- output$custom_error_comp <- renderText({
-            paste0(
-              "ERROR: One of the following is wrong with your uploaded files:\n",
-              "1: Does not contain Metadata.xlsx\n",
-              "2: Has additional custom data and custom data not in CSV format\n",
-              "3: There are no files\n",
-              "4: Additional files uploaded that are not CSV or XLSX format\n",
-              "Please fix the above, reupload, and re-do.")
-          })
         }
       })
   })
