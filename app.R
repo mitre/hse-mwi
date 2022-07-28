@@ -168,6 +168,11 @@ m_reg <- as.data.frame(
 # remove everything that doesn't have a numerator
 m_reg <- m_reg[!is.na(m_reg$Numerator),]
 rownames(m_reg) <- m_reg$Numerator
+# create a subset for the "create your own MWI" part
+sub_m <- m_reg[, c("Measure", "Category", "Weights", "Weights")]
+colnames(sub_m)[ncol(sub_m)-1] <- "Original Weights"
+colnames(sub_m)[ncol(sub_m)] <- "Updated Weights"
+rownames(sub_m) <- rownames(m_reg)
 
 # load index weighting/output
 info_df <- read.csv(
@@ -2321,12 +2326,22 @@ server <- function(input, output, session) {
   
   # preallocate download for custom processing
   overall_list <- reactiveVal()
+  upd_weights <- reactiveVal(sub_m)
   
   # output for the customizing just the weights
-  output$custom_mwi_weights <- renderDT(editable = "column", {
-    sub_m <- m_reg[, c("Measure", "Domain", "Weights", "Weights")]
-    colnames(sub_m)[ncol(sub_m)-1] <- "Original Weights"
-    colnames(sub_m)[ncol(sub_m)] <- "Updated Weights"
+  output$custom_mwi_weights <- renderDT(
+    rownames = F,
+    options = list(pageLength = nrow(m_reg)),
+    editable = list(target = "column", disable = list(columns = c(0:2))), 
+    {
+      upd_weights()
+    })
+  
+  # make table updates persistent
+  observeEvent(input$custom_mwi_weights_cell_edit, {
+    row  <- input$custom_mwi_weights_cell_edit$row
+    clmn <- input$custom_mwi_weights_cell_edit$col
+    upd_weights()[row, clmn] <- input$custom_mwi_weights_cell_edit$value
   })
   
   # download the Metadata file
@@ -2348,8 +2363,6 @@ server <- function(input, output, session) {
     }
   )
   
-  custom_weights_proxy <- dataTableProxy("custom_mwi_weights")
-  
   observeEvent(c(input$custom_mwi_go, input$custom_mwi_go_comp, input$custom_mwi_go_weights), {
     withProgress(
       message = "Creating custom Mental Wellness Index!", 
@@ -2358,10 +2371,6 @@ server <- function(input, output, session) {
         
         req(isTruthy(input$custom_mwi_go) || isTruthy(input$custom_mwi_comp) ||
               isTruthy(input$custom_mwi_go_weights))
-        
-        # testing
-        # input <- list()
-        # input$custom_zip <- "C:/Users/hdelossantos/Downloads/custom_zip.zip"
         
         # start by checking files
         error <- F
@@ -2419,7 +2428,10 @@ server <- function(input, output, session) {
           }
         } else {
           # for custom weights
-          m_reg_custom <- input
+          m_reg_custom <- m_reg
+          m_reg_custom[rownames(upd_weights()), "Weights"] <- 
+            upd_weights()[,"Updated Weights"]
+          custom_data <- list()
         }
         
         if (!error){
