@@ -2322,11 +2322,16 @@ server <- function(input, output, session) {
   
   # observe and create custom MWI ----
   
-  # STOPHERE: https://stackoverflow.com/questions/63834508/update-shiny-dt-based-on-editable-cells-user-input
-  
   # preallocate download for custom processing
   overall_list <- reactiveVal()
-  upd_weights <- reactiveVal(sub_m)
+  upd_weights <- reactiveVal(sub_m) # custom weight dataframe
+  button_click <- reactiveValues( # tracking which custom button clicked
+    "go" = 0,
+    "weights" = 0,
+    "comp" = 0
+  )
+  # STOP HERE: keeping track of which button clicked
+  # also make weight processing WAY more efficient, you can do it
   
   # output for the customizing just the weights
   output$custom_mwi_weights <- renderDT(
@@ -2364,19 +2369,20 @@ server <- function(input, output, session) {
   )
   
   observeEvent(c(input$custom_mwi_go, input$custom_mwi_go_comp, input$custom_mwi_go_weights), {
+    # require one button to be pressed at least
+    req(isTruthy(input$custom_mwi_go) || isTruthy(input$custom_mwi_go_comp) ||
+          isTruthy(input$custom_mwi_go_weights))
+    
     withProgress(
       message = "Creating custom Mental Wellness Index!", 
       detail = "Loading data...", {
         source(file.path("Processing_Pipeline", "pipeline_driver.R"))
         
-        req(isTruthy(input$custom_mwi_go) || isTruthy(input$custom_mwi_comp) ||
-              isTruthy(input$custom_mwi_go_weights))
-        
         # start by checking files
         error <- F
         zip_true <- T
         # only look for a zip file for custom data
-        if (!isTruthy(input$custom_mwi_weights)){
+        if (!isTruthy(input$custom_mwi_go_weights)){
           if (!is.null(input$custom_zip)){
             zip_df <- input$custom_zip # a list of files
           } else if (!is.null(input$custom_zip_comp)) {
@@ -2416,15 +2422,16 @@ server <- function(input, output, session) {
             
           } else {
             error <- T
-            output$custom_error <- output$custom_error_comp <- renderText({
-              paste0(
-                "ERROR: One of the following is wrong with your uploaded files:\n",
-                "1: Does not contain Metadata.xlsx\n",
-                "2: Has additional custom data and custom data not in CSV format\n",
-                "3: There are no files\n",
-                "4: Additional files uploaded that are not CSV or XLSX format\n",
-                "Please fix the above, reupload, and re-do.")
-            })
+            output$custom_error <- output$custom_error_comp <-
+              output$custom_error_weights <- renderText({
+                paste0(
+                  "ERROR: One of the following is wrong with your uploaded files:\n",
+                  "1: Does not contain Metadata.xlsx\n",
+                  "2: Has additional custom data and custom data not in CSV format\n",
+                  "3: There are no files\n",
+                  "4: Additional files uploaded that are not CSV or XLSX format\n",
+                  "Please fix the above, reupload, and re-do.")
+              })
           }
         } else {
           # for custom weights
@@ -2443,13 +2450,14 @@ server <- function(input, output, session) {
           }, 
           error = function(cond){
             error <- T 
-            output$custom_error <- output$custom_error_comp <- renderText({
-              paste0(
-                "ERROR: The pipeline returned the following error:\n",
-                cond, "\n",
-                "Please doublecheck your custom data and the metadata file according to the parameters given above, reupload, and re-do."
-              )
-            })
+            output$custom_error <- output$custom_error_comp <-
+              output$custom_error_weights <- renderText({
+                paste0(
+                  "ERROR: The pipeline returned the following error:\n",
+                  cond, "\n",
+                  "Please doublecheck your custom data and the metadata file according to the parameters given above, reupload, and re-do."
+                )
+              })
             
             return(list())
           })
@@ -2491,9 +2499,10 @@ server <- function(input, output, session) {
             # keep in reactive for download
             overall_list(overall_out)
             
-            output$custom_error <- output$custom_error_comp <- renderText({
-              paste0("Complete! Click 'Download Custom MWI' to download. Upload resulting .RData on the 'Custom MWI Upload' section of the 'Explore States' or 'Explore ZIP Codes' page to explore.")
-            })
+            output$custom_error <- output$custom_error_comp <- 
+              output$custom_error_weights <- renderText({
+                paste0("Complete! Click 'Download Custom MWI' to download. Upload resulting .RData on the 'Custom MWI Upload' section of the 'Explore States' or 'Explore ZIP Codes' page to explore.")
+              })
           }
         }
       })
