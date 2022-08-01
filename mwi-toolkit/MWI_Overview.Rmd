@@ -14,15 +14,14 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 # NOTE: once knit, move html output to www/
 ```
 
-The Mental Wellness Index (MWI) is a framework and tool that provides data on factors influencing community-level mental wellness for each ZIP code\* in the nation.
+The MWI is a framework and tool that provides data on factors influencing community-level mental wellness for each ZIP code\* in the nation.
 
 The MWI is composed of 28 measures organized under 3 domains: *Social Determinants of Health*, *Healthcare Access*, and *Health Status*. Additionally, the framework includes two dynamic factors: *Structural Racism* and *Community & Cultural Assets*. These factors are woven around and throughout the MWI domains, reflecting their influence throughout the framework.
 
-<center>
-
-![MWI Framework and Explanation](supporting_images/mwi_framework_w_explanation.png)\
-
+<center>![MWI Framework and Explanation](supporting_images/mwi_framework_w_explanation.png)\
 </center>
+
+<center>*The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*</center>
 
 The MWI is not intended to be a comprehensive evaluation of a community's mental wellness. We recommend use of the MWI in combination with local data and working alongside community groups to identify, account for, and include local-level factors that shape community mental wellness.
 
