@@ -11,7 +11,26 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::knit_hooks$set(optipng = knitr::hook_optipng)
-# NOTE: ADD REFERENCES TO MEASURES LATER
 ```
 
++------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                        | Social Determinants of Health                                                                                                                                                                                                                  |
++:=======================+:===============================================================================================================================================================================================================================================+
+|                        | *Built Environment*                                                                                                                                                                                                                            |
++------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Alcohol Outlet Density | Number of places that sell alcohol per 10,000 people. This measure only includes places that sell alcohol, but people are not allowed to drink alcohol in these places, such as liquor stores and some supermarkets (off-premise consumption). |
+|                        |                                                                                                                                                                                                                                                |
+|                        | ***Why is "Alcohol Outlet Density" important when we think about mental wellness?***                                                                                                                                                           |
+|                        |                                                                                                                                                                                                                                                |
+|                        | Studies on alcohol outlets has found an association between higher alcohol outlet density and adverse mental health outcomes.[^1] [^2]                                                                                                         |
+|                        |                                                                                                                                                                                                                                                |
+|                        | Click [here](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Outlet_Density.pdf?raw=true) to learn more about this measure.                                                                                          |
+|                        |                                                                                                                                                                                                                                                |
+|                        | **Stratified:** (N/A)                                                                                                                                                                                                                          |
+|                        |                                                                                                                                                                                                                                                |
+|                        | **Data Source:** County Business Partners (CBP)                                                                                                                                                                                                |
++------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+[^1]: Giesbrecht, N., Huguet, N., Ogden, L., Kaplan, M. S., McFarland, B. H., Caetano, R., Conner, K. R., & Nolte, K. B. (2015). Acute alcohol use among suicide decedents in 14 US states: impacts of off-premise and on premise alcohol outlet density. Addiction, 110(2), 300--307.. <a href = 'https://doi.org/10.1111/add.12762 ' target = "_blank">(link)</a>
+
+[^2]: Pereira, G., Wood, L., Foster, S., & Haggar, F. (2013). Access to alcohol outlets, alcohol consumption and mental health. PLOS One, 8(1), Article e53461. <a href = 'https://doi.org/10.1371/journal.pone.0053461' target = "_blank">(link)</a>
