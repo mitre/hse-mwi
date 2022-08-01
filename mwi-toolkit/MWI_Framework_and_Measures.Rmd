@@ -18,20 +18,20 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 
 The MWI framework contains three domains and two dynamic factors:
 
-* Domains:
-  * Social Determinants of Health
-  * Healthcare Access
-  * Health Status
-* Dynamic Factors
-  * Structural Racism
-  * Community and Cultural Assets
+-   Domains:
+    -   Social Determinants of Health
+    -   Healthcare Access
+    -   Health Status
+-   Dynamic Factors
+    -   Structural Racism
+    -   Community and Cultural Assets
 
 <center>![MWI Framework and Measures](supporting_images/mwi_framework_w_measures.png)\
 </center>
 
 [**Domains and Sub-Domains**]{.underline}
 
-The three domains in the MWI framework are: Social Determinants of Health, Healthcare Access, and Health Status. These are distinct and influence one another (they do not overlap). Each domain includes a set of measures, each measure belongs to a single domain. To learn more about the measures under each domain, you can refer to the "Measures and Data Sources" section.
+The three domains in the MWI framework are: Social Determinants of Health, Healthcare Access, and Health Status. These are distinct and influence one another (they do not overlap). Each domain includes a set of measures, each measure belongs to a single domain. 
 
 1.  **Social Determinants of Health:** the social, economic, environmental, and structural conditions that influence a community's mental wellness and quality of life. There are 15 measures in this domain, organized under the following sub-domains:
     -   **Built Environment:** The physical parts of where people live and work.
