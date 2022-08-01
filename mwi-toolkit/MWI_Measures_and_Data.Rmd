@@ -1,0 +1,17 @@
+---
+title: "MWI Measures and Data"
+output: 
+  html_document:
+    theme: cerulean
+    # toc: true
+    # toc_depth: 4
+    # toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+# NOTE: ADD REFERENCES TO MEASURES LATER
+```
+
+
