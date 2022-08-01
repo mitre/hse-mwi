@@ -16,6 +16,10 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 
 <center>*The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*</center>
 
+#
+
+<center>![MWI Framework and Measures](supporting_images/mwi_framework_w_measures.png)\ </center>
+
 The MWI framework contains three domains and two dynamic factors:
 
 -   Domains:
@@ -24,45 +28,61 @@ The MWI framework contains three domains and two dynamic factors:
     -   Health Status
 -   Dynamic Factors
     -   Structural Racism
-    -   Community and Cultural Assets
+    -   Community and Cultural Assets 
 
-<center>![MWI Framework and Measures](supporting_images/mwi_framework_w_measures.png)\
-</center>
+#
 
 [**Domains and Sub-Domains**]{.underline}
 
-The three domains in the MWI framework are: Social Determinants of Health, Healthcare Access, and Health Status. These are distinct and influence one another (they do not overlap). Each domain includes a set of measures, each measure belongs to a single domain. 
+The three domains in the MWI framework are: Social Determinants of Health, Healthcare Access, and Health Status. These are distinct and influence one another (they do not overlap). Each domain includes a set of measures, each measure belongs to a single domain.
 
-1.  **Social Determinants of Health:** the social, economic, environmental, and structural conditions that influence a community's mental wellness and quality of life. There are 15 measures in this domain, organized under the following sub-domains:
-    -   **Built Environment:** The physical parts of where people live and work.
+1.  **Social Determinants of Health:** the social, economic, environmental, and structural conditions that influence a community's mental wellness and quality of life.[^1] There are 15 measures in this domain, organized under the following sub-domains:
+    -   **Built Environment:** The physical parts of where people live and work, such as easy access to parks and having broadband access.[^2]
     -   **Education Success:** Ability to receive formal education and to achieve graduation outcomes.
-    -   **Income & Employment:** Income earned in comparison to the federal poverty level and employment status.
+    -   **Income & Employment:** Income earned in comparison to the federal poverty level and employment status.[^3]
     -   **Housing:** Living space affordability, quality, and economic and racial/ethnic spatial polarization.
-    -   **Social Capital:** Refers to the resources to which individuals and groups have access through their social networks .
-    -   **Safety and Community Trauma:** Factors contributing to community members living in peace, harmony, and mutual respect.
-    -   **Financial Access:** Availability and affordability of financial services for individuals in a community.
+    -   **Social Capital:** Refers to the resources to which individuals and groups have access through their social networks. These social networks could be at the personal, public, professional, and other levels. When these networks intersect the value of these connections increases, increasing the overall social capital.[^4] 
+    -   **Safety and Community Trauma:** Safety refers to factors contributing to community members living in peace, harmony, and mutual respect,[^5]  while community trauma refers to experiences by community members that have structural and social traumatic consequences.[^6] 
+    -   **Financial Access:** Availability and affordability of financial services for individuals in a community.[^7]
 2.  **Healthcare Access:** Access to traditional healthcare systems, accounting for quality, financial, geographic, and other considerations. There are 3 measures in this domain, organized under the following sub-domains:
     -   **Treatment Facilities:** Access to physical locations providing appropriate medical treatment.
-    -   **Health Insurance:** Service covering some or all health and medical cost. To be covered by this service, people are required to make a monthly payment. The monthly payment is required even if the service is not used.
+    -   **Health Insurance:** Service covering some or all health and medical costs. 
 3.  **Health Status:** mental health, substance use, and other morbidity and mortality measures that are linked to mental wellness. There are 10 measures in this domain, organized under the following sub-domains:
     -   **Substance Use:** Mortality from and frequency of substance use behaviors at a community level.
-    -   **Mental Health:** Emotional, psychological, and social well-being of communities.
+    -   **Mental Health:** Emotional, psychological, and social well-being of communities.[^8]
     -   **Other Morbidity and Mortality:** Other forms of morbidity and mortality correlated with mental wellness.
 
 [**Dynamic Factors**]{.underline}
 
 *Community & Cultural Assets* and *Structural Racism* acknowledge the positive and negative influences of human factors that influence outcomes and the distribution of assets and obstacles for measures in all three domains:
 
-**Community & Cultural Assets:** Resources in the form of people, places, and organizations that promote social connection and improve the health and wellbeing of the community.[^1] [^2]
+**Community & Cultural Assets:** Resources in the form of people, places, and organizations that promote social connection and improve the health and wellbeing of the community.[^9] [^10]
 
-[^1]: Arts & Planning Toolkit. (n.d.). What is Cultural Asset Mapping? <a href = 'https://artsandplanning.mapc.org/cultural-asset-mapping/' target = "_blank">(link)</a>
+[^1]: Healthy People 2030. (n.d.) Social Determinants of Health. Office of Disease Prevention and Health Promotion. <a href = https://health.gov/healthypeople/priority-areas/social-determinants-health target = "_blank">(link)</a>
 
-[^2]: National Institute for Health and Care Excellence. (2017, March 3). Community engagement: improving health and wellbeing, Quality standard [QS148]. <a href = 'https://www.nice.org.uk/guidance/qs148/chapter/quality-statement-3-identifying-community-assets' target = "_blank">(link)</a>
+[^2]: Centers for Disease Control and Prevention. (2011, June). Impact of the Build Environment on Health. <a href = 'https://www.cdc.gov/nceh/publications/factsheets/impactofthebuiltenvironmentonhealth.pdf ' target = "_blank">(link)</a>
+
+[^3]: Healthcare.gov. (n.d.) Federal poverty level (FPL). Centers for Medicare and Medicaid Services (U.S.) . <a href = 'https://www.healthcare.gov/glossary/federal-poverty-level-fpl/' target = "_blank">(link)</a>
+
 
 Community & cultural assets influence all measures in the MWI. Community & cultural assets are challenging to quantify because they are often not measured in national datasets, but they have an important influence on community mental wellness. One example of a measure where community and cultural assets can be seen prominently is "third places," which measures the number of places where people spend time outside of their homes ("first place") and their workplaces ("second place"), per 100,000 people.
 
-**Structural Racism:** The macrolevel systems, social forces, institutions, ideologies, and processes that interact with one another to generate and reinforce inequities among racial and ethnic groups.[^3]
+**Structural Racism:** The macrolevel systems, social forces, institutions, ideologies, and processes that interact with one another to generate and reinforce inequities among racial and ethnic groups.[^11]
 
-[^3]: Gee, G., & Ford, C. (2011). Structural Racism and Health Inequities: Old Issues, New Directions. Du Bois Review: Social Science Research on Race, 8(1), 115-132. <a href = 'https://doi.org/10.1017/S1742058X11000130' target = "_blank">https://doi.org/10.1017/S1742058X11000130</a>
+[^4]: Moore S, Kawachi ITwenty years of social capital and health research: a glossary J Epidemiol Community Health 2017;71:513-517. <a href = 'https://jech.bmj.com/content/71/5/513' target = "_blank">(link)</a>
+
+[^5]: Department of Justice, Washington, DC. Office of Juvenile Justice and Delinquency Prevention. (1998). Guide for Implementing the Balanced and Restorative Justice Model. <a href = 'https://eric.ed.gov/?id=ED434981' target = "_blank">(link)</a>
+
+[^6]: Pinderhughes, H., Davis, R. A., & Williams, M. (2015). Adverse community experiences and resilience: A framework for addressing and preventing community trauma. Prevention Institute. <a href = 'https://bit.ly/2Phz53G' target = "_blank">(link)</a>
+
+[^7]: Innovations for Poverty Action. (2018). Access to Finance. <a href = 'https://www.poverty-action.org/topics/access-finance' target = "_blank">(link)</a>
+
+[^8]: MentalHealth.gov (2022). What is Mental Health? Department of Health and Human Services. <a href = 'https://www.mentalhealth.gov/basics/what-is-mental-health' target = "_blank">(link)</a>
+
+[^9]: Arts & Planning Toolkit. (n.d.). What is Cultural Asset Mapping? <a href = 'https://artsandplanning.mapc.org/cultural-asset-mapping/' target = "_blank">(link)</a>
+
+[^10]: National Institute for Health and Care Excellence. (2017, March 3). Community engagement: improving health and wellbeing, Quality standard [QS148]. <a href = 'https://www.nice.org.uk/guidance/qs148/chapter/quality-statement-3-identifying-community-assets' target = "_blank">(link)</a>
+
+[^11]: Gee, G., & Ford, C. (2011). Structural Racism and Health Inequities: Old Issues, New Directions. Du Bois Review: Social Science Research on Race, 8(1), 115–132. <a href = 'https://doi.org/10.1017/S1742058X11000130' target = "_blank">(link)</a>
 
 Structural racism influences all measures in the MWI. Structural racism harms society as a whole, not only Black populations and other people of color. Structural racism operates on many levels, often intersecting with other "isms" (sexism, classism, etc.) and has cascading effects that are often unnamed and seemingly unnoticed. These cascading effects highlight the importance of our approach for developing the MWI---that equity delivered to historically marginalized populations will accrue to others and potentially catalyzes movement toward social and racial justice. One example of a measure where structural racism can be seen prominently is the Index of Concentration at the Extremes (a proxy for residential segregation).
