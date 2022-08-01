@@ -16,12 +16,17 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 
 <center>*The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*</center>
 
-The MWI framework contains three domains and two dynamic factors.
+The MWI framework contains three domains and two dynamic factors:
 
-<center>
+* Domains:
+  * Social Determinants of Health
+  * Healthcare Access
+  * Health Status
+* Dynamic Factors
+  * Structural Racism
+  * Community and Cultural Assets
 
-![MWI Framework and Measures](supporting_images/mwi_framework_w_measures.png)\
-
+<center>![MWI Framework and Measures](supporting_images/mwi_framework_w_measures.png)\
 </center>
 
 [**Domains and Sub-Domains**]{.underline}
