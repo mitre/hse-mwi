@@ -40,3 +40,21 @@ To explore this option, you can:
 You can also explore the MWI by hovering over ZIP Codes on the map, or by hovering over points on the interactive distribution.
 
 ![](images/explore_states.png)
+
+**How to Use the Explore Zip Codes Tab**
+
+The Explore Zip Codes option provides a community overview that shows the MWI and each individual measure for a specific ZIP Code. This page is useful to see all measures for a ZIP Code, or to focus on areas (which may cross state lines) surrounding a ZIP Code.
+
+To explore this option, you can:
+
+-   Select population to view (either Overall or Black),
+
+-   Select to explore either the overall MWI or an individual measure from the drop down menu,
+
+-   Select a ZIP Code by entering the numeric ZIP Code under "Exploration Options," or by clicking on a ZIP Code on the interactive map,
+
+-   Explore the overall Mental Wellness Index for the ZIP Code selected and how it ranked in the state,
+
+-   View how each measure ranked for that community.
+
+    ![](images/explore_zip.png)
