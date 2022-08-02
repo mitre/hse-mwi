@@ -1,0 +1,42 @@
+---
+title: "How to Use the MWI Tool!"
+output: 
+  html_document:
+    theme: cerulean
+    # toc: true
+    # toc_depth: 4
+    # toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+```
+
+The MWI tool includes two main features:
+
+-   How to explore mental wellness at the State level
+
+-   How to explore mental wellness at the ZIP Code level
+
+Here you can find instructions on how to use the MWI, as well as videos and use cases to also guide you.
+
+\<Insert MWI Overview Video here\> \<Insert Explore MWI Maps Video here\>
+
+**How to Use the Explore States Tab**
+
+The Explore States option allows you to explore the MWI through an interactive map and distribution visualization. This option is useful if you would like to focus on a particular state or compare a ZIP Code to state-wide rankings.
+
+To explore this option, you can:
+
+-   Select population to view (either Overall or Black),
+
+-   Select either a specific state or the entire country ("All" states),
+
+-   Select to explore either the overall MWI or an individual measure.
+
+-   Select a ZIP Code within their selected state by entering the numeric ZIP Code under "Exploration Options," or by clicking on a ZIP Code on the interactive map.
+
+You can also explore the MWI by hovering over ZIP Codes on the map, or by hovering over points on the interactive distribution.
+
+![](images/explore_states.png)
