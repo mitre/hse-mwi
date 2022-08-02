@@ -58,3 +58,4 @@ To explore this option, you can:
 -   View how each measure ranked for that community.
 
     ![](images/explore_zip.png)
+
