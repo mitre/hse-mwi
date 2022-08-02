@@ -42,7 +42,17 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 |                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 |                                     | **Data Source:** American Community Survey (ACS)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 +-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Living Within a Half-Mile of a Park |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Living Within a Half-Mile of a Park | Percent of people that live within a half-mile of a park.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|                                     | **Why is "Living Within a Half-Mile of Park" important when we think about mental wellness?**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|                                     | Living close to natural areas, such as parks, can have benefits on mental health.[^7] [^8]Studies have found that living within short walking distance of a park has a positive impact on mental health. [^9]                                                                                                                                                                                                                                                                                                                                                                                                              |
+|                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|                                     | Click [here](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Living_Within_a_Half_Mile_of_a_Park.pdf?raw=true) to learn more about this measure.                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|                                     | **Stratified:** N/A                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|                                     | **Data Source:** Centers for Disease Control (CDC) Environmental Public Health (EPH) Tracking Network                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 +-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 [^1]: Giesbrecht, N., Huguet, N., Ogden, L., Kaplan, M. S., McFarland, B. H., Caetano, R., Conner, K. R., & Nolte, K. B. (2015). Acute alcohol use among suicide decedents in 14 US states: impacts of off-premise and on premise alcohol outlet density. Addiction, 110(2), 300--307.. <a href = 'https://doi.org/10.1111/add.12762 ' target = "_blank">(link)</a>
@@ -56,3 +66,55 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 [^5]: Benda, N. C., Veinot, T. C., Sieck, C. J., & Ancker, J. S. (2020). broadband internet access is a social determinant of health! American Journal of Public Health, 110(8), 1123--1125. <a href = 'https://doi.org/10.2105/ajph.2020.305784' target = "_blank">(link)</a>
 
 [^6]: Tomer, A., Fishbane, L., Siefer, A., & Callahan, B. (2020). Digital Prosperity: How broadband can deliver health and equity to all communities. Brookings Metropolitan Policy Program. <a href = 'https://www.brookings.edu/wpcontent/uploads/2020/02/20200227_BrookingsMetro_Digital-Prosperity-Report-final.pdf ' target = "_blank">(link)</a>
+
+[^7]: Balseviciene, B., Sinkariova, L., Grazuleviciene, R., Andrusaityte, S., Uzdanaviciute, I., Dedele, A., & Nieuwenhuijsen, M. J. (2014). *Impact of residential greenness on preschool children's emotional and behavioral problems.* International Journal of Environmental Research and Public Health, 11(7), 6757--6770. <https://doi.org/10.3390/ijerph110706757>
+
+[^8]: Mitchell, R. J., Richardson, E. A., Shortt, N. K., & Pearce, J. R. (2015). *Neighborhood environments and socioeconomic inequalities in mental well-being.* American Journal of Preventive Medicine, 49(1), 80--84. <https://doi.org/10.1016/j.amepre.2015.01.017>
+
+[^9]: Sturm, R., &
+    Cohen, D. (2014). *Proximity to urban parks and mental health.* The
+    Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Sturm, R., &
+    Cohen, D. (2014). *Proximity to urban parks and mental health.* The
+    Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Sturm, R., &
+    Cohen, D. (2014). *Proximity to urban parks and mental health.* The
+    Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>
+
+
