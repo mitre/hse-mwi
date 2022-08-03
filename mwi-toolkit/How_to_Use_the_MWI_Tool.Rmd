@@ -57,4 +57,40 @@ To explore this option, you can:
 
 -   View how each measure ranked for that community.
 
-    ![](images/explore_zip.png)
+<center>![](images/explore_zip.png)</center>
+
+**Use Case: Using the MWI to Understand the Mental Health Needs of a Community**
+
+An organization in Baltimore, MD works to improve educational outcomes for youth and ensure families are healthy and successful in the West Baltimore area. They are conducting a community participatory budgeting process this summer to decide how to allocate their funding.
+
+**Plan community conversations to review the MWI!**
+
+The non-profit meets with members of the West Baltimore community to talk about the drivers of overall mental wellness, poor mental health and substance use disorders in their community. They guide the conversation following the three steps below.
+
+<center>![](images/steps.png)</center>
+
+**Step 1: Review Measures in the MWI**
+
+The MWI includes 28 measures organized under three domains: Social Determinants of Health, Healthcare Access, and Health Status. The organization and community members explore the Mental Wellness Index of their community.
+
+The organization enters the ZIP code in the MWI tool for their community to see the overall Mental Wellness Index measure. To do so, they follow these steps:
+
+-   Go to the MWI tool, select "Maryland" from the drop-down menu, and select "Start Exploring!
+
+<center>![](images/review_measures.png)</center>
+
+-   Since the group is interested in a community in a specific zip code, they select the "Explore ZIP Codes" option:
+
+<center>![](images/review_measures2.png)</center>
+
+-   The group is interested in seeing the Mental Wellness Index for the Black population living in their zip code, so they go to the "Exploration Options" section and select "Black" for "Which population's MWI do you want to view?":
+
+<center>![](images/review_measures3.png)</center>
+
+-   As a group they have decided to look at the overall Mental Wellness Index first so they select "Mental Wellness Index" from the drop-down menu under "What measure would you like to focus on?"
+
+<center>![](images/review_measures4.png)</center>
+
+-   The group starts exploring the tool by entering the ZIP Code number, which gives them the opportunity to take a closer look at their community:
+
+<center>![](images/review_measures5.png)</center>
