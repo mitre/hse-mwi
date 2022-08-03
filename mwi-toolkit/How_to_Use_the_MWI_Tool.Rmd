@@ -94,3 +94,19 @@ The organization enters the ZIP code in the MWI tool for their community to see 
 -   The group starts exploring the tool by entering the ZIP Code number, which gives them the opportunity to take a closer look at their community:
 
 <center>![](images/review_measures5.png)</center>
+
+**Step 2: Explore MWI Score and Measures**
+
+The group decides to take a closer look at the MWI score and measures results for their community.
+
+-   On the right hand-side they see their community has an overall Mental Wellness Index score of 22, a low score compared to the rest of the nation.
+
+<center>![](images/explore.png)</center>
+
+-   They also notice their community Mental Wellness is low compared to the Mental Wellness Index of their state.
+
+<center>![](images/explore2.png)</center>
+
+-   To better understand what are the specific Mental Wellness areas that need to be targeted to improve the mental wellness of their community, they explore the score for each individual measure. They focus on those with a lower score as those indicate more obstacles to mental wellness.
+
+<center>![](images/explore3.png)</center>
