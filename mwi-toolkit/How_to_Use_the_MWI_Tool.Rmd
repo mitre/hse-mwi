@@ -110,3 +110,15 @@ The group decides to take a closer look at the MWI score and measures results fo
 -   To better understand what are the specific Mental Wellness areas that need to be targeted to improve the mental wellness of their community, they explore the score for each individual measure. They focus on those with a lower score as those indicate more obstacles to mental wellness.
 
 <center>![](images/explore3.png)</center>
+
+**Step 3: Identify Priority Mental Wellness Factors**
+
+Based on their community conversations and review of the measures in the MWI, the organization selects three measures to prioritize as part of their budget decision making process.
+
+-   Voter participation (a measure of social capital),
+
+-   No high school diploma (an education measure), and
+
+-   Unemployment (a measure of employment.<center>![](images/identify.png)</center>
+
+Now the organization and community members can discuss and make a data-informed decision on how to best allocate funds to support their community!
