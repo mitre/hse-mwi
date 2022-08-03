@@ -119,6 +119,18 @@ Based on their community conversations and review of the measures in the MWI, th
 
 -   No high school diploma (an education measure), and
 
--   Unemployment (a measure of employment.<center>![](images/identify.png)</center>
+-   Unemployment (a measure of employment.
+
+    <center>![](images/identify.png)</center>
 
 Now the organization and community members can discuss and make a data-informed decision on how to best allocate funds to support their community!
+
+**How to Customize the MWI**
+
+You can customize the MWI to meet your needs. The MWI includes 28 measures, however, communities might have other important wellbeing factors they would like to include in their analysis which are not included as part of the baseline framework. It can be modified in the following ways:
+
+-   Removing measures
+
+-   Adding and replacing measures and data sets
+
+-   Modifying measure weights
