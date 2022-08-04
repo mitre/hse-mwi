@@ -69,6 +69,66 @@ The non-profit meets with members of the West Baltimore community to talk about 
 
 <center>![](images/steps.png)</center>
 
+<!-- I tried this -->
+
+<!-- div { border: 1px solid #CCC; } -->
+
+<!-- ::: {style="display: inline"} -->
+
+<!-- Step 1: Review Measures in the MWI
+The MWI contains 28 measures.  The organization
+and community members explore the Mental Wellness Index of their community.
+ -->
+
+<!-- ::: -->
+
+<!-- ::: {style="display: inline"} -->
+
+<!-- Step 2: Explore MWI Score and Measures
+The group notices some MWI measures for their
+community are ranked higher or lower than the rest
+of their state and the nation.  They also notice measure
+areas that reflect key topics from their community discussion.
+ -->
+
+<!-- ::: -->
+
+<!-- ::: {style="display: inline"} -->
+
+<!-- Step 3: Identify Priority Mental Wellness Factors
+Based on their community conversations and review of the
+measures in the MWI, the organization selects three measures
+to prioritize as part of their budget decision making process: 
+•	Voter participation (a measure of social capital), 
+•	No high school diploma (an education measure), and 
+•	Unemployment (a measure of employment).
+ -->
+
+<!-- ::: -->
+
+<!-- I also tried this  -->
+<!-- <span>Step 1: Review Measures in the MWI
+The MWI contains 28 measures.  The organization and
+community members explore the Mental Wellness Index of their community.
+</span> -->
+<!-- <span>Step 2: Explore MWI Score and Measures
+The group notices some MWI measures for their community
+are ranked higher or lower than the rest of their state and
+the nation.  They also notice measure areas that reflect key
+topics from their community discussion.
+</span> -->
+<!-- <span>Step 3: Identify Priority Mental Wellness Factors
+Based on their community conversations and review of the measures
+in the MWI, the organization selects three measures to prioritize 
+as part of their budget decision making process: 
+•	Voter participation (a measure of social capital), 
+•	No high school diploma (an education measure), and 
+•	Unemployment (a measure of employment).
+</span> -->
+
+<!-- I tried some other failed methods too - let me know if you'd like to see them -->
+
+
 **Step 1: Review Measures in the MWI**
 
 The MWI includes 28 measures organized under three domains: Social Determinants of Health, Healthcare Access, and Health Status. The organization and community members explore the Mental Wellness Index of their community.
@@ -134,3 +194,4 @@ You can customize the MWI to meet your needs. The MWI includes 28 measures, howe
 -   Adding and replacing measures and data sets
 
 -   Modifying measure weights
+
