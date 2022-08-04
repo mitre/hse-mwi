@@ -21,7 +21,7 @@ The MWI tool includes two main features:
 
 Here you can find instructions on how to use the MWI, as well as videos and use cases to also guide you.
 
-\<Insert MWI Overview Video here\> \<Insert Explore MWI Maps Video here\>
+<!-- \<Insert MWI Overview Video here\> \<Insert Explore MWI Maps Video here\> -->
 
 **How to Use the Explore States Tab**
 
@@ -75,59 +75,67 @@ The non-profit meets with members of the West Baltimore community to talk about 
 
 <!-- ::: {style="display: inline"} -->
 
+```{=html}
 <!-- Step 1: Review Measures in the MWI
 The MWI contains 28 measures.  The organization
 and community members explore the Mental Wellness Index of their community.
  -->
-
+```
 <!-- ::: -->
 
 <!-- ::: {style="display: inline"} -->
 
+```{=html}
 <!-- Step 2: Explore MWI Score and Measures
 The group notices some MWI measures for their
 community are ranked higher or lower than the rest
 of their state and the nation.  They also notice measure
 areas that reflect key topics from their community discussion.
  -->
-
+```
 <!-- ::: -->
 
 <!-- ::: {style="display: inline"} -->
 
+```{=html}
 <!-- Step 3: Identify Priority Mental Wellness Factors
 Based on their community conversations and review of the
 measures in the MWI, the organization selects three measures
 to prioritize as part of their budget decision making process: 
-•	Voter participation (a measure of social capital), 
-•	No high school diploma (an education measure), and 
-•	Unemployment (a measure of employment).
+•   Voter participation (a measure of social capital), 
+•   No high school diploma (an education measure), and 
+•   Unemployment (a measure of employment).
  -->
-
+```
 <!-- ::: -->
 
 <!-- I also tried this  -->
+
+```{=html}
 <!-- <span>Step 1: Review Measures in the MWI
 The MWI contains 28 measures.  The organization and
 community members explore the Mental Wellness Index of their community.
 </span> -->
+```
+```{=html}
 <!-- <span>Step 2: Explore MWI Score and Measures
 The group notices some MWI measures for their community
 are ranked higher or lower than the rest of their state and
 the nation.  They also notice measure areas that reflect key
 topics from their community discussion.
 </span> -->
+```
+```{=html}
 <!-- <span>Step 3: Identify Priority Mental Wellness Factors
 Based on their community conversations and review of the measures
 in the MWI, the organization selects three measures to prioritize 
 as part of their budget decision making process: 
-•	Voter participation (a measure of social capital), 
-•	No high school diploma (an education measure), and 
-•	Unemployment (a measure of employment).
+•   Voter participation (a measure of social capital), 
+•   No high school diploma (an education measure), and 
+•   Unemployment (a measure of employment).
 </span> -->
-
+```
 <!-- I tried some other failed methods too - let me know if you'd like to see them -->
-
 
 **Step 1: Review Measures in the MWI**
 
@@ -195,3 +203,58 @@ You can customize the MWI to meet your needs. The MWI includes 28 measures, howe
 
 -   Modifying measure weights
 
+The following videos and use case will provide guidance on how to create your own MWI.
+
+<!-- \<Insert Create your own MWI\> \<Insert Downloading Data and Viewing Documentation\> -->
+
+**Use Case: Creating Your Own MWI**
+
+A non-profit is partnering with a county in California to decide how to allocate its resources to promote mental wellbeing. They are specifically interested in focusing on upstream factors -- like income, housing, education, and access to health care -- that can contribute to the prevention of poor mental health outcomes. They also found additional factors important to their community not included in the MWI, for example access to primary health care. Their goal is to identify the upstream factors impacting mental wellbeing in that county and to use these factors to identify priority ZIP codes where they can work to promote mental wellbeing.
+
+**Plan community conversations to review the MWI.**
+
+The non-profit meets with members from the community to talk about the drivers of overall mental wellness, poor mental health and substance use disorders in their community. They guide the conversation following the steps below.
+
+<!-- I don't have hyperlinks for the 7 below sentences that call for them -->
+
+Click here to access resources to help you guide data conversations with communities.
+
+**Step 1: Review Measures in the MWI**
+
+The MWI contains 28 measures. The non-profit and community members review the measures and decide they need to modify the MWI to meet their needs. They need to add some new measures, remove some of them, and review and adjust the weights for the measures.
+
+Click here for instructions on where to find the list of measures
+
+**Step 2: Identify Data for the New Measure**
+
+The community **identified access to primary health care** as an important way to help promote mental wellness.
+
+The non-profit organization decides to include a measure for "Access to Community Health Centers, and remove the measures "Alcohol Outlet Density", and "Financial Access".
+
+Click here for instructions on how to identify a new data set
+
+**Step 3: Update the Individual Measure Weights**
+
+The organization now has 27 measures they will use to customize their own MWI. They review the measures and adjust the weights for each measure.
+
+Click here for instructions on how to customize the weights for each measure in the MWI
+
+**Step 4: Update MWI Metadata**
+
+The organization downloads the MWI metadata file and updates the file to include the new list of measures.
+
+Click here for instructions on how to modify the data for the customized MWI
+
+**Step 5: Prep New Measure Data**
+
+To use the new "Access to Community Health Center" measure data in the MWI, the organization prepares their data file.
+
+Click here for instructions on how to prepare your data file for the customized MWI
+
+**Step 6: Run the Customized MWI**
+
+Now the organization is ready to run their customized MWI.
+
+Click here for instructions on how to generate your customized MWI
+
+<center>**Now the group can use the customized MWI to explore mental wellness factors in California!**</center>
