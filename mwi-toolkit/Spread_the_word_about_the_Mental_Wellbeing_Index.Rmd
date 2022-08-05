@@ -1,11 +1,16 @@
 ---
-title: "Spread the Word about the Mental Wellbeing Index!"
-output: html_document
-date: "2022-08-05"
+title: "Spread the word about the Mental Wellbing Index"
+output: 
+  html_document:
+    theme: cerulean
+    # toc: true
+    # toc_depth: 4
+    # toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 ```
 
 The Mental Wellness Index can influence, guide, inform various organizations and agencies about the factors influencing mental wellbeing at the community level. Organizations that may find the MWI useful include community-based organizations, universities, national non-profits, health departments, and government agencies.
@@ -24,7 +29,8 @@ Use these resources to let others know about the MWI:
 
 **Social Media Post #1**
 
-The Mental Wellness Index quantifies 28 factors that influence community-level mental wellness for each ZIP code in the nation. These insights can promote data-informed decisions and more equitable allocation of resources in partnership with communities. Learn more:<https://sjp.mitre.org/mwi>
+The Mental Wellness Index quantifies 28 factors that influence community-level mental wellness for each ZIP code in the nation. These insights can promote data-informed decisions and more equitable allocation of resources in partnership with communities. Learn more:
+<https://sjp.mitre.org/mwi>
 
 Facebook and LinkedIn
 
