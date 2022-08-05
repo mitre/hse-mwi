@@ -103,6 +103,8 @@ The MWI team used these insights to inform measure selection and MWI tool develo
 
 Analytic Results:
 
+<center>
+
 ![](images/svi.png)
 
 ![](images/minority_health.png)
@@ -111,37 +113,19 @@ Analytic Results:
 
 ![](images/uns.png)
 
-![
+![](images/black.png){width="720"}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-](images/black.png){width="720"}
+</center>
 
 [**Downloadable Data and Information**]{.underline}
 
-1) [Data Information](https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv): The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and
-directionality.
+1)  [Data Information](https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv): The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and directionality.
 
-2) [Mental Wellness Index for Black Populations](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv): The calculated MWI for Black populations for each ZCTA.
+2)  [Mental Wellness Index for Black Populations](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv): The calculated MWI for Black populations for each ZCTA.
 
-3) [Mental Wellness Index for Overall Population](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv): The calculated MWI for the overall population for each ZCTA.
+3)  [Mental Wellness Index for Overall Population](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv): The calculated MWI for the overall population for each ZCTA.
 
-4) [MWI Project Github Page](https://github.com/mitre/hse-mwi): This page is home to all of the raw data, code to manipulate the data, documentation concerning each measure, and everything else concerned with the creation of the MWI Tool.
+4)  [MWI Project Github Page](https://github.com/mitre/hse-mwi): This page is home to all of the raw data, code to manipulate the data, documentation concerning each measure, and everything else concerned with the creation of the MWI Tool.
 
 **Measures Documentation**
 
