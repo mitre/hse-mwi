@@ -111,4 +111,100 @@ Analytic Results:
 
 ![](images/uns.png)
 
-![](images/black.png)
+![
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+](images/black.png){width="720"}
+
+[**Downloadable Data and Information**]{.underline}
+
+1) [Data Information](https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv): The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and
+directionality.
+
+2) [Mental Wellness Index for Black Populations](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv): The calculated MWI for Black populations for each ZCTA.
+
+3) [Mental Wellness Index for Overall Population](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv): The calculated MWI for the overall population for each ZCTA.
+
+4) [MWI Project Github Page](https://github.com/mitre/hse-mwi): This page is home to all of the raw data, code to manipulate the data, documentation concerning each measure, and everything else concerned with the creation of the MWI Tool.
+
+**Measures Documentation**
+
+Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each measure can be accessed below. Click on the link to download the corresponding documentation.
+
+**Social Determinants of Health**
+
+-   [Alcohol Outlet Density](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Outlet_Density.pdf?raw=true)
+
+-   [Below 100% Poverty Rate](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Below_100_Federal_Poverty_Level.pdf?raw=true)
+
+-   [Broadband Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Broadband_Access.pdf?raw=true)
+
+-   [Mortgage Lending Difference](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mortgage_Lending_Difference.pdf?raw=true)
+
+-   [No High School Diploma](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/No_High_School_Diploma.pdf?raw=true)
+
+-   [Nursery and Preschool Enrollment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Nursery_and_Preschool_Enrollment.pdf?raw=true)
+
+-   [Police Killing](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Police_Killings.pdf?raw=true)s
+
+-   [Residential Segregation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Residential_segregation.pdf?raw=true)
+
+-   [Third Places](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Third_Places.pdf?raw=true)
+
+-   [Unemployment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Unemployment.pdf?raw=true)
+
+-   [Access to Financial Services](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Access_to_Financial_Services.pdf?raw=true)
+
+-   [Violent Crime](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Violent_crime.pdf?raw=true)
+
+-   [Housing Stress](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Housing_Stress.pdf?raw=true)
+
+-   [Living Within a Half-Mile of a Park](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Living_Within_a_Half_Mile_of_a_Park.pdf?raw=true)
+
+-   [Voter Participation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Voter_Participation.pdf?raw=true)
+
+**Healthcare Access**
+
+-   [Uninsured](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Uninsured.pdf?raw=true)
+
+-   [Mental Health Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mental_Health_Treatment_Facility_Access.pdf?raw=true)
+
+-   [Substance Use Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Substance_Use_Treatment_Facility_Access.pdf?raw=true)
+
+**Health Status**
+
+-   [Adult Binge Drinking](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Adult_Binge_Drinking.pdf?raw=true)
+
+-   [Insufficient Sleep](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Insufficient_Sleep.pdf?raw=true)
+
+-   [Obesity](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Obesity.pdf?raw=true)
+
+-   [Poor Mental Health](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Poor_Mental_Health.pdf?raw=true)
+
+-   [Smoking Status](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Smoking_Status.pdf?raw=true)
+
+-   [Alcohol-Related Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Related_Mortality.pdf?raw=true)
+
+-   [Estimated Drug Poisoning Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Estimated_Drug_Poisoning_Mortality.pdf?raw=true)
+
+-   [Suicide Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicide_Mortality.pdf?raw=true)
+
+-   [Life Expectancy](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Life_Expectancy.pdf?raw=true)
+
+-   [Suicidal Ideation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicidal_Ideation.pdf?raw=true)
