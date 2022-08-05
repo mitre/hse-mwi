@@ -18,7 +18,10 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 
 # 
 
-<center>![MWI Framework and Measures](images/mwi_framework_w_measures.png) </center>
+::: {style="float:left;position: relative; top: 0px; width: 500px"}
+![MWI Framework and Measures](images/mwi_framework_w_measures.png)\
+:::
+
 
 The MWI framework contains three domains and two dynamic factors:
 
