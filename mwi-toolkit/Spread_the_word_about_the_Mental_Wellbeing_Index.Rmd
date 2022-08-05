@@ -1,0 +1,21 @@
+---
+title: "Spread the Word"
+output: html_document
+date: "2022-08-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The Mental Wellness Index can influence, guide, inform various organizations and agencies about the factors influencing mental wellbeing at the community level. Organizations that may find the MWI useful include community-based organizations, universities, national non-profits, health departments, and government agencies.
+
+Use these resources to let others know about the MWI:
+
+-   [MWI fact sheet](https://mitre.sharepoint.com/:b:/r/sites/HealthandSocialEquity-SJP/Shared%20Documents/General/Strategic%20Initiative%20Fund/Toolkit/MWI%20Toolkit%20Content/MWI-Internal-fact-sheet-07-27.pdf?csf=1&web=1&e=qKlYkT)
+
+-   [Sample newsletter article](https://mitre.sharepoint.com/:b:/r/sites/HealthandSocialEquity-SJP/Shared%20Documents/General/Strategic%20Initiative%20Fund/Toolkit/MWI%20Toolkit%20Content/MWI%20Sample%20Newsletter%20Article.pdf?csf=1&web=1&e=Z3hBq2)
+
+-   Sample social media content and graphics
+
+*The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*
