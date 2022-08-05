@@ -15,7 +15,7 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 ```
 
 ::: {style="float:right;position: relative; top: 0px; width: 500px"}
-![Black Family Example](supporting_images/black_family_ex.png)\
+![Black Family Example](images/black_family_ex.png)\
 :::
 
 The MWI provides results and data for Black populations and the overall population, down to the ZIP code level.
