@@ -1,5 +1,5 @@
 ---
-title: "Spread the word about the Mental Wellbing Index"
+title: "Spread the word about the Mental Wellness Index"
 output: 
   html_document:
     theme: cerulean
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 ```
 
-The Mental Wellness Index can influence, guide, inform various organizations and agencies about the factors influencing mental wellbeing at the community level. Organizations that may find the MWI useful include community-based organizations, universities, national non-profits, health departments, and government agencies.
+The Mental Wellness Index can influence, guide, inform various organizations and agencies about the factors influencing mental wellness at the community level. Organizations that may find the MWI useful include community-based organizations, universities, national non-profits, health departments, and government agencies.
 
 Use these resources to let others know about the MWI:
 
@@ -37,7 +37,7 @@ Facebook and LinkedIn
 
 Twitter
 
-Social Media Post #2
+**Social Media Post #2**
 
 Do you know which factors are influencing #mentalwellness in your community? How does your community compare to others in your state or across the nation? The Mental Wellness Index can show you using an easy-to-use data tool. <https://sjp.mitre.org/mwi>
 
