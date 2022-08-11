@@ -48,6 +48,18 @@ sass(
 
 addResourcePath("mwi-toolkit", "mwi-toolkit")
 
+# order for tabs
+mwi_toolkit_order <- c(
+  "MWI_Overview",
+  "MWI_Populations_of_Focus",
+  "MWI_Framework_and_Measures",
+  "MWI_Tool_Videos_and_Guides",
+  "Share_the_MWI_With_Others",
+  "The_Science_Behind_the_MWI",
+  "Data_Conversations_with_Communities",
+  "Frequently_Asked_Questions"
+)
+
 # function for app preprocessing ----
 
 app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
@@ -1055,10 +1067,7 @@ ui <- fluidPage(
       c(
         title = "MWI Toolkit",
         lapply(
-          gsub(".Rmd","", 
-               list.files("mwi-toolkit")[
-                 grepl("*.Rmd", list.files("mwi-toolkit"))]
-               ),
+          mwi_toolkit_order,
           function(x){
             tabPanel(
               title = div(gsub("_", " ", x), class = "about"),
