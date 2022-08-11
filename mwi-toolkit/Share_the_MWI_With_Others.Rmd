@@ -1,5 +1,5 @@
 ---
-title: "Spread the word about the Mental Wellness Index"
+title: "Spread the Word About the Mental Wellness Index"
 output: 
   html_document:
     theme: cerulean
