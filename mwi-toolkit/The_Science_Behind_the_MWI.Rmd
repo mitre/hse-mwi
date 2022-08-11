@@ -1,5 +1,5 @@
 ---
-title: "The Science Behing the MWI"
+title: "The Science Behind the MWI"
 output: 
   html_document:
     theme: cerulean
@@ -37,7 +37,7 @@ The MWI has been created based on ZCTAS.
 
 Source: Conduent HealthyCommunities Institute. Accessed on June 28, 2022. Link: <https://help.healthycities.org/hc/en-us/articles/115006016767-What-is-the-difference-between-ZIP-Codes-and-ZCTAs->
 
-Methods
+[**Methods**]{.underline}
 
 All methods used to calculate unique statistical procedures can also be accessed below. Click on the link to download the corresponding documentation.
 
