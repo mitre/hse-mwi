@@ -57,7 +57,8 @@ mwi_toolkit_order <- c(
   "Share_the_MWI_With_Others",
   "The_Science_Behind_the_MWI",
   "Data_Conversations_with_Communities",
-  "Frequently_Asked_Questions"
+  "Frequently_Asked_Questions",
+  "Contact"
 )
 
 # function for app preprocessing ----

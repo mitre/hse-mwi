@@ -1,0 +1,16 @@
+---
+title: "Contact"
+output: 
+  html_document:
+    theme: cerulean
+    # toc: true
+    # toc_depth: 4
+    # toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+```
+
+You can contact the MWI team with questions at [socialjustice\@mitre.org](mailto:socialjustice@mitre.org){.email}.

@@ -25,19 +25,19 @@ The MWI is composed of 28 measures organized under 3 domains: *Social Determinan
 
 The MWI is not intended to be a comprehensive evaluation of a community's mental wellness. We recommend use of the MWI in combination with local data and working alongside community groups to identify, account for, and include local-level factors that shape community mental wellness.
 
-***What is Mental Wellness?***
+### What is Mental Wellness?
 
 Mental Wellness means everyone in a community can thrive, regardless of a mental health or a substance use challenge.[^1]
 
 [^1]: National Council for Mental Wellbeing (n.d.) We Are Mental Wellbeing. The National Council for Mental Wellbeing. <a href = 'https://www.thenationalcouncil.org/about/we-are-mental-wellbeing/' target = "_blank">(link)</a>
 
-***Why MITRE Created the MWI***
+### Why MITRE Created the MWI
 
 -   MITRE built the MWI because it fills a gap---there is no existing resource or health index to understand factors influencing mental wellness at the community or ZIP code level.
 -   The MWI is intended to enable local, state, and federal government agencies, non-profits, and communities, to visualize the factors that contribute to mental wellness.
 -   The MWI promotes data-informed decisions.
 
-***The MWI Provides a Unique Perspective***
+### The MWI Provides a Unique Perspective
 
 -   The MWI **focuses on equity** by considering the influence of structural racism and community and cultural assets. Structural racism can have a negative impact on mental wellness. On the other hand, it is important to consider the strengths, identities, and aspirations that individuals and communities hold about themselves that promote mental wellness.
 -   The MWI can be **modified to meet community needs**. Anyone interested in using the MWI can upload their own data and adjust the level of importance given to each measure.
