@@ -3,6 +3,7 @@ title: "MWI Framework and Measures"
 output: 
   html_document:
     theme: cerulean
+    css: styles.css
     toc: true
     toc_depth: 4
     toc_float: true
@@ -595,4 +596,4 @@ To select measures to include in the MWI, MITRE leveraged data and expertise fro
 
 -   **Feasibility**: The data for the measure is up-to-date and available on a timely basis.
 
-NOTE: Though race stratified data are not available for all measures in the MWI, preference was given in the selection process to measures with data that can be stratified by race for Black populations. For data that is stratified by Black populations, the measure is calculated for both Black populations and the overall population (see measure documentation for more information on these calculations). For data that cannot be stratified, the overall population values are used for both calculations. Some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race.
+> NOTE: Though race stratified data are not available for all measures in the MWI, preference was given in the selection process to measures with data that can be stratified by race for Black populations. For data that is stratified by Black populations, the measure is calculated for both Black populations and the overall population (see measure documentation for more information on these calculations). For data that cannot be stratified, the overall population values are used for both calculations. Some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race.

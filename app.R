@@ -771,7 +771,7 @@ ui <- fluidPage(
               img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About the MWI' page.<p></p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'MWI Toolkit' page.<p></p>"
               )),
               HTML(paste0(
                 "All states are included.",
@@ -820,7 +820,7 @@ ui <- fluidPage(
                 uiOutput("data_info"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"About the MWI\" page.",
+                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
                   "</font>"
                 ))
               )
@@ -897,7 +897,7 @@ ui <- fluidPage(
               img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About the MWI' page.<p></p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'MWI Toolkit' page.<p></p>"
               )),
               HTML(paste0(
                 "All states are included.",
@@ -931,7 +931,7 @@ ui <- fluidPage(
                 uiOutput("data_info_com"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"About the MWI\" page.",
+                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
                   "</font>"
                 ))
               ),
@@ -1041,25 +1041,6 @@ ui <- fluidPage(
       )
     ),
     
-    # about ----
-    navbarMenu(
-      "About the MWI",
-      tabPanel(
-        title = div("About the MWI", class="about"),
-        # NOTE: when making changes to about.Rmd, move result to www
-        htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
-                               class="about-panel",
-                               frameborder = 0, 
-                               scrolling = 'auto')),
-      tabPanel(
-        title = div("Measure & Methodology Documentation Download",
-                    class = "about"), 
-        htmltools::tags$iframe(src = "docdownload.html",
-                               class = "about-panel",
-                               frameborder = 0,
-                               scrolling = "auto")
-      )
-    ),
     # mwi toolkit ----
     
     # add toolkit pages dynamically since there are a lot of them

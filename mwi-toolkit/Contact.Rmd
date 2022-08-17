@@ -3,6 +3,7 @@ title: "Contact"
 output: 
   html_document:
     theme: cerulean
+    css: styles.css
     # toc: true
     # toc_depth: 4
     # toc_float: true
