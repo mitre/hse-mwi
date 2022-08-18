@@ -31,7 +31,7 @@ options(shiny.maxRequestSize=300*1024^2)
 
 source("app_config.R")
 
-# styling ----
+# styling/resources ----
 
 # Applies css to rShiny app
 sass(
@@ -44,6 +44,20 @@ sass(
 sass(
   sass_file("www/stylesheets/app.scss"),
   output = "about/app.css"
+)
+
+addResourcePath("mwi-toolkit", "mwi-toolkit")
+
+# order for tabs
+mwi_toolkit_order <- c(
+  "MWI_Overview",
+  "MWI_Populations_of_Focus",
+  "MWI_Framework_and_Measures",
+  "MWI_Tool_Videos_and_Guides",
+  "Share_the_MWI_With_Others",
+  "The_Science_Behind_the_MWI",
+  "Data_Conversations_with_Communities",
+  "Frequently_Asked_Questions"
 )
 
 # function for app preprocessing ----
@@ -1043,6 +1057,29 @@ ui <- fluidPage(
                                class = "about-panel",
                                frameborder = 0,
                                scrolling = "auto")
+      )
+    ),
+    # mwi toolkit ----
+    
+    # add toolkit pages dynamically since there are a lot of them
+    do.call(
+      navbarMenu,
+      c(
+        title = "MWI Toolkit",
+        lapply(
+          mwi_toolkit_order,
+          function(x){
+            tabPanel(
+              title = div(gsub("_", " ", x), class = "about"),
+              htmltools::tags$iframe(
+                src = paste0("mwi-toolkit/", x, ".html"),
+                class = "about-panel",
+                frameborder = 0,
+                scrolling = "auto")
+              
+            )
+          }
+        )
       )
     )
   ),
