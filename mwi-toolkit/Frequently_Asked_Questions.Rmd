@@ -3,6 +3,7 @@ title: "Frequently Asked Questions"
 output: 
   html_document:
     theme: cerulean
+    css: styles.css
     # toc: true
     # toc_depth: 4
     # toc_float: true
@@ -16,12 +17,14 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 ```
 
-**Who can use the MWI?**
+#### Who can use the MWI?
 
 The MWI is publicly available to anyone.
 Users including (but not limited to) communities, researchers, state and federal agencies, non-profits, and policy makers can examine, quantify, and compare the factors influencing community-level wellness for each ZIP Code in the nation using the MWI.
 
-**How are the measures and domains weighted?**
+------------------------------------------------------------------------
+
+#### How are the measures and domains weighted?
 
 Measures in the MWI have been assigned default weights, which will be applied if you do not customize the MWI.
 The selection of these default weights was informed by a review of relevant literature and other health indices.
@@ -30,17 +33,23 @@ See the [Weighting Methods](https://raw.githubusercontent.com/mitre/hse-mwi/main
 
 However, you can adjust the weights of the measures in the MWI to better align to your use case or community needs using the "Create Your Own MWI" feature of the tool.
 
-**Does MITRE provide technical assistance to support use of the MWI?**
+------------------------------------------------------------------------
+
+#### Does MITRE provide technical assistance to support use of the MWI?
 
 The MWI Toolkit provides detailed information on how to use and modify the MWI.
-You can contact the MWI team with questions at sjp\@mitre.org.
+You can contact the MWI team with questions at [socialjustice\@mitre.org](mailto:socialjustice@mitre.org){.email}.
 
-**Can I adjust the MWI to fit my use or my community's needs?**
+------------------------------------------------------------------------
+
+#### Can I adjust the MWI to fit my use or my community's needs?
 
 Yes!
 The MWI can be modified using the "Create Your Own MWI" feature of the tool in three different ways; you may: 1) add new measures and data sets, 2) remove measures, and 3) change the weight assigned to each measure.
 
-**What is the difference between ZIP Codes and ZCTAs?**
+------------------------------------------------------------------------
+
+#### What is the difference between ZIP Codes and ZCTAs?
 
 United States Postal Service (USPS) ZIP Codes were created to improve mail delivery service.
 They are based on postal routes rather than defined geographic boundaries.
@@ -52,7 +61,9 @@ In the MWI, the term "ZIP Code" refers to ZCTAs, which are used in the MWI and a
 In most cases the ZCTA is the same as the USPS ZIP Code for an area.
 For more information on ZCTAs, please see [census.gov](https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html).
 
-**What kind of technical infrastructure would I need to have in place to use the MWI?**
+------------------------------------------------------------------------
+
+#### What kind of technical infrastructure would I need to have in place to use the MWI?
 
 To use the exploration features of the MWI, you will need a device that can connect to the Internet (such as a computer or tablet), Internet access, and an Internet web browser.
 If you would like to customize the MWI using the "Create Your Own MWI" feature, you will need additional tools, which may include Microsoft Excel, R, RStudio.

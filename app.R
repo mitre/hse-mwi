@@ -57,7 +57,8 @@ mwi_toolkit_order <- c(
   "Share_the_MWI_With_Others",
   "The_Science_Behind_the_MWI",
   "Data_Conversations_with_Communities",
-  "Frequently_Asked_Questions"
+  "Frequently_Asked_Questions",
+  "Contact"
 )
 
 # function for app preprocessing ----
@@ -819,7 +820,9 @@ ui <- fluidPage(
                 uiOutput("data_info"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
+
+                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
+
                   "</font>"
                 ))
               )
@@ -930,7 +933,9 @@ ui <- fluidPage(
                 uiOutput("data_info_com"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
+
+                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
+
                   "</font>"
                 ))
               ),
@@ -1040,25 +1045,7 @@ ui <- fluidPage(
       )
     ),
     
-    # about ----
-    navbarMenu(
-      "MWI Toolkit",
-      tabPanel(
-        title = div("About the MWI", class="about"),
-        # NOTE: when making changes to about.Rmd, move result to www
-        htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
-                               class="about-panel",
-                               frameborder = 0, 
-                               scrolling = 'auto')),
-      tabPanel(
-        title = div("Measure & Methodology Documentation Download",
-                    class = "about"), 
-        htmltools::tags$iframe(src = "docdownload.html",
-                               class = "about-panel",
-                               frameborder = 0,
-                               scrolling = "auto")
-      )
-    ),
+
     # mwi toolkit ----
     
     # add toolkit pages dynamically since there are a lot of them

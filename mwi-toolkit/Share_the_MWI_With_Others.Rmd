@@ -3,12 +3,13 @@ title: "Spread the Word About the Mental Wellness Index"
 output: 
   html_document:
     theme: cerulean
+    css: styles.css
     # toc: true
     # toc_depth: 4
     # toc_float: true
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 ```
@@ -25,24 +26,28 @@ Use these resources to let others know about the MWI:
 
 *The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*
 
-**Social Media Content and Graphics**
+### Social Media Content and Graphics
 
-**Social Media Post #1**
+<hr>
+
+#### Social Media Post #1
 
 The Mental Wellness Index quantifies 28 factors that influence community-level mental wellness for each ZIP code in the nation. These insights can promote data-informed decisions and more equitable allocation of resources in partnership with communities. Learn more: <https://sjp.mitre.org/mwi>
 
-Facebook and LinkedIn
-
 ![](images/facebook_linkedin.png)
 
-Twitter
+```{r, echo=FALSE}
+shiny::includeHTML("socialpost1.html")
+```
 
-**Social Media Post #2**
+<hr>
+
+#### Social Media Post #2
 
 Do you know which factors are influencing #mentalwellness in your community? How does your community compare to others in your state or across the nation? The Mental Wellness Index can show you using an easy-to-use data tool. <https://sjp.mitre.org/mwi>
 
-Facebook and LinkedIn
-
 ![](images/facebook_linkedin2.png)
 
-Twitter
+```{r, echo=FALSE}
+shiny::includeHTML("socialpost2.html")
+```
