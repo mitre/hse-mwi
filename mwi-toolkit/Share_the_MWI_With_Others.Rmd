@@ -1,5 +1,5 @@
 ---
-title: "Spread the Word About the Mental Wellness Index"
+title: "Share the MWI with Others"
 output: 
   html_document:
     theme: cerulean
@@ -24,7 +24,7 @@ Use these resources to let others know about the MWI:
 
 -   Sample social media content and graphics
 
-*The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*
+<blockquote class="focus">The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.</blockquote>
 
 ### Social Media Content and Graphics
 
@@ -36,9 +36,7 @@ The Mental Wellness Index quantifies 28 factors that influence community-level m
 
 ![](images/facebook_linkedin.png)
 
-```{r, echo=FALSE}
-shiny::includeHTML("socialpost1.html")
-```
+
 
 <hr>
 
@@ -48,6 +46,3 @@ Do you know which factors are influencing #mentalwellness in your community? How
 
 ![](images/facebook_linkedin2.png)
 
-```{r, echo=FALSE}
-shiny::includeHTML("socialpost2.html")
-```

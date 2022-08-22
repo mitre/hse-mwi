@@ -1,8 +1,9 @@
 ---
-title: "What are the MWI's Populations of Focus?"
+title: "MWI Populations of Focus"
 output: 
   html_document:
     theme: cerulean
+    css: styles.css
     # toc: true
     # toc_depth: 4
     # toc_float: true
@@ -14,7 +15,7 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 # NOTE: once knit, move html output to www/
 ```
 
-::: {style="float:right;position: relative; top: 0px; width: 500px"}
+::: {style="float:right;position: relative; top: 0px; width: 500px; padding: 0px 25px 25px;"}
 ![Black Family Example](images/black_family_ex.png)\
 :::
 
@@ -48,4 +49,4 @@ Black populations were prioritized as the first group of interest in part for th
 
 By focusing on underserved and under-resourced communities, the MWI "centers at the margins" or normalizes the perspectives and experiences of non-White racial and ethnic groups. MITRE recognizes that equity delivered to historically underserved populations will accrue to others. This will in turn promote social and racial justice. MITRE hopes to make the data viewable for other groups experiencing health disparities in the future.
 
-<center>*The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*</center>
+<blockquote class="focus">The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.</blockquote>

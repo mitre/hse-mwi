@@ -22,7 +22,7 @@ The MWI is composed of 28 measures organized under 3 domains: *Social Determinan
 <center>![MWI Framework and Explanation](images/mwi_framework_w_explanation.png)\
 </center>
 
-<center><p>*The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*</center></p>
+<blockquote class="focus">The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.</blockquote>
 
 The MWI is not intended to be a comprehensive evaluation of a community's mental wellness. We recommend use of the MWI in combination with local data and working alongside community groups to identify, account for, and include local-level factors that shape community mental wellness.
 
