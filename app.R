@@ -1152,9 +1152,6 @@ server <- function(input, output, session) {
           "The <b>Mental Wellness Index™ (MWI)</b> quantifies 28 factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation."
         ),
         HTML("</p></font>"),
-        HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
-      
-     
         HTML("<center>"),
         img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "40%"),
         HTML("</center>")
@@ -1163,7 +1160,8 @@ server <- function(input, output, session) {
       HTML("<center>"),
       actionButton("learn-button", "Learn more in the MWI Toolkit"),
       actionButton("video-button", "Watch videos about how the MWI tool works"),
-      HTML("</center>")
+      HTML("</center>"),
+      HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
     ),
     hr(),
     HTML(paste0(
