@@ -855,7 +855,7 @@ ui <- fluidPage(
               ),
               selectInput(
                 "com_map_fill",
-                "What measure would you like to focus on?",
+                "What would you like to explore?",
                 choices = overall$avail_meas_list[["pop"]]
               ),
               textInput(
@@ -1267,7 +1267,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1327,7 +1327,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1384,7 +1384,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1434,7 +1434,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session = session,
       "us_map_fill",
-      "Which measure would you like to explore?",
+      "What would you like to explore?",
       choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
@@ -1606,7 +1606,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session = session,
       "com_map_fill",
-      "What measure would you like to focus on?",
+      "What would you like to explore?",
       choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
