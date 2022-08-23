@@ -1147,26 +1147,27 @@ server <- function(input, output, session) {
       HTML("<b><center>Welcome to the Mental Wellness Index™!</b></center>"),
     size = "l",
     fluidRow(
-      
-      column(
-        width = 7,
-        HTML("<p align = 'justify'><font size = '3'>"),
+      HTML("<p align = 'center'><font size = '3'>"),
         HTML(
-          "The <b>Mental Wellness Index™ (MWI)</b> quantifies factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation.  The MWI aggregates <b>28 weighted measures</b> that quantify facilitators and barriers to mental wellness across <b>three domains</b>: <b>Social Determinants of Health</b>, <b>Healthcare Access</b>, and <b>Health Status</b>. Two <b>dynamic factors</b> (<b>Structural Racism</b> and <b>Community and Cultural Assets</b>) influence measures in all three of the domains. The Mental Wellness Index tool allows users to <b>explore the MWI and its measures</b>, providing information for the <b>overall population</b> and <b>Black populations</b>."
+          "The <b>Mental Wellness Index™ (MWI)</b> quantifies 28 factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation."
         ),
         HTML("</p></font>"),
-        HTML("<font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font>")
-      ),
-      column(
-        width = 5,
+        HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
+      
+     
         HTML("<center>"),
-        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
+        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "40%"),
         HTML("</center>")
-      )
+      ),
+    fluidRow(
+      HTML("<center>"),
+      actionButton("learn-button", "Learn about the MWI tool"),
+      actionButton("video-button", "See how the MWI tool works"),
+      HTML("</center>")
     ),
     hr(),
     HTML(paste0(
-      "<p><font size = '3'><b><center>You can explore the MWI Tool in two ways:</p></b></font>"
+      "<p><font size = '3'><b><center>Start exploring the MWI tool in two ways</p></b></font>"
     )),
     fluidRow(
       column(
