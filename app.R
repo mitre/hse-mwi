@@ -1149,7 +1149,7 @@ server <- function(input, output, session) {
     fluidRow(
       HTML("<p align = 'center'><font size = '3'>"),
         HTML(
-          "The <b>Mental Wellness Index™ (MWI)</b> quantifies 28 factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation."
+          "The <b>Mental Wellness Index (MWI)</b> quantifies 28 factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation."
         ),
         HTML("</p></font>"),
         HTML("<center>"),
@@ -1165,7 +1165,7 @@ server <- function(input, output, session) {
     ),
     hr(),
     HTML(paste0(
-      "<p><font size = '3'><b><center>Start exploring the MWI tool in two ways</p></b></font>"
+      "<p><font size = '3'><b><center>Start exploring the MWI tool in two ways:</p></b></font>"
     )),
     fluidRow(
       column(
