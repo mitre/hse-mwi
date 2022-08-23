@@ -1153,7 +1153,7 @@ server <- function(input, output, session) {
         ),
         HTML("</p></font>"),
         HTML("<center>"),
-        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "40%"),
+        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "30%"),
         HTML("</center>")
       ),
     fluidRow(
