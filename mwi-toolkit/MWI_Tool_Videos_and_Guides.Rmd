@@ -5,7 +5,7 @@ output:
     theme: cerulean
     css: styles.css
     toc: true
-    toc_depth: 3
+    toc_depth: 4
     toc_float: true
 ---
 
@@ -23,11 +23,23 @@ The MWI tool includes two main features: 
 
 Here you can find instructions on how to use the MWI, as well as videos and use cases to guide you.
 
-> **Note**: The MWI and its individual measures are displayed as rankings that show how a given ZIP Code compares to all other ZIP Codes in the nation on a range between 0 and 100. For example, a Broadband Access measure ranking of 75 means that this ZIP Code ranks higher than 75% of the ZIP Codes in the nation for this measure (not that 75% of individuals in the ZIP Code have broadband access).
+> **Note**: MWI values and individual measure rankings show how a given ZIP Code compares to all other ZIP Codes in the nation on a range between 0 and 100.
 >
-> For the MWI, a higher ranking (closer to 100) indicates more resources or assets to support mental wellness, while a lower ranking (closer to 0) indicates more obstacles to mental wellness. Watch the Explore MWI Maps video to learn more.
+> For the MWI, a higher value (closer to 100) indicates more resources or assets to support mental wellness, while a lower value (closer to 0) indicates more obstacles to mental wellness. Individual measure are displayed as rankings. For example, a Broadband Access measure ranking of 75 means that this ZIP Codes ranks higher than 75% of the ZIP Codes in the nation for this measure (not that 75% of individuals in the ZIP Code have broadband access).
 
-<!-- \<Insert MWI Overview Video here\> \<Insert Explore MWI Maps Video here\> -->
+### MWI Instructional Videos
+
+#### Video 1
+
+Add link here
+
+#### Video 2
+
+Add link here
+
+#### Video 3
+
+Add link here
 
 ### How to Use the "Explore States" Tab
 
@@ -69,14 +81,17 @@ To explore this option, you can:
 
 An organization in Baltimore, MD works to improve educational outcomes for youth and ensure families are healthy and successful in the West Baltimore area. They are conducting a community participatory budgeting process this summer to decide how to allocate their funding.
 
-**Plan community conversations to review the MWI!**
-
-The non-profit meets with members of the West Baltimore community to talk about the drivers of overall mental wellness, poor mental health and substance use disorders in their community. They guide the conversation following the three steps below.
++---------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| <center><img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/people-group.svg" width="100" height="100"/></center> | **Plan community conversations to review the MWI!**                                                                                                                                                                                                     |
+|                                                                                                                                                   |                                                                                                                                                                                                                                                         |
+|                                                                                                                                                   | The non-profit meets with members of the West Baltimore community to talk about the drivers of overall mental wellness, poor mental health and substance use disorders in their community. They guide the conversation following the three steps below. |
++---------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 <center>![](images/steps.png)</center>
 
+###  {.tabset .tabset-pills}
 
-### {.tabset .tabset-pills}
+Click on each step below to learn how about how the organization used the MWI.
 
 #### Step 1
 
@@ -84,8 +99,9 @@ The non-profit meets with members of the West Baltimore community to talk about 
 
 The MWI includes 28 measures organized under three domains: Social Determinants of Health, Healthcare Access, and Health Status. The organization and community members explore the Mental Wellness Index of their community.
 
-The organization enters the ZIP code in the MWI tool for their community to see the overall Mental Wellness Index measure. To do so, they follow these steps:
+The organization enters the ZIP code in the MWI tool for their community to see the overall Mental Wellness Index measure.
 
+> Click the arrows on the right and left of the image below to see screenshots of their steps in the MWI tool.
 
 ```{r echo=FALSE}
 review_measures <- list.files("images", pattern = "review_measures",full.names = TRUE)
@@ -98,12 +114,13 @@ slickR(obj = review_measures, height = 400, width = "95%") %synch%
   (slickR(review_captions, slideType = 'p') + settings(arrows=FALSE))
 ```
 
-
 #### Step 2
 
 ##### Step 2: Explore MWI Score and Measures
 
 The group decides to take a closer look at the MWI score and measures results for their community.
+
+> Click the arrows on the right and left of the image below to see screenshots of their steps in the MWI tool.
 
 ```{r echo=FALSE}
 explore_images <- list.files(path = "images", pattern="explore", full.names = TRUE)[3:5]
@@ -116,7 +133,6 @@ slickR(obj = explore_images, height = 400, width = "95%") %synch%
   (slickR(explore_captions, slideType = 'p') + settings(arrows=FALSE))
 ```
 
-
 #### Step 3
 
 ##### Step 3: Identify Priority Mental Wellness Factors
@@ -127,7 +143,7 @@ Based on their community conversations and review of the measures in the MWI, th
 
 -   No high school diploma (an education measure), and
 
--   Unemployment (a measure of employment.
+-   Unemployment (a measure of employment).
 
     <center>![](images/identify.png)</center>
 
@@ -145,7 +161,7 @@ You can customize the MWI to meet your needs. The MWI includes 28 measures, howe
 
 -   Modifying measure weights
 
-The following use case will provide guidance on how to create your own MWI. See the "Create Your Own MWI" tab for detailed instructions. To learn how to download MWI data and documentation, watch the video "Downloading Data and Viewing Documentation
+The following use case will provide guidance on how to create your own MWI. See the "Create Your Own MWI" tab for detailed instructions. 
 
 <!-- \<Insert Create your own MWI\> \<Insert Downloading Data and Viewing Documentation\> -->
 
@@ -176,6 +192,8 @@ Click here to access resources to help you guide data conversations with communi
 **Now the group can use the customized MWI to explore mental wellness factors in California!**
 
 ###  {.tabset .tabset-pills}
+
+Click on each step below to learn how about how the organization used the MWI.
 
 #### Step 1
 

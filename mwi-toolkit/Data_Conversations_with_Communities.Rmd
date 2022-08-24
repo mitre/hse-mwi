@@ -3,6 +3,7 @@ title: "Data Conversations with Communities"
 output: 
   html_document:
     theme: cerulean
+    css: styles.css
     # toc: true
     # toc_depth: 4
     # toc_float: true
@@ -53,8 +54,6 @@ See the following resources for more tips and ideas:
 
 -   [Plain Language](https://www.plainlanguage.gov/about/definitions/) by the Plain Language Action and Information Network
 
-<center>
 
-*The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.*
+<blockquote class="focus">The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice. </blockquote>
 
-</center>
