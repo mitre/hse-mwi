@@ -855,7 +855,7 @@ ui <- fluidPage(
               ),
               selectInput(
                 "com_map_fill",
-                "What measure would you like to focus on?",
+                "What would you like to explore?",
                 choices = overall$avail_meas_list[["pop"]]
               ),
               textInput(
@@ -1267,7 +1267,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1327,7 +1327,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1384,7 +1384,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1434,7 +1434,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session = session,
       "us_map_fill",
-      "Which score/measure would you like to explore?",
+      "What would you like to explore?",
       choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
@@ -1606,7 +1606,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session = session,
       "com_map_fill",
-      "What measure would you like to focus on?",
+      "What would you like to explore?",
       choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
@@ -1824,7 +1824,7 @@ server <- function(input, output, session) {
           html_color(mc, "higher"),
           " value indicates a ",
           html_color(mc, "higher"),
-          " national ranking for ", 
+          " national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ", 
           html_color(mc, full_name),
           ".",
           "</font></b><p></p>",
@@ -1951,9 +1951,9 @@ server <- function(input, output, session) {
             " (ZIP Code",
             ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
             html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
-            " has a ", html_color(mc, full_name), " national ranking of ",
+            " has a ", html_color(mc, full_name), " national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  of ",
             html_color(mc, trunc(f_val)),
-            ", putting it at the ",
+            " and is at the ",
             html_color(mc, st_perc), 
             " percentile for the state.",
             " This is in the ", 
@@ -1962,7 +1962,7 @@ server <- function(input, output, session) {
             html_color(mc, us_comp), " relative to the United States.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates a higher national ranking for ",
+            "<i>A higher value indicates a higher national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
             full_name,
             ". ",
             ifelse(
@@ -1987,7 +1987,7 @@ server <- function(input, output, session) {
             ", indicating missing data or no population in this area.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates a higher national ranking for ",
+            "<i>A higher value indicates a higher national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
             full_name,
             ". ",
             ifelse(
@@ -2109,9 +2109,9 @@ server <- function(input, output, session) {
           " (ZIP Code",
           ifelse(nchar(zcta_to_zip[com_sub$ZCTA]) > 5, "s "," "), 
           html_color(mc, zcta_to_zip[com_sub$ZCTA]), ")",
-          " has a ", html_color(mc, full_name), " national ranking of ",
+          " has a ", html_color(mc, full_name), " national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  of ",
           html_color(mc, trunc(f_val)),
-          ", putting it at the ",
+          " and is at the ",
           html_color(mc, com_perc), 
           " percentile for the state.",
           " This is in the ", 
@@ -2124,7 +2124,7 @@ server <- function(input, output, session) {
             paste0(
               "<p></p>",
               "<font size = '2'>",
-              "<i>A higher value indicates a higher national ranking for ",
+              "<i>A higher value indicates a higher national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
               full_name,
               ". ",
               ifelse(
@@ -2156,7 +2156,7 @@ server <- function(input, output, session) {
               paste0(
                 "<p></p>",
                 "<font size = '2'>",
-                "<i>A higher value indicates a higher national ranking for ",
+                "<i>A higher value indicates a higher national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
                 full_name,
                 ". ",
                 ifelse(
