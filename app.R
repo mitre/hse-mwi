@@ -56,7 +56,7 @@ mwi_toolkit_order <- c(
   "MWI_Tool_Videos_and_Guides",
   "Share_the_MWI_With_Others",
   "The_Science_Behind_the_MWI",
-  "Data_Conversations_with_Communities",
+  "MWI_in_Action",
   "Frequently_Asked_Questions",
   "Contact"
 )
@@ -1051,12 +1051,13 @@ ui <- fluidPage(
     # add toolkit pages dynamically since there are a lot of them
     do.call(
       navbarMenu,
-      c(
+      c(menuName = "toolkit",
         title = "MWI Toolkit",
         lapply(
           mwi_toolkit_order,
           function(x){
             tabPanel(
+              id = tolower(x),
               title = div(gsub("_", " ", x), class = "about"),
               htmltools::tags$iframe(
                 src = paste0("mwi-toolkit/", x, ".html"),
@@ -1147,22 +1148,24 @@ server <- function(input, output, session) {
       HTML("<b><center>Welcome to the Mental Wellness Index™!</b></center>"),
     size = "l",
     fluidRow(
-      HTML("<p align = 'center'><font size = '3'>"),
-        HTML(
-          "The <b>Mental Wellness Index (MWI)</b> quantifies 28 factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation."
-        ),
-        HTML("</p></font>"),
-        HTML("<center>"),
-        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "30%"),
-        HTML("</center>")
-      ),
-    fluidRow(
-      HTML("<center>"),
-      actionButton("learn-button", "Learn more in the MWI Toolkit"),
-      actionButton("video-button", "Watch videos about how the MWI tool works"),
-      HTML("</center>"),
-      HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
-    ),
+      column(width = 1),
+      column(width = 10,
+             HTML("<p align = 'center'><font size = '3'>"),
+             HTML(
+               "The <b>Mental Wellness Index (MWI)</b> combines 28 factors that influence <b>community-level mental wellness</b> into a single value for <b>each ZIP code</b> in the nation."
+             ),
+             HTML("</p></font>"),
+             HTML("<center>"),
+             img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "60%"),
+             HTML("</center>"),
+             HTML("<br>"),
+             HTML("<center>"),
+             actionButton("learn_button", "Learn more in the MWI Toolkit"),
+             actionButton("video_button", "Watch videos about how the MWI tool works"),
+             HTML("</center>"),
+             HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
+      )),
+      column(width = 1),
     hr(),
     HTML(paste0(
       "<p><font size = '3'><b><center>Start exploring the MWI tool in two ways:</p></b></font>"
@@ -1199,6 +1202,23 @@ server <- function(input, output, session) {
   )
   
   showModal(welcome_modal)
+  
+
+  observeEvent(input$learn_button, {
+    updateNavbarPage(session = session, 
+                     inputId = "toolkit", 
+                     selected = "mwi_overview")
+    
+    removeModal()
+  })
+  
+  observeEvent(input$video_button, {
+    updateNavbarPage(session = session, 
+                     inputId = "toolkit", 
+                     selected = "mwi_tool_videos_and_guides")
+    
+    removeModal()
+  })
   
   observeEvent(input$enter_mwi, {
     # update all of the inputs -- this will cascade
