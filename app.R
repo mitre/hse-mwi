@@ -177,8 +177,8 @@ rownames(sub_m) <- rownames(m_reg)
 # load index weighting/output
 info_df <- read.csv(
   file.path(data_folder, "Cleaned", "HSE_MWI_Data_Information.csv"),
-  row.names = "Numerator"
 )
+rownames(info_df) <- info_df$Numerator
 
 # load zip codes to zcta
 zip_cw <- read.csv(
@@ -932,7 +932,7 @@ ui <- fluidPage(
               "<br><br>",
               "To adjust the weights in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
               "<ol>",
-              "<li>Update weights for each measure in the table below as desired.</li>",
+              "<li>Update weights for each measure in the table below as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number).</li>",
               "<br>",
               "<li>Click 'Create Custom MWI' below. This will take some time.</li>",
               "<br>",
@@ -1292,55 +1292,45 @@ server <- function(input, output, session) {
   
   # observe custom data upload: state
   observeEvent(input$custom_data_load_st, {
-    if (!is.null(input$custom_data_st)){
-      validate(need(endsWith(tolower(input$custom_data_st$datapath), ".rdata"),
-                    "Must upload .RData File"))
-      
-      # load the RData file -- contains ov
-      load(input$custom_data_st$datapath)
-      
-      for (ov in names(ol)){
-        ol[[ov]] <- overall_output[[ov]]
-      }
-      
-      # update available states
-      updateSelectInput(
-        session = session,
-        "st_focus",
-        "Which state would you like to focus on?",
-        choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
-        selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
-      )
-      
-      # update available states
-      updateSelectInput(
-        session = session,
-        "us_map_fill",
-        "What would you like to explore?",
-        choices = ol$avail_meas_list[["pop"]]
-      )
-      updateSelectInput(
-        session = session,
-        "com_map_fill",
-        "What measure would you like to focus on?",
-        choices = ol$avail_meas_list[["pop"]]
-      )
-      
-      # update selected defaults for community view
-      com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
-      com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
-        st_coordinates(ol$geopts$pop)[,1] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
-          st_coordinates(ol$geopts$pop)[,1] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
-          st_coordinates(ol$geopts$pop)[,2] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
-          st_coordinates(ol$geopts$pop)[,2] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
-        ,]
-      com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
-        ol$mwi[["pop"]]$ZCTA %in% 
-          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+    withProgress(
+      message = "Uploading custom Mental Wellness Index!", {
+        if (!is.null(input$custom_data_st)){
+          validate(need(endsWith(tolower(input$custom_data_st$datapath), ".rdata"),
+                        "Must upload .RData File"))
+          
+          # load the RData file -- contains ov
+          load(input$custom_data_st$datapath)
+          
+          for (ov in names(ol)){
+            ol[[ov]] <- overall_output[[ov]]
+          }
+          
+          # update available states
+          updateSelectInput(
+            session = session,
+            "st_focus",
+            "Which state would you like to focus on?",
+            choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
+            selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
+          )
+          
+          # update available states
+          updateSelectInput(
+            session = session,
+            "us_map_fill",
+            "What would you like to explore?",
+            choices = ol$avail_meas_list[["pop"]]
+          )
+          updateSelectInput(
+            session = session,
+            "com_map_fill",
+            "What measure would you like to focus on?",
+            choices = ol$avail_meas_list[["pop"]]
+          )
+          
+          # update selected defaults for community view
+          com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
+          com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
               st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
@@ -1349,58 +1339,61 @@ server <- function(input, output, session) {
               st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
               st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
-          ],]
-    }
+            ,]
+          com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+            ol$mwi[["pop"]]$ZCTA %in% 
+              ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+                st_coordinates(ol$geopts$pop)[,1] >=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+                  st_coordinates(ol$geopts$pop)[,1] <=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+                  st_coordinates(ol$geopts$pop)[,2] >=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+                  st_coordinates(ol$geopts$pop)[,2] <=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              ],]
+        }
+      })
   })
   
   # observe custom data upload: community
   observeEvent(input$custom_data_load_com, {
-    if (!is.null(input$custom_data_com)){
-      # load the RData file
-      load(input$custom_data_com$datapath)
-      
-      for (ov in names(ol)){
-        ol[[ov]] <- overall_output[[ov]]
-      }
-      
-      # update available states
-      updateSelectInput(
-        session = session,
-        "st_focus",
-        "Which state would you like to focus on?",
-        choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
-        selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
-      )
-      
-      # update available states
-      updateSelectInput(
-        session = session,
-        "us_map_fill",
-        "What would you like to explore?",
-        choices = ol$avail_meas_list[["pop"]]
-      )
-      updateSelectInput(
-        session = session,
-        "com_map_fill",
-        "What measure would you like to focus on?",
-        choices = ol$avail_meas_list[["pop"]]
-      )
-      
-      # update selected defaults for community view
-      com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
-      com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
-        st_coordinates(ol$geopts$pop)[,1] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
-          st_coordinates(ol$geopts$pop)[,1] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
-          st_coordinates(ol$geopts$pop)[,2] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
-          st_coordinates(ol$geopts$pop)[,2] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
-        ,]
-      com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
-        ol$mwi[["pop"]]$ZCTA %in% 
-          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+    withProgress(
+      message = "Uploading custom Mental Wellness Index!", {
+        if (!is.null(input$custom_data_com)){
+          # load the RData file
+          load(input$custom_data_com$datapath)
+          
+          for (ov in names(ol)){
+            ol[[ov]] <- overall_output[[ov]]
+          }
+          
+          # update available states
+          updateSelectInput(
+            session = session,
+            "st_focus",
+            "Which state would you like to focus on?",
+            choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
+            selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
+          )
+          
+          # update available states
+          updateSelectInput(
+            session = session,
+            "us_map_fill",
+            "What would you like to explore?",
+            choices = ol$avail_meas_list[["pop"]]
+          )
+          updateSelectInput(
+            session = session,
+            "com_map_fill",
+            "What measure would you like to focus on?",
+            choices = ol$avail_meas_list[["pop"]]
+          )
+          
+          # update selected defaults for community view
+          com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
+          com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
               st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
@@ -1409,8 +1402,21 @@ server <- function(input, output, session) {
               st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
               st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
-          ],]
-    }
+            ,]
+          com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+            ol$mwi[["pop"]]$ZCTA %in% 
+              ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+                st_coordinates(ol$geopts$pop)[,1] >=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+                  st_coordinates(ol$geopts$pop)[,1] <=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+                  st_coordinates(ol$geopts$pop)[,2] >=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+                  st_coordinates(ol$geopts$pop)[,2] <=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              ],]
+        }
+      })
   })
   
   # reset to overall MWI
@@ -2335,18 +2341,21 @@ server <- function(input, output, session) {
   
   # output for the customizing just the weights
   output$custom_mwi_weights <- renderDT(
-    rownames = F,
-    options = list(pageLength = nrow(m_reg)),
-    editable = list(target = "column", disable = list(columns = c(0:2))), 
     {
-      upd_weights()
+      datatable(upd_weights(), 
+                rownames = F,
+                options = list(pageLength = nrow(m_reg)),
+                editable = list(target = "cell", 
+                                disable = list(columns = c(0:2))))
     })
   
   # make table updates persistent
   observeEvent(input$custom_mwi_weights_cell_edit, {
+    df <- upd_weights()
     row  <- input$custom_mwi_weights_cell_edit$row
     clmn <- input$custom_mwi_weights_cell_edit$col
-    upd_weights()[row, clmn] <- input$custom_mwi_weights_cell_edit$value
+    df[row, clmn+1] <- input$custom_mwi_weights_cell_edit$value
+    upd_weights(df)
   })
   
   # download the Metadata file
@@ -2528,14 +2537,18 @@ server <- function(input, output, session) {
   
   # download the output file
   output$download_custom_mwi <- output$download_custom_mwi_comp <- 
+    output$download_custom_mwi_weights <- 
     downloadHandler(
       filename = function(){
         paste0("Custom_MWI_", Sys.Date(), ".RData")
       },
       content = function(file){
-        overall_output <- overall_list()
-        
-        save(overall_output, file = file)
+        withProgress(
+          message = "Creating Custom MWI file for download...",{ 
+            overall_output <- overall_list()
+            
+            save(overall_output, file = file)
+          })
       }
     )
 }
