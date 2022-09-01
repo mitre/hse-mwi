@@ -2402,7 +2402,8 @@ server <- function(input, output, session) {
           # that the rest of the data is csv
           if (zip_true &
               "Metadata.xlsx" %in% zip_df$name & 
-              all(endsWith(tolower(zip_df$datapath), c(".csv", ".xlsx"))) & 
+              all((endsWith(tolower(zip_df$datapath), ".xlsx")) |
+                  (endsWith(tolower(zip_df$datapath), ".csv"))) & 
               (nrow(zip_df) == 1 |
                (nrow(zip_df) > 1 &
                 all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
@@ -2413,9 +2414,9 @@ server <- function(input, output, session) {
             )
             
             # read all custom data
-            custom_data <- lapply(
-              zip_df$name[zip_df$name != "Metadata.xlsx"], function(x){
-                read.csv(unz(input$custom_zip$datapath, x), check.names = F)
+            custom_data <-  lapply(
+              zip_df$datapath[zip_df$name != "Metadata.xlsx"], function(x){
+                read.csv(x, check.names = F)
               }
             )
             names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
