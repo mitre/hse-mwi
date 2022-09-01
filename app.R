@@ -2373,6 +2373,20 @@ server <- function(input, output, session) {
     req(isTruthy(input$custom_mwi_go) || isTruthy(input$custom_mwi_go_comp) ||
           isTruthy(input$custom_mwi_go_weights))
     
+    # check which button got pressed
+    press <- if (input$custom_mwi_go[1] > button_click$go){
+      "go"
+    } else if (input$custom_mwi_go_comp[1] > button_click$comp){
+      "comp"
+    } else {
+      "weights"
+    }
+    
+    # update the saved values
+    button_click$go <- input$custom_mwi_go[1]
+    button_click$comp <- input$custom_mwi_go_comp[1]
+    button_click$weights <- input$custom_mwi_go_weights[1]
+    
     withProgress(
       message = "Creating custom Mental Wellness Index!", 
       detail = "Loading data...", {
@@ -2382,7 +2396,7 @@ server <- function(input, output, session) {
         error <- F
         zip_true <- T
         # only look for a zip file for custom data
-        if (!isTruthy(input$custom_mwi_go_weights)){
+        if (press != "weights"){
           if (!is.null(input$custom_zip)){
             zip_df <- input$custom_zip # a list of files
           } else if (!is.null(input$custom_zip_comp)) {
@@ -2391,55 +2405,57 @@ server <- function(input, output, session) {
             zip_true <- F
             error <- T
             output$custom_error <- output$custom_error_comp <- renderText({
-              paste0("ERROR: Please upload ZIP files as described above.")
+              paste0("ERROR: Please upload files as described above.")
             })
           }
         }
         
         # for custom data
-        if (!isTruthy(input$custom_mwi_go_weights)){
-          # check that metadata is in the list, that there's something in it,
-          # that the rest of the data is csv
-          if (zip_true &
-              "Metadata.xlsx" %in% zip_df$name & 
-              all((endsWith(tolower(zip_df$datapath), ".xlsx")) |
-                  (endsWith(tolower(zip_df$datapath), ".csv"))) & 
-              (nrow(zip_df) == 1 |
-               (nrow(zip_df) > 1 &
-                all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
-                             ".csv"))))){
-            # read the metadata file
-            m_reg_custom <- as.data.frame(
-              read_xlsx(zip_df$datapath[zip_df$name == "Metadata.xlsx"], sheet = 1)
-            )
-            
-            # read all custom data
-            custom_data <-  lapply(
-              zip_df$datapath[zip_df$name != "Metadata.xlsx"], function(x){
-                read.csv(x, check.names = F)
-              }
-            )
-            names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
-            
+        if (!error){
+          if (press != "weights"){
+            # check that metadata is in the list, that there's something in it,
+            # that the rest of the data is csv
+            if (zip_true &
+                "Metadata.xlsx" %in% zip_df$name & 
+                all((endsWith(tolower(zip_df$datapath), ".xlsx")) |
+                    (endsWith(tolower(zip_df$datapath), ".csv"))) & 
+                (nrow(zip_df) == 1 |
+                 (nrow(zip_df) > 1 &
+                  all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
+                               ".csv"))))){
+              # read the metadata file
+              m_reg_custom <- as.data.frame(
+                read_xlsx(zip_df$datapath[zip_df$name == "Metadata.xlsx"], sheet = 1)
+              )
+              
+              # read all custom data
+              custom_data <-  lapply(
+                zip_df$datapath[zip_df$name != "Metadata.xlsx"], function(x){
+                  read.csv(x, check.names = F)
+                }
+              )
+              names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
+              
+            } else {
+              error <- T
+              output$custom_error <- output$custom_error_comp <-
+                output$custom_error_weights <- renderText({
+                  paste0(
+                    "ERROR: One of the following is wrong with your uploaded files:\n",
+                    "1: Does not contain Metadata.xlsx\n",
+                    "2: Has additional custom data and custom data not in CSV format\n",
+                    "3: There are no files\n",
+                    "4: Additional files uploaded that are not CSV or XLSX format\n",
+                    "Please fix the above, reupload, and re-do.")
+                })
+            }
           } else {
-            error <- T
-            output$custom_error <- output$custom_error_comp <-
-              output$custom_error_weights <- renderText({
-                paste0(
-                  "ERROR: One of the following is wrong with your uploaded files:\n",
-                  "1: Does not contain Metadata.xlsx\n",
-                  "2: Has additional custom data and custom data not in CSV format\n",
-                  "3: There are no files\n",
-                  "4: Additional files uploaded that are not CSV or XLSX format\n",
-                  "Please fix the above, reupload, and re-do.")
-              })
+            # for custom weights
+            m_reg_custom <- m_reg
+            m_reg_custom[rownames(upd_weights()), "Weights"] <- 
+              upd_weights()[,"Updated Weights"]
+            custom_data <- list()
           }
-        } else {
-          # for custom weights
-          m_reg_custom <- m_reg
-          m_reg_custom[rownames(upd_weights()), "Weights"] <- 
-            upd_weights()[,"Updated Weights"]
-          custom_data <- list()
         }
         
         if (!error){
