@@ -52,7 +52,8 @@ addResourcePath("mwi-toolkit", "mwi-toolkit")
 mwi_toolkit_order <- c(
   "MWI_Overview",
   "MWI_Populations_of_Focus",
-  "MWI_Framework_and_Measures",
+  "MWI_Framework",
+  "MWI_Measures_and_Data",
   "MWI_Tool_Videos_and_Guides",
   "Share_the_MWI_With_Others",
   "The_Science_Behind_the_MWI",
