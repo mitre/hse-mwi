@@ -38,7 +38,7 @@ The MWI has been created based on ZCTAS.
 
 [^1]: Conduent HealthyCommunities Institute. Accessed on June 28, 2022. Link: <https://help.healthycities.org/hc/en-us/articles/115006016767-What-is-the-difference-between-ZIP-Codes-and-ZCTAs->
 
-### Methods
+### Methods Documentation
 
 All methods used to calculate unique statistical procedures can also be accessed below. Click on the link to download the corresponding documentation.
 
@@ -50,7 +50,7 @@ All methods used to calculate unique statistical procedures can also be accessed
 
 -   [Measure Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf?raw=true)
 
-#### Measures Documentation
+### Measures Documentation
 
 Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each measure can be accessed below. Click on the link to download the corresponding documentation.
 
@@ -148,43 +148,10 @@ Nationally representative, geographically granular data were unavailable for a w
 
 Please see [measure documentation](https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures) for more information on the strengths and limitations of specific measures selected.
 
-### Validity Testing
-
-Analytic and face validity were verified evaluate the robustness, validity, and accuracy of the MWI. As part of the analytic validity testing, the team examined the correlation of the MWI with other major health indices, including the Social Vulnerability Index, Minority Health Social Vulnerability Index, the Child Opportunity Index, and the Health Resources and Service Administration's Service Area Status and Unmet Need Score. We grouped ZCTAs by their Core-Based Statistical Areas (CBSA) designations to analyze relationships by varying population densities: metro (urbanized areas with 50,000 or more inhabitants) , micro (at least one urban cluster of at least 10,000 but less than 50,000), and neither (fewer than 10,000 -- representing non-urban areas).[^4] We expect to see Pearson correlation coefficients (PCC) between 0.5 \<= \|r\| \<= 0.8), signifying those patterns of contributors to mental wellness correlate with other health indices as supported by literature, but also that the MWI does not providing completely redundant information (i.e., \|r\| = 1.0). Additionally, we analyzed ZCTA rankings between the MWI's overall population and Black populations results to understand the consistency of a ZCTA's relative ranking when examining data describing assets and obstacles within Black populations versus the overall population. Here, we observe higher PCC values for this correlation as well as a tapered pattern with strong alignment near the upper and low ends of the distribution, indicating that high and low ranked ZCTAs are consistent between Black and overall populations.
-
-[^4]: [Glossary (census.gov)](https://www.census.gov/programs-surveys/geography/about/glossary.html#par_textimage_7)
-
-Our findings show that the MWI is correlated with other health indices with a PCC of 0.52 \<= \|r\| \<= 0.85). This is generally in line with our expected results. Analytic graphs are provided below. 
-
-To test its face validity, multiple listening sessions were held with 5 community key informants to solicit feedback on ways to improve the MWI and the MWI tool to increase its validity and usefulness. Community key informants included representatives from community-based organizations, nonprofits, and local public health practitioners. Themes that emerged from the listening sessions included:
-
--   Mental wellness has different connotations for different communities.
--   There is no national data available at the ZIP code level for important measures of community mental wellness, like sense of power, value, and hopefulness.
--   The MWI can influence a larger national conversation on health equity and mental wellness.
--   The MWI's intent should be clearly communicated---e.g. A tool that is meant to be customized and used by communities.
--   Black communities are not monolithic.
--   Research and interventions often leave out, misunderstand, do not benefit or exploit Black communities.
--   Communities want a tool that demonstrates the positive impacts (programs, policies) occurring in their neighborhoods and environments over time.
-
-The MWI team used these insights to inform measure selection and MWI tool development. For example, the Create Your Own MWI feature was included based on feedback regarding the desire to supplement local data (if available) for important measures of community mental wellness (like sense of power, value, and hopefulness) due to the lack of national data. The MWI team also developed the Third Places measure based on feedback from community key informants regarding the need to include positive resources and assets in communities.
-
-#### Analytic Results
-
-<center>
-
-![](images/svi.png)
-
-![](images/minority_health.png)
-
-![](images/sas.png)
-
-![](images/uns.png)
-
-![](images/black.png){width="720"}
-
-</center>
 
 ### Downloadable Data and Information
+
+To learn how to download MWI data and documentation, watch the video “Downloading Data and Viewing Documentation".
 
 1)  [Data Information](https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv): The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and directionality.
 
