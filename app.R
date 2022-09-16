@@ -1239,42 +1239,15 @@ server <- function(input, output, session) {
              HTML("</center>"),
              HTML("<br>"),
              HTML("<center>"),
-             HTML("Learn more and watch videos about how the MWI tool works by visiting MWI Toolkit by clicking on the tab in the blue bar."),
-             img(src = file.path("media", "MWI Toolkit.png"), height = "40px"),
+             HTML("To learn more and view MWI videos, click <b>MWI Toolkit</b> in the blue bar at the top of the page."),
+            
              HTML("</center>"),
              HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
       )),
-      column(width = 1),
-    hr(),
-    HTML(paste0(
-      "<p><font size = '3'><b><center>Start exploring the MWI tool in two ways:</p></b></font>"
-    )),
-    fluidRow(
-      column(
-        width = 6,
-        HTML("<font size = '3'><b><p>Explore States</p></b></font>"),
-        img(src = file.path("media", "MWI_State_View.png"), align = "center", height = "200px"),
-        HTML("<font size = '2'><p><i>Good for exploring measures overall, gives general distributions in states</i></p></font>")
-      ),
-      column(
-        width = 6,
-        HTML("<font size = '3'><b><p>Explore ZIP Codes</p></b></font>"),
-        img(src = file.path("media", "MWI_ZIP_Code_View.png"), align = "center", height = "200px"),
-        HTML("<font size = '2'><p><i>Good for exploring measures for a specific ZIP Code, gives all measure results for a ZIP Code</p></i></font>")
-      )
-    ),
-    selectInput(
-      "start_st",
-      "Choose your state and click below to get started!",
-      choices = c(unname(f_st), "All"),
-      selected = "Virginia",
-      width = "400px"
-    ),
-    HTML("</center>"),
+     
     footer = tagList(
       HTML("<center>"),
-      actionButton("enter_mwi", "Start Exploring!"),
-      modalButton("Use Defaults"),
+      modalButton("Start Exploring!"),
       HTML("</center>")
     ),
     easyClose = T # it will just use defaults
