@@ -990,7 +990,7 @@ ui <- fluidPage(
               "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
               "</ul>",
               "<br>",
-              "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
+              "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. Select multiple files by pressing ctrl/cmd and then clicking on each file in the file explorer box. Note: Do not have files open while uploading. This will take some time, depending on the amount of measures included.</li>",
               "<br>",
               "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
               "<br>",
@@ -1005,7 +1005,7 @@ ui <- fluidPage(
               HTML("<br><br>"),
               fileInput(
                 "custom_zip", 
-                "Upload Custom Data Files (.xlsx, .csv)",
+                "Upload Custom Data Files (.xlsx, .csv) (do not have files open):",
                 accept = c(".xlsx", ".csv"),
                 multiple = T
               ),
@@ -1073,7 +1073,7 @@ ui <- fluidPage(
               "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
               "</ul>",
               "<br>",
-              "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
+              "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. Select multiple files by pressing ctrl/cmd and then clicking on each file in the file explorer box. Note: Do not have files open while uploading. This will take some time, depending on the amount of measures included.</li>",
               "<br>",
               "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
               "<br>",
@@ -1088,7 +1088,7 @@ ui <- fluidPage(
               HTML("<br><br>"),
               fileInput(
                 "custom_zip_comp", 
-                "Upload Custom Data Files (.xlsx, .csv)",
+                "Upload Custom Data Files (.xlsx, .csv) (do not have files open):",
                 accept = c(".xlsx", ".csv"),
                 multiple = T
               ),
