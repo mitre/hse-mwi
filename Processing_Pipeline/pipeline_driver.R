@@ -120,7 +120,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
   
   # if the custom data list is empty, we're just adjusting weights (and data
   # has already been processed) -- we can skip steps
-  upd_weights <- length(custom_data) == 0
+  upd_weights <- length(custom_data) == 0 & run_custom
   
   # filter out measures with weight of 0 and an empty numerator
   m_reg <- m_reg[m_reg$Weights != 0,]
