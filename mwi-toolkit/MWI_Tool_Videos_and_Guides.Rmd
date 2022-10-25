@@ -29,18 +29,17 @@ Here you can find instructions on how to use the MWI, as well as videos and use 
 
 ### MWI Instructional Videos
 
-#### Video 1
+#### Tool Overview
 
-Add link here
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5SsYGjfqbhk" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-#### Video 2
+#### Explore Maps
 
-Add link here
+<iframe width="560" height="315" src="https://www.youtube.com/embed/baGT56pfyPA" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-#### Video 3
+#### Data and Documentation
 
-Add link here
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/BNkvRBkfxP4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 ### How to Use the "Explore States" Tab
 
 The Explore States option allows you to explore the MWI through an interactive map and distribution visualization. This option is useful if you would like to focus on a particular state or compare a ZIP Code to state-wide rankings.
