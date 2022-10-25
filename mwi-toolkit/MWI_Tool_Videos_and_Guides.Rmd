@@ -12,7 +12,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::knit_hooks$set(optipng = knitr::hook_optipng)
-library(slickR)
+library(vembedr)
+library(fontawesome)
 ```
 
 The MWI tool includes two main features: 
@@ -27,19 +28,34 @@ Here you can find instructions on how to use the MWI, as well as videos and use 
 >
 > For the MWI, a higher value (closer to 100) indicates more resources or assets to support mental wellness, while a lower value (closer to 0) indicates more obstacles to mental wellness. Individual measure are displayed as rankings. For example, a Broadband Access measure ranking of 75 means that this ZIP Codes ranks higher than 75% of the ZIP Codes in the nation for this measure (not that 75% of individuals in the ZIP Code have broadband access).
 
-### MWI Instructional Videos
+### MWI Instructional Videos {.tabset}
 
-#### Video 1
+Navigate to the [full playlist here](https://youtube.com/playlist?list=PLkTApXQou_8IFFkeJ4sqKq43hQK9lxsJj) `r fa("link")`
 
-Add link here
+#### Tool Overview 
 
-#### Video 2
+```{r, echo = FALSE}
+embed_youtube("5SsYGjfqbhk") %>%
+  use_bs_responsive() 
+```
 
-Add link here
 
-#### Video 3
+#### Explore Maps 
 
-Add link here
+```{r, echo = FALSE}
+embed_youtube("baGT56pfyPA") %>%
+  use_bs_responsive()
+```
+
+
+#### Data and Documentation 
+
+```{r, echo = FALSE}
+embed_youtube("BNkvRBkfxP4") %>%
+  use_bs_responsive()
+```
+
+
 
 ### How to Use the "Explore States" Tab
 
