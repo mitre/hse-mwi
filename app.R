@@ -31,7 +31,7 @@ options(shiny.maxRequestSize=300*1024^2)
 
 source("app_config.R")
 
-# styling ----
+# styling/resources ----
 
 # Applies css to rShiny app
 sass(
@@ -44,6 +44,22 @@ sass(
 sass(
   sass_file("www/stylesheets/app.scss"),
   output = "about/app.css"
+)
+
+addResourcePath("mwi-toolkit", "mwi-toolkit")
+
+# order for tabs
+mwi_toolkit_order <- c(
+  "MWI_Overview",
+  "MWI_Populations_of_Focus",
+  "MWI_Framework",
+  "MWI_Measures_and_Data",
+  "MWI_Tool_Videos_and_Guides",
+  "Share_the_MWI_With_Others",
+  "The_Science_Behind_the_MWI",
+  "MWI_in_Action",
+  "Frequently_Asked_Questions",
+  "Contact"
 )
 
 # function for app preprocessing ----
@@ -805,7 +821,9 @@ ui <- fluidPage(
                 uiOutput("data_info"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
+
+                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
+
                   "</font>"
                 ))
               )
@@ -838,7 +856,7 @@ ui <- fluidPage(
               ),
               selectInput(
                 "com_map_fill",
-                "What measure would you like to focus on?",
+                "What would you like to explore?",
                 choices = overall$avail_meas_list[["pop"]]
               ),
               textInput(
@@ -916,7 +934,9 @@ ui <- fluidPage(
                 uiOutput("data_info_com"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
+
+                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
+
                   "</font>"
                 ))
               ),
@@ -1026,23 +1046,29 @@ ui <- fluidPage(
       )
     ),
     
-    # about ----
-    navbarMenu(
-      "MWI Toolkit",
-      tabPanel(
-        title = div("About the MWI", class="about"),
-        # NOTE: when making changes to about.Rmd, move result to www
-        htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
-                               class="about-panel",
-                               frameborder = 0, 
-                               scrolling = 'auto')),
-      tabPanel(
-        title = div("Measure & Methodology Documentation Download",
-                    class = "about"), 
-        htmltools::tags$iframe(src = "docdownload.html",
-                               class = "about-panel",
-                               frameborder = 0,
-                               scrolling = "auto")
+
+    # mwi toolkit ----
+    
+    # add toolkit pages dynamically since there are a lot of them
+    do.call(
+      navbarMenu,
+      c(menuName = "toolkit",
+        title = "MWI Toolkit",
+        lapply(
+          mwi_toolkit_order,
+          function(x){
+            tabPanel(
+              id = tolower(x),
+              title = div(gsub("_", " ", x), class = "about"),
+              htmltools::tags$iframe(
+                src = paste0("mwi-toolkit/", x, ".html"),
+                class = "about-panel",
+                frameborder = 0,
+                scrolling = "auto")
+              
+            )
+          }
+        )
       )
     )
   ),
@@ -1123,59 +1149,50 @@ server <- function(input, output, session) {
       HTML("<b><center>Welcome to the Mental Wellness Index™!</b></center>"),
     size = "l",
     fluidRow(
-      
-      column(
-        width = 7,
-        HTML("<p align = 'justify'><font size = '3'>"),
-        HTML(
-          "The <b>Mental Wellness Index™ (MWI)</b> quantifies factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation.  The MWI aggregates <b>28 weighted measures</b> that quantify facilitators and barriers to mental wellness across <b>three domains</b>: <b>Social Determinants of Health</b>, <b>Healthcare Access</b>, and <b>Health Status</b>. Two <b>dynamic factors</b> (<b>Structural Racism</b> and <b>Community and Cultural Assets</b>) influence measures in all three of the domains. The Mental Wellness Index tool allows users to <b>explore the MWI and its measures</b>, providing information for the <b>overall population</b> and <b>Black populations</b>."
-        ),
-        HTML("</p></font>"),
-        HTML("<font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font>")
-      ),
-      column(
-        width = 5,
-        HTML("<center>"),
-        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
-        HTML("</center>")
-      )
-    ),
-    hr(),
-    HTML(paste0(
-      "<p><font size = '3'><b><center>You can explore the MWI Tool in two ways:</p></b></font>"
-    )),
-    fluidRow(
-      column(
-        width = 6,
-        HTML("<font size = '3'><b><p>Explore States</p></b></font>"),
-        img(src = file.path("media", "MWI_State_View.png"), align = "center", height = "200px"),
-        HTML("<font size = '2'><p><i>Good for exploring measures overall, gives general distributions in states</i></p></font>")
-      ),
-      column(
-        width = 6,
-        HTML("<font size = '3'><b><p>Explore ZIP Codes</p></b></font>"),
-        img(src = file.path("media", "MWI_ZIP_Code_View.png"), align = "center", height = "200px"),
-        HTML("<font size = '2'><p><i>Good for exploring measures for a specific ZIP Code, gives all measure results for a ZIP Code</p></i></font>")
-      )
-    ),
-    selectInput(
-      "start_st",
-      "Choose your state and click below to get started!",
-      choices = c(unname(f_st), "All"),
-      selected = "Virginia",
-      width = "400px"
-    ),
-    HTML("</center>"),
+      column(width = 1),
+      column(width = 10,
+             HTML("<p align = 'center'><font size = '3'>"),
+             HTML(
+               "The <b>Mental Wellness Index (MWI)</b> combines 28 factors that influence <b>community-level mental wellness</b> into a single value for <b>each ZIP code</b> in the nation."
+             ),
+             HTML("</p></font>"),
+             HTML("<center>"),
+             img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "60%"),
+             HTML("</center>"),
+             HTML("<br>"),
+             HTML("<center>"),
+             HTML("To learn more and view MWI videos, click <b>MWI Toolkit</b> in the blue bar at the top of the page."),
+            
+             HTML("</center>"),
+             HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
+      )),
+     
     footer = tagList(
       HTML("<center>"),
-      actionButton("enter_mwi", "Start Exploring!"),
-      modalButton("Use Defaults"),
+      modalButton("Start Exploring!"),
       HTML("</center>")
     ),
     easyClose = T # it will just use defaults
   )
   
   showModal(welcome_modal)
+  
+
+  observeEvent(input$learn_button, {
+    updateNavbarPage(session = session, 
+                     inputId = "toolkit", 
+                     selected = "mwi_overview")
+    
+    removeModal()
+  })
+  
+  observeEvent(input$video_button, {
+    updateNavbarPage(session = session, 
+                     inputId = "toolkit", 
+                     selected = "mwi_tool_videos_and_guides")
+    
+    removeModal()
+  })
   
   observeEvent(input$enter_mwi, {
     # update all of the inputs -- this will cascade
@@ -1244,7 +1261,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1304,7 +1321,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1361,7 +1378,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1411,7 +1428,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session = session,
       "us_map_fill",
-      "Which score/measure would you like to explore?",
+      "What would you like to explore?",
       choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
@@ -1583,7 +1600,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session = session,
       "com_map_fill",
-      "What measure would you like to focus on?",
+      "What would you like to explore?",
       choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
@@ -1801,7 +1818,7 @@ server <- function(input, output, session) {
           html_color(mc, "higher"),
           " value indicates a ",
           html_color(mc, "higher"),
-          " national ranking for ", 
+          " national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ", 
           html_color(mc, full_name),
           ".",
           "</font></b><p></p>",
@@ -1928,9 +1945,9 @@ server <- function(input, output, session) {
             " (ZIP Code",
             ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
             html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
-            " has a ", html_color(mc, full_name), " national ranking of ",
+            " has a ", html_color(mc, full_name), " national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  of ",
             html_color(mc, trunc(f_val)),
-            ", putting it at the ",
+            " and is at the ",
             html_color(mc, st_perc), 
             " percentile for the state.",
             " This is in the ", 
@@ -1939,7 +1956,7 @@ server <- function(input, output, session) {
             html_color(mc, us_comp), " relative to the United States.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates a higher national ranking for ",
+            "<i>A higher value indicates a higher national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
             full_name,
             ". ",
             ifelse(
@@ -1964,7 +1981,7 @@ server <- function(input, output, session) {
             ", indicating missing data or no population in this area.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates a higher national ranking for ",
+            "<i>A higher value indicates a higher national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
             full_name,
             ". ",
             ifelse(
@@ -2086,9 +2103,9 @@ server <- function(input, output, session) {
           " (ZIP Code",
           ifelse(nchar(zcta_to_zip[com_sub$ZCTA]) > 5, "s "," "), 
           html_color(mc, zcta_to_zip[com_sub$ZCTA]), ")",
-          " has a ", html_color(mc, full_name), " national ranking of ",
+          " has a ", html_color(mc, full_name), " national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  of ",
           html_color(mc, trunc(f_val)),
-          ", putting it at the ",
+          " and is at the ",
           html_color(mc, com_perc), 
           " percentile for the state.",
           " This is in the ", 
@@ -2101,7 +2118,7 @@ server <- function(input, output, session) {
             paste0(
               "<p></p>",
               "<font size = '2'>",
-              "<i>A higher value indicates a higher national ranking for ",
+              "<i>A higher value indicates a higher national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
               full_name,
               ". ",
               ifelse(
@@ -2133,7 +2150,7 @@ server <- function(input, output, session) {
               paste0(
                 "<p></p>",
                 "<font size = '2'>",
-                "<i>A higher value indicates a higher national ranking for ",
+                "<i>A higher value indicates a higher national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
                 full_name,
                 ". ",
                 ifelse(
