@@ -932,13 +932,13 @@ ui <- fluidPage(
               "<br><br>",
               "To adjust the weights in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
               "<ol>",
-              "<li>Update weights for each measure in the table below as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number).</li>",
+              "<li>Update weights for each measure in the table below as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number). Click outside of that edited entry to lock it in. Note that weights do not need to add to 100 (they will be normalized, and have georgraphy/race stratification penalties applied, when the Custom MWI is calculated).</li>",
               "<br>",
               "<li>Click 'Create Custom MWI' below. This will take some time.</li>",
               "<br>",
               "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing will be lost! Nothing is stored within this application.</b></li>",
               "<br>",
-              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
+              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file. Once the file is fully loaded, click 'Upload' to see your Custom MWI results.</li>",
               "</ol>",
               "</p>"
               )),
@@ -994,7 +994,7 @@ ui <- fluidPage(
               "<br>",
               "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
               "<br>",
-              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
+              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file. Once the file is fully loaded, click 'Upload' to see your Custom MWI results.</li>",
               "</ol>",
               "</p>"
             )),
@@ -1077,7 +1077,7 @@ ui <- fluidPage(
               "<br>",
               "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
               "<br>",
-              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
+              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file. Once the file is fully loaded, click 'Upload' to see your Custom MWI results.</li>",
               "</ol>",
               "</p>"
             )),
