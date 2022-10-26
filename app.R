@@ -963,7 +963,7 @@ ui <- fluidPage(
           column(width = 2),
           column(
             width = 8,
-            HTML("<center><h2>Add local data to create your own Mental Wellness Index (MWI)!</h2></center>"),
+            HTML("<center><h2>Add Local Data to Mental Wellness Index (MWI)</h2></center>"),
             HTML(paste0(
               "<p align = 'justify'>",
               "To create your own Mental Wellness Index with your own local data, follow the instructions below to create your own MWI for your community below by adjusting weights and adding your own data and metadata. If you only want to adjust the weights in the MWI, go to the \"Adjust MWI Weights\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it. However, if you would like to keep your data on your computer while creating the MWI, please see the \"Add Local Data to MWI on Your Computer\" section.",
@@ -1025,7 +1025,7 @@ ui <- fluidPage(
           column(width = 2),
           column(
             width = 8,
-            HTML("<center><h2>Add local data to create your own Mental Wellness Index (MWI)!</h2></center>"),
+            HTML("<center><h2>Add Local Data to Mental Wellness Index (MWI) On Your Computer</h2></center>"),
             HTML(paste0(
               "<p align = 'justify'>",
               "If you want to keep your data on your computer, follow the instructions below to create your own MWI for your community by adjusting weights and adding your own data and metadata.",
