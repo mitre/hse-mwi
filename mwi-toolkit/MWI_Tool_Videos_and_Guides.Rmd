@@ -12,7 +12,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::knit_hooks$set(optipng = knitr::hook_optipng)
-library(slickR)
+library(vembedr)
+library(fontawesome)
 ```
 
 The MWI tool includes two main features: 
@@ -27,19 +28,35 @@ Here you can find instructions on how to use the MWI, as well as videos and use 
 >
 > For the MWI, a higher value (closer to 100) indicates more resources or assets to support mental wellness, while a lower value (closer to 0) indicates more obstacles to mental wellness. Individual measure are displayed as rankings. For example, a Broadband Access measure ranking of 75 means that this ZIP Codes ranks higher than 75% of the ZIP Codes in the nation for this measure (not that 75% of individuals in the ZIP Code have broadband access).
 
-### MWI Instructional Videos
+### MWI Instructional Videos {.tabset}
 
-#### Tool Overview
+Navigate to the [full playlist here](https://youtube.com/playlist?list=PLkTApXQou_8IFFkeJ4sqKq43hQK9lxsJj) `r fa("link")`
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/5SsYGjfqbhk" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+#### Tool Overview 
 
-#### Explore Maps
+```{r, echo = FALSE}
+embed_youtube("5SsYGjfqbhk") %>%
+  use_bs_responsive() 
+```
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/baGT56pfyPA" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-#### Data and Documentation
+#### Explore Maps 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/BNkvRBkfxP4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+```{r, echo = FALSE}
+embed_youtube("baGT56pfyPA") %>%
+  use_bs_responsive()
+```
+
+
+#### Data and Documentation 
+
+```{r, echo = FALSE}
+embed_youtube("BNkvRBkfxP4") %>%
+  use_bs_responsive()
+```
+
+
+
 ### How to Use the "Explore States" Tab
 
 The Explore States option allows you to explore the MWI through an interactive map and distribution visualization. This option is useful if you would like to focus on a particular state or compare a ZIP Code to state-wide rankings.
