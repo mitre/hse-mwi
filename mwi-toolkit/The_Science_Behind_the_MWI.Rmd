@@ -1,0 +1,162 @@
+---
+title: "The Science Behind the MWI"
+output: 
+  html_document:
+    theme: cerulean
+    css: styles.css
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+```
+
+The MWI fills a gap - There is no existing tool that summarizes the factors influencing mental wellness of communities for the entire nation at a geographically granular level (such as the ZIP Code level) and provides results for Black populations and the overall population.
+
+The goal of the MWI is to provide an objective, data-based snapshot of the factors that influence mental well-being at the ZIP Code level. This allows for a "like-to-like" comparison of areas and can help inform users (in partnership with impacted communities) about how best to distribute resources for the highest impact, and to advocate for their communities.
+
+**Did you know ZIP codes and ZCTAs are slightly different?**
+
+The MWI has been created based on ZCTAS.
+
+-   The term ZIP codes stand for: Zone Improvement Plan Codes. These were created by the U.S. Postal Service to improve mail delivery service. They are based on postal routes which factor in delivery-area, mail volume, and geographic location.
+
+<!-- -->
+
+-   ZCTAs stands for: ZIP Code Tabulation Areas. These were created by the U.S. Census Bureau. These have been assigned to census blocks. They represent a geographic location of populated areas.
+
+<!-- -->
+
+-   For the most part, the geographic area of a ZIP Code is the same as the ZCTA.
+
+<!-- -->
+
+-   In the MWI, the term "ZIP code" refers to ZIP Code Tabulation Areas (ZCTAs)[^1]
+
+[^1]: Conduent HealthyCommunities Institute. Accessed on June 28, 2022. Link: <https://help.healthycities.org/hc/en-us/articles/115006016767-What-is-the-difference-between-ZIP-Codes-and-ZCTAs->
+
+### Methods Documentation
+
+All methods used to calculate unique statistical procedures can also be accessed below. Click on the link to download the corresponding documentation.
+
+-   [Facility Weights](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Facility_Weights_Methods.pdf?raw=true)
+
+-   [Geography](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Geography_Methods.pdf?raw=true)
+
+-   [Two Step Floating Catchment Methodology](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Two_Step_Floating_Catchment_Area.pdf?raw=true)
+
+-   [Measure Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf?raw=true)
+
+### Measures Documentation
+
+Each measure used in the MWI Tool was assessed based on its strengths, limitations, and theoretical justification for inclusion into the tool. Detailed documentation for each measure can be accessed below. Click on the link to download the corresponding documentation.
+
+##### Social Determinants of Health
+
+-   [Alcohol Outlet Density](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Outlet_Density.pdf?raw=true)
+
+-   [Below 100% Poverty Rate](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Below_100_Federal_Poverty_Level.pdf?raw=true)
+
+-   [Broadband Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Broadband_Access.pdf?raw=true)
+
+-   [Mortgage Lending Difference](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mortgage_Lending_Difference.pdf?raw=true)
+
+-   [No High School Diploma](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/No_High_School_Diploma.pdf?raw=true)
+
+-   [Nursery and Preschool Enrollment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Nursery_and_Preschool_Enrollment.pdf?raw=true)
+
+-   [Police Killings](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Police_Killings.pdf?raw=true)
+
+-   [Residential Segregation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Residential_segregation.pdf?raw=true)
+
+-   [Third Places](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Third_Places.pdf?raw=true)
+
+-   [Unemployment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Unemployment.pdf?raw=true)
+
+-   [Access to Financial Services](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Access_to_Financial_Services.pdf?raw=true)
+
+-   [Violent Crime](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Violent_crime.pdf?raw=true)
+
+-   [Housing Stress](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Housing_Stress.pdf?raw=true)
+
+-   [Living Within a Half-Mile of a Park](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Living_Within_a_Half_Mile_of_a_Park.pdf?raw=true)
+
+-   [Voter Participation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Voter_Participation.pdf?raw=true)
+
+##### Healthcare Access
+
+-   [Uninsured](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Uninsured.pdf?raw=true)
+
+-   [Mental Health Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mental_Health_Treatment_Facility_Access.pdf?raw=true)
+
+-   [Substance Use Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Substance_Use_Treatment_Facility_Access.pdf?raw=true)
+
+##### Health Status
+
+-   [Adult Binge Drinking](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Adult_Binge_Drinking.pdf?raw=true)
+
+-   [Insufficient Sleep](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Insufficient_Sleep.pdf?raw=true)
+
+-   [Obesity](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Obesity.pdf?raw=true)
+
+-   [Poor Mental Health](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Poor_Mental_Health.pdf?raw=true)
+
+-   [Smoking Status](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Smoking_Status.pdf?raw=true)
+
+-   [Alcohol-Related Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Related_Mortality.pdf?raw=true)
+
+-   [Estimated Drug Poisoning Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Estimated_Drug_Poisoning_Mortality.pdf?raw=true)
+
+-   [Suicide Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicide_Mortality.pdf?raw=true)
+
+-   [Life Expectancy](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Life_Expectancy.pdf?raw=true)
+
+-   [Suicidal Ideation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicidal_Ideation.pdf?raw=true)
+
+### Limitations and Challenges
+
+Limitations that we faced based on the types of data that are available and collected in national datasets include the following:
+
+1.  Lack of access to geographically granular data on certain topics
+2.  Lack of data stratified by demographics such as race, ethnicity, sexual orientation, English proficiency/language, etc.
+3.  Most data are deficit-focused, and deficit-focused data may not represent community-based perspectives and lack a focus on assets and strengths.
+4.  Impact of structural racism inherent to the research enterprise, which impacts areas such as survey development, sampling, data collection and analysis, etc.
+5.  Some populations, such as individuals experiencing homelessness, may not be represented in various national datasets
+
+Because data were aggregated from multiple data sources, we note that all data are not from the same year or range of years. Additionally, some measures that strongly aligned with the measure evaluation and selection criteria (see below) were included even though they could not be stratified by race, so calculations based on these measures may have lower validity for Black populations. Race stratified data were available for 14 measures, unavailable for 8 measures, and not applicable for 6 measures.
+
+Nationally representative, geographically granular data were unavailable for a wide range of topics that impact mental wellness, such as social connectedness[^2]; sense of belonging; access to safe, reliable, and efficient transportation; community allostatic load[^3]; and access to culturally and linguistically appropriate care, among others. If data on these, or other topics, are available at the local level, using the MWI tool data upload feature can enhance the results of the MWI.
+
+[^2]: Office of Disease Prevention and Health Promotion (n.d.). *Social Cohesion*. Healthy People 2030. <https://health.gov/healthypeople/objectives-and-data/social-determinants-health/literature-summaries/social-cohesion>
+
+[^3]: Chandra, A., Cahill, M., Yeung, D., & Ross, R. (2018) *Toward an Initial Conceptual Framework to Assess Community Allostatic Load: Early Themes from Literature Review and Community Analyses on the Role of Cumulative Community Stress.* RAND Corporation. Available at: <https://www.rand.org/pubs/research_reports/RR2559.html>
+
+[We had a limited ability to consult directly with communities in the creation of the MWI]{.underline}. Input from communities that are directly impacted is vital to ensure a tool will be most useful for them. While we consulted with and had input from selected community leaders and program providers in Black communities, we did not have direct input from community residents. In our next steps, we hope to engage directly with communities to understand their priorities and preferences, incorporate participatory approaches, and work with communities to understand how the MWI can best address their needs.
+
+[We have sought to address these challenges by]{.underline}:
+
+-   Prioritizing race-stratified measures.
+
+-   Building adaptive features into the MWI tool that allow users to upload community-specific data (effectively adding and removing measures), and weight measures according to their values and preferences.
+
+-   Incorporating creative measure constructs by including measures of assets that are not "traditionally" included in health indices (e.g., third places, access to financial services, voter participation, etc.), and application of novel methodologies to represent key constructs (e.g., using data about treatment facility characteristics in addition to location data).
+
+-   Committing to document and share recommendations related to challenges with others to positively influence change.
+
+Please see [measure documentation](https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures) for more information on the strengths and limitations of specific measures selected.
+
+
+### Downloadable Data and Information
+
+To learn how to download MWI data and documentation, watch the video “Downloading Data and Viewing Documentation".
+
+1)  [Data Information](https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv): The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and directionality.
+
+2)  [Mental Wellness Index for Black Populations](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv): The calculated MWI for Black populations for each ZCTA.
+
+3)  [Mental Wellness Index for Overall Population](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv): The calculated MWI for the overall population for each ZCTA.
+
+4)  [MWI Project Github Page](https://github.com/mitre/hse-mwi): This page is home to all of the raw data, code to manipulate the data, documentation concerning each measure, and everything else concerned with the creation of the MWI Tool.
