@@ -75,9 +75,9 @@ The three domains in the MWI framework are: Social Determinants of Health, Healt
 
 [^6]: Tomer, A., Fishbane, L., Siefer, A., & Callahan, B. (2020). Digital Prosperity: How broadband can deliver health and equity to all communities. Brookings Metropolitan Policy Program. <a href = 'https://www.brookings.edu/wpcontent/uploads/2020/02/20200227_BrookingsMetro_Digital-Prosperity-Report-final.pdf ' target = "_blank">(link)</a>
 
-[^7]: Balseviciene, B., Sinkariova, L., Grazuleviciene, R., Andrusaityte, S., Uzdanaviciute, I., Dedele, A., & Nieuwenhuijsen, M. J. (2014). *Impact of residential greenness on preschool children's emotional and behavioral problems.* International Journal of Environmental Research and Public Health, 11(7), 6757--6770. <https://doi.org/10.3390/ijerph110706757>
+[^7]: Balseviciene, B., Sinkariova, L., Grazuleviciene, R., Andrusaityte, S., Uzdanaviciute, I., Dedele, A., & Nieuwenhuijsen, M. J. (2014). *Impact of residential greenness on preschool children's emotional and behavioral problems.* International Journal of Environmental Research and Public Health, 11(7), 6757--6770. <https://doi.org/10.3390/ijerph110706757>{target="_blank"}
 
-[^8]: Mitchell, R. J., Richardson, E. A., Shortt, N. K., & Pearce, J. R. (2015). *Neighborhood environments and socioeconomic inequalities in mental well-being.* American Journal of Preventive Medicine, 49(1), 80--84. <https://doi.org/10.1016/j.amepre.2015.01.017>
+[^8]: Mitchell, R. J., Richardson, E. A., Shortt, N. K., & Pearce, J. R. (2015). *Neighborhood environments and socioeconomic inequalities in mental well-being.* American Journal of Preventive Medicine, 49(1), 80--84. <https://doi.org/10.1016/j.amepre.2015.01.017>{target="_blank"}
 
 ### Dynamic Factors
 
@@ -86,13 +86,13 @@ The three domains in the MWI framework are: Social Determinants of Health, Healt
 #### Community & Cultural Assets 
 **Community & Cultural Assets** are resources in the form of people, places, and organizations that promote social connection and improve the health and wellbeing of the community.[^9] [^10]
 
-[^9]: Sturm, R., & Cohen, D. (2014). *Proximity to urban parks and mental health.* The Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>
+[^9]: Sturm, R., & Cohen, D. (2014). *Proximity to urban parks and mental health.* The Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>{target="_blank"}
 
-    Sturm, R., & Cohen, D. (2014). *Proximity to urban parks and mental health.* The Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>
+    Sturm, R., & Cohen, D. (2014). *Proximity to urban parks and mental health.* The Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>{target="_blank"}
 
-    Sturm, R., & Cohen, D. (2014). *Proximity to urban parks and mental health.* The Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>
+    Sturm, R., & Cohen, D. (2014). *Proximity to urban parks and mental health.* The Journal of Mental Health Policy and Economics, 17(1), 19--24. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4049158/>{target="_blank"}
 
-[^10]: Esch, P., Bocquet, V., Pull, C., Couffignal, S., Lehnert, T., Graas, M., Fond-Harmant, L., & Ansseau, M. (2014). *The downward spiral of mental disorders and educational attainment: a systematic review on early school leaving.* BMC Psychiatry, 14, Article 237. <https://doi.org/10.1186/s12888-014-0237-4>
+[^10]: Esch, P., Bocquet, V., Pull, C., Couffignal, S., Lehnert, T., Graas, M., Fond-Harmant, L., & Ansseau, M. (2014). *The downward spiral of mental disorders and educational attainment: a systematic review on early school leaving.* BMC Psychiatry, 14, Article 237. <https://doi.org/10.1186/s12888-014-0237-4>{target="_blank"}
 
 Community & cultural assets influence all measures in the MWI. Community & cultural assets are challenging to quantify because they are often not measured in national datasets, but they have an important influence on community mental wellness. One example of a measure where community and cultural assets can be seen prominently is "third places," which measures the number of places where people spend time outside of their homes ("first place") and their workplaces ("second place"), per 100,000 people.
 
@@ -100,6 +100,6 @@ Community & cultural assets influence all measures in the MWI. Community & cultu
 #### Structural Racism
 **Structural Racism** is the macrolevel systems, social forces, institutions, ideologies, and processes that interact with one another to generate and reinforce inequities among racial and ethnic groups.[^11]
 
-[^11]: Steele, L. S., Dewa, C. S., Lin, E., & Lee, K. L. (2007). *Education level, income level and mental health services use in Canada: associations and policy implications.* Healthcare Policy, 3(1), 96--106. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2645130/>
+[^11]: Steele, L. S., Dewa, C. S., Lin, E., & Lee, K. L. (2007). *Education level, income level and mental health services use in Canada: associations and policy implications.* Healthcare Policy, 3(1), 96--106. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2645130/>{target="_blank"}
 
 Structural racism influences all measures in the MWI. Structural racism harms society as a whole, not only Black populations and other people of color. Structural racism operates on many levels, often intersecting with other "isms" (sexism, classism, etc.) and has cascading effects that are often unnamed and seemingly unnoticed. These cascading effects highlight the importance of our approach for developing the MWI---that equity delivered to historically marginalized populations will accrue to others and potentially catalyzes movement toward social and racial justice. One example of a measure where structural racism can be seen prominently is the Index of Concentration at the Extremes (a proxy for residential segregation).

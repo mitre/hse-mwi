@@ -36,19 +36,20 @@ The MWI has been created based on ZCTAS.
 
 -   In the MWI, the term "ZIP code" refers to ZIP Code Tabulation Areas (ZCTAs)[^1]
 
-[^1]: Conduent HealthyCommunities Institute. Accessed on June 28, 2022. Link: <https://help.healthycities.org/hc/en-us/articles/115006016767-What-is-the-difference-between-ZIP-Codes-and-ZCTAs->
+[^1]: Conduent HealthyCommunities Institute. Accessed on June 28, 2022. Link: <https://help.healthycities.org/hc/en-us/articles/115006016767-What-is-the-difference-between-ZIP-Codes-and-ZCTAs->{target="_blank"}
 
 ### Methods Documentation
 
 All methods used to calculate unique statistical procedures can also be accessed below. Click on the link to download the corresponding documentation.
 
--   [Facility Weights](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Facility_Weights_Methods.pdf?raw=true)
+- [Facility Weights](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Facility_Weights_Methods.pdf?raw=true){target="_blank"}
 
--   [Geography](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Geography_Methods.pdf?raw=true)
+- [Geography](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Geography_Methods.pdf?raw=true){target="_blank"}
 
--   [Two Step Floating Catchment Methodology](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Two_Step_Floating_Catchment_Area.pdf?raw=true)
+- [Two Step Floating Catchment Methodology](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Two_Step_Floating_Catchment_Area.pdf?raw=true){target="_blank"}
 
--   [Measure Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf?raw=true)
+- [Measure Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf?raw=true){target="_blank"}
+
 
 ### Measures Documentation
 
@@ -56,65 +57,66 @@ Each measure used in the MWI Tool was assessed based on its strengths, limitatio
 
 ##### Social Determinants of Health
 
--   [Alcohol Outlet Density](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Outlet_Density.pdf?raw=true)
+- [Alcohol Outlet Density](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Outlet_Density.pdf?raw=true){target="_blank"}
 
--   [Below 100% Poverty Rate](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Below_100_Federal_Poverty_Level.pdf?raw=true)
+- [Below 100% Poverty Rate](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Below_100_Federal_Poverty_Level.pdf?raw=true){target="_blank"}
 
--   [Broadband Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Broadband_Access.pdf?raw=true)
+- [Broadband Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Broadband_Access.pdf?raw=true){target="_blank"}
 
--   [Mortgage Lending Difference](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mortgage_Lending_Difference.pdf?raw=true)
+- [Mortgage Lending Difference](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mortgage_Lending_Difference.pdf?raw=true){target="_blank"}
 
--   [No High School Diploma](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/No_High_School_Diploma.pdf?raw=true)
+- [No High School Diplomna](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/No_High_School_Diploma.pdf?raw=true){target="_blank"}
 
--   [Nursery and Preschool Enrollment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Nursery_and_Preschool_Enrollment.pdf?raw=true)
+- [Nursery and Preschool Enrollment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Nursery_and_Preschool_Enrollment.pdf?raw=true){target="_blank"}
 
--   [Police Killings](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Police_Killings.pdf?raw=true)
+- [Police Killings](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Police_Killings.pdf?raw=true){target="_blank"}
 
--   [Residential Segregation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Residential_segregation.pdf?raw=true)
+- [Residential Segregation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Residential_segregation.pdf?raw=true){target="_blank"}
 
--   [Third Places](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Third_Places.pdf?raw=true)
+- [Third Places](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Third_Places.pdf?raw=true){target="_blank"}
 
--   [Unemployment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Unemployment.pdf?raw=true)
+- [Unemployment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Unemployment.pdf?raw=true){target="_blank"}
 
--   [Access to Financial Services](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Access_to_Financial_Services.pdf?raw=true)
+- [Access to Financial Services](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Access_to_Financial_Services.pdf?raw=true){target="_blank"}
 
--   [Violent Crime](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Violent_crime.pdf?raw=true)
+- [Violent Crime](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Violent_crime.pdf?raw=true){target="_blank"}
 
--   [Housing Stress](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Housing_Stress.pdf?raw=true)
+- [Housing Stress](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Housing_Stress.pdf?raw=true){target="_blank"}
 
--   [Living Within a Half-Mile of a Park](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Living_Within_a_Half_Mile_of_a_Park.pdf?raw=true)
+- [Living Within a Half-Mile of a Park](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Living_Within_a_Half_Mile_of_a_Park.pdf?raw=true){target="_blank"}
 
--   [Voter Participation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Voter_Participation.pdf?raw=true)
+- [Voter Participation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Voter_Participation.pdf?raw=true){target="_blank"}
 
 ##### Healthcare Access
 
--   [Uninsured](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Uninsured.pdf?raw=true)
+- [Uninsured](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Uninsured.pdf?raw=true){target="_blank"}
 
--   [Mental Health Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mental_Health_Treatment_Facility_Access.pdf?raw=true)
+- [Mental Health Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mental_Health_Treatment_Facility_Access.pdf?raw=true){target="_blank"}
 
--   [Substance Use Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Substance_Use_Treatment_Facility_Access.pdf?raw=true)
+- [Substance Use Treatment Facility Access](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Substance_Use_Treatment_Facility_Access.pdf?raw=true){target="_blank"}
+
 
 ##### Health Status
 
--   [Adult Binge Drinking](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Adult_Binge_Drinking.pdf?raw=true)
+- [Adult Binge Drinking](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Adult_Binge_Drinking.pdf?raw=true){target="_blank"}
 
--   [Insufficient Sleep](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Insufficient_Sleep.pdf?raw=true)
+- [Insufficient Sleep](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Insufficient_Sleep.pdf?raw=true){target="_blank"}
 
--   [Obesity](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Obesity.pdf?raw=true)
+- [Obesity](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Obesity.pdf?raw=true){target="_blank"}
 
--   [Poor Mental Health](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Poor_Mental_Health.pdf?raw=true)
+- [Poor Mental Health](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Poor_Mental_Health.pdf?raw=true){target="_blank"}
 
--   [Smoking Status](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Smoking_Status.pdf?raw=true)
+- [Smoking Status](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Smoking_Status.pdf?raw=true){target="_blank"}
 
--   [Alcohol-Related Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Related_Mortality.pdf?raw=true)
+- [Alcohol-Related Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Alcohol_Related_Mortality.pdf?raw=true){target="_blank"}
 
--   [Estimated Drug Poisoning Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Estimated_Drug_Poisoning_Mortality.pdf?raw=true)
+- [Estimated Drug Poisoning Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Estimated_Drug_Poisoning_Mortality.pdf?raw=true){target="_blank"}
 
--   [Suicide Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicide_Mortality.pdf?raw=true)
+- [Suicide Mortality](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicide_Mortality.pdf?raw=true){target="_blank"}
 
--   [Life Expectancy](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Life_Expectancy.pdf?raw=true)
+- [Life Expectancy](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Life_Expectancy.pdf?raw=true){target="_blank"}
 
--   [Suicidal Ideation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicidal_Ideation.pdf?raw=true)
+- [Suicidal Ideation](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Suicidal_Ideation.pdf?raw=true){target="_blank"}
 
 ### Limitations and Challenges
 
@@ -130,9 +132,9 @@ Because data were aggregated from multiple data sources, we note that all data a
 
 Nationally representative, geographically granular data were unavailable for a wide range of topics that impact mental wellness, such as social connectedness[^2]; sense of belonging; access to safe, reliable, and efficient transportation; community allostatic load[^3]; and access to culturally and linguistically appropriate care, among others. If data on these, or other topics, are available at the local level, using the MWI tool data upload feature can enhance the results of the MWI.
 
-[^2]: Office of Disease Prevention and Health Promotion (n.d.). *Social Cohesion*. Healthy People 2030. <https://health.gov/healthypeople/objectives-and-data/social-determinants-health/literature-summaries/social-cohesion>
+[^2]: Office of Disease Prevention and Health Promotion (n.d.). *Social Cohesion*. Healthy People 2030. <https://health.gov/healthypeople/objectives-and-data/social-determinants-health/literature-summaries/social-cohesion>{target="_blank"}
 
-[^3]: Chandra, A., Cahill, M., Yeung, D., & Ross, R. (2018) *Toward an Initial Conceptual Framework to Assess Community Allostatic Load: Early Themes from Literature Review and Community Analyses on the Role of Cumulative Community Stress.* RAND Corporation. Available at: <https://www.rand.org/pubs/research_reports/RR2559.html>
+[^3]: Chandra, A., Cahill, M., Yeung, D., & Ross, R. (2018) *Toward an Initial Conceptual Framework to Assess Community Allostatic Load: Early Themes from Literature Review and Community Analyses on the Role of Cumulative Community Stress.* RAND Corporation. Available at: <https://www.rand.org/pubs/research_reports/RR2559.html>{target="_blank"}
 
 [We had a limited ability to consult directly with communities in the creation of the MWI]{.underline}. Input from communities that are directly impacted is vital to ensure a tool will be most useful for them. While we consulted with and had input from selected community leaders and program providers in Black communities, we did not have direct input from community residents. In our next steps, we hope to engage directly with communities to understand their priorities and preferences, incorporate participatory approaches, and work with communities to understand how the MWI can best address their needs.
 
@@ -146,17 +148,17 @@ Nationally representative, geographically granular data were unavailable for a w
 
 -   Committing to document and share recommendations related to challenges with others to positively influence change.
 
-Please see [measure documentation](https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures) for more information on the strengths and limitations of specific measures selected.
+Please see <a href ='https://github.com/mitre/hse-mwi/tree/main/Documentation/Measures' target = "_blank">measure documentation</a>) for more information on the strengths and limitations of specific measures selected.
 
 
 ### Downloadable Data and Information
 
 To learn how to download MWI data and documentation, watch the video “Downloading Data and Viewing Documentation".
 
-1)  [Data Information](https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv): The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and directionality.
+1)  <a href = 'https://github.com/mitre/hse-mwi/blob/main/Data/Cleaned/HSE_MWI_Data_Information.csv' target = "_blank">Data Information</a>: The document delineates all measures and key facets for each measure such as the data source, weight, year(s) extracted, geographic level, and directionality.
 
-2)  [Mental Wellness Index for Black Populations](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv): The calculated MWI for Black populations for each ZCTA.
+2)  <a href = 'https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Black.csv' target = "_blank">Mental Wellness Index for Black Populations</a>: The calculated MWI for Black populations for each ZCTA.
 
-3)  [Mental Wellness Index for Overall Population](https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv): The calculated MWI for the overall population for each ZCTA.
+3)  <a href = 'https://github.com/mitre/hse-mwi/raw/main/Data/Cleaned/HSE_MWI_ZCTA_Mental_Wellness_Index_Population.csv' target = "_blank">Mental Wellness Index for Overall Population</a>: The calculated MWI for the overall population for each ZCTA.
 
-4)  [MWI Project Github Page](https://github.com/mitre/hse-mwi): This page is home to all of the raw data, code to manipulate the data, documentation concerning each measure, and everything else concerned with the creation of the MWI Tool.
+4)  <a href = 'https://github.com/mitre/hse-mwi' target = "_blank">MWI Project Github Page</a>: This page is home to all of the raw data, code to manipulate the data, documentation concerning each measure, and everything else concerned with the creation of the MWI Tool.

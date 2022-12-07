@@ -36,7 +36,7 @@ Mental Wellness means everyone in a community can thrive, regardless of a mental
 
 ### Why MITRE Created the MWI
 
--   MITRE built the MWI because it fills a gap---there is no existing resource or health index to understand factors influencing mental wellness at the community or ZIP code level.
+-   MITRE built the MWI because it fills a gap --- there is no existing resource or health index to understand factors influencing mental wellness at the community or ZIP code level.
 -   The MWI is intended to enable local, state, and federal government agencies, non-profits, and communities, to visualize the factors that contribute to mental wellness.
 -   The MWI promotes data-informed decisions.
 

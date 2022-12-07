@@ -29,7 +29,7 @@ Users including (but not limited to) communities, researchers, state and federal
 Measures in the MWI have been assigned default weights, which will be applied if you do not customize the MWI.
 The selection of these default weights was informed by a review of relevant literature and other health indices.
 Default weights were assigned based on the findings of this review related to the relative importance of the three domains, then a weighting penalty was assigned to measures that are not race stratified and to those that are not geographically granular (data that are not available at the Census Tract, ZIP Code, or ZCTA level).
-See the [Weighting Methods](https://raw.githubusercontent.com/mitre/hse-mwi/main/Documentation/Methods/Weighting_Methods.pdf) document for more information about the assignment of default weights.
+See the [Weighting Methods](https://raw.githubusercontent.com/mitre/hse-mwi/main/Documentation/Methods/Weighting_Methods.pdf){target="_blank"} document for more information about the assignment of default weights.
 
 However, you can adjust the weights of the measures in the MWI to better align to your use case or community needs using the "Create Your Own MWI" feature of the tool.
 
@@ -59,7 +59,7 @@ ZCTAs were created by the United States Census Bureau and are statistical entiti
 
 In the MWI, the term "ZIP Code" refers to ZCTAs, which are used in the MWI and are represented in maps and plots.
 In most cases the ZCTA is the same as the USPS ZIP Code for an area.
-For more information on ZCTAs, please see [census.gov](https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html).
+For more information on ZCTAs, please see [census.gov](https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html){target="_blank"}.
 
 ------------------------------------------------------------------------
 
@@ -67,4 +67,4 @@ For more information on ZCTAs, please see [census.gov](https://www.census.gov/pr
 
 To use the exploration features of the MWI, you will need a device that can connect to the Internet (such as a computer or tablet), Internet access, and an Internet web browser.
 If you would like to customize the MWI using the "Create Your Own MWI" feature, you will need additional tools, which may include Microsoft Excel, R, RStudio.
-Please see the [Create Your Own MWI](https://sjp.mitre.org/mwi) page for more details.
+Please see the [Create Your Own MWI](https://sjp.mitre.org/mwi){target="_blank"} page for more details.

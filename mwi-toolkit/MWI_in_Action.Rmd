@@ -150,8 +150,8 @@ The organization identifies a reliable data source they can use from the Health 
 > **Health Center Penetration**
 >
 > HRSA defines this measure as the ratio of the population served by a health center to the population with household income below 200% of the Federal Poverty Level (FPL).
-> More information about this measure is available from HRSA under Health Center Penetration in the [Unmet Need Score (UNS) and Service Area Status (SAS) Resource Guide](https://bphc.hrsa.gov/sites/default/files/bphc/funding/uns-resource-guide.pdf).
-> Data for the measure is available in the [UNS Workbook](https://bphc.hrsa.gov/sites/default/files/bphc/funding/unmet-need-score-workbook.xlsx) (Excel document download) in Column Q "Health Center Penetration" after ZIP codes have been entered in Column A.
+> More information about this measure is available from HRSA under Health Center Penetration in the [Unmet Need Score (UNS) and Service Area Status (SAS) Resource Guide](https://bphc.hrsa.gov/sites/default/files/bphc/funding/uns-resource-guide.pdf){target="_blank"}.
+> Data for the measure is available in the [UNS Workbook](https://bphc.hrsa.gov/sites/default/files/bphc/funding/unmet-need-score-workbook.xlsx){target="_blank"} (Excel document download) in Column Q "Health Center Penetration" after ZIP codes have been entered in Column A.
 
 <hr>
 
@@ -178,7 +178,7 @@ The new proposed individual measure weights are:
 +-----------------------------------+-------------------------+----------------------------------+------------------------------------------------------+
 
 > **Note:** The default MWI gives less weight to measures that are not at the ZIP Code level or stratified for Black populations (Given that this was the first priority population).
-> Learn more about the [MWI's Measure Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf).
+> Learn more about the [MWI's Measure Weighting](https://github.com/mitre/hse-mwi/blob/main/Documentation/Methods/Weighting_Methods.pdf){target="_blank"}.
 >
 > The MWI default domain weights are: 60% for Social Determinants of Health, 15% for Health Care Access, and 25% for Health Status.
 > These domain weights were developed based on established research literature about the contribution of different factors to health outcomes.
@@ -199,7 +199,7 @@ Next, they edit the metadata.xlsx file to reflect the new *Access to Community H
 3.  In column I "Weights" enter 4.61 for each Social Determinants of Health Measure, 3.75 for each Healthcare Access Measure (including the Access to Community Health Centers measure), and 2.5 for each Health Status Measure.
 4.  Save the metadata file.
 
-> **Note:** A list of California ZIP codes is available at: <https://data.ca.gov/dataset/county-and-zip-code-references>.
+> **Note:** A list of California ZIP codes is available at: <https://data.ca.gov/dataset/county-and-zip-code-references>{target="_blank"}.
 
 <hr>
 
@@ -211,7 +211,7 @@ To use the new *Access to Community Health Center* measure data in the MWI, the 
 The first column contains the 5-digit ZIP Code, and the second column contains the measure value.
 They make sure all the ZIP Codes for California are listed with its respective value and save the file as healthcenter.csv.
 
-For additional guidance on how to format and prepare new measure data, see the [Create Your Own MWI](https://github.com/mitre/hse-mwi#Instructions-to-Create-Your-Own-MWI) instructions.
+For additional guidance on how to format and prepare new measure data, see the [Create Your Own MWI](https://github.com/mitre/hse-mwi#Instructions-to-Create-Your-Own-MWI){target="_blank"} instructions.
 
 <hr>
 
@@ -283,9 +283,9 @@ Here are a few tips to ensure respectful and fruitful data conversations:
 
 See the following resources for more tips and ideas:
 
--   [Guide to Data Chats: Convening Community Conversations About Data](https://www.neighborhoodindicators.org/sites/default/files/publications/Guide%20to%20Data%20Chats%E2%96%A1%20Convening%20Community%20Conversations%20about%20Data.pdf) by the Urban Institute and National Neighborhood Indicators Partnership
+-   [Guide to Data Chats: Convening Community Conversations About Data](https://www.neighborhoodindicators.org/sites/default/files/publications/Guide%20to%20Data%20Chats%E2%96%A1%20Convening%20Community%20Conversations%20about%20Data.pdf){target="_blank"} by the Urban Institute and National Neighborhood Indicators Partnership
 
--   [Plain Language](https://www.plainlanguage.gov/about/definitions/) by the Plain Language Action and Information Network
+-   [Plain Language](https://www.plainlanguage.gov/about/definitions/){target="_blank"} by the Plain Language Action and Information Network
 
 <blockquote class="focus">
 
