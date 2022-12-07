@@ -30,7 +30,7 @@ Here you can find instructions on how to use the MWI, as well as videos and use 
 
 ### MWI Instructional Videos {.tabset}
 
-Navigate to the [full playlist here](https://youtube.com/playlist?list=PLkTApXQou_8IFFkeJ4sqKq43hQK9lxsJj) `r fa("link")`
+Navigate to the [full playlist here](https://youtube.com/playlist?list=PLkTApXQou_8IFFkeJ4sqKq43hQK9lxsJj){target="_blank"} `r fa("link")`
 
 #### Tool Overview 
 

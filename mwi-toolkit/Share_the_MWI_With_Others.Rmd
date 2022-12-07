@@ -18,9 +18,9 @@ The Mental Wellness Index can influence, guide, inform various organizations and
 
 Use these resources to let others know about the MWI:
 
--   [MWI fact sheet](images/MWI-fact-sheet-02-10_PRS.pdf)
+-   [MWI fact sheet](images/MWI-fact-sheet-02-10_PRS.pdf){target="_blank"}
 
--   [Sample newsletter article](images/MWI Sample Newsletter Article.pdf)
+-   [Sample newsletter article](images/MWI Sample Newsletter Article.pdf){target="_blank"}
 
 -   Sample social media content and graphics
 
@@ -31,7 +31,7 @@ Use these resources to let others know about the MWI:
 
 #### Social Media Post #1
 
-The Mental Wellness Index quantifies 28 factors that influence community-level mental wellness for each ZIP code in the nation. These insights can promote data-informed decisions and more equitable allocation of resources in partnership with communities. Learn more: <https://sjp.mitre.org/mwi>
+The Mental Wellness Index quantifies 28 factors that influence community-level mental wellness for each ZIP code in the nation. These insights can promote data-informed decisions and more equitable allocation of resources in partnership with communities. Learn more: <https://sjp.mitre.org/mwi>{target="_blank"}
 
 ![](images/facebook_linkedin.png)
 
@@ -42,7 +42,7 @@ The Mental Wellness Index quantifies 28 factors that influence community-level m
 
 #### Social Media Post #2
 
-Do you know which factors are influencing #mentalwellness in your community? How does your community compare to others in your state or across the nation? The Mental Wellness Index can show you using an easy-to-use data tool. <https://sjp.mitre.org/mwi>
+Do you know which factors are influencing #mentalwellness in your community? How does your community compare to others in your state or across the nation? The Mental Wellness Index can show you using an easy-to-use data tool. <https://sjp.mitre.org/mwi>{target="_blank"}
 
 ![](images/facebook_linkedin2.png)
 
