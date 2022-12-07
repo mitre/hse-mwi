@@ -65,7 +65,7 @@ Each measure used in the MWI Tool was assessed based on its strengths, limitatio
 
 - [Mortgage Lending Difference](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Mortgage_Lending_Difference.pdf?raw=true){target="_blank"}
 
-- [No High School Diplomna](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/No_High_School_Diploma.pdf?raw=true){target="_blank"}
+- [No High School Diploma](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/No_High_School_Diploma.pdf?raw=true){target="_blank"}
 
 - [Nursery and Preschool Enrollment](https://github.com/mitre/hse-mwi/blob/main/Documentation/Measures/Nursery_and_Preschool_Enrollment.pdf?raw=true){target="_blank"}
 
