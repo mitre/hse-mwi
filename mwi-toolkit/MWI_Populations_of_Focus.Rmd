@@ -1,0 +1,52 @@
+---
+title: "MWI Populations of Focus"
+output: 
+  html_document:
+    theme: cerulean
+    css: styles.css
+    # toc: true
+    # toc_depth: 4
+    # toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+# NOTE: once knit, move html output to www/
+```
+
+::: {style="float:right;position: relative; top: 0px; width: 500px; padding: 0px 25px 25px;"}
+![Black Family Example](images/black_family_ex.png)\
+:::
+
+The MWI provides results and data for Black populations and the overall population, down to the ZIP code level.
+
+Black populations were prioritized as the first group of interest in part for the following reasons:
+
+-   Black populations have similar or lower prevalence of adverse mental health and substance use outcomes compared to the overall population in national datasets, [^1] [^2] but they often experience a greater burden of disease and poorer access to and quality of care. [^3] [^4] [^5]
+
+-   Black populations experience more criminalization of mental health and substance use disorders than other racial and ethnic groups.[^6] [^7]
+
+-   Racial and ethnic minority groups who have borne disproportionate impacts of COVID-19 exposure---including Black populations---are more recently experiencing higher rates of mental health symptoms and the use of substances to cope.[^8] [^9]
+
+[^1]: Breslau, J., Aguilar-Gaxiola, S., Kendler, K. S., Su, M., Williams, D., & Kessler, R. C. (2006). Specifying race-ethnic differences in risk for psychiatric disorder in a USA national sample. Psychological medicine, 36(1), 57--68. <a href = 'https://doi.org/10.1017/S0033291705006161' target = "_blank">https://doi.org/10.1017/S0033291705006161</a>
+
+[^2]: Breslau, J., Kendler, K. S., Su, M., Gaxiola-Aguilar, S., & Kessler, R. C. (2005). Lifetime risk and persistence of psychiatric disorders across ethnic groups in the United States. Psychological medicine, 35(3), 317--327. <a href = 'https://doi.org/10.1017/s0033291704003514' target = "_blank">https://doi.org/10.1017/s0033291704003514</a>
+
+[^3]: Mental Health America. (2020). Black and African American communities and mental health. Mental Health America. <a href = 'https://www.mhanational.org/issues/black-and-african-american-communities-and-mental-health' target = "_blank">(link)</a>
+
+[^4]: Office of the Surgeon General (US); Center for Mental Health Services (US); National Institute of Mental Health (US). (2001). Mental Health: Culture, Race, and Ethnicity: A Supplement to Mental Health: A Report of the Surgeon General. Rockville (MD): Substance Abuse and Mental Health Services Administration (US). Chapter 3 Mental Health Care for African Americans. Available from: <a href = 'https://www.ncbi.nlm.nih.gov/books/NBK44251/' target = "_blank">(link)</a>
+
+[^5]: SAMHSA. (2020). Double jeopardy; COVID-19 and behavioral health disparities for Black and Latino communities in the U.S. <a href = 'https://www.samhsa.gov/sites/default/files/covid19-behavioral-health-disparities-black-latino-communities.pdf' target = "_blank">(link)</a>
+
+[^6]: Pope, L. (2019, July 24). Racial Disparities in Mental Health and Criminal Justice. National Alliance on Mental Illness. <a href = 'https://www.nami.org/Blogs/NAMI-Blog/July-2019/Racial-Disparities-in-Mental-Health-and-Criminal-Justice' target = "_blank">(link)</a>
+
+[^7]: Volkow, N.D. (2021). Addiction Should Be Treated, Not Penalized. Health Affairs Blog. <a href = 'https://www.healthaffairs.org/do/10.1377/hblog20210421.168499/full' target = "_blank">(link)</a>
+
+[^8]: Substance Abuse and Mental Health Services Administration. (n.d.). Double Jeopardy: COVID-19 and Behavioral Health Disparities for Black and Latino Communities in the U.S. (Submitted by OBHE). <a href = 'https://www.samhsa.gov/sites/default/files/covid19-behavioral-health-disparities-black-latino-communities.pdf' target = "_blank">(link)</a>
+
+[^9]: Novacek, D. M., Hampton-Anderson, J. N., Ebor, M. T., Loeb, T. B., & Wyatt, G. E. (2020). Mental health ramifications of the COVID-19 pandemic for Black Americans: Clinical and research recommendations. Psychological trauma: theory, research, practice and policy, 12(5), 449--451. <a href = 'https://doi.org/10.1037/tra0000796' target = "_blank">https://doi.org/10.1037/tra0000796</a>
+
+By focusing on underserved and under-resourced communities, the MWI "centers at the margins" or normalizes the perspectives and experiences of non-White racial and ethnic groups. MITRE recognizes that equity delivered to historically underserved populations will accrue to others. This will in turn promote social and racial justice. MITRE hopes to make the data viewable for other groups experiencing health disparities in the future.
+
+<blockquote class="focus">The driving force behind the MWI is that equity delivered to historically marginalized populations will accrue to others and potentially catalyze movement toward social and racial justice.</blockquote>
