@@ -16,11 +16,13 @@ county_cw <- read.csv(file.path(cw_folder, "zcta_county_rel_20.csv"),
                         "ZCTA5" = "character",
                         "GEOID" = "character"
                       ))
+county_cw$STATE <- substr(county_cw$GEOID, 1, 2)
 ct_cw <- read.csv(file.path(cw_folder, "zcta_tract_rel_20.csv"),
                   colClasses = c(
                     "ZCTA5" = "character",
                     "GEOID" = "character"
                   ))
+ct_cw$STATE <- substr(ct_cw$GEOID, 1, 2)
 zip_cw <- read.csv(file.path(cw_folder, "Zip_to_zcta_crosswalk_2021.csv"),
                    colClasses = c(
                      "ZIP_CODE" = "character",
