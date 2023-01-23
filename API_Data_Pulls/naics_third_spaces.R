@@ -47,8 +47,8 @@ data_folder <- file.path(
 # Codes that Hannah Highlighted in xlsx doc (prevents doublecounting)
 naics_codes <- 
   read.csv(file.path(data_folder, "NAICS_Third_Places_aggregation.csv")) %>%
-  rename("Code" = "X2017.NAICS.Code",
-         "Business_Type" = "X2017.NAICS.Title") %>%
+  dplyr::rename("Code" = "X2017.NAICS.Code",
+                "Business_Type" = "X2017.NAICS.Title") %>%
   filter(Code %in% c(4451, 4452, 451, 51912, 51919, 7111, 7112, 712, 7131,
                      7139, 72233, 7224, 7225, 8121, 81221, 81222, 81231,
                      81232, 81291, 81292, 81299, 813, 8134))
@@ -63,7 +63,7 @@ resource_folder <- file.path(
   "Data", "Resources")
 
 zip <- read_zips(
-  file.path(resource_folder, "Zip_to_zcta_crosswalk_2020.csv"),
+  file.path(resource_folder, "Zip_to_zcta_crosswalk_2021.csv"),
   "ZIP_CODE")
 
 # Filter out Territories
@@ -76,7 +76,7 @@ for (i in 1:nrow(naics_codes)) {
   cbp <- getCensus(
     name = "cbp",
     vars = c("ESTAB"), 
-    vintage = 2019,
+    vintage = 2020,
     region = "zipcode:*",
     show_call = F,
     NAICS2017 = naics_codes$Code[i]
@@ -109,12 +109,12 @@ nrow(subset(cbp_zcta, `4451` == 0 & `4452` == 0 & `451` == 0 & `51912` == 0 &
          `81231` == 0 & `81232` == 0 & `81291` == 0 & `81292` == 0 &
          `81299` == 0 & `813` == 0 & `8134` == 0))
 
-# 13320 ZCTAs have 0 third spaces - this is about 40% of ZCTAs
+# 13327 ZCTAs have 0 third spaces - this is about 40% of ZCTAs
 
 # Load ZCTA Populations
 pop <- get_acs(geography = "zcta",
                output = "wide",
-               year = 2019,
+               year = 2020,
                survey = "acs5",
                variables = "B01001_001",
                geometry = F
@@ -124,7 +124,7 @@ pop <- get_acs(geography = "zcta",
 # Calculate Measure----
 # Calculating measure value = # third spaces / 100k population in ZCTA
 final <- full_join(cbp_zcta, pop, by = c("ZCTA" = "GEOID")) %>%
-  rename(population = B01001_001E)
+  dplyr::rename(population = B01001_001E)
 final <- mutate(final,
                 thirdspaces_pop = (rowSums(final[2:24])/population)*100000,
               # Replacing Infs with 0s
