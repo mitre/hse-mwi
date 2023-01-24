@@ -8,7 +8,6 @@ library(tidyr)
 library(purrr)
 library(tidycensus)
 library(lubridate)
-library(readxl)
 
 # Read in MPV Datasets & Crosswalks----
 
@@ -22,38 +21,40 @@ data_folder <- file.path(
 
 
 # Read & Clean Mapping Police Violence Data -----
-# Data last pulled June 25th, 2021
+# Data last pulled January 24, 2023
 # https://mappingpoliceviolence.org/
-mpv <- read_xlsx(file.path(data_folder,"Raw", "MPVDatasetDownload.xlsx"), )
+mpv <- read.csv(file.path(data_folder,"Raw", 
+                          "Mapping_Police_Violence_01_24_23.csv"), )
 
 # Reformatting dates
-mpv$`Date of Incident (month/day/year)` <- as.Date(mpv$`Date of Incident (month/day/year)`)
-mpv$year <- year(mpv$`Date of Incident (month/day/year)`)
-mpv$month <- month(mpv$`Date of Incident (month/day/year)`)
+mpv$date_orig <- mpv$date
+mpv$date <- as.Date(mpv$date_orig, "%m/%d/%Y")
+mpv$year <- year(mpv$date)
+mpv$month <- month(mpv$date)
 
 # Standardizing ZIP Codes 
-mpv$Zipcode <- str_pad(as.character(mpv$Zipcode), width = 5, side = "left", pad = "0")
+mpv$zip <- str_pad(as.character(mpv$zip), width = 5, side = "left", pad = "0")
 
 # Removing any rows with ZIP Codes that are longer than 5 digits
-mpv$ziplength <- nchar(mpv$Zipcode)
+mpv$ziplength <- nchar(mpv$zip)
 mpv <- mpv[mpv$ziplength == 5,]
 mpv$ziplength <- NULL
 
 # Fixed labeling in Race Category 
 mpv <- mpv %>%
-  mutate(`Victim's race` = case_when(`Victim's race` == "white" ~ "White",
-                                     `Victim's race` == "Unknown Race" ~ "Unknown race",
-                                     TRUE ~ as.character(`Victim's race`))) %>%
+  mutate(`race` = case_when(`race` == "white" ~ "White",
+                                     `race` == "Unknown Race" ~ "Unknown race",
+                                     TRUE ~ as.character(`race`))) %>%
   # Select relevant vars
-  select(`Victim's race`, year, Zipcode, State, County) %>%
+  select(`race`, year, zip, state, county) %>%
   # Remove rows with missing data
   na.omit() 
 
 
 # Pull ACS denominators -----
 
-# Getting ACS population data from 2015-2019 for total and black pop
-years <- 2015:2019
+# Getting ACS population data from 2017-2021 for total and black pop
+years <- 2017:2021
 
 get_pop_data <- function(year){
   get_acs(geography = "zcta", 
@@ -65,7 +66,7 @@ get_pop_data <- function(year){
 
 pop_data_years <- map_df(years, ~ get_pop_data(.x), .id = "year") %>%
   separate(NAME, into = c("label", "ZCTA")) %>%
-  mutate(year = as.numeric(year) + 2014) 
+  mutate(year = as.numeric(year) + 2016) 
 
 all_pop_data_years <- pop_data_years %>% 
   filter(variable == "B01001_001") %>%
@@ -78,22 +79,22 @@ black_pop_data_years <- pop_data_years %>%
 
 # Converting ZIPs to ZCTA & select relevant columns
 mpv <- mpv %>%
-  left_join(zip_cw, by = c("Zipcode" = "ZIP_CODE")) %>%
-  filter(year <= 2019,
-         year >= 2015,
+  left_join(zip_cw, by = c("zip" = "ZIP_CODE")) %>%
+  filter(year <= 2021,
+         year >= 2017,
          !is.na(ZCTA))
 
 # Clean Up MPV Data -------
 
 # Count number of events per zip code per year in MPV
 all_counts <- mpv %>%
-  group_by(ZCTA, County, State, year) %>%
+  group_by(ZCTA, county, state, year) %>%
   count()
 
 # Count number of events per zip code per year for Black Victims in MPV
 black_counts <- mpv %>%
-  filter(`Victim's race` == "Black") %>%
-  group_by(ZCTA, County, State, year) %>%
+  filter(`race` == "Black") %>%
+  group_by(ZCTA, county, state, year) %>%
   count()
 
 
@@ -115,8 +116,10 @@ create_county_values <- function(data_joined){
   data_county <- data_joined %>%
     left_join(county_cw, by = c("ZCTA"= "ZCTA5")) %>%
     group_by(GEOID, year) %>%
-    summarize(county_counts = sum(n*ZPOPPCT/100, na.rm = T),
-              county_py = sum(estimate * ZPOPPCT/100, na.rm = T)) 
+    summarize(county_counts = sum(n*AREALAND_PART/AREALAND_ZCTA5_20*100/100, 
+                                  na.rm = T),
+              county_py = sum(estimate * AREALAND_PART/AREALAND_ZCTA5_20*100/100,
+                              na.rm = T)) 
   
   return(data_county)
 }  
