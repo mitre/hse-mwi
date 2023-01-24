@@ -6,6 +6,7 @@
 
 library(censusapi)
 library(stringr)
+library(usmap)
 
 # supporting functions ----
 
@@ -33,11 +34,9 @@ us_cities <- us_cities[!duplicated(us_cities$postal.code),]
 rownames(us_cities) <- us_cities$postal.code
 
 # load county crosswalk
-county_cw <- read.csv(file.path(resource_folder, "zcta_county_rel_10.txt"),
+county_cw <- read.csv(file.path(resource_folder, "zcta_county_rel_20.csv"),
                       colClasses = c(
                         "ZCTA5" = "character",
-                        "STATE" = "character",
-                        "COUNTY" = "character",
                         "GEOID" = "character"
                       ))
 # remove duplicated counties -- this is for a list of all counties
@@ -56,7 +55,7 @@ data_folder <- file.path(
 
 # federal banking institutions
 fed_banks <- read_zips(
-  file.path(data_folder, "FDIC_locations_10_4_2021.csv"),
+  file.path(data_folder, "FDIC_locations_1_24_23.csv"),
   "ZIP"
 )
 # also pad state and county number
@@ -66,7 +65,7 @@ fed_banks$STCNTY <- str_pad(fed_banks$STCNTY, 5, pad = "0")
 cu_banks <- read_zips(
   file.path(
     data_folder, 
-    "NCUA_Credit_Union_Branch_Information_03_2021.csv"),
+    "NCUA_Credit_Union_Branch_Information_09_2022.csv"),
   "PhysicalAddressPostalCode"
 )
 # filter out anything not in the 50 states
@@ -144,7 +143,7 @@ cu_banks$STCNTY[cu_banks$PhysicalAddressCountyName == ""] <-
         cu_banks$PhysicalAddressCountyName == ""][x]
     
     paste0(
-      fips(us_cities$state.code[zip_search]),
+      usmap::fips(us_cities$state.code[zip_search]),
       us_cities$county.code[zip_search]
     )
   })
@@ -177,7 +176,7 @@ for (nc in unique(naics_codes$NAICS_2017)){
   cbp_service <- getCensus(
     name = "cbp",
     vars = c("ESTAB", "STATE", "COUNTY"), 
-    vintage = 2019,
+    vintage = 2020,
     region = "county:*",
     show_call = F,
     NAICS2017 = nc
