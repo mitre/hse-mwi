@@ -4,13 +4,16 @@ library(readxl)
 library(tidycensus) 
 library(sf) 
 library(geosphere) 
+library(readr)
+library(tibble)
+library(tigris)
 
 # Import and Crosswalk Data----
 # SSACD to County FIPS Crosswalk
 cw <- read_csv("https://data.nber.org/ssa-fips-state-county-crosswalk/2018/xwalk2018.csv")
 
 # Census Tract Population and Point Data
-ct <- read_csv("https://www2.census.gov/geo/docs/reference/cenpop2010/tract/CenPop2010_Mean_TR.txt") 
+ct <- read_csv("https://www2.census.gov/geo/docs/reference/cenpop2020/tract/CenPop2020_Mean_TR.txt") 
 
 # County Distance Thresholds
 data_folder <- file.path(
@@ -31,11 +34,11 @@ thresh <- thresh[!is.na(thresh$`FIPS County Code`), ] %>%
 
 # Import Mental Health Facility Treatment Centers
 mh_fac <- read_csv(file.path(data_folder,
-                               "SAMHSA_Locator/Mental_Health_Treament_Facility_listing_2021_05_18_134835.csv"))
+                               "SAMHSA_Locator/Mental_Health_FindTreament_Facility_listing_2023_01_24_172825.csv"))
 
 # Import Substance Abuse Facility Treatment Centers
 sa_fac <- read_csv(file.path(data_folder,
-                             "SAMHSA_Locator/Substance_Use_Treament_Facility_listing_2021_05_18_134647.csv"))
+                             "SAMHSA_Locator/Substance_Use_FindTreament_Facility_listing_2023_01_24_172855.csv"))
 
 # Weights Folder
 weights_folder <- file.path(
@@ -51,16 +54,14 @@ sa_weights <- read_csv(file.path(weights_folder,
                                  "SAMHSA_SUFacility_weights.csv"))
 
 # Add weights in MH dataset
-mh_fac <- add_column(mh_fac, weights = mh_weights$weight, .before = "psy")
+mh_fac <- tibble::add_column(mh_fac, weights = mh_weights$weight, .before = "psy")
 
 # Add weights in SA dataset
-sa_fac <- add_column(sa_fac, weights = sa_weights$weight, .before = "dt")
+sa_fac <- tibble::add_column(sa_fac, weights = sa_weights$weight, .before = "dt")
 
 # Import census tracts & establish polygons
-states <- c(1:2, 4:6, 8:9, 10:13, 15:42, 44:51, 53:56)
-poly <- get_decennial(geography = "tract", state = states,
-                      variables = "P012001", year = 2010, geometry = T) %>%
-  mutate(county = substr(GEOID, 1, 5))
+poly <- tigris::tracts(year = 2020, cb = T)
+poly <- mutate(poly, county = substr(GEOID, 1, 5))
 
 # Step 1 of Floating Catchment Area (FCA) Methodology----
 # Build a Function to Calculate R value
@@ -75,8 +76,8 @@ poly <- get_decennial(geography = "tract", state = states,
 # Output  
 #   Returns R value for each facility within the dataset of facilities
 
-# Set the amount of rows to be iterated
-n <- 1000
+# Set the amount of rows to be iterated -- testing
+# n <- 1000
 
 step_1_fca <- function (data, geo, facil) {
   # Build a for loop while subseting by proximity - only look at CT centroids
@@ -231,10 +232,13 @@ mh_fac[is.na(mh_fac$GEOID),]
 
 # Determine which rows contain NA values for the GEOID
 which(is.na(mh_fac$GEOID), arr.ind=TRUE)
+
+# remove them -- PR
+mh_fac <- mh_fac[-which(is.na(mh_fac$GEOID), arr.ind=TRUE),]
  
 # Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
-mh_fac[10552, 175] <- "02016000200" # One for Alaska
-mh_fac[10583, 175] <- "15007040300" # One for Hawaii
+# mh_fac[10552, 175] <- "02016000200" # One for Alaska
+# mh_fac[10583, 175] <- "15007040300" # One for Hawaii
 
 # Remove irrelevant variables and incomplete cases
 mh_fac <- mh_fac %>%
@@ -259,13 +263,16 @@ sa_fac[is.na(sa_fac$GEOID),]
 # Determine which rows contain NA values for the GEOID
 which(is.na(sa_fac$GEOID), arr.ind=TRUE)
 
+# remove them -- PR
+sa_fac <- sa_fac[-which(is.na(sa_fac$GEOID), arr.ind=TRUE),]
+
 # Manually add in Census Tracts in the 50 states for GEOIDs that were reported NA:
-sa_fac[6657, 227] <- "26033970600" # One for Michigan 
-sa_fac[12045, 227] <- "06037800506" # One for California
-sa_fac[13896, 227] <- "41007950300" # One for Oregon
-sa_fac[14114, 227] <- "02016000100" # One for Alaska
-sa_fac[14161, 227] <- "15009030902" # One for Hawaii
-sa_fac[14169, 227] <- "15009031700" # Another for Hawaii
+# sa_fac[6657, 227] <- "26033970600" # One for Michigan 
+# sa_fac[12045, 227] <- "06037800506" # One for California
+# sa_fac[13896, 227] <- "41007950300" # One for Oregon
+# sa_fac[14114, 227] <- "02016000100" # One for Alaska
+# sa_fac[14161, 227] <- "15009030902" # One for Hawaii
+# sa_fac[14169, 227] <- "15009031700" # Another for Hawaii
 
 # Remove irrelevant variables and incomplete cases
 sa_fac <- sa_fac %>%
@@ -298,10 +305,12 @@ sa_fac[is.na(sa_fac$Distance),]
 # Determine which rows contain NA values for the GEOID
 which(is.na(sa_fac$Distance), arr.ind=TRUE)
 
+# not manually adding in
+
 # Manually add in Distance and Population values
-# Determined from US Census & Distance Thresholds of other CTs in same county
-sa_fac[3371, 228] <- 14177 # Population Value for Shannon County
-sa_fac[3371, 229] <- 60 # Distance Threshold for Shannon County
+# # Determined from US Census & Distance Thresholds of other CTs in same county
+# sa_fac[3371, 228] <- 14177 # Population Value for Shannon County
+# sa_fac[3371, 229] <- 60 # Distance Threshold for Shannon County
 
 sa_fac <- sa_fac %>%
 rename(geometry = "geometry.x") %>%
@@ -327,11 +336,11 @@ ct <- step_2_fca(mh_fac, ct, "mh")
 # Create A values using SA dataset
 ct <- step_2_fca(sa_fac, ct, "sa")
 
-# Populate non-calculated R and A values as 0
-mh_fac$R[-c(1:n)] <- 0
-sa_fac$R[-c(1:n)] <- 0
-ct$A_mh[-c(1:n)] <- 0
-ct$A_sa[-c(1:n)] <- 0
+# Populate non-calculated R and A values as 0 -- test
+# mh_fac$R[-c(1:n)] <- 0
+# sa_fac$R[-c(1:n)] <- 0
+# ct$A_mh[-c(1:n)] <- 0
+# ct$A_sa[-c(1:n)] <- 0
 
 # Distribution of R value for MH 
 ggplot(mh_fac[1:nrow(mh_fac),], aes(R)) + 
@@ -355,10 +364,11 @@ ggplot(ct[1:nrow(sa_fac),], aes(A_sa)) +
 
 # Remove Geometry
 ct <- ct %>%
-  dplyr::select(-geometry)
+  dplyr::select(-geometry) 
+ct <- st_drop_geometry(ct)
 
 # Export Facility Access Dataset
 write.csv(ct,
-           file = file.path(data_folder,
+           file = file.path(data_folder, "..", "Preprocessed",
                             "SAMHSA_CT_treatmentfacilityaccess.csv"),
            row.names = F, na = "")
