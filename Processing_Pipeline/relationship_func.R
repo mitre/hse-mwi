@@ -82,6 +82,9 @@ ct_10_to_20 <- function(df, geoid_col, meas_col){
     res_df[tmp$GEOID_TRACT_20, v] <- tmp$x
   }
   
+  # convert column name back
+  colnames(res_df)[1] <- geoid_col
+  
   for (mc in meas_col){
     cat(paste0(
       "[", Sys.time(), "]: Mapped ", mc, " from 2010 to 2020, ", 
@@ -146,6 +149,9 @@ zcta_10_to_20 <- function(df, geoid_col, meas_col){
     
     res_df[tmp$GEOID_ZCTA5_20, v] <- tmp$x
   }
+  
+  # convert column name back
+  colnames(res_df)[1] <- geoid_col
   
   for (mc in meas_col){
     cat(paste0(
