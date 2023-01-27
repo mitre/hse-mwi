@@ -17,6 +17,7 @@ county_cw <- read.csv(file.path(cw_folder, "zcta_county_rel_20.csv"),
                         "GEOID" = "character"
                       ))
 county_cw$STATE <- substr(county_cw$GEOID, 1, 2)
+county_cw$COUNTY <- substr(county_cw$GEOID, 3, 5)
 ct_cw <- read.csv(file.path(cw_folder, "zcta_tract_rel_20.csv"),
                   colClasses = c(
                     "ZCTA5" = "character",

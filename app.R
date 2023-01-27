@@ -122,7 +122,8 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     # get zip code data
     # NOTE: cb = T will download a generalized file
     zips <- zctas(cb = T, year = 2020)
-    zips <- zips[zips$GEOID10 %in% mwi$pop$ZCTA,]
+    colnames(zips)[colnames(zips) == "GEOID20"] <- "GEOID"
+    zips <- zips[zips$GEOID %in% mwi$pop$ZCTA,]
     zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
     
     # create the geo data for leaflet
@@ -130,11 +131,11 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     geodat <- geopts <- list()
     for (idx in index_types){
       geodat[[idx]] <-
-        geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
+        geo_join(zips, mwi[[idx]], by_sp = "GEOID", by_df = "ZCTA", how = "left")
       
       # sort by state code and zcta
       geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
-                                           geodat[[idx]]$GEOID10),]
+                                           geodat[[idx]]$GEOID),]
       
       # convert to points for US visualization -- ignore warnings
       geopts[[idx]] <- st_centroid(geodat[[idx]])
@@ -153,8 +154,8 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
   }
   
   # get available zctas -- both will have the same
-  avail_zctas <- geodat[["pop"]]$GEOID10
-  names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10, 
+  avail_zctas <- geodat[["pop"]]$GEOID
+  names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID, 
                                " (State: ", geodat[["pop"]]$STATE_NAME, ")")
   
   return(list(
@@ -198,27 +199,51 @@ rownames(info_df) <- info_df$Numerator
 
 # load zip codes to zcta
 zip_cw <- read.csv(
-  file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2020.csv"),
+  file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2021.csv"),
   colClasses = c(
     "ZIP_CODE" = "character",
     "ZCTA" = "character"
   ))
 territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
+# we need to align these ZIP codes to ZCTAs in 2020 (in future)
+# NOTE: in future, it may be a good idea to get the map between zip and ZCTA2020
+# proper -- the code below is an attempt to do that, but did not work. since
+# most did not change wily, the legacy version should work mostly fine.
+# zcta_rel <- read.csv(file.path(data_folder, "Resources",
+#                                "tab20_zcta510_zcta520_natl.txt"),
+#                      colClasses = c(
+#                        "GEOID_ZCTA5_20" = "character",
+#                        "GEOID_ZCTA5_10" = "character"
+#                      ),
+#                      sep = "|")
+# # get rid of zctas with no relationship between each other
+# zcta_rel <- zcta_rel[zcta_rel$GEOID_ZCTA5_10 != "" & 
+#                        zcta_rel$GEOID_ZCTA5_20 != "",]
+# zcta_rel <- zcta_rel[order(zcta_rel$GEOID_ZCTA5_10),]
+# zcta_rel$perc_land <- zcta_rel$AREALAND_PART/zcta_rel$AREALAND_ZCTA5_20
+# # chose zcta to zip code with the largest area in 2020
+# zcta_most <- aggregate(perc_land ~ GEOID_ZCTA5_10, zcta_rel, FUN = which.max)
+# zcta_most$GEOID_ZCTA5_20 <- zcta_rel$GEOID_ZCTA5_20[which(!duplicated(zcta_most$GEOID_ZCTA5_10))+zcta_most$perc_land-1]
+# rownames(zcta_most) <- zcta_most$GEOID_ZCTA5_10
+# # keep the old, map to the new
+# zip_cw$ZCTA10 <- zip_cw$ZCTA
+# zip_cw$ZCTA <- zcta_most[zip_cw$ZCTA, "GEOID_ZCTA5_20"]
+
 zip_to_zcta <- setNames(zip_cw$ZCTA, zip_cw$ZIP_CODE)
 zcta_to_zip <- aggregate(ZIP_CODE ~ ZCTA, data = zip_cw, 
                          FUN = function(x){paste(x, collapse = ", ")})
 zcta_to_zip <- setNames(zcta_to_zip$ZIP_CODE, zcta_to_zip$ZCTA)
 
-# load county cw for zcta state county mapping
-county_cw <- read.csv(
-  file.path(data_folder, "Resources", "zcta_county_rel_10.txt"),
-  colClasses = c(
-    "ZCTA5" = "character",
-    "STATE" = "character",
-    "COUNTY" = "character",
-    "GEOID" = "character"
-  ))
+# load crosswalk files
+county_cw <- read.csv(file.path(data_folder, "Resources",
+                                "zcta_county_rel_20.csv"),
+                      colClasses = c(
+                        "ZCTA5" = "character",
+                        "GEOID" = "character"
+                      ))
+county_cw$STATE <- substr(county_cw$GEOID, 1, 2)
+county_cw$COUNTY <- substr(county_cw$GEOID, 3, 5)
 # collapse so that there's one zcta for every row (states get collapsed by pipe)
 cty_cw <- 
   aggregate(STATE ~ ZCTA5, data = county_cw, 
@@ -362,16 +387,16 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                      fill_opacity = .7,
                      add_poly = F, us_proxy = NA, zcta_choose = NA){
   # subset map for easy plotting
-  gd_map <- geodat[,c(fill, "GEOID10", "STATE", "STATE_NAME", "geometry")]
+  gd_map <- geodat[,c(fill, "GEOID", "STATE", "STATE_NAME", "geometry")]
   colnames(gd_map)[1] <- "Fill"
   if (fill != "Mental_Wellness_Index"){
     # replace data with no directionality data
-    gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID10, fill]
+    gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID, fill]
   }
-  gd_map[, colnames(all_pop_df)[-c(1:2)]] <- all_pop_df[gd_map$GEOID10, -c(1:2)]
+  gd_map[, colnames(all_pop_df)[-c(1:2)]] <- all_pop_df[gd_map$GEOID, -c(1:2)]
   
   # get rid of empty polygons
-  gd_map <- gd_map[!is.na(gd_map$GEOID10),]
+  gd_map <- gd_map[!is.na(gd_map$GEOID),]
   
   # create palette
   pal <- colorNumeric(
@@ -400,8 +425,8 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
   labels <- 
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
-      "ZCTA: ", gd_map$GEOID10, "<br>", 
-      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
+      "ZCTA: ", gd_map$GEOID, "<br>", 
+      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID]), "<br>", 
       "Population: ", as.data.frame(gd_map)[, paste0("total_",idx)], 
       # " (", trunc(as.data.frame(gd_map)[, paste0("perc_",idx)]), "%)",
       "<br>",
@@ -413,7 +438,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
     if (!is_com){
       unname(st_bbox(geodat))
     } else { # community focuses on ZCTA
-      unname(st_bbox(geodat[geodat$GEOID10 == zcta_choose,]))
+      unname(st_bbox(geodat[geodat$GEOID == zcta_choose,]))
     }
   
   if (!add_poly){
@@ -428,7 +453,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                       color = "#b2aeae",
                       dashArray = "",
                       fillOpacity = fill_opacity,
-                      layerId = ~GEOID10,
+                      layerId = ~GEOID,
                       highlight = highlightOptions(weight = 2,
                                                    color = "#666",
                                                    dashArray = "",
@@ -461,7 +486,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                            color = ~pal(Fill),
                            dashArray = "",
                            fillOpacity = fill_opacity,
-                           layerId = ~GEOID10,
+                           layerId = ~GEOID,
                            label = labels,
                            radius = 5) %>%
           addLegend(pal = pal_wo_na,
@@ -485,7 +510,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
     
     # if it's a community, we also want to focus on it
     if (is_com){
-      zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
+      zcta_select <- gd_map[gd_map$GEOID == zcta_choose,]
       mp <- mp %>% 
         addPolygons(
           data = zcta_select,
@@ -501,11 +526,11 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                                        dashArray = "",
                                        fillOpacity = 0.7,
                                        bringToFront = T),
-          label = labels[gd_map$GEOID10 == zcta_choose]
+          label = labels[gd_map$GEOID == zcta_choose]
         )
     }
   } else {
-    zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
+    zcta_select <- gd_map[gd_map$GEOID == zcta_choose,]
     mp <- 
       if (!is_all){
         us_proxy %>% 
@@ -524,7 +549,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                                          dashArray = "",
                                          fillOpacity = 0.7,
                                          bringToFront = T),
-            label = labels[gd_map$GEOID10 == zcta_choose]
+            label = labels[gd_map$GEOID == zcta_choose]
           )
       } else {
         us_proxy %>% 
@@ -537,7 +562,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
             dashArray = "",
             fillOpacity = 1,
             layerId = "remove_me",
-            label = labels[gd_map$GEOID10 == zcta_choose],
+            label = labels[gd_map$GEOID == zcta_choose],
             radius = 7)
       }
   }
@@ -1196,25 +1221,25 @@ server <- function(input, output, session) {
     "ZCTA" = "23936", 
     "geodat" = overall$geodat[["pop"]][ # community -- within +/- .5
       st_coordinates(overall$geopts$pop)[,1] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] - 1 &
         st_coordinates(overall$geopts$pop)[,1] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] + 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] + 1 &
         st_coordinates(overall$geopts$pop)[,2] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] - 1 &
         st_coordinates(overall$geopts$pop)[,2] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] + 1 
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] + 1 
       ,],
     "mwi" = overall$mwi[["pop"]][# community -- within +/- .5
       overall$mwi[["pop"]]$ZCTA %in% 
-        overall$geodat[["pop"]]$GEOID10[
+        overall$geodat[["pop"]]$GEOID[
           st_coordinates(overall$geopts$pop)[,1] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] - 1 &
             st_coordinates(overall$geopts$pop)[,1] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] + 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] + 1 &
             st_coordinates(overall$geopts$pop)[,2] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] - 1 &
             st_coordinates(overall$geopts$pop)[,2] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] + 1 
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] + 1 
         ]
       ,],
     "com_map_fill" = "Mental_Wellness_Index"
@@ -1289,18 +1314,18 @@ server <- function(input, output, session) {
     # community boundary
     # community -- within +/- .5
     com_log <- st_coordinates(ol$geopts$pop)[,1] >=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
       st_coordinates(ol$geopts$pop)[,1] <=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
       st_coordinates(ol$geopts$pop)[,2] >=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
       st_coordinates(ol$geopts$pop)[,2] <=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
     
     com_sub$geodat <- ol$geodat[["pop"]][com_log,]
     com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
       ol$mwi[["pop"]]$ZCTA %in% 
-        ol$geodat[["pop"]]$GEOID10[com_log],]
+        ol$geodat[["pop"]]$GEOID[com_log],]
     
     removeModal()
   })
@@ -1349,25 +1374,25 @@ server <- function(input, output, session) {
           com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
           com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
             ,]
           com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
             ol$mwi[["pop"]]$ZCTA %in% 
-              ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+              ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
                 st_coordinates(ol$geopts$pop)[,1] >=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
                   st_coordinates(ol$geopts$pop)[,1] <=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
                   st_coordinates(ol$geopts$pop)[,2] >=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
                   st_coordinates(ol$geopts$pop)[,2] <=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
               ],]
         }
       })
@@ -1412,25 +1437,25 @@ server <- function(input, output, session) {
           com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
           com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
             ,]
           com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
             ol$mwi[["pop"]]$ZCTA %in% 
-              ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+              ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
                 st_coordinates(ol$geopts$pop)[,1] >=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
                   st_coordinates(ol$geopts$pop)[,1] <=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
                   st_coordinates(ol$geopts$pop)[,2] >=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
                   st_coordinates(ol$geopts$pop)[,2] <=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
               ],]
         }
       })
@@ -1470,25 +1495,25 @@ server <- function(input, output, session) {
       com_sub$ZCTA <- "23936"
       com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
         st_coordinates(ol$geopts$pop)[,1] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
           st_coordinates(ol$geopts$pop)[,1] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
           st_coordinates(ol$geopts$pop)[,2] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
           st_coordinates(ol$geopts$pop)[,2] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
         ,]
       com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
         ol$mwi[["pop"]]$ZCTA %in% 
-          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+          ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
           ],]
     }
   })
@@ -1633,7 +1658,7 @@ server <- function(input, output, session) {
         nchar(input$zip_choose) == 5 &
         !grepl("\\D", input$zip_choose) & # only numbers
         input$zip_choose %in% names(zip_to_zcta) & # a valid zcta
-        zip_to_zcta[input$zip_choose] %in% st_sub$geodat$GEOID10 # in the state
+        zip_to_zcta[input$zip_choose] %in% st_sub$geodat$GEOID # in the state
     ){
       focus_info$hl <- T
       focus_info$ZCTA <- unname(zip_to_zcta[input$zip_choose])
@@ -1712,7 +1737,7 @@ server <- function(input, output, session) {
       # get coordinates to know the total
       all_coord <- st_coordinates(ol$geopts[[idx]])
       zcta_coord <- 
-        st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])
+        st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])
       
       # get surrounding community
       zcta_log <- all_coord[,1] >=
@@ -1738,7 +1763,7 @@ server <- function(input, output, session) {
       # get within coordinates
       com_sub$geodat <- ol$geodat[[idx]][zcta_log,]
       com_sub$mwi <- ol$mwi[[idx]][ol$mwi[[idx]]$ZCTA %in% 
-                                  ol$geodat[[idx]]$GEOID10[zcta_log],]
+                                  ol$geodat[[idx]]$GEOID[zcta_log],]
       
       com_sub$com_map_fill <- 
         if (com_sub$idx == "pop" & grepl("*_black$", input$com_map_fill)){
