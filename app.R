@@ -2398,8 +2398,7 @@ server <- function(input, output, session) {
     as.datatable(
       formattable(reportcard, 
                   list(Measure = measure_formatter,
-                       Category = category_formatter,
-                       Rank = color_bar("lightblue")
+                       Category = category_formatter
                   ),
                   table.attr = 'style="font-size: 16px;";\"'), 
       rownames = F,
