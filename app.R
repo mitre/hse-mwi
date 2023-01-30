@@ -2482,7 +2482,7 @@ server <- function(input, output, session) {
       text_mwi,
       "<hr/>",
       "<font size = '3'><b>Measure Rankings:</b></font>",
-      "<i><p>Range from 0 to 100. Measure values with * were included with the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. See \"Explore ZCTA Measures\" for an interactive table.</p></i>",
+      "<i><p>Range from 0 to 100. Measure values with * were included with the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. See \"Explore ZCTA Measures\" for an interactive table with measure values.</p></i>",
       "<p></p>",
       text_meas,
       
