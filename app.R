@@ -108,8 +108,7 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     }
   }
   
-  if (!app_start | 
-      (app_start &
+  if ((app_start &
        !"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
        list.files(file.path(data_folder, "Cleaned")))){
     
@@ -148,7 +147,10 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
            file = file.path(data_folder, 
                             "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
     }
-  } else {
+  } else if ("HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
+              list.files(file.path(data_folder, "Cleaned"))){
+    # this will exist for the pipeline as well -- can only be done if started
+    
     # load geodat data (should be much faster)
     load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
   }
@@ -158,14 +160,25 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
   names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID, 
                                " (State: ", geodat[["pop"]]$STATE_NAME, ")")
   
-  return(list(
-    meas_col_to_type = meas_col_to_type,
-    avail_measures = avail_measures,
-    measure_to_names = measure_to_names,
-    avail_meas_list = avail_meas_list,
-    geodat = geodat,
-    geopts = geopts
-  ))
+  # if we're running a custom pipeline, we're not going to save the geo data, 
+  # it's very big and it's already in the app
+  if (app_start){
+    return(list(
+      meas_col_to_type = meas_col_to_type,
+      avail_measures = avail_measures,
+      measure_to_names = measure_to_names,
+      avail_meas_list = avail_meas_list,
+      geodat = geodat,
+      geopts = geopts
+    ))
+  } else {
+    return(list(
+      meas_col_to_type = meas_col_to_type,
+      avail_measures = avail_measures,
+      measure_to_names = measure_to_names,
+      avail_meas_list = avail_meas_list
+    ))
+  }
   
 }
 
@@ -1347,6 +1360,26 @@ server <- function(input, output, session) {
             ol[[ov]] <- overall_output[[ov]]
           }
           
+          # add geo data from previously loaded data --- this takes a bit, but 
+          # is worth it
+          geodat <- geopts <- list()
+          for (idx in index_types){
+            geodat[[idx]] <-
+              geo_join(overall$geodat[[idx]][, 1:7], mwi[[idx]], 
+                       by_sp = "GEOID", by_df = "ZCTA", how = "left")
+            
+            # sort by state code and zcta
+            geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
+                                                 geodat[[idx]]$GEOID),]
+            
+            # convert to points for US visualization -- ignore warnings
+            geopts[[idx]] <- st_centroid(geodat[[idx]])
+          }
+          
+          ol[["geodat"]] <- geodat
+          ol[["geopts"]] <- geopts
+          
+          
           # update available states
           updateSelectInput(
             session = session,
@@ -1409,6 +1442,25 @@ server <- function(input, output, session) {
           for (ov in names(ol)){
             ol[[ov]] <- overall_output[[ov]]
           }
+          
+          # add geo data from previously loaded data --- this takes a bit, but 
+          # is worth it
+          geodat <- geopts <- list()
+          for (idx in index_types){
+            geodat[[idx]] <-
+              geo_join(overall$geodat[[idx]][, 1:7], mwi[[idx]], 
+                       by_sp = "GEOID", by_df = "ZCTA", how = "left")
+            
+            # sort by state code and zcta
+            geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
+                                                 geodat[[idx]]$GEOID),]
+            
+            # convert to points for US visualization -- ignore warnings
+            geopts[[idx]] <- st_centroid(geodat[[idx]])
+          }
+          
+          ol[["geodat"]] <- geodat
+          ol[["geopts"]] <- geopts
           
           # update available states
           updateSelectInput(
