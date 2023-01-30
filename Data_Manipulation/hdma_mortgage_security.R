@@ -23,7 +23,7 @@ data_folder <- file.path(
 mort_df <- fread(file.path(
   data_folder,
   "HMDA",
-  "HMDA_actions_taken_2-3-6-7-8_year_2020.csv" # national
+  "HMDA_actions_taken_2-3-6-7-8_year_2021.csv" # national
 ),
 colClasses = c("census_tract" = "character"))
 # make sure the census tracts are correct
@@ -141,5 +141,5 @@ data_folder <- file.path(
 
 write.csv(mort_out,
           file = file.path(data_folder,
-                           "HMDA_Mortgage_Approval_2020.csv"),
+                           "HMDA_Mortgage_Approval_2021.csv"),
           row.names = F, na = "")

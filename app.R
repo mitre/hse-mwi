@@ -5,11 +5,6 @@
 # NOTE: Styling by Sarah Ober of Case Study for using health equity framework
 # in population health team.
 
-# running locally? for custom MWI ----
-
-# change to TRUE if running locally
-app_local <- FALSE
-
 # load libraries ----
 
 library(readxl)
@@ -33,7 +28,7 @@ options(shiny.maxRequestSize=300*1024^2)
 
 source("app_config.R")
 
-# styling ----
+# styling/resources ----
 
 # Applies css to rShiny app
 sass(
@@ -46,6 +41,22 @@ sass(
 sass(
   sass_file("www/stylesheets/app.scss"),
   output = "about/app.css"
+)
+
+addResourcePath("mwi-toolkit", "mwi-toolkit")
+
+# order for tabs
+mwi_toolkit_order <- c(
+  "MWI_Overview",
+  "MWI_Populations_of_Focus",
+  "MWI_Framework",
+  "MWI_Measures_and_Data",
+  "MWI_Tool_Videos_and_Guides",
+  "Share_the_MWI_With_Others",
+  "The_Science_Behind_the_MWI",
+  "MWI_in_Action",
+  "Frequently_Asked_Questions",
+  "Contact"
 )
 
 # function for app preprocessing ----
@@ -111,8 +122,9 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     
     # get zip code data
     # NOTE: cb = T will download a generalized file
-    zips <- zctas(cb = T, year = 2019)
-    zips <- zips[zips$GEOID10 %in% mwi$pop$ZCTA,]
+    zips <- zctas(cb = T, year = 2020)
+    colnames(zips)[colnames(zips) == "GEOID20"] <- "GEOID"
+    zips <- zips[zips$GEOID %in% mwi$pop$ZCTA,]
     zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
     
     # create the geo data for leaflet
@@ -120,11 +132,11 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     geodat <- geopts <- list()
     for (idx in index_types){
       geodat[[idx]] <-
-        geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
+        geo_join(zips, mwi[[idx]], by_sp = "GEOID", by_df = "ZCTA", how = "left")
       
       # sort by state code and zcta
       geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
-                                           geodat[[idx]]$GEOID10),]
+                                           geodat[[idx]]$GEOID),]
       
       # convert to points for US visualization -- ignore warnings
       geopts[[idx]] <- st_centroid(geodat[[idx]])
@@ -143,8 +155,8 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
   }
   
   # get available zctas -- both will have the same
-  avail_zctas <- geodat[["pop"]]$GEOID10
-  names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10, 
+  avail_zctas <- geodat[["pop"]]$GEOID
+  names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID, 
                                " (State: ", geodat[["pop"]]$STATE_NAME, ")")
   
   return(list(
@@ -174,12 +186,17 @@ m_reg <- as.data.frame(
 # remove everything that doesn't have a numerator
 m_reg <- m_reg[!is.na(m_reg$Numerator),]
 rownames(m_reg) <- m_reg$Numerator
+# create a subset for the "create your own MWI" part
+sub_m <- m_reg[, c("Measure", "Category", "Weights", "Weights")]
+colnames(sub_m)[ncol(sub_m)-1] <- "Original Weights"
+colnames(sub_m)[ncol(sub_m)] <- "Updated Weights"
+rownames(sub_m) <- rownames(m_reg)
 
 # load index weighting/output
 info_df <- read.csv(
   file.path(data_folder, "Cleaned", "HSE_MWI_Data_Information.csv"),
-  row.names = "Numerator"
 )
+rownames(info_df) <- info_df$Numerator
 
 # load mapped measure data excat values
 meas_df <- read.csv(
@@ -191,27 +208,51 @@ rownames(meas_df) <- meas_df$GEOID
 
 # load zip codes to zcta
 zip_cw <- read.csv(
-  file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2020.csv"),
+  file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2021.csv"),
   colClasses = c(
     "ZIP_CODE" = "character",
     "ZCTA" = "character"
   ))
 territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
+# we need to align these ZIP codes to ZCTAs in 2020 (in future)
+# NOTE: in future, it may be a good idea to get the map between zip and ZCTA2020
+# proper -- the code below is an attempt to do that, but did not work. since
+# most did not change wily, the legacy version should work mostly fine.
+# zcta_rel <- read.csv(file.path(data_folder, "Resources",
+#                                "tab20_zcta510_zcta520_natl.txt"),
+#                      colClasses = c(
+#                        "GEOID_ZCTA5_20" = "character",
+#                        "GEOID_ZCTA5_10" = "character"
+#                      ),
+#                      sep = "|")
+# # get rid of zctas with no relationship between each other
+# zcta_rel <- zcta_rel[zcta_rel$GEOID_ZCTA5_10 != "" & 
+#                        zcta_rel$GEOID_ZCTA5_20 != "",]
+# zcta_rel <- zcta_rel[order(zcta_rel$GEOID_ZCTA5_10),]
+# zcta_rel$perc_land <- zcta_rel$AREALAND_PART/zcta_rel$AREALAND_ZCTA5_20
+# # chose zcta to zip code with the largest area in 2020
+# zcta_most <- aggregate(perc_land ~ GEOID_ZCTA5_10, zcta_rel, FUN = which.max)
+# zcta_most$GEOID_ZCTA5_20 <- zcta_rel$GEOID_ZCTA5_20[which(!duplicated(zcta_most$GEOID_ZCTA5_10))+zcta_most$perc_land-1]
+# rownames(zcta_most) <- zcta_most$GEOID_ZCTA5_10
+# # keep the old, map to the new
+# zip_cw$ZCTA10 <- zip_cw$ZCTA
+# zip_cw$ZCTA <- zcta_most[zip_cw$ZCTA, "GEOID_ZCTA5_20"]
+
 zip_to_zcta <- setNames(zip_cw$ZCTA, zip_cw$ZIP_CODE)
 zcta_to_zip <- aggregate(ZIP_CODE ~ ZCTA, data = zip_cw, 
                          FUN = function(x){paste(x, collapse = ", ")})
 zcta_to_zip <- setNames(zcta_to_zip$ZIP_CODE, zcta_to_zip$ZCTA)
 
-# load county cw for zcta state county mapping
-county_cw <- read.csv(
-  file.path(data_folder, "Resources", "zcta_county_rel_10.txt"),
-  colClasses = c(
-    "ZCTA5" = "character",
-    "STATE" = "character",
-    "COUNTY" = "character",
-    "GEOID" = "character"
-  ))
+# load crosswalk files
+county_cw <- read.csv(file.path(data_folder, "Resources",
+                                "zcta_county_rel_20.csv"),
+                      colClasses = c(
+                        "ZCTA5" = "character",
+                        "GEOID" = "character"
+                      ))
+county_cw$STATE <- substr(county_cw$GEOID, 1, 2)
+county_cw$COUNTY <- substr(county_cw$GEOID, 3, 5)
 # collapse so that there's one zcta for every row (states get collapsed by pipe)
 cty_cw <- 
   aggregate(STATE ~ ZCTA5, data = county_cw, 
@@ -356,16 +397,16 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                      fill_opacity = .7,
                      add_poly = F, us_proxy = NA, zcta_choose = NA){
   # subset map for easy plotting
-  gd_map <- geodat[,c(fill, "GEOID10", "STATE", "STATE_NAME", "geometry")]
+  gd_map <- geodat[,c(fill, "GEOID", "STATE", "STATE_NAME", "geometry")]
   colnames(gd_map)[1] <- "Fill"
   if (fill != "Mental_Wellness_Index"){
     # replace data with no directionality data
-    gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID10, fill]
+    gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID, fill]
   }
-  gd_map[, colnames(all_pop_df)[-c(1:2)]] <- all_pop_df[gd_map$GEOID10, -c(1:2)]
+  gd_map[, colnames(all_pop_df)[-c(1:2)]] <- all_pop_df[gd_map$GEOID, -c(1:2)]
   
   # get rid of empty polygons
-  gd_map <- gd_map[!is.na(gd_map$GEOID10),]
+  gd_map <- gd_map[!is.na(gd_map$GEOID),]
   
   # create palette
   pal <- colorNumeric(
@@ -394,8 +435,8 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
   labels <- 
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
-      "ZCTA: ", gd_map$GEOID10, "<br>", 
-      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
+      "ZCTA: ", gd_map$GEOID, "<br>", 
+      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID]), "<br>", 
       "Population: ", as.data.frame(gd_map)[, paste0("total_",idx)], 
       # " (", trunc(as.data.frame(gd_map)[, paste0("perc_",idx)]), "%)",
       "<br>",
@@ -407,7 +448,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
     if (!is_com){
       unname(st_bbox(geodat))
     } else { # community focuses on ZCTA
-      unname(st_bbox(geodat[geodat$GEOID10 == zcta_choose,]))
+      unname(st_bbox(geodat[geodat$GEOID == zcta_choose,]))
     }
   
   if (!add_poly){
@@ -422,7 +463,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                       color = "#b2aeae",
                       dashArray = "",
                       fillOpacity = fill_opacity,
-                      layerId = ~GEOID10,
+                      layerId = ~GEOID,
                       highlight = highlightOptions(weight = 2,
                                                    color = "#666",
                                                    dashArray = "",
@@ -455,7 +496,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                            color = ~pal(Fill),
                            dashArray = "",
                            fillOpacity = fill_opacity,
-                           layerId = ~GEOID10,
+                           layerId = ~GEOID,
                            label = labels,
                            radius = 5) %>%
           addLegend(pal = pal_wo_na,
@@ -479,7 +520,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
     
     # if it's a community, we also want to focus on it
     if (is_com){
-      zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
+      zcta_select <- gd_map[gd_map$GEOID == zcta_choose,]
       mp <- mp %>% 
         addPolygons(
           data = zcta_select,
@@ -495,11 +536,11 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                                        dashArray = "",
                                        fillOpacity = 0.7,
                                        bringToFront = T),
-          label = labels[gd_map$GEOID10 == zcta_choose]
+          label = labels[gd_map$GEOID == zcta_choose]
         )
     }
   } else {
-    zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
+    zcta_select <- gd_map[gd_map$GEOID == zcta_choose,]
     mp <- 
       if (!is_all){
         us_proxy %>% 
@@ -518,7 +559,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                                          dashArray = "",
                                          fillOpacity = 0.7,
                                          bringToFront = T),
-            label = labels[gd_map$GEOID10 == zcta_choose]
+            label = labels[gd_map$GEOID == zcta_choose]
           )
       } else {
         us_proxy %>% 
@@ -531,7 +572,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
             dashArray = "",
             fillOpacity = 1,
             layerId = "remove_me",
-            label = labels[gd_map$GEOID10 == zcta_choose],
+            label = labels[gd_map$GEOID == zcta_choose],
             radius = 7)
       }
   }
@@ -734,32 +775,24 @@ ui <- fluidPage(
             ),
             bsCollapsePanel(
               "Custom MWI Upload",
-              if (app_local){
-                tagList(
-                  HTML("<font size = '2'><p>"),
-                  "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
-                  HTML("<p></font>"),
-                  fileInput(
-                    "custom_data_st",
-                    label = "Upload Custom Mental Wellness Index (.RData)",
-                    accept = ".RData"
-                  ),
-                  actionButton(
-                    "custom_data_load_st",
-                    "Upload"
-                  ),
-                  actionButton(
-                    "custom_data_reset_st",
-                    "Reset"
-                  )
+              tagList(
+                HTML("<font size = '2'><p>"),
+                "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab. Note that data uploaded to this application is not kept -- it is deleted once you leave the page. However, if you would like to keep your data on your computer while viewing the MWI, please see the \"Add Local Data to MWI on Your Computer\" section.",
+                HTML("<p></font>"),
+                fileInput(
+                  "custom_data_st",
+                  label = "Upload Custom Mental Wellness Index (.RData)",
+                  accept = ".RData"
+                ),
+                actionButton(
+                  "custom_data_load_st",
+                  "Upload"
+                ),
+                actionButton(
+                  "custom_data_reset_st",
+                  "Reset"
                 )
-              } else {
-                tagList(
-                  HTML("<font size = '2'><p>"),
-                  "To create and view the necessary custom Mental Wellness Index file, you will need to run the Mental Wellness Index Tool on your local computer in order to protect your data. Please see the \"Create Your Own MWI\" tab for more information.",
-                  HTML("<p></font>")
-                )
-              }
+              )
             ),
             bsCollapsePanel(
               "About the Mental Wellness Index",
@@ -767,7 +800,7 @@ ui <- fluidPage(
               img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About the MWI' page.<p></p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'MWI Toolkit' page.<p></p>"
               )),
               HTML(paste0(
                 "All states are included.",
@@ -816,7 +849,9 @@ ui <- fluidPage(
                 uiOutput("data_info"),
                 HTML(paste0(
                   "<font size = '2'>",
-                  "For more information on data and overall methodology, please see the \"About the MWI\" page.",
+
+                  "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
+
                   "</font>"
                 ))
               )
@@ -849,7 +884,7 @@ ui <- fluidPage(
               ),
               selectInput(
                 "com_map_fill",
-                "What measure would you like to focus on?",
+                "What would you like to explore?",
                 choices = overall$avail_meas_list[["pop"]]
               ),
               textInput(
@@ -860,10 +895,9 @@ ui <- fluidPage(
             ),
             bsCollapsePanel(
               "Custom MWI Upload",
-              if (app_local){
                 tagList(
                   HTML("<font size = '2'><p>"),
-                  "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab.",
+                  "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab. Note that data uploaded to this application is not kept -- it is deleted once you leave the page. However, if you would like to keep your data on your computer while viewing the MWI, please see the \"Add Local Data to MWI on Your Computer\" section.",
                   HTML("</p></font>"),
                   fileInput(
                     "custom_data_com",
@@ -879,13 +913,6 @@ ui <- fluidPage(
                     "Reset"
                   )
                 )
-              } else {
-                tagList(
-                  HTML("<font size = '2'><p>"),
-                  "To create and view the necessary custom Mental Wellness Index file, you will need to run the Mental Wellness Index Tool on your local computer in order to protect your data. Please see the \"Create Your Own MWI\" tab for more information.",
-                  HTML("<p></font>")
-                )
-              }
             ),
             bsCollapsePanel(
               "About the Mental Wellness Index",
@@ -893,7 +920,7 @@ ui <- fluidPage(
               img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
               HTML("</center>"),
               HTML("<font size = '2'>"),
-              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'About the MWI' page.<p></p>"
+              HTML(paste0("The Mental Wellness Index is the weighted sum of 28 measure values, which quantify facilitators and barriers to mental wellness. For more information about the Mental Wellness Index, please see the 'MWI Toolkit' page.<p></p>"
               )),
               HTML(paste0(
                 "All states are included.",
@@ -931,7 +958,7 @@ ui <- fluidPage(
                     uiOutput("data_info_com"),
                     HTML(paste0(
                       "<font size = '2'>",
-                      "For more information on data and overall methodology, please see the \"About the MWI\" page.",
+                      "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
                       "</font>"
                     ))
                   ),
@@ -949,7 +976,7 @@ ui <- fluidPage(
                 open = c("ZCTA Measure Results"),
                 bsCollapsePanel(
                   "ZCTA Measure Results",
-                  HTML("<p><i>Measures have ranks from 0 to 100. All measures are oriented in the MWI so that higher values in the MWI indicate more assets supporting mental wellness. Measures designated as obstacles to mental wellness were included with the opposite orientation when calculating the MWI. Measure value corrsponds to the exact value in the data, corresponding to the measure description. For more information, please see Measure and Data Documentation.</i></p>"),
+                  HTML("<p><i>Measures have ranks from 0 to 100. All measures are oriented in the MWI so that higher values in the MWI indicate more assets supporting mental wellness. Measures designated as obstacles to mental wellness were included with the opposite orientation when calculating the MWI. Measure value corrsponds to the exact value in the data, corresponding to the measure description. For more information, please see `MWI Measures and Data` in the MWI Toolkit.</i></p>"),
                   uiOutput("com_report_card_table_mwi"),
                   HTML("<p></p>"),
                   DTOutput("com_report_card_table")
@@ -962,18 +989,120 @@ ui <- fluidPage(
     ),
     
     # upload data ----
-    tabPanel(
-      title = div("Create Your Own MWI", class = "explore"),
-      fluidRow(
-        column(width = 2),
-        column(
-          width = 8,
-          HTML("<center><h2>Create your own Mental Wellness Index (MWI)!</h2></center>"),
-          HTML(paste0(
-            "<p align = 'justify'>",
-            "To create your own Mental Wellness Index, you must be running the Mental Wellness Index Tool on your local computer in order to protect your data. Follow the instructions below to create your own MWI for your community below by adjusting weights and/or adding your own data and metadata.",
-            "<ol>",
-            if (!app_local){
+    
+    navbarMenu(
+      "Create Your Own MWI",
+      tabPanel(
+        title = div("Adjust MWI Weights", class = "explore"),
+        fluidRow(
+          column(width = 2),
+          column(
+            width = 8,
+            HTML("<center><h2>Change weights to create your own Mental Wellness Index (MWI)!</h2></center>"),
+            HTML(paste0(
+              "<p align = 'justify'>",
+              "Weights used in the Mental Wellness Index control the relative influence each measure has on the total MWI; higher numbers inidcate a higher influence. If you adjust the weights to 0, a measure has no influence on the MWI.",
+              "<br><br>",
+              "To adjust the weights in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
+              "<ol>",
+              "<li>Update weights for each measure in the table below as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number). Click outside of that edited entry to lock it in. Note that weights do not need to add to 100 (they will be normalized, and have georgraphy/race stratification penalties applied, when the Custom MWI is calculated).</li>",
+              "<br>",
+              "<li>Click 'Create Custom MWI' below. This will take some time.</li>",
+              "<br>",
+              "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing will be lost! Nothing is stored within this application.</b></li>",
+              "<br>",
+              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file. Once the file is fully loaded, click 'Upload' to see your Custom MWI results.</li>",
+              "</ol>",
+              "</p>"
+              )),
+            tagList(
+              hr(),
+              HTML("<center>"),
+              DTOutput("custom_mwi_weights"),
+              HTML("<br><br>"),
+              actionButton("custom_mwi_go_weights", "Create Custom MWI"),
+              downloadButton("download_custom_mwi_weights", "Download Custom MWI"),
+              HTML("<br><br>"),
+              verbatimTextOutput("custom_error_weights"),
+              HTML("</center>")
+            )
+          ),
+          column(width = 2)
+        )
+      ),
+      tabPanel(
+        title = div("Add Local Data to MWI", class = "explore"),
+        fluidRow(
+          column(width = 2),
+          column(
+            width = 8,
+            HTML("<center><h2>Add Local Data to Mental Wellness Index (MWI)</h2></center>"),
+            HTML(paste0(
+              "<p align = 'justify'>",
+              "To create your own Mental Wellness Index with your own local data, follow the instructions below to create your own MWI for your community below by adjusting weights and adding your own data and metadata. If you only want to adjust the weights in the MWI, go to the \"Adjust MWI Weights\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it. However, if you would like to keep your data on your computer while creating the MWI, please see the \"Add Local Data to MWI on Your Computer\" section.",
+              "<ol>",
+              "<li> Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).</li>",
+              "<ul>",
+              "<li>Accepted geographical ID types are always numeric and include the following:</li>",
+              "<ul>",
+              "<li>ZCTA: 5 digit ZCTA (example: 35406)</li>",
+              "<li>County: 5 digit County FIPS Code (2 digits state code and 3 digit county code, example: 01001)</li>",
+              "<li>ZIP Code: US Postal Service ZIP Code (example: 35051)</li>",
+              "<li>Census Tract: 11 digit Census Tract FIPS Code (2 digits state code, 3 digit county code, and 6 digit tract code, example: 01001020100)</li>",
+              "</ul>",
+              "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see next step).</li>",
+              "<li>Numerators and denominators must be numeric columns.</li>",
+              "<li>Missing data should have cells left blank.</li>",
+              "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black populations measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
+              "</ul>",
+              "<br>",
+              "<li> Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
+              "<ul>",
+              "<li>If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.</li>",
+              "<li>If you would like to remove a measure in your MWI, either delete the measure row or set its weight to 0.</li>",
+              "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
+              "</ul>",
+              "<br>",
+              "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. Select multiple files by pressing ctrl/cmd and then clicking on each file in the file explorer box. Note: Do not have files open while uploading. This will take some time, depending on the amount of measures included.</li>",
+              "<br>",
+              "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
+              "<br>",
+              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file. Once the file is fully loaded, click 'Upload' to see your Custom MWI results.</li>",
+              "</ol>",
+              "</p>"
+            )),
+            tagList(
+              hr(),
+              HTML("<center>"),
+              downloadButton("download_metadata", "Download Metadata.xlsx"),
+              HTML("<br><br>"),
+              fileInput(
+                "custom_zip", 
+                "Upload Custom Data Files (.xlsx, .csv) (do not have files open):",
+                accept = c(".xlsx", ".csv"),
+                multiple = T
+              ),
+              actionButton("custom_mwi_go", "Create Custom MWI"),
+              downloadButton("download_custom_mwi", "Download Custom MWI"),
+              HTML("<br><br>"),
+              verbatimTextOutput("custom_error"),
+              HTML("</center>")
+            )
+          ),
+          column(width = 2)
+        )
+      ),
+      tabPanel(
+        title = div("Add Local Data to MWI on Your Computer", class = "explore"),
+        fluidRow(
+          column(width = 2),
+          column(
+            width = 8,
+            HTML("<center><h2>Add Local Data to Mental Wellness Index (MWI) On Your Computer</h2></center>"),
+            HTML(paste0(
+              "<p align = 'justify'>",
+              "If you want to keep your data on your computer, follow the instructions below to create your own MWI for your community by adjusting weights and adding your own data and metadata.",
+              "<ol>",
               tagList(HTML(paste0(
                 "<li> Download free versions of <a href = 'https://www.r-project.org/' target = '_blank'>R</a> and <a href = 'https://www.rstudio.com/products/rstudio/download/' target = '_blank'>RStudio</a>. Download a modern browser (Firefox, Chrome, Edge, etc.) and make that your default browser if you haven't already.</li>",
                 "<br>",
@@ -988,92 +1117,89 @@ ui <- fluidPage(
                 "<li>install.packages('readxl', 'writexl', 'htmltools', 'shiny', 'tigris', 'leaflet', 'RColorBrewer', 'sf', 'plotly', 'ggbeeswarm', 'shinyWidgets', 'sass', 'shinycssloaders', 'shinyBS')</li>",
                 "</ul>",
                 "<br>",
-                "<li> In \"app.R\", navigate to line 11, which should say \"app_local <- FALSE\". Change FALSE to TRUE.</li>",
-                "<br>",
                 "<li> In the top right hand corner of the \"app.R\" window, you should see \"Run App\". Click the small downward arrow to the right of that and click \"Run External\". Then click \"Run App\".</li>",
                 "<br>",
                 "<li> After a delay (this will be slow the first time, then quicker after that), the Mental Wellness Index Tool should open in your browser. Click on the \"Create Your Own MWI\" tab and follow the remaining steps to create your own MWI.</li>",
                 "<br>"
-              )))
-            } else {
-              tagList()
-            },
-            
-            "<li> If you are only adjusting weights for included data, skip the next step.</li>",
-            "<br>",
-            "<li> Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).</li>",
-            "<ul>",
-            "<li>Accepted geographical ID types are always numeric and include the following:</li>",
-            "<ul>",
-            "<li>ZCTA: 5 digit ZCTA (example: 35406)</li>",
-            "<li>County: 5 digit County FIPS Code (2 digits state code and 3 digit county code, example: 01001)</li>",
-            "<li>ZIP Code: US Postal Service ZIP Code (example: 35051)</li>",
-            "<li>Census Tract: 11 digit Census Tract FIPS Code (2 digits state code, 3 digit county code, and 6 digit tract code, example: 01001020100)</li>",
-            "</ul>",
-            "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see next step).</li>",
-            "<li>Numerators and denominators must be numeric columns.</li>",
-            "<li>Missing data should have cells left blank.</li>",
-            "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black populations measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
-            "</ul>",
-            "<br>",
-            "<li> Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
-            "<ul>",
-            "<li>If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.</li>",
-            "<li>If you would like to remove a measure in your MWI, either delete the measure row or set its weight to 0.</li>",
-            "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
-            "</ul>",
-            "<br>",
-            "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. This will take some time, depending on the amount of measures included.</li>",
-            "<br>",
-            "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
-            "<br>",
-            "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.</li>",
-            "</ol>",
-            "</p>"
-          )),
-          if (app_local){
+              ))),
+              "<li> If you are only adjusting weights for included data, skip the next step.</li>",
+              "<br>",
+              "<li> Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).</li>",
+              "<ul>",
+              "<li>Accepted geographical ID types are always numeric and include the following:</li>",
+              "<ul>",
+              "<li>ZCTA: 5 digit ZCTA (example: 35406)</li>",
+              "<li>County: 5 digit County FIPS Code (2 digits state code and 3 digit county code, example: 01001)</li>",
+              "<li>ZIP Code: US Postal Service ZIP Code (example: 35051)</li>",
+              "<li>Census Tract: 11 digit Census Tract FIPS Code (2 digits state code, 3 digit county code, and 6 digit tract code, example: 01001020100)</li>",
+              "</ul>",
+              "<li>If a denominator column is provided, the final input to the MWI will be the numerator divided by the denominator, multiplied by the scaling number (specified in the metadata file, see next step).</li>",
+              "<li>Numerators and denominators must be numeric columns.</li>",
+              "<li>Missing data should have cells left blank.</li>",
+              "<li>If race stratified, there should be two columns: one ending in '_pop' corresponding to the overall population measure, and one ending in '_black' corresponding to the black populations measure. In the Metadata.xlsx file edit, that row's 'Preprocessed' column should be set to TRUE.</li>",
+              "</ul>",
+              "<br>",
+              "<li> Download Metadata.xlsx with the button below. If adding custom data, add a row and fill in information for each measure you want to add to the Mental Wellness Index. Descriptions for each column can be found in the 'Column Descriptions' sheet of the Metadata.xlsx. Note that <b>all</b> column names, with the exception of 'denominator', must be filled out.</li>",
+              "<ul>",
+              "<li>If you have multiple measures in one file, add a row for each measure and its qualities, but specify the same file name.</li>",
+              "<li>If you would like to remove a measure in your MWI, either delete the measure row or set its weight to 0.</li>",
+              "<li>If you would only like to adjust weights, change only the weight column to the desired values. Note that penalties for race stratifications and geographic granularity are still applied and total weights are scaled to sum to 100.</li>",
+              "</ul>",
+              "<br>",
+              "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. Select multiple files by pressing ctrl/cmd and then clicking on each file in the file explorer box. Note: Do not have files open while uploading. This will take some time, depending on the amount of measures included.</li>",
+              "<br>",
+              "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
+              "<br>",
+              "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file. Once the file is fully loaded, click 'Upload' to see your Custom MWI results.</li>",
+              "</ol>",
+              "</p>"
+            )),
             tagList(
               hr(),
               HTML("<center>"),
-              downloadButton("download_metadata", "Download Metadata.xlsx"),
+              downloadButton("download_metadata_comp", "Download Metadata.xlsx"),
               HTML("<br><br>"),
               fileInput(
-                "custom_zip", 
-                "Upload Custom Data Files (.xlsx, .csv)",
+                "custom_zip_comp", 
+                "Upload Custom Data Files (.xlsx, .csv) (do not have files open):",
                 accept = c(".xlsx", ".csv"),
                 multiple = T
               ),
-              actionButton("custom_mwi_go", "Create Custom MWI"),
-              downloadButton("download_custom_mwi", "Download Custom MWI"),
+              actionButton("custom_mwi_go_comp", "Create Custom MWI"),
+              downloadButton("download_custom_mwi_comp", "Download Custom MWI"),
               HTML("<br><br>"),
-              verbatimTextOutput("custom_error"),
+              verbatimTextOutput("custom_error_comp"),
               HTML("</center>")
             )
-          } else {
-            tagList()
-          }
-        ),
-        column(width = 2)
+          ),
+          column(width = 2)
+        )
       )
     ),
     
-    # about ----
-    navbarMenu(
-      "About the MWI",
-      tabPanel(
-        title = div("About the MWI", class="about"),
-        # NOTE: when making changes to about.Rmd, move result to www
-        htmltools::tags$iframe(src = "about.html", # put testdoc.html to /www
-                               class="about-panel",
-                               frameborder = 0, 
-                               scrolling = 'auto')),
-      tabPanel(
-        title = div("Measure & Methodology Documentation Download",
-                    class = "about"), 
-        htmltools::tags$iframe(src = "docdownload.html",
-                               class = "about-panel",
-                               frameborder = 0,
-                               scrolling = "auto")
+
+    # mwi toolkit ----
+    
+    # add toolkit pages dynamically since there are a lot of them
+    do.call(
+      navbarMenu,
+      c(menuName = "toolkit",
+        title = "MWI Toolkit",
+        lapply(
+          mwi_toolkit_order,
+          function(x){
+            tabPanel(
+              id = tolower(x),
+              title = div(gsub("_", " ", x), class = "about"),
+              htmltools::tags$iframe(
+                src = paste0("mwi-toolkit/", x, ".html"),
+                class = "about-panel",
+                frameborder = 0,
+                scrolling = "auto")
+              
+            )
+          }
+        )
       )
     )
   ),
@@ -1123,25 +1249,25 @@ server <- function(input, output, session) {
     "ZCTA" = "23936", 
     "geodat" = overall$geodat[["pop"]][ # community -- within +/- .5
       st_coordinates(overall$geopts$pop)[,1] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] - 1 &
         st_coordinates(overall$geopts$pop)[,1] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] + 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] + 1 &
         st_coordinates(overall$geopts$pop)[,2] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] - 1 &
         st_coordinates(overall$geopts$pop)[,2] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] + 1 
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] + 1 
       ,],
     "mwi" = overall$mwi[["pop"]][# community -- within +/- .5
       overall$mwi[["pop"]]$ZCTA %in% 
-        overall$geodat[["pop"]]$GEOID10[
+        overall$geodat[["pop"]]$GEOID[
           st_coordinates(overall$geopts$pop)[,1] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] - 1 &
             st_coordinates(overall$geopts$pop)[,1] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] + 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] + 1 &
             st_coordinates(overall$geopts$pop)[,2] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] - 1 &
             st_coordinates(overall$geopts$pop)[,2] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] + 1 
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] + 1 
         ]
       ,],
     "com_map_fill" = "Mental_Wellness_Index"
@@ -1154,59 +1280,50 @@ server <- function(input, output, session) {
       HTML("<b><center>Welcome to the Mental Wellness Index™!</b></center>"),
     size = "l",
     fluidRow(
-      
-      column(
-        width = 7,
-        HTML("<p align = 'justify'><font size = '3'>"),
-        HTML(
-          "The <b>Mental Wellness Index™ (MWI)</b> quantifies factors that influence <b>community-level mental wellness</b> for <b>each ZIP code</b> in the nation.  The MWI aggregates <b>28 weighted measures</b> that quantify facilitators and barriers to mental wellness across <b>three domains</b>: <b>Social Determinants of Health</b>, <b>Healthcare Access</b>, and <b>Health Status</b>. Two <b>dynamic factors</b> (<b>Structural Racism</b> and <b>Community and Cultural Assets</b>) influence measures in all three of the domains. The Mental Wellness Index tool allows users to <b>explore the MWI and its measures</b>, providing information for the <b>overall population</b> and <b>Black populations</b>."
-        ),
-        HTML("</p></font>"),
-        HTML("<font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font>")
-      ),
-      column(
-        width = 5,
-        HTML("<center>"),
-        img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "90%"),
-        HTML("</center>")
-      )
-    ),
-    hr(),
-    HTML(paste0(
-      "<p><font size = '3'><b><center>You can explore the MWI Tool in two ways:</p></b></font>"
-    )),
-    fluidRow(
-      column(
-        width = 6,
-        HTML("<font size = '3'><b><p>Explore States</p></b></font>"),
-        img(src = file.path("media", "MWI_State_View.png"), align = "center", height = "200px"),
-        HTML("<font size = '2'><p><i>Good for exploring measures overall, gives general distributions in states</i></p></font>")
-      ),
-      column(
-        width = 6,
-        HTML("<font size = '3'><b><p>Explore ZIP Codes</p></b></font>"),
-        img(src = file.path("media", "MWI_ZIP_Code_View.png"), align = "center", height = "200px"),
-        HTML("<font size = '2'><p><i>Good for exploring measures for a specific ZIP Code, gives all measure results for a ZIP Code</p></i></font>")
-      )
-    ),
-    selectInput(
-      "start_st",
-      "Choose your state and click below to get started!",
-      choices = c(unname(f_st), "All"),
-      selected = "Virginia",
-      width = "400px"
-    ),
-    HTML("</center>"),
+      column(width = 1),
+      column(width = 10,
+             HTML("<p align = 'center'><font size = '3'>"),
+             HTML(
+               "The <b>Mental Wellness Index (MWI)</b> combines 28 factors that influence <b>community-level mental wellness</b> into a single value for <b>each ZIP code</b> in the nation."
+             ),
+             HTML("</p></font>"),
+             HTML("<center>"),
+             img(src = file.path("media", "MWI Framework (Transparent Background).png"), align = "center", width = "60%"),
+             HTML("</center>"),
+             HTML("<br>"),
+             HTML("<center>"),
+             HTML("To learn more and view MWI videos, click <b>MWI Toolkit</b> in the blue bar at the top of the page."),
+            
+             HTML("</center>"),
+             HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
+      )),
+     
     footer = tagList(
       HTML("<center>"),
-      actionButton("enter_mwi", "Start Exploring!"),
-      modalButton("Use Defaults"),
+      modalButton("Start Exploring!"),
       HTML("</center>")
     ),
     easyClose = T # it will just use defaults
   )
   
   showModal(welcome_modal)
+  
+
+  observeEvent(input$learn_button, {
+    updateNavbarPage(session = session, 
+                     inputId = "toolkit", 
+                     selected = "mwi_overview")
+    
+    removeModal()
+  })
+  
+  observeEvent(input$video_button, {
+    updateNavbarPage(session = session, 
+                     inputId = "toolkit", 
+                     selected = "mwi_tool_videos_and_guides")
+    
+    removeModal()
+  })
   
   observeEvent(input$enter_mwi, {
     # update all of the inputs -- this will cascade
@@ -1225,18 +1342,18 @@ server <- function(input, output, session) {
     # community boundary
     # community -- within +/- .5
     com_log <- st_coordinates(ol$geopts$pop)[,1] >=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
       st_coordinates(ol$geopts$pop)[,1] <=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
       st_coordinates(ol$geopts$pop)[,2] >=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
       st_coordinates(ol$geopts$pop)[,2] <=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
     
     com_sub$geodat <- ol$geodat[["pop"]][com_log,]
     com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
       ol$mwi[["pop"]]$ZCTA %in% 
-        ol$geodat[["pop"]]$GEOID10[com_log],]
+        ol$geodat[["pop"]]$GEOID[com_log],]
     
     removeModal()
   })
@@ -1245,125 +1362,131 @@ server <- function(input, output, session) {
   
   # observe custom data upload: state
   observeEvent(input$custom_data_load_st, {
-    if (!is.null(input$custom_data_st)){
-      validate(need(endsWith(tolower(input$custom_data_st$datapath), ".rdata"),
-                    "Must upload .RData File"))
-      
-      # load the RData file -- contains ov
-      load(input$custom_data_st$datapath)
-      
-      for (ov in names(ol)){
-        ol[[ov]] <- overall_output[[ov]]
-      }
-      
-      # update available states
-      updateSelectInput(
-        session = session,
-        "st_focus",
-        "Which state would you like to focus on?",
-        choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
-        selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
-      )
-      
-      # update available states
-      updateSelectInput(
-        session = session,
-        "us_map_fill",
-        "What would you like to explore?",
-        choices = ol$avail_meas_list[["pop"]]
-      )
-      updateSelectInput(
-        session = session,
-        "com_map_fill",
-        "What measure would you like to focus on?",
-        choices = ol$avail_meas_list[["pop"]]
-      )
-      
-      # update selected defaults for community view
-      com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
-      com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
-        st_coordinates(ol$geopts$pop)[,1] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
-          st_coordinates(ol$geopts$pop)[,1] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
-          st_coordinates(ol$geopts$pop)[,2] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
-          st_coordinates(ol$geopts$pop)[,2] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
-        ,]
-      com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
-        ol$mwi[["pop"]]$ZCTA %in% 
-          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+    withProgress(
+      message = "Uploading custom Mental Wellness Index!", {
+        if (!is.null(input$custom_data_st)){
+          validate(need(endsWith(tolower(input$custom_data_st$datapath), ".rdata"),
+                        "Must upload .RData File"))
+          
+          # load the RData file -- contains ov
+          load(input$custom_data_st$datapath)
+          
+          for (ov in names(ol)){
+            ol[[ov]] <- overall_output[[ov]]
+          }
+          
+          # update available states
+          updateSelectInput(
+            session = session,
+            "st_focus",
+            "Which state would you like to focus on?",
+            choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
+            selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
+          )
+          
+          # update available states
+          updateSelectInput(
+            session = session,
+            "us_map_fill",
+            "What would you like to explore?",
+            choices = ol$avail_meas_list[["pop"]]
+          )
+          updateSelectInput(
+            session = session,
+            "com_map_fill",
+            "What would you like to explore?",
+            choices = ol$avail_meas_list[["pop"]]
+          )
+          
+          # update selected defaults for community view
+          com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
+          com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
-          ],]
-    }
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
+            ,]
+          com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+            ol$mwi[["pop"]]$ZCTA %in% 
+              ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
+                st_coordinates(ol$geopts$pop)[,1] >=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
+                  st_coordinates(ol$geopts$pop)[,1] <=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
+                  st_coordinates(ol$geopts$pop)[,2] >=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
+                  st_coordinates(ol$geopts$pop)[,2] <=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
+              ],]
+        }
+      })
   })
   
   # observe custom data upload: community
   observeEvent(input$custom_data_load_com, {
-    if (!is.null(input$custom_data_com)){
-      # load the RData file
-      load(input$custom_data_com$datapath)
-      
-      for (ov in names(ol)){
-        ol[[ov]] <- overall_output[[ov]]
-      }
-      
-      # update available states
-      updateSelectInput(
-        session = session,
-        "st_focus",
-        "Which state would you like to focus on?",
-        choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
-        selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
-      )
-      
-      # update available states
-      updateSelectInput(
-        session = session,
-        "us_map_fill",
-        "What would you like to explore?",
-        choices = ol$avail_meas_list[["pop"]]
-      )
-      updateSelectInput(
-        session = session,
-        "com_map_fill",
-        "What measure would you like to focus on?",
-        choices = ol$avail_meas_list[["pop"]]
-      )
-      
-      # update selected defaults for community view
-      com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
-      com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
-        st_coordinates(ol$geopts$pop)[,1] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
-          st_coordinates(ol$geopts$pop)[,1] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
-          st_coordinates(ol$geopts$pop)[,2] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
-          st_coordinates(ol$geopts$pop)[,2] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
-        ,]
-      com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
-        ol$mwi[["pop"]]$ZCTA %in% 
-          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+    withProgress(
+      message = "Uploading custom Mental Wellness Index!", {
+        if (!is.null(input$custom_data_com)){
+          # load the RData file
+          load(input$custom_data_com$datapath)
+          
+          for (ov in names(ol)){
+            ol[[ov]] <- overall_output[[ov]]
+          }
+          
+          # update available states
+          updateSelectInput(
+            session = session,
+            "st_focus",
+            "Which state would you like to focus on?",
+            choices = c(unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]]), "All"),
+            selected = unname(f_st[f_st %in% f_st[ol$mwi$pop$STATE]])[1]
+          )
+          
+          # update available states
+          updateSelectInput(
+            session = session,
+            "us_map_fill",
+            "What would you like to explore?",
+            choices = ol$avail_meas_list[["pop"]]
+          )
+          updateSelectInput(
+            session = session,
+            "com_map_fill",
+            "What would you like to explore?",
+            choices = ol$avail_meas_list[["pop"]]
+          )
+          
+          # update selected defaults for community view
+          com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
+          com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
-          ],]
-    }
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
+            ,]
+          com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
+            ol$mwi[["pop"]]$ZCTA %in% 
+              ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
+                st_coordinates(ol$geopts$pop)[,1] >=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
+                  st_coordinates(ol$geopts$pop)[,1] <=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
+                  st_coordinates(ol$geopts$pop)[,2] >=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
+                  st_coordinates(ol$geopts$pop)[,2] <=
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
+              ],]
+        }
+      })
   })
   
   # reset to overall MWI
@@ -1392,7 +1515,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session = session,
         "com_map_fill",
-        "What measure would you like to focus on?",
+        "What would you like to explore?",
         choices = ol$avail_meas_list[["pop"]]
       )
       
@@ -1400,25 +1523,25 @@ server <- function(input, output, session) {
       com_sub$ZCTA <- "23936"
       com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
         st_coordinates(ol$geopts$pop)[,1] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
           st_coordinates(ol$geopts$pop)[,1] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
           st_coordinates(ol$geopts$pop)[,2] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
           st_coordinates(ol$geopts$pop)[,2] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
         ,]
       com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
         ol$mwi[["pop"]]$ZCTA %in% 
-          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+          ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
           ],]
     }
   })
@@ -1442,7 +1565,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session = session,
       "us_map_fill",
-      "Which score/measure would you like to explore?",
+      "What would you like to explore?",
       choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
@@ -1563,7 +1686,7 @@ server <- function(input, output, session) {
         nchar(input$zip_choose) == 5 &
         !grepl("\\D", input$zip_choose) & # only numbers
         input$zip_choose %in% names(zip_to_zcta) & # a valid zcta
-        zip_to_zcta[input$zip_choose] %in% st_sub$geodat$GEOID10 # in the state
+        zip_to_zcta[input$zip_choose] %in% st_sub$geodat$GEOID # in the state
     ){
       focus_info$hl <- T
       focus_info$ZCTA <- unname(zip_to_zcta[input$zip_choose])
@@ -1614,7 +1737,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session = session,
       "com_map_fill",
-      "What measure would you like to focus on?",
+      "What would you like to explore?",
       choices = ol$avail_meas_list[[idx]],
       selected = fill
     )
@@ -1642,7 +1765,7 @@ server <- function(input, output, session) {
       # get coordinates to know the total
       all_coord <- st_coordinates(ol$geopts[[idx]])
       zcta_coord <- 
-        st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])
+        st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])
       
       # get surrounding community
       zcta_log <- all_coord[,1] >=
@@ -1668,7 +1791,7 @@ server <- function(input, output, session) {
       # get within coordinates
       com_sub$geodat <- ol$geodat[[idx]][zcta_log,]
       com_sub$mwi <- ol$mwi[[idx]][ol$mwi[[idx]]$ZCTA %in% 
-                                  ol$geodat[[idx]]$GEOID10[zcta_log],]
+                                  ol$geodat[[idx]]$GEOID[zcta_log],]
       
       com_sub$com_map_fill <- 
         if (com_sub$idx == "pop" & grepl("*_black$", input$com_map_fill)){
@@ -1832,7 +1955,7 @@ server <- function(input, output, session) {
           html_color(mc, "higher"),
           " value indicates a ",
           html_color(mc, "higher"),
-          " national ranking for ", 
+          " national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ", 
           html_color(mc, full_name),
           ".",
           "</font></b><p></p>",
@@ -1959,9 +2082,9 @@ server <- function(input, output, session) {
             " (ZIP Code",
             ifelse(nchar(zcta_to_zip[focus_info$ZCTA]) > 5, "s "," "), 
             html_color(mc, zcta_to_zip[focus_info$ZCTA]), ")",
-            " has a ", html_color(mc, full_name), " national ranking of ",
+            " has a ", html_color(mc, full_name), " national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  of ",
             html_color(mc, trunc(f_val)),
-            ", putting it at the ",
+            " and is at the ",
             html_color(mc, st_perc), 
             " percentile for the state.",
             " This is in the ", 
@@ -1970,7 +2093,7 @@ server <- function(input, output, session) {
             html_color(mc, us_comp), " relative to the United States.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates a higher national ranking for ",
+            "<i>A higher value indicates a higher national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
             full_name,
             ". ",
             ifelse(
@@ -1995,7 +2118,7 @@ server <- function(input, output, session) {
             ", indicating missing data or no population in this area.",
             "</font></b><p></p>",
             "<font size = '2'>",
-            "<i>A higher value indicates a higher national ranking for ",
+            "<i>A higher value indicates a higher national ", ifelse(st_sub$us_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
             full_name,
             ". ",
             ifelse(
@@ -2118,9 +2241,9 @@ server <- function(input, output, session) {
           " (ZIP Code",
           ifelse(nchar(zcta_to_zip[com_sub$ZCTA]) > 5, "s "," "), 
           html_color(mc, zcta_to_zip[com_sub$ZCTA]), ")",
-          " has a ", html_color(mc, full_name), " national ranking of ",
+          " has a ", html_color(mc, full_name), " national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  of ",
           html_color(mc, trunc(f_val)),
-          ", putting it at the ",
+          " and is at the ",
           html_color(mc, com_perc), 
           " percentile for the state.",
           " This is in the ", 
@@ -2133,7 +2256,7 @@ server <- function(input, output, session) {
             paste0(
               "<p></p>",
               "<font size = '2'>",
-              "<i>A higher value indicates a higher national ranking for ",
+              "<i>A higher value indicates a higher national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
               full_name,
               ". ",
               ifelse(
@@ -2165,7 +2288,7 @@ server <- function(input, output, session) {
               paste0(
                 "<p></p>",
                 "<font size = '2'>",
-                "<i>A higher value indicates a higher national ranking for ",
+                "<i>A higher value indicates a higher national ", ifelse(com_sub$com_map_fill != "Mental_Wellness_Index", "ranking", "value"), "  for ",
                 full_name,
                 ". ",
                 ifelse(
@@ -2359,7 +2482,7 @@ server <- function(input, output, session) {
       text_mwi,
       "<hr/>",
       "<font size = '3'><b>Measure Rankings:</b></font>",
-      "<i><p>Range from 0 to 100. Measure values with * were included with the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. See \"Explore ZCTA Measures\" for a sortable table.</p></i>",
+      "<i><p>Range from 0 to 100. Measure values with * were included with the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. See \"Explore ZCTA Measures\" for an interactive table.</p></i>",
       "<p></p>",
       text_meas,
       
@@ -2371,9 +2494,36 @@ server <- function(input, output, session) {
   
   # preallocate download for custom processing
   overall_list <- reactiveVal()
+  upd_weights <- reactiveVal(sub_m) # custom weight dataframe
+  button_click <- reactiveValues( # tracking which custom button clicked
+    "go" = 0,
+    "weights" = 0,
+    "comp" = 0
+  )
+  # STOP HERE: keeping track of which button clicked
+  # also make weight processing WAY more efficient, you can do it
+  
+  # output for the customizing just the weights
+  output$custom_mwi_weights <- renderDT(
+    {
+      datatable(upd_weights(), 
+                rownames = F,
+                options = list(pageLength = nrow(m_reg)),
+                editable = list(target = "cell", 
+                                disable = list(columns = c(0:2))))
+    })
+  
+  # make table updates persistent
+  observeEvent(input$custom_mwi_weights_cell_edit, {
+    df <- upd_weights()
+    row  <- input$custom_mwi_weights_cell_edit$row
+    clmn <- input$custom_mwi_weights_cell_edit$col
+    df[row, clmn+1] <- input$custom_mwi_weights_cell_edit$value
+    upd_weights(df)
+  })
   
   # download the Metadata file
-  output$download_metadata <- downloadHandler(
+  output$download_metadata <- output$download_metadata_comp <- downloadHandler(
     filename = function(){
       "Metadata.xlsx"
     },
@@ -2391,48 +2541,97 @@ server <- function(input, output, session) {
     }
   )
   
-  observeEvent(input$custom_mwi_go, {
+  observeEvent(c(input$custom_mwi_go, input$custom_mwi_go_comp, input$custom_mwi_go_weights), {
+    # require one button to be pressed at least
+    req(isTruthy(input$custom_mwi_go) || isTruthy(input$custom_mwi_go_comp) ||
+          isTruthy(input$custom_mwi_go_weights))
+    
+    # check which button got pressed
+    press <- if (input$custom_mwi_go[1] > button_click$go){
+      "go"
+    } else if (input$custom_mwi_go_comp[1] > button_click$comp){
+      "comp"
+    } else {
+      "weights"
+    }
+    
+    # update the saved values
+    button_click$go <- input$custom_mwi_go[1]
+    button_click$comp <- input$custom_mwi_go_comp[1]
+    button_click$weights <- input$custom_mwi_go_weights[1]
+    
     withProgress(
       message = "Creating custom Mental Wellness Index!", 
       detail = "Loading data...", {
         source(file.path("Processing_Pipeline", "pipeline_driver.R"))
         
-        # testing
-        # input <- list()
-        # input$custom_zip <- "C:/Users/hdelossantos/Downloads/custom_zip.zip"
-        
         # start by checking files
+        error <- F
         zip_true <- T
-        if (!is.null(input$custom_zip)){
-          zip_df <- input$custom_zip # a list of files
-        } else {
-          output$custom_error <- renderText({
-            paste0("ERROR: Please upload multiple files as described above.")
-          })
+        # only look for a zip file for custom data
+        if (press != "weights"){
+          if (!is.null(input$custom_zip)){
+            zip_df <- input$custom_zip # a list of files
+          } else if (!is.null(input$custom_zip_comp)) {
+            zip_df <- input$custom_zip_comp # a list of files
+          } else {
+            zip_true <- F
+            error <- T
+            output$custom_error <- output$custom_error_comp <- renderText({
+              paste0("ERROR: Please upload files as described above.")
+            })
+          }
         }
         
-        # check that metadata is in the list, that there's something in it,
-        # that the rest of the data is csv
-        if (zip_true &
-          "Metadata.xlsx" %in% zip_df$name & 
-          all(endsWith(tolower(zip_df$datapath), c(".csv", ".xlsx"))) & 
-          (nrow(zip_df) == 1 |
-          (nrow(zip_df) > 1 &
-          all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
-                       ".csv"))))){
-          # read the metadata file
-          m_reg_custom <- as.data.frame(
-            read_xlsx(zip_df$datapath[zip_df$name == "Metadata.xlsx"], sheet = 1)
-          )
-          
-          # read all custom data
-          custom_data <- lapply(
-            zip_df$name[zip_df$name != "Metadata.xlsx"], function(x){
-              read.csv(unz(input$custom_zip$datapath, x), check.names = F)
+        # for custom data
+        if (!error){
+          if (press != "weights"){
+            # check that metadata is in the list, that there's something in it,
+            # that the rest of the data is csv
+            if (zip_true &
+                "Metadata.xlsx" %in% zip_df$name & 
+                all((endsWith(tolower(zip_df$datapath), ".xlsx")) |
+                    (endsWith(tolower(zip_df$datapath), ".csv"))) & 
+                (nrow(zip_df) == 1 |
+                 (nrow(zip_df) > 1 &
+                  all(endsWith(tolower(zip_df$name[zip_df$name != "Metadata.xlsx"]),
+                               ".csv"))))){
+              # read the metadata file
+              m_reg_custom <- as.data.frame(
+                read_xlsx(zip_df$datapath[zip_df$name == "Metadata.xlsx"], sheet = 1)
+              )
+              
+              # read all custom data
+              custom_data <-  lapply(
+                zip_df$datapath[zip_df$name != "Metadata.xlsx"], function(x){
+                  read.csv(x, check.names = F)
+                }
+              )
+              names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
+              
+            } else {
+              error <- T
+              output$custom_error <- output$custom_error_comp <-
+                output$custom_error_weights <- renderText({
+                  paste0(
+                    "ERROR: One of the following is wrong with your uploaded files:\n",
+                    "1: Does not contain Metadata.xlsx\n",
+                    "2: Has additional custom data and custom data not in CSV format\n",
+                    "3: There are no files\n",
+                    "4: Additional files uploaded that are not CSV or XLSX format\n",
+                    "Please fix the above, reupload, and re-do.")
+                })
             }
-          )
-          names(custom_data) <- zip_df$name[zip_df$name != "Metadata.xlsx"]
-          
+          } else {
+            # for custom weights
+            m_reg_custom <- m_reg
+            m_reg_custom[rownames(upd_weights()), "Weights"] <- 
+              upd_weights()[,"Updated Weights"]
+            custom_data <- list()
+          }
+        }
+        
+        if (!error){
           incProgress(detail = "Running pipeline...")
           
           # now pass it into the pipeline file
@@ -2440,18 +2639,21 @@ server <- function(input, output, session) {
             mwi_pipeline(m_reg_custom, custom_data, run_custom = T)
           }, 
           error = function(cond){
-            output$custom_error <- renderText({
-              paste0(
-                "ERROR: The pipeline returned the following error:\n",
-                cond, "\n",
-                "Please doublecheck your custom data and the metadata file according to the parameters given above, reupload, and re-do."
-              )
-            })
+            error <- T 
+            output$custom_error <- output$custom_error_comp <-
+              output$custom_error_weights <- renderText({
+                paste0(
+                  "ERROR: The pipeline returned the following error:\n",
+                  cond, "\n",
+                  "Please doublecheck your custom data and the metadata file according to the parameters given above, reupload, and re-do."
+                )
+              })
             
             return(list())
           })
-          
-          
+        }
+        
+        if (!error){
           incProgress(detail = "Processing app data...")
           
           # need to also all preceding data, if the list came out correctly
@@ -2468,8 +2670,8 @@ server <- function(input, output, session) {
             
             ap <- suppressWarnings(
               app_preprocess(overall_out$m_reg, 
-                            overall_out$info_dat, overall_out$mwi,
-                            app_start = F)
+                             overall_out$info_dat, overall_out$mwi,
+                             app_start = F)
             )
             
             # add counties/states to mwi
@@ -2487,36 +2689,32 @@ server <- function(input, output, session) {
             # keep in reactive for download
             overall_list(overall_out)
             
-            output$custom_error <- renderText({
-              paste0("Complete! Click 'Download Custom MWI' to download. Upload resulting .RData on the 'Custom MWI Upload' section of the 'Explore States' or 'Explore ZIP Codes' page to explore.")
-            })
+            output$custom_error <- output$custom_error_comp <- 
+              output$custom_error_weights <- renderText({
+                paste0("Complete! Click 'Download Custom MWI' to download. Upload resulting .RData on the 'Custom MWI Upload' section of the 'Explore States' or 'Explore ZIP Codes' page to explore.")
+              })
           }
-        } else {
-          output$custom_error <- renderText({
-            paste0(
-              "ERROR: One of the following is wrong with your uploaded files:\n",
-              "1: Does not contain Metadata.xlsx\n",
-              "2: Has additional custom data and custom data not in CSV format\n",
-              "3: There are no files\n",
-              "4: Additional files uploaded that are not CSV or XLSX format\n",
-              "Please fix the above, reupload, and re-do.")
-          })
         }
       })
   })
   
   
   # download the output file
-  output$download_custom_mwi <- downloadHandler(
-    filename = function(){
-      paste0("Custom_MWI_", Sys.Date(), ".RData")
-    },
-    content = function(file){
-      overall_output <- overall_list()
-      
-      save(overall_output, file = file)
-    }
-  )
+  output$download_custom_mwi <- output$download_custom_mwi_comp <- 
+    output$download_custom_mwi_weights <- 
+    downloadHandler(
+      filename = function(){
+        paste0("Custom_MWI_", Sys.Date(), ".RData")
+      },
+      content = function(file){
+        withProgress(
+          message = "Creating Custom MWI file for download...",{ 
+            overall_output <- overall_list()
+            
+            save(overall_output, file = file)
+          })
+      }
+    )
 }
 
 # RUN ----

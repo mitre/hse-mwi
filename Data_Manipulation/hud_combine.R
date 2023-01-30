@@ -2,7 +2,9 @@
 # By Karen Jiang
 # Originated on: 6/11/21
 
-library(tidyverse)
+library(readxl)
+library(dplyr)
+library(tidyr)
 
 # load data and combine ----
 data_folder <- file.path(
@@ -16,7 +18,7 @@ df <- read.csv(file.path(data_folder, "Table1.csv"))
 
 # Read in Data Dictionary
 dictionary <- readxl::read_xlsx(file.path(data_folder, 
-                                          "CHAS data dictionary 13-17.xlsx"),
+                                          "CHAS data dictionary 15-19.xlsx"),
                                 sheet = "Table 1")
 
 
@@ -41,12 +43,11 @@ housing_stress <- df %>%
          
          # Calculate housing stress for black pop
          # Defined as black pop with housing stress / black renters & owners
-         black_num = select(., black_num_col_nums) %>% rowSums(na.rm = T),
-         black_denom = select(., black_denom_col_nums) %>% rowSums(na.rm = T),
+         black_num = select(., all_of(black_num_col_nums)) %>% rowSums(na.rm = T),
+         black_denom = select(., all_of(black_denom_col_nums)) %>% rowSums(na.rm = T),
          housing_stress_black = black_num/black_denom * 100) %>%
   
   select(geoid, housing_stress_pop, housing_stress_black)
-  
 
 # write out ----
 

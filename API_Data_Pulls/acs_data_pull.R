@@ -10,7 +10,7 @@ library(tidycensus)
 
 # pull data ----
 
-# ACS 5 year 2019
+# ACS 5 year 2021
 acs_data <- get_acs(
   "zcta",
   variables = c(
@@ -183,7 +183,7 @@ acs_data <- get_acs(
     "B19001H_016", # Estimate!!Total:!!$150,000 to $199,999
     "B19001H_017"  # Estimate!!Total:!!$200,000 or more
   ), 
-  year = 2019,
+  year = 2021,
   output = "wide"
 )
 

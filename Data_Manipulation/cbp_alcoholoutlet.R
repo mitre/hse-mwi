@@ -7,6 +7,7 @@
 library(dplyr)
 library(tidycensus)
 library(censusapi)
+library(readxl)
 
 source("Processing_Pipeline/crosswalk_func.R")
 
@@ -31,7 +32,7 @@ grocery_states$any_alc_sales <- ifelse(rowSums(grocery_states[,3:5] , na.rm = T)
 get_cbp <- function(naics, name){
   dat <- getCensus(name = "cbp",
                    key = Sys.getenv("CENSUS_API_KEY"),
-                   vintage = "2019",
+                   vintage = "2020",
                    vars = "ESTAB",
                    region = "county:*",
                    NAICS2017 = naics
@@ -72,7 +73,7 @@ all <- all %>%
 # Get population denominators from ACS ------
 pop <- get_acs(geography = "county",
                output = "wide",
-               year = 2019,
+               year = 2020,
                survey = "acs5",
                variables = "B01001_001",
                geometry = F

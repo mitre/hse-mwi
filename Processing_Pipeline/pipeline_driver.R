@@ -27,6 +27,9 @@ m_reg <- m_reg[!is.na(m_reg$Numerator),]
 # load crosswalk functions and information
 source(file.path("Processing_Pipeline", "crosswalk_func.R"))
 
+# load relationship files (2010 to 2020) and information
+source(file.path("Processing_Pipeline", "relationship_func.R"))
+
 # load population totals
 all_pop_df <- read.csv(
   file.path(data_folder, "Resources", "ACS_ZCTA_Total_Populations.csv"),
@@ -103,6 +106,10 @@ geo_levels <- c(
 
 # pipeline function ----
 
+# inputs:
+#  m_reg_custom: metadata file
+#  custom_data: list of dataframes of custom data
+#  run_custom: are we adding custom data?
 mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(), 
                          run_custom = F){
   
@@ -114,6 +121,10 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
     m_reg <- m_reg_custom
   }
   
+  # if the custom data list is empty, we're just adjusting weights (and data
+  # has already been processed) -- we can skip steps
+  upd_weights <- length(custom_data) == 0 & run_custom
+  
   # filter out measures with weight of 0 and an empty numerator
   m_reg <- m_reg[m_reg$Weights != 0,]
   m_reg <- m_reg[!is.na(m_reg$Numerator),]
@@ -123,52 +134,113 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
     overall_out[["m_reg"]] <- m_reg
   }
   
-  cat(paste0("[", Sys.time(), "]: Loading and collating data\n"))
-  
-  # where we're going to put all the data
-  level_data <- list()
-  for (gl in geo_levels){
-    # subset to the data at the specific geographic level
-    m_reg_sub <- m_reg[m_reg$`Geographic Level` == gl,]
+  if (!upd_weights){
+    cat(paste0("[", Sys.time(), "]: Loading and collating data\n"))
     
-    comb_df <- data.frame()
-    for (fn in unique(m_reg_sub$Filename)){
-      # correct geoid column 
-      geoid_colname <- m_reg_sub$`GEOID Column`[m_reg_sub$Filename == fn][1]
+    # where we're going to put all the data
+    level_data <- list()
+    for (gl in geo_levels){
+      # subset to the data at the specific geographic level
+      m_reg_sub <- m_reg[m_reg$`Geographic Level` == gl,]
       
-      # read in data 
-      if (!fn %in% names(custom_data)){
-        curr_df <- read.csv(file.path(preprocessed_folder, fn),
-                            colClasses = setNames(
-                              "character",
-                              geoid_colname
-                            ))
-      } else {
-        curr_df <- custom_data[[fn]]
-      }
-      
-      curr_df <- check_geoid(curr_df, geoid_colname, type = gl)
-      
-      # collate data
-      if (nrow(comb_df) == 0){
-        # add our data
-        comb_df <- rbind(comb_df, curr_df)
-        # rename geoid column
-        colnames(comb_df)[colnames(comb_df) == geoid_colname] <- "GEOID"
-        # add as rownames
-        rownames(comb_df) <- as.character(comb_df$GEOID)
-      } else { # add data to existing
-        comb_df[as.character(curr_df[,geoid_colname]), 
-                colnames(curr_df)[colnames(curr_df) != geoid_colname]] <-
-          curr_df[,colnames(curr_df)[colnames(curr_df) != geoid_colname]]
+      comb_df <- data.frame()
+      for (fn in unique(m_reg_sub$Filename)){
+        # correct geoid column 
+        geoid_colname <- m_reg_sub$`GEOID Column`[m_reg_sub$Filename == fn][1]
         
-        # update geoid and rownames
-        comb_df$GEOID <- as.character(rownames(comb_df))
+        # read in data 
+        if (!fn %in% names(custom_data)){
+          curr_df <- read.csv(file.path(preprocessed_folder, fn),
+                              colClasses = setNames(
+                                "character",
+                                geoid_colname
+                              ))
+        } else {
+          curr_df <- custom_data[[fn]]
+        }
+        
+        curr_df <- check_geoid(curr_df, geoid_colname, type = gl)
+        
+        # getting columns that need to be converted 
+        # (numerators and denominators)
+        var_df <- rbind(m_reg_sub, m_reg_sub[m_reg_sub$`Race Stratification`,])
+        
+        is_preprocessed <- var_df$`Is Preprocessed`
+        not_dup_num <- !duplicated(var_df$Numerator)
+        not_dup_den <- !duplicated(var_df$Denominator) & !is.na(var_df$Denominator)
+        var_df$Numerator[is_preprocessed & not_dup_num] <-
+          paste0(var_df$Numerator[is_preprocessed & not_dup_num], "_pop")
+        var_df$Denominator[is_preprocessed & not_dup_den] <-
+          paste0(var_df$Denominator[is_preprocessed & not_dup_den], "_pop")
+        
+        # add black for ones that are preprocessed and are not pop
+        not_pop_num <- !grepl("_pop", var_df$Numerator)
+        not_pop_den <- !grepl("_pop", var_df$Denominator) & 
+          !is.na(var_df$Denominator)
+        var_df$Numerator[is_preprocessed & not_pop_num] <-
+          paste0(var_df$Numerator[is_preprocessed & not_pop_num], "_black")
+        var_df$Denominator[is_preprocessed & not_pop_den] <-
+          paste0(var_df$Denominator[is_preprocessed & not_pop_den], "_black")
+        
+        meas_col <- c(var_df$Numerator, var_df$Denominator)
+        meas_col <- meas_col[!is.na(meas_col)]
+        meas_col <- meas_col[meas_col %in% colnames(curr_df)]
+        
+        # get rid of duplicate GEOID rows by averaging -- no GEOIDs should be
+        # duplicated
+        if (any(duplicated(curr_df[, geoid_colname]))){
+          dup_vals <- curr_df[, geoid_colname] %in% 
+            curr_df[, geoid_colname][duplicated(curr_df[, geoid_colname])]
+          
+          tmp <- aggregate(curr_df[dup_vals, meas_col], 
+                           by = list("GEOID" = curr_df[, geoid_colname][dup_vals]),
+                           FUN = mean, na.rm = T)
+          colnames(tmp)[-1] <- meas_col
+          
+          curr_df <- curr_df[!duplicated(curr_df[, geoid_colname]),]
+          rownames(curr_df) <- curr_df[, geoid_colname]
+          curr_df[tmp$GEOID, meas_col] <- tmp[, meas_col]
+        }
+        
+        # first, map from 2010 to 2020 if needed
+        # applies to census tracts and ZCTAs -- counties have no change, zip
+        # codes are only converted once converted to ZCTAs
+        if (m_reg_sub$`Geographic Boundaries`[m_reg_sub$Filename == fn][1] ==
+             2010){
+          
+          if (gl == "Census Tract"){
+            
+            curr_df <- ct_10_to_20(curr_df, 
+                                   geoid_colname,
+                                   meas_col)
+          } else if (gl == "ZCTA"){
+            curr_df <- zcta_10_to_20(curr_df, 
+                                     geoid_colname,
+                                     meas_col)
+          }
+        }
+        
+        # collate data
+        if (nrow(comb_df) == 0){
+          # add our data
+          comb_df <- rbind(comb_df, curr_df)
+          # rename geoid column
+          colnames(comb_df)[colnames(comb_df) == geoid_colname] <- "GEOID"
+          # add as rownames
+          rownames(comb_df) <- as.character(comb_df$GEOID)
+        } else { # add data to existing
+          comb_df[as.character(curr_df[,geoid_colname]), 
+                  colnames(curr_df)[colnames(curr_df) != geoid_colname]] <-
+            curr_df[,colnames(curr_df)[colnames(curr_df) != geoid_colname]]
+          
+          # update geoid and rownames
+          comb_df$GEOID <- as.character(rownames(comb_df))
+        }
       }
+      
+      # add to full list
+      level_data[[gl]] <- comb_df
     }
-    
-    # add to full list
-    level_data[[gl]] <- comb_df
   }
   
   # get/output variable information ----
@@ -260,39 +332,56 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
   
   rownames(info_dat) <- info_dat$Numerator
   
-  # where we're going to put all the data
-  for (gl in geo_levels){
-    # subset to the data at the specific geographic level
-    info_dat_sub <- info_dat[info_dat$`Geographic Level` == gl,]
-    
-    if (nrow(info_dat_sub) > 0){
-      # we'll go through each column and compute information for each
-      info_dat[info_dat_sub$Numerator, "Is_Numeric"] <- 
-        sapply(level_data[[gl]][, info_dat_sub$Numerator],
-               is.numeric)
-      info_dat[info_dat_sub$Numerator, "Minimum"] <- 
-        sapply(level_data[[gl]][, info_dat_sub$Numerator], 
-               function(x){min(x, na.rm = T)})
-      info_dat[info_dat_sub$Numerator, "Maximum"] <- 
-        sapply(level_data[[gl]][, info_dat_sub$Numerator], 
-               function(x){max(x, na.rm = T)})
-      info_dat[info_dat_sub$Numerator, "Missing"] <- 
-        sapply(level_data[[gl]][, info_dat_sub$Numerator], 
-               function(x){sum(is.na(x))})
-      info_dat[info_dat_sub$Numerator, "Number_Rows"] <- 
-        sapply(level_data[[gl]][, info_dat_sub$Numerator], 
-               function(x){sum(!is.na(x))})
+  
+  if (!upd_weights){
+    # where we're going to put all the data
+    for (gl in geo_levels){
+      # subset to the data at the specific geographic level
+      info_dat_sub <- info_dat[info_dat$`Geographic Level` == gl,]
       
-      # output statistics about data
-      for (num in info_dat_sub$Numerator){
-        cat(paste0("Statistics for ", num, ":\n"))
-        for (cn in c("Is_Numeric", "Minimum", "Maximum", "Missing" , 
-                     "Number_Rows")){
-          cat(paste0("\t", gsub("_", " ", cn),":", 
-                     info_dat[num, cn]), "\n")
+      if (nrow(info_dat_sub) > 0){
+        # we'll go through each column and compute information for each
+        info_dat[info_dat_sub$Numerator, "Is_Numeric"] <- 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator],
+                 is.numeric)
+        info_dat[info_dat_sub$Numerator, "Minimum"] <- 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+                 function(x){min(x, na.rm = T)})
+        info_dat[info_dat_sub$Numerator, "Maximum"] <- 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+                 function(x){max(x, na.rm = T)})
+        info_dat[info_dat_sub$Numerator, "Missing"] <- 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+                 function(x){sum(is.na(x))})
+        info_dat[info_dat_sub$Numerator, "Number_Rows"] <- 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+                 function(x){sum(!is.na(x))})
+        
+        # output statistics about data
+        for (num in info_dat_sub$Numerator){
+          cat(paste0("Statistics for ", num, ":\n"))
+          for (cn in c("Is_Numeric", "Minimum", "Maximum", "Missing" , 
+                       "Number_Rows")){
+            cat(paste0("\t", gsub("_", " ", cn),":", 
+                       info_dat[num, cn]), "\n")
+          }
         }
       }
     }
+  } else {
+    # we will fill in this info from the original
+    info_orig <- read.csv(file.path(cleaned_folder,
+                                    "HSE_MWI_Data_Information.csv"),
+                          check.names = F)
+    rownames(info_orig) <- info_orig$Numerator
+    
+    cn <- c("Is_Numeric", 
+            "Minimum", 
+            "Maximum", 
+            "Missing", 
+            "Number_Rows")
+    info_dat[, cn] <- info_orig[info_dat$Numerator, cn]
+    
   }
   
   # write out data information
@@ -311,177 +400,227 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
   
   # convert data to zcta ----
   
-  cat(paste0("[", Sys.time(), "]: Converting data to ZCTA level\n"))
-  
-  # first, preallocate
-  zcta_df <-
-    if (nrow(level_data[["ZCTA"]]) > 0){
-      level_data[["ZCTA"]][, c(
-        "GEOID",
-        info_dat$Numerator[info_dat$`Geographic Level` == "ZCTA"],
-        info_dat$Denominator[!is.na(info_dat$Denominator) &
-                               info_dat$`Geographic Level` == "ZCTA"]
-      )
-      ]
-    } else {
-      # use the data that was loaded in the crosswalk_func script
-      data.frame(
-        "GEOID" = as.character(all_zctas)
-      )
-    }
-  # set the rownames to be the zctas
-  rownames(zcta_df) <- zcta_df$GEOID
-  
-  # now go through the rest of the geolevels and convert them to ZCTA
-  for (gl in geo_levels[geo_levels != "ZCTA"]){
-    # subset to the data at the specific geographic level
-    info_dat_sub <- info_dat[info_dat$`Geographic Level` == gl,]
+  if (!upd_weights){
+    cat(paste0("[", Sys.time(), "]: Converting data to ZCTA level\n"))
     
-    if (nrow(info_dat_sub) > 0){
-      zcta_conversion <- 
-        if (gl == "County"){
-          county_to_zcta(
-            level_data[[gl]], 
-            "GEOID", 
-            c(info_dat_sub$Numerator, 
-              info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)])
-          )  
-        } else if (gl == "Census Tract"){
-          ct_to_zcta(
-            level_data[[gl]], 
-            "GEOID", 
-            c(info_dat_sub$Numerator, 
-              info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)])
-          )  
-        } else if (gl == "ZIP Code"){
-          zip_to_zcta(
-            level_data[[gl]], 
-            "GEOID", 
-            c(info_dat_sub$Numerator, 
-              info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)]),
-            use_mean = T
-          )  
-        }
+    # first, preallocate
+    zcta_df <-
+      if (nrow(level_data[["ZCTA"]]) > 0){
+        level_data[["ZCTA"]][, c(
+          "GEOID",
+          info_dat$Numerator[info_dat$`Geographic Level` == "ZCTA"],
+          info_dat$Denominator[!is.na(info_dat$Denominator) &
+                                 info_dat$`Geographic Level` == "ZCTA"]
+        )
+        ]
+      } else {
+        # use the data that was loaded in the crosswalk_func script
+        data.frame(
+          "GEOID" = as.character(all_zctas)
+        )
+      }
+    # set the rownames to be the zctas
+    rownames(zcta_df) <- zcta_df$GEOID
+    
+    # now go through the rest of the geolevels and convert them to ZCTA
+    for (gl in geo_levels[geo_levels != "ZCTA"]){
+      # subset to the data at the specific geographic level
+      info_dat_sub <- info_dat[info_dat$`Geographic Level` == gl,]
       
-      # add to main
-      zcta_df[zcta_conversion$ZCTA, 
-              colnames(zcta_conversion)[colnames(zcta_conversion) != "ZCTA"]] <-
-        zcta_conversion[, colnames(zcta_conversion) != "ZCTA"]
-      # reupdate the rownames
-      rownames(zcta_df) <- zcta_df$GEOID
-      
-    }
-  }
-  
-  # need to filter out ZCTAs not in US -- filtered out in crosswalk file
-  zcta_df <- zcta_df[zcta_df$GEOID %in% all_zctas,]
-  
-  # if using custom data, we need to filter out all ZCTAs with no data for our
-  # custom data
-  if (run_custom & length(custom_data) > 0){
-    for (fn in names(custom_data)){
-      # get the numerators that correspond to the file
-      all_num <- m_reg$Numerator[m_reg$Filename == fn]
-      
-      # go through each and filter to only zctas that are nonmissing in the
-      # custom data
-      for (nm in all_num){
-        if (m_reg$`Is Preprocessed`[m_reg$Numerator == nm]){
-          nm <- paste0(nm, "_pop")
-        }
+      if (nrow(info_dat_sub) > 0){
+        zcta_conversion <- 
+          if (gl == "County"){
+            county_to_zcta(
+              level_data[[gl]], 
+              "GEOID", 
+              c(info_dat_sub$Numerator, 
+                info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)])
+            )  
+          } else if (gl == "Census Tract"){
+            ct_to_zcta(
+              level_data[[gl]], 
+              "GEOID", 
+              c(info_dat_sub$Numerator, 
+                info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)])
+            )  
+          } else if (gl == "ZIP Code"){
+            # for zip code, we need to map from zip to zcta 2010 and then to
+            # zcta 2022 (no 2022 direct mappings are out yet)
+            zcta_res <- 
+              zip_to_zcta(
+                level_data[[gl]], 
+                "GEOID", 
+                c(info_dat_sub$Numerator, 
+                  info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)]),
+                use_mean = T
+              )  
+            
+            zcta_10_to_20(
+              zcta_res, 
+              "GEOID",
+              c(info_dat_sub$Numerator, 
+                info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)]))
+          }
         
-        zcta_df <- zcta_df[!is.na(zcta_df[,nm]),]
+        # add to main
+        zcta_df[zcta_conversion$ZCTA, 
+                colnames(zcta_conversion)[colnames(zcta_conversion) != "ZCTA"]] <-
+          zcta_conversion[, colnames(zcta_conversion) != "ZCTA"]
+        # reupdate the rownames
+        rownames(zcta_df) <- zcta_df$GEOID
+        
       }
     }
     
-    # subset all_pop_df to ZCTAs in zcta_df
-    all_pop_df <- all_pop_df[all_pop_df$GEOID %in% zcta_df$GEOID,]
+    # need to filter out ZCTAs not in US -- filtered out in crosswalk file
+    zcta_df <- zcta_df[zcta_df$GEOID %in% all_zctas,]
+    
+    # if using custom data, we need to filter out all ZCTAs with no data for our
+    # custom data
+    if (run_custom & length(custom_data) > 0){
+      for (fn in names(custom_data)){
+        # get the numerators that correspond to the file
+        all_num <- m_reg$Numerator[m_reg$Filename == fn]
+        
+        # go through each and filter to only zctas that are nonmissing in the
+        # custom data
+        for (nm in all_num){
+          if (m_reg$`Is Preprocessed`[m_reg$Numerator == nm]){
+            nm <- paste0(nm, "_pop")
+          }
+          
+          zcta_df <- zcta_df[!is.na(zcta_df[,nm]),]
+        }
+      }
+      
+      # subset all_pop_df to ZCTAs in zcta_df
+      all_pop_df <- all_pop_df[all_pop_df$GEOID %in% zcta_df$GEOID,]
+    }
   }
   
   # scale and combine each measure ----
   
-  cat(paste0("[", Sys.time(), "]: Combining and scaling measures\n"))
-  
-  # TODO: CLEAN UP ENVIRONMENT
-  # TODO: ADD CHECKS
-  
-  # first, allocate with only numerators
-  meas_df <- zcta_df[, !colnames(zcta_df) %in% info_dat$Denominator]
-  
-  # then, we want to divide by denominators (if they have one)
-  meas_df[, info_dat$Numerator[!is.na(info_dat$Denominator)]] <-
-    meas_df[, info_dat$Numerator[!is.na(info_dat$Denominator)]]/
-    zcta_df[, info_dat$Denominator[!is.na(info_dat$Denominator)]]
-  
-  # then we want to scale all of them (should have a scale)
-  meas_df[, info_dat$Numerator] <- 
-    sweep(meas_df[, info_dat$Numerator], MARGIN = 2, info_dat$Scale, `*`)
-  
-  # for all data, if the population is 0, mark as missing
-  # if not already in missing
-  rownames(meas_df) <- as.character(meas_df$GEOID)
-  meas_df[all_pop_df$GEOID[all_pop_df$total_black < 1],
-          !grepl("_pop", colnames(meas_df)) & 
-            colnames(meas_df) %in% 
-            info_dat$Numerator[info_dat$`Race Stratification`]] <- NA
-  meas_df[all_pop_df$GEOID[all_pop_df$total_pop < 1],
-          grepl("_pop", colnames(meas_df)) | 
-            colnames(meas_df) %in% 
-            info_dat$Numerator[!info_dat$`Race Stratification`]] <- NA
-  
-  cat(paste0("[", Sys.time(), "]: Write out converted, scaled data\n"))
-  
-  if (run_custom){
-    overall_out[["meas_df"]] <- meas_df
-  } else {
-    write.csv(meas_df, 
-              file.path(cleaned_folder,
-                        "HSE_MWI_ZCTA_Converted_Measures.csv"),
-              na = "",
-              row.names = F)
+  if (!upd_weights){
+    cat(paste0("[", Sys.time(), "]: Combining and scaling measures\n"))
+    
+    # TODO: CLEAN UP ENVIRONMENT
+    # TODO: ADD CHECKS
+    
+    # first, allocate with only numerators
+    meas_df <- zcta_df[, !colnames(zcta_df) %in% info_dat$Denominator]
+    
+    # then, we want to divide by denominators (if they have one)
+    meas_df[, info_dat$Numerator[!is.na(info_dat$Denominator)]] <-
+      meas_df[, info_dat$Numerator[!is.na(info_dat$Denominator)]]/
+      zcta_df[, info_dat$Denominator[!is.na(info_dat$Denominator)]]
+    
+    # then we want to scale all of them (should have a scale)
+    meas_df[, info_dat$Numerator] <- 
+      sweep(meas_df[, info_dat$Numerator], MARGIN = 2, info_dat$Scale, `*`)
+    
+    # for all data, if the population is 0, mark as missing
+    # if not already in missing
+    rownames(meas_df) <- as.character(meas_df$GEOID)
+    meas_df[all_pop_df$GEOID[all_pop_df$total_black < 1],
+            !grepl("_pop", colnames(meas_df)) & 
+              colnames(meas_df) %in% 
+              info_dat$Numerator[info_dat$`Race Stratification`]] <- NA
+    meas_df[all_pop_df$GEOID[all_pop_df$total_pop < 1],
+            grepl("_pop", colnames(meas_df)) | 
+              colnames(meas_df) %in% 
+              info_dat$Numerator[!info_dat$`Race Stratification`]] <- NA
+    
+    cat(paste0("[", Sys.time(), "]: Write out converted, scaled data\n"))
+    
+    if (run_custom){
+      overall_out[["meas_df"]] <- meas_df
+    } else {
+      write.csv(meas_df, 
+                file.path(cleaned_folder,
+                          "HSE_MWI_ZCTA_Converted_Measures.csv"),
+                na = "",
+                row.names = F)
+    }
   }
   
   # directionality and percentile scaling ----
   
-  cat(paste0("[", Sys.time(), "]: Percentile ranking measures\n"))
-  
-  # allocate the percentile scaled dataframe
-  perc_meas_df <- meas_df
-  
-  # keep ranking of original directionality -- "more means more"
-  # for visualization purposes
-  no_dir_perc_meas_df <- perc_meas_df
-  no_dir_perc_meas_df[,-1] <- apply(no_dir_perc_meas_df[,-1], MARGIN = 2, perc.rank)
-  no_dir_perc_meas_df <- no_dir_perc_meas_df[no_dir_perc_meas_df$GEOID != "",]
-  
-  # then we want to put them in the correct directionality
-  # (higher score == higher need)
-  perc_meas_df[, info_dat$Numerator] <- 
-    sweep(perc_meas_df[, info_dat$Numerator], 
-          MARGIN = 2, 
-          info_dat$Directionality, 
-          `*`)
-  
-  # do percentile ranking
-  perc_meas_df[,-1] <- apply(perc_meas_df[,-1], MARGIN = 2, perc.rank)
-  
-  cat(paste0("[", Sys.time(), "]: Write out percentile ranked data\n"))
-  
-  if (run_custom){
-    overall_out[["perc_meas_df"]] <- perc_meas_df
-    overall_out[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
-  } else {
-    write.csv(perc_meas_df, 
-              file.path(cleaned_folder,
-                        "HSE_MWI_ZCTA_Percentile_Ranked_Measures.csv"),
-              na = "",
-              row.names = F)
+  if (!upd_weights){
+    cat(paste0("[", Sys.time(), "]: Percentile ranking measures\n"))
     
-    write.csv(no_dir_perc_meas_df, 
-              file.path(cleaned_folder,
-                        "HSE_MWI_ZCTA_No_Directionality_Percentile_Ranked_Measures.csv"),
-              na = "",
-              row.names = F)
+    # allocate the percentile scaled dataframe
+    perc_meas_df <- meas_df
+    
+    # keep ranking of original directionality -- "more means more"
+    # for visualization purposes
+    no_dir_perc_meas_df <- perc_meas_df
+    no_dir_perc_meas_df[,-1] <- apply(no_dir_perc_meas_df[,-1], MARGIN = 2, perc.rank)
+    no_dir_perc_meas_df <- no_dir_perc_meas_df[no_dir_perc_meas_df$GEOID != "",]
+    
+    # then we want to put them in the correct directionality
+    # (higher score == higher need)
+    perc_meas_df[, info_dat$Numerator] <- 
+      sweep(perc_meas_df[, info_dat$Numerator], 
+            MARGIN = 2, 
+            info_dat$Directionality, 
+            `*`)
+    
+    # do percentile ranking
+    perc_meas_df[,-1] <- apply(perc_meas_df[,-1], MARGIN = 2, perc.rank)
+    
+    cat(paste0("[", Sys.time(), "]: Write out percentile ranked data\n"))
+    
+    if (run_custom){
+      overall_out[["perc_meas_df"]] <- perc_meas_df
+      overall_out[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
+    } else {
+      write.csv(perc_meas_df, 
+                file.path(cleaned_folder,
+                          "HSE_MWI_ZCTA_Percentile_Ranked_Measures.csv"),
+                na = "",
+                row.names = F)
+      
+      write.csv(no_dir_perc_meas_df, 
+                file.path(cleaned_folder,
+                          "HSE_MWI_ZCTA_No_Directionality_Percentile_Ranked_Measures.csv"),
+                na = "",
+                row.names = F)
+    }
+  } else {
+    # if we're just changing the weights, we can just read the processed data 
+    # here
+    # STOP: NEED TO FIX COLUMN TYPES
+    perc_meas_df <- read.csv(
+      file.path(cleaned_folder,
+                "HSE_MWI_ZCTA_Percentile_Ranked_Measures.csv"),
+      check.names = F,
+      colClasses = c(
+        "GEOID" = "character"
+      )
+    )
+    
+    # if it's custom, we need to save all in the overall output vector
+    meas_df <- read.csv(file.path(cleaned_folder,
+                                  "HSE_MWI_ZCTA_Converted_Measures.csv"),
+                        check.names = F,
+                        colClasses = c(
+                          "GEOID" = "character"
+                        ))
+    
+    no_dir_perc_meas_df <- read.csv(
+      file.path(cleaned_folder,
+                "HSE_MWI_ZCTA_No_Directionality_Percentile_Ranked_Measures.csv"),
+      check.names = F,
+      colClasses = c(
+        "GEOID" = "character"
+      ))
+    
+    
+    if (run_custom){
+      overall_out[["meas_df"]] <- meas_df
+      overall_out[["perc_meas_df"]] <- perc_meas_df
+      overall_out[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
+    }
   }
   
   # create final scores for population and black ----

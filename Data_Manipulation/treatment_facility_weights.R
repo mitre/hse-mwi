@@ -20,8 +20,8 @@ data_folder <- file.path(
 
 weights <- read_xlsx(file.path(data_folder, "Documentation_Behavioral_Health_Treament_Facility_listing_COUNTS_NEW.xlsx"), "Sheet1")
 
-mh <- read.csv(file.path(data_folder, "Mental_Health_Treament_Facility_listing_2021_05_18_134835.csv"))
-su <- read.csv(file.path(data_folder, "Substance_Use_Treament_Facility_listing_2021_05_18_134647.csv"))
+mh <- read.csv(file.path(data_folder, "Mental_Health_FindTreament_Facility_listing_2023_01_24_172825.csv"))
+su <- read.csv(file.path(data_folder, "Substance_Use_FindTreament_Facility_listing_2023_01_24_172855.csv"))
 
 
 ## Functions -----
@@ -79,6 +79,9 @@ generate_facility_scores <- function(subject = c("mh", "sa"),
       cn <- names %>%
         filter(`Grouped ID` == col) %>%
         as.data.frame()
+      
+      # filter out service codes that no longer exist (some languages)
+      cn <- cn[cn$service_code %in% colnames(mh),]
       
       # If facility provides any of the services listed in the group, facility receives point, otherwise 0.
       dat[, col] <- ifelse(rowSums(dat[, cn$service_code, drop = F], na.rm = T) >= unique(cn$thresh), 1, 0)
