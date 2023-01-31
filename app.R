@@ -1963,7 +1963,7 @@ server <- function(input, output, session) {
           "<i>",
           ifelse(
             dir_val == -1, 
-            "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
+            "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
             ""
           ),
           "</i>",
@@ -2098,7 +2098,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
+              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
               ""
             ),
             "</i>",
@@ -2123,7 +2123,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
+              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
               ""
             ),
             "</i>",
@@ -2261,7 +2261,7 @@ server <- function(input, output, session) {
               ". ",
               ifelse(
                 dir_val == -1, 
-                "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
+                "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
                 ""
               ),
               "</i>",
@@ -2293,7 +2293,7 @@ server <- function(input, output, session) {
                 ". ",
                 ifelse(
                   dir_val == -1, 
-                  "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
+                  "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
                   ""
                 ),
                 "</i>",
