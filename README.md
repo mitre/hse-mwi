@@ -3,7 +3,8 @@
 # Outline
 
 - [Mental Wellness Index (MWI)](#Mental-Wellness-Index-(MWI))
-- [Instructions to Create Your Own MWI](#Instructions-to-Create-Your-Own-MWI)
+- [Set Up MWI and Create Your Own MWI](#Set-Up-MWI-and-Create-Your-Own-MWI)
+- [Using MWI Data](#Using-MWI-Data)
 - [Technical Set Up](#Technical-Set-Up) (only useful for contributors)
 - [Contact and Attribution](#Contact-and-Attribution)
 
@@ -21,7 +22,6 @@ The intent of the Mental Wellness Index is to provide a snapshot of a community'
 
 \*ZIP Code Tabulation Area (ZCTA)
 
-
 ## MWI Domains & Measures
 
 The MWI creates a score for each zip code between 0 and 100, such that:
@@ -36,11 +36,17 @@ The MWI creates a score for each zip code between 0 and 100, such that:
 
 ## Focus on Black Americans
 
-The MWI was developed with the mental health status of Black Americans in mind. We selected Black Americans as a priority population in order to center at the margins and avoid creating an index that is focused to the 'average community.'  We believe that focusing on Black Americans in this way allows all groups experiencing disparities to benefit because none of us are well until all of us are well. We also recognize the need to identify, recognize, and adapt the MWI for additional priority populations.
+The MWI was developed with the mental health status of Black Americans in mind. We selected Black Americans as a priority population in order to center at the margins and avoid creating an index that is focused to the 'average community.' We believe that focusing on Black Americans in this way allows all groups experiencing disparities to benefit because none of us are well until all of us are well. We also recognize the need to identify, recognize, and adapt the MWI for additional priority populations.
 
-# Instructions to Create Your Own MWI
+## 2023 Data Update
 
-To create your own Mental Wellness Index, you must be running the Mental Wellness Index Tool on your local computer in order to protect your data. Follow the instructions below to create your own MWI for your community below by adjusting weights and/or adding your own data and metadata.
+Data has been updated to most recently available as of January 24, 2023. If you would like to use previously released versions of the MWI, see [Releases](https://github.com/mitre/hse-mwi/releases).
+
+# Set Up MWI and Create Your Own MWI
+
+To set up and simply run the Mental Wellness Index Tool, follow instructions 1 - 8. 
+
+To create your own Mental Wellness Index, you can follow the rest of the instructions to run the Mental Wellness Index Tool on your local computer. Follow instructions 8+ below to create your own MWI for your community below by adjusting weights and/or adding your own data and metadata.
 
 1. Download free versions of [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/). Download a modern browser (Firefox, Chrome, Edge, etc.) and make that your default browser if you haven't already.
 
@@ -59,7 +65,7 @@ To create your own Mental Wellness Index, you must be running the Mental Wellnes
 
 8. After a delay (this will be slow the first time, then quicker after that), the Mental Wellness Index Tool should open in your browser. Click on the "Create Your Own MWI" tab and follow the remaining steps to create your own MWI.
 
-9. If you are only adjusting weights for included data, skip the next step.
+9. If you are only adjusting weights or subsetting to specific ZIP Codes for included data, skip the next step. This can also be done on the website [here](https://sjp.mitre.org/mwi).
 
 10. Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).
    * Accepted geographical ID types are always numeric and include the following:
@@ -85,7 +91,18 @@ To create your own Mental Wellness Index, you must be running the Mental Wellnes
 
 15. To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file.
 
+# Using MWI Data
+
+If you would like to use the MWI or its processed measures or data, see the "Data" and "Documentation" folders for more information. Each folder in "Data" has a README detailing the included files. All data, with the exception of the Metadata file, is in CSV format.
+
+Folders in "Data" are as follows:
+- Resources: contains files for processing data and referencing geography crosswalks.
+- Preprocessed: contains preprocessed data for all measures in the format the MWI pipeline requires: one column to indicate geographical identifier, then one for the numerical value of each measure.
+- Cleaned: contains Mental Wellness Index results and processing pipeline results.
+
 # Technical Set Up
+
+Note: this section is primarily for contributors.
 
 ## Data Pipeline
 
