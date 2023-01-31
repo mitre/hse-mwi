@@ -1038,7 +1038,7 @@ ui <- fluidPage(
                 DTOutput("custom_mwi_weights")
               ),
               tabPanel(
-                "Adjust MWI Weights",
+                "Subset Zip Codes/ZCTAs",
                 br(),
                 textAreaInput(
                   "custom_mwi_zips",

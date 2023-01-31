@@ -560,6 +560,9 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
       meas_df <- meas_df[meas_df$GEOID %in% unname(z_enter),]
     }
     
+    meas_df <- meas_df[meas_df$GEOID != "",]
+    rownames(meas_df) <- meas_df$GEOID
+    
     overall_out[["meas_df"]] <- meas_df
   }
   
@@ -590,6 +593,11 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
     cat(paste0("[", Sys.time(), "]: Write out percentile ranked data\n"))
     
     if (run_custom){
+      no_dir_perc_meas_df <- 
+        no_dir_perc_meas_df[no_dir_perc_meas_df$GEOID != "",]
+      rownames(no_dir_perc_meas_df) <- no_dir_perc_meas_df$GEOID
+      colnames(no_dir_perc_meas_df)[colnames(no_dir_perc_meas_df) == "GEOID"] <- "ZCTA"
+      
       overall_out[["perc_meas_df"]] <- perc_meas_df
       overall_out[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
     } else {
@@ -627,6 +635,15 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
     
     
     if (run_custom){
+      no_dir_perc_meas_df <- 
+        no_dir_perc_meas_df[no_dir_perc_meas_df$GEOID != "",]
+      rownames(no_dir_perc_meas_df) <- no_dir_perc_meas_df$GEOID
+      colnames(no_dir_perc_meas_df)[colnames(no_dir_perc_meas_df) == "GEOID"] <- "ZCTA"
+      
+      perc_meas_df <- 
+        perc_meas_df[perc_meas_df$GEOID != "",]
+      rownames(perc_meas_df) <- perc_meas_df$GEOID
+      
       overall_out[["perc_meas_df"]] <- perc_meas_df
       overall_out[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
     }
