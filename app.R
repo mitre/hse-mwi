@@ -976,7 +976,7 @@ ui <- fluidPage(
                 open = c("ZCTA Measure Results"),
                 bsCollapsePanel(
                   "ZCTA Measure Results",
-                  HTML("<p><i>Measures have ranks from 0 to 100. Measures are oriented in the MWI so that higher values in the MWI indicate more assets supporting mental wellness. Measures designated as obstacles to mental wellness were included with the opposite orientation when calculating the MWI. Measure value corrsponds to the exact value in the data, corresponding to the measure description. For more information, please see `MWI Measures and Data` in the MWI Toolkit.</i></p>"),
+                  HTML("<p><i>Measures have ranks from 0 to 100. Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> to mental wellness, based on their respective directionality. Measure value corrsponds to the exact value in the data, corresponding to the measure description. For more information, please see `MWI Measures and Data` in the MWI Toolkit.</i></p>"),
                   uiOutput("com_report_card_table_mwi"),
                   HTML("<p></p>"),
                   DTOutput("com_report_card_table")
@@ -1963,7 +1963,7 @@ server <- function(input, output, session) {
           "<i>",
           ifelse(
             dir_val == -1, 
-            "Note: Measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. These measure values were included in the opposite orientation when calculating the MWI. ",
+            "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
             ""
           ),
           "</i>",
@@ -2098,7 +2098,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: Measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. These measure values were included in the opposite orientation when calculating the MWI. ",
+              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
               ""
             ),
             "</i>",
@@ -2123,7 +2123,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note:  Measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. These measure values were included in the opposite orientation when calculating the MWI. ",
+              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
               ""
             ),
             "</i>",
@@ -2261,7 +2261,7 @@ server <- function(input, output, session) {
               ". ",
               ifelse(
                 dir_val == -1, 
-                "Note: Measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. These measure values were included in the opposite orientation when calculating the MWI. ",
+                "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
                 ""
               ),
               "</i>",
@@ -2293,7 +2293,7 @@ server <- function(input, output, session) {
                 ". ",
                 ifelse(
                   dir_val == -1, 
-                  "Note: Measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. These measure values were included in the opposite orientation when calculating the MWI. ",
+                  "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. These measure was designated as an obstacle when calculating the MWI. ",
                   ""
                 ),
                 "</i>",
@@ -2481,7 +2481,7 @@ server <- function(input, output, session) {
       text_mwi,
       "<hr/>",
       "<font size = '3'><b>Measure Rankings:</b></font>",
-      "<i><p>Range from 0 to 100. Measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. Measure values with * were included with the opposite orientation when calculating the MWI. See \"Explore ZCTA Measures\" for an interactive table with measure values.</p></i>",
+      "<i><p>Range from 0 to 100. Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. See \"Explore ZCTA Measures\" for an interactive table with measure values.</p></i>",
       "<p></p>",
       text_meas,
       
