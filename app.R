@@ -22,6 +22,7 @@ library(sass)
 library(shinycssloaders)
 library(shinyBS)
 library(DT)
+library(formattable)
 
 options(shiny.maxRequestSize=300*1024^2)
 
@@ -210,6 +211,14 @@ info_df <- read.csv(
 )
 rownames(info_df) <- info_df$Numerator
 
+# load mapped measure data excat values
+meas_df <- read.csv(
+  file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_Converted_Measures.csv"),
+  colClasses = c("GEOID" = "character")
+)
+meas_df <- meas_df[meas_df$GEOID != "",]
+rownames(meas_df) <- meas_df$GEOID
+
 # load zip codes to zcta
 zip_cw <- read.csv(
   file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2021.csv"),
@@ -383,6 +392,7 @@ meas_min_colors["Mental Wellness Index"] <-
 overall <- app_preprocess(m_reg, info_df, mwi, app_start = T)
 # add other specific data
 overall[["m_reg"]] <- m_reg
+overall[["meas_df"]] <- meas_df
 overall[["info_dat"]] <- info_df
 overall[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
 
@@ -853,7 +863,7 @@ ui <- fluidPage(
                 HTML(paste0(
                   "<font size = '2'>",
 
-                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
+                  "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
 
                   "</font>"
                 ))
@@ -864,7 +874,7 @@ ui <- fluidPage(
       )
     ),
     
-    # explore communities ----
+    # explore ZIP codes ----
     tabPanel(
       title = div("Explore ZIP Codes", class="explore"),
       class = "explore-panel",
@@ -936,36 +946,54 @@ ui <- fluidPage(
         ),
         mainPanel(
           width = 9,
-          column(
-            width = 8,
-            uiOutput("com_map_legend"),
-            HTML("<br>"),
-            withSpinner(leafletOutput("com_map", height = 850),
-                        type = 8, color = "#005B94", hide.ui = F)
-          ),
-          column(
-            width = 4,
-            bsCollapse(
-              multiple = T,
-              open = c("ZCTA Measure Results", "Selected Measure Interpretation", "About Selected Measure"),
-              bsCollapsePanel(
-                "Selected Measure Interpretation",
-                uiOutput("com_map_expl")
+          tabsetPanel(
+            tabPanel(
+              "Explore ZCTA Maps",
+              p(),
+              column(
+                width = 8,
+                uiOutput("com_map_legend"),
+                HTML("<br>"),
+                withSpinner(leafletOutput("com_map", height = 850),
+                            type = 8, color = "#005B94", hide.ui = F)
               ),
-              bsCollapsePanel(
-                "About Selected Measure",
-                uiOutput("data_info_com"),
-                HTML(paste0(
-                  "<font size = '2'>",
-
-                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
-
-                  "</font>"
-                ))
-              ),
-              bsCollapsePanel(
-                "ZCTA Measure Results",
-                uiOutput("com_map_report_card")
+              column(
+                width = 4,
+                bsCollapse(
+                  multiple = T,
+                  open = c("ZCTA Measure Results", "Selected Measure Interpretation", "About Selected Measure"),
+                  bsCollapsePanel(
+                    "Selected Measure Interpretation",
+                    uiOutput("com_map_expl")
+                  ),
+                  bsCollapsePanel(
+                    "About Selected Measure",
+                    uiOutput("data_info_com"),
+                    HTML(paste0(
+                      "<font size = '2'>",
+                      "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
+                      "</font>"
+                    ))
+                  ),
+                  bsCollapsePanel(
+                    "ZCTA Measure Results",
+                    uiOutput("com_map_report_card")
+                  )
+                )
+              )
+            ),
+            tabPanel(
+              "Explore ZCTA Measures",
+              p(),
+              bsCollapse(
+                open = c("ZCTA Measure Results"),
+                bsCollapsePanel(
+                  "ZCTA Measure Results",
+                  HTML("<p><i>Measures have ranks from 0 to 100. Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> to mental wellness, based on their respective directionality. Measure value corrsponds to the exact value in the data, corresponding to the measure description. For more information, please see `MWI Measures and Data` in the MWI Toolkit.</i></p>"),
+                  uiOutput("com_report_card_table_mwi"),
+                  HTML("<p></p>"),
+                  DTOutput("com_report_card_table")
+                )
               )
             )
           )
@@ -2019,7 +2047,7 @@ server <- function(input, output, session) {
           "<i>",
           ifelse(
             dir_val == -1, 
-            "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+            "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
             ""
           ),
           "</i>",
@@ -2154,7 +2182,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
               ""
             ),
             "</i>",
@@ -2179,7 +2207,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
               ""
             ),
             "</i>",
@@ -2190,7 +2218,7 @@ server <- function(input, output, session) {
       }
     })
   })
-  # output plots and information: community view ----
+  # output plots and information: ZIP code view ----
   
   output$data_info_com <- renderUI({
     withProgress(message = "Rendering data information", {
@@ -2225,6 +2253,7 @@ server <- function(input, output, session) {
     })
   })
   
+  # community map
   output$com_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
       plot_map(com_sub$com_map_fill, com_sub$geodat,
@@ -2233,7 +2262,7 @@ server <- function(input, output, session) {
     })
   })
   
-  # put an explanation
+  # put an community map explanation
   output$com_map_expl <- renderUI({
     withProgress(message = "Rendering map explanation", {
       full_name <- ol$measure_to_names[[com_sub$idx]][com_sub$com_map_fill]
@@ -2316,7 +2345,7 @@ server <- function(input, output, session) {
               ". ",
               ifelse(
                 dir_val == -1, 
-                "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+                "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
                 ""
               ),
               "</i>",
@@ -2348,7 +2377,7 @@ server <- function(input, output, session) {
                 ". ",
                 ifelse(
                   dir_val == -1, 
-                  "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+                  "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
                   ""
                 ),
                 "</i>",
@@ -2372,6 +2401,98 @@ server <- function(input, output, session) {
     })
   })
   
+  # above the "table" version, add text for the MWI
+  output$com_report_card_table_mwi <- renderUI({
+    mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
+    
+    dn <- "Mental Wellness Index"
+    mc <- meas_max_colors[dn]
+    text_mwi <- paste0(
+      "<b><font size = '3'>",
+      html_color(
+        ifelse(trunc(mwi_zcta[1, "Mental_Wellness_Index"]) >= 50,
+               mc, meas_min_colors[dn]),
+        dn),
+      ifelse(dn == "Mental Wellness Index", 
+             paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
+             ""),
+      "</b></font>",
+      "<br>"
+    )
+    
+    HTML(paste0(
+      "<p><b><font size = '3'>",
+      "ZCTA: ", com_sub$ZCTA,
+      "</b></font></p>",
+      text_mwi))
+  })
+  
+  # put a "report card" for the community (in TABLE format)
+  output$com_report_card_table <- renderDataTable({
+    
+    # Create Report Card Table
+    reportcard <- ol$m_reg[,c("Measure", "Measure Description", "Category", "Directionality")]
+    
+    # Add column of measure values based on selected ZCTA and index type (Pop/Black)
+    Rank <- t(ol$no_dir_perc_meas_df[com_sub$ZCTA,
+                                     ol$avail_measures[[com_sub$idx]][-1]])
+    colnames(Rank) <- "Rank"
+    rownames(Rank) <- gsub("_pop$", "", rownames(Rank))
+    
+    # similarly, add the values
+    val <- t(ol$meas_df[com_sub$ZCTA,
+                        ol$avail_measures[[com_sub$idx]][-1]])
+    colnames(val) <- "Value"
+    rownames(val) <- gsub("_pop$", "", rownames(val))
+    
+    # add values to report card
+    reportcard[rownames(val), "Value"] <- val
+    reportcard <- reportcard[!is.na(reportcard$Measure),]
+    
+    reportcard <- merge(reportcard, Rank, by = "row.names",sort = FALSE) %>%
+      as.data.frame() %>%
+      mutate(Directionality = ifelse(Directionality == -1, "Obstacle", "Asset"),
+             Rank = as.numeric(round(Rank)),
+             Value = format(as.numeric(round(Value, 2)), scientific = F),
+             )  %>%
+      select(Measure, Rank, Value, `Measure Description`, Category, Directionality)
+    
+    rownames(reportcard) <- NULL
+    
+    measure_formatter <- formatter(
+      "span",
+      style = x ~ icontext(
+        ifelse(x == com_sub$com_map_fill,
+               "star",
+               ""),
+        x))
+    category_formatter <- formatter(
+      "span",
+      style = x ~ style(
+        color = ifelse(x == "Healthcare Access", 
+                       meas_max_colors[2],
+                       ifelse(x == "Health Status", 
+                              meas_max_colors[3],
+                              meas_max_colors[1])
+        )
+      )
+    )
+    
+    
+    as.datatable(
+      formattable(reportcard, 
+                  list(Measure = measure_formatter,
+                       Category = category_formatter
+                  ),
+                  table.attr = 'style="font-size: 16px;";\"'), 
+      rownames = F,
+      options = list(
+        "pageLength" = nrow(reportcard), # show all
+        columnDefs = list(list(width = c('250px'), targets = c(4))) # wrap column descriptions
+      )
+    )
+  })
+
   # put a "report card" for the community
   output$com_map_report_card <- renderUI({
     mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
@@ -2444,7 +2565,7 @@ server <- function(input, output, session) {
       text_mwi,
       "<hr/>",
       "<font size = '3'><b>Measure Rankings:</b></font>",
-      "<i><p>Range from 0 to 100. Measure values with * were included with the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness.</p></i>",
+      "<i><p>Range from 0 to 100. Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. See \"Explore ZCTA Measures\" for an interactive table with measure values.</p></i>",
       "<p></p>",
       text_meas,
       
