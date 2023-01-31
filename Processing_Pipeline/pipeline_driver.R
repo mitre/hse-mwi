@@ -110,8 +110,9 @@ geo_levels <- c(
 #  m_reg_custom: metadata file
 #  custom_data: list of dataframes of custom data
 #  run_custom: are we adding custom data?
+#  z_enter: list of ZCTAs to subset to, if running custom
 mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(), 
-                         run_custom = F){
+                         run_custom = F, z_enter = c()){
   
   # saving for the overall output
   overall_out <- list()
@@ -545,7 +546,25 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
   
   # directionality and percentile scaling ----
   
-  if (!upd_weights){
+  # percentile rank/scale depending on if there are zctas we want to subset to
+  if (upd_weights){
+    # if it's custom, we need to save all in the overall output vector
+    meas_df <- read.csv(file.path(cleaned_folder,
+                                  "HSE_MWI_ZCTA_Converted_Measures.csv"),
+                        check.names = F,
+                        colClasses = c(
+                          "GEOID" = "character"
+                        ))
+    
+    if (length(z_enter) > 0){
+      meas_df <- meas_df[meas_df$GEOID %in% unname(z_enter),]
+    }
+    
+    overall_out[["meas_df"]] <- meas_df
+  }
+  
+  if (!upd_weights |
+      (upd_weights & length(z_enter) > 0)){
     cat(paste0("[", Sys.time(), "]: Percentile ranking measures\n"))
     
     # allocate the percentile scaled dataframe
@@ -589,7 +608,6 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
   } else {
     # if we're just changing the weights, we can just read the processed data 
     # here
-    # STOP: NEED TO FIX COLUMN TYPES
     perc_meas_df <- read.csv(
       file.path(cleaned_folder,
                 "HSE_MWI_ZCTA_Percentile_Ranked_Measures.csv"),
@@ -598,14 +616,6 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
         "GEOID" = "character"
       )
     )
-    
-    # if it's custom, we need to save all in the overall output vector
-    meas_df <- read.csv(file.path(cleaned_folder,
-                                  "HSE_MWI_ZCTA_Converted_Measures.csv"),
-                        check.names = F,
-                        colClasses = c(
-                          "GEOID" = "character"
-                        ))
     
     no_dir_perc_meas_df <- read.csv(
       file.path(cleaned_folder,
@@ -617,7 +627,6 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
     
     
     if (run_custom){
-      overall_out[["meas_df"]] <- meas_df
       overall_out[["perc_meas_df"]] <- perc_meas_df
       overall_out[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
     }

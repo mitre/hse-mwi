@@ -978,19 +978,21 @@ ui <- fluidPage(
     navbarMenu(
       "Create Your Own MWI",
       tabPanel(
-        title = div("Adjust MWI Weights", class = "explore"),
+        title = div("Adjust MWI Weights and ZIP Codes", class = "explore"),
         fluidRow(
           column(width = 2),
           column(
             width = 8,
-            HTML("<center><h2>Change weights to create your own Mental Wellness Index (MWI)!</h2></center>"),
+            HTML("<center><h2>Change weights and ZIP Codes to create your own Mental Wellness Index (MWI)!</h2></center>"),
             HTML(paste0(
               "<p align = 'justify'>",
-              "Weights used in the Mental Wellness Index control the relative influence each measure has on the total MWI; higher numbers inidcate a higher influence. If you adjust the weights to 0, a measure has no influence on the MWI.",
+              "Weights used in the Mental Wellness Index control the relative influence each measure has on the total MWI; higher numbers inidcate a higher influence. If you adjust the weights to 0, a measure has no influence on the MWI. You can also use this page to change the set of ZIP Codes considered in the MWI.",
               "<br><br>",
-              "To adjust the weights in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
+              "To adjust the weights or change the ZIP Codes used in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
               "<ol>",
-              "<li>Update weights for each measure in the table below as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number). Click outside of that edited entry to lock it in. Note that weights do not need to add to 100 (they will be normalized, and have georgraphy/race stratification penalties applied, when the Custom MWI is calculated).</li>",
+              "<li>To update weights for each measure, click the \"Adjust MWI Weights\" tab below. Then update the table as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number). Click outside of that edited entry to lock it in. Note that weights do not need to add to 100 (they will be normalized, and have georgraphy/race stratification penalties applied, when the Custom MWI is calculated).</li>",
+              "<br>",
+              "<li>To update the ZIP Codes or ZCTAs considered in the MWI, click the \"Subset Zip Codes/ZCTAs\" tab below. There, you will enter the ZIP Codes you want to create the MWI for in the text box, with each ZIP Code or ZCTA on a separate line. Note that these all must be either ZIP Codes or ZCTAs -- you cannot submit a mix. Use the switch below the text box to indicate whether the entries are ZIP Codes or ZCTAs. Note: If no values are entered, all ZCTAs will be used. Entering ZCTAs is more accurate. Comparing at least 10 ZCTAs/ZIP Codes is recommended.</li>",
               "<br>",
               "<li>Click 'Create Custom MWI' below. This will take some time.</li>",
               "<br>",
@@ -999,18 +1001,40 @@ ui <- fluidPage(
               "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file. Once the file is fully loaded, click 'Upload' to see your Custom MWI results.</li>",
               "</ol>",
               "</p>"
-              )),
-            tagList(
-              hr(),
-              HTML("<center>"),
-              DTOutput("custom_mwi_weights"),
-              HTML("<br><br>"),
-              actionButton("custom_mwi_go_weights", "Create Custom MWI"),
-              downloadButton("download_custom_mwi_weights", "Download Custom MWI"),
-              HTML("<br><br>"),
-              verbatimTextOutput("custom_error_weights"),
-              HTML("</center>")
-            )
+            )),
+            hr(),
+            HTML("<center>"),
+            tabsetPanel(
+              tabPanel(
+                "Adjust MWI Weights",
+                DTOutput("custom_mwi_weights")
+              ),
+              tabPanel(
+                "Adjust MWI Weights",
+                br(),
+                textAreaInput(
+                  "custom_mwi_zips",
+                  "Enter ZIP Codes or ZCTAs to subset the MWI to (line separated):",
+                  placeholder = "12345\n10034\n19567\n...",
+                  height = "200px",
+                  width = "400px"
+                ),
+                switchInput(
+                  "custom_mwi_zip_choice",
+                  onLabel = "ZIP Code",
+                  offLabel = "ZCTA",
+                  value = T, # zips shown
+                  onStatus = "secondary",
+                  offStatus = "secondary"
+                )
+              )
+            ),
+            HTML("<br><br>"),
+            actionButton("custom_mwi_go_weights", "Create Custom MWI"),
+            downloadButton("download_custom_mwi_weights", "Download Custom MWI"),
+            HTML("<br><br>"),
+            verbatimTextOutput("custom_error_weights"),
+            HTML("</center>")
           ),
           column(width = 2)
         )
@@ -1364,8 +1388,12 @@ server <- function(input, output, session) {
           # is worth it
           geodat <- geopts <- list()
           for (idx in index_types){
+            geo_sub <- st_drop_geometry(overall$geodat[[idx]])[, "GEOID"] %in%
+              overall_output$mwi[[idx]][,"ZCTA"]
+            
             geodat[[idx]] <-
-              geo_join(overall$geodat[[idx]][, 1:7], mwi[[idx]], 
+              geo_join(overall$geodat[[idx]][geo_sub, 1:7],
+                       overall_output$mwi[[idx]], 
                        by_sp = "GEOID", by_df = "ZCTA", how = "left")
             
             # sort by state code and zcta
@@ -1447,8 +1475,12 @@ server <- function(input, output, session) {
           # is worth it
           geodat <- geopts <- list()
           for (idx in index_types){
+            geo_sub <- st_drop_geometry(overall$geodat[[idx]])[, "GEOID"] %in%
+              overall_output$mwi[[idx]][,"ZCTA"]
+            
             geodat[[idx]] <-
-              geo_join(overall$geodat[[idx]][, 1:7], mwi[[idx]], 
+              geo_join(overall$geodat[[idx]][geo_sub, 1:7],
+                       overall_output$mwi[[idx]], 
                        by_sp = "GEOID", by_df = "ZCTA", how = "left")
             
             # sort by state code and zcta
@@ -2513,6 +2545,9 @@ server <- function(input, output, session) {
           }
         }
         
+        # for a subset list
+        z_enter <- c()
+        
         # for custom data
         if (!error){
           if (press != "weights"){
@@ -2557,6 +2592,18 @@ server <- function(input, output, session) {
             m_reg_custom <- m_reg
             m_reg_custom[rownames(upd_weights()), "Weights"] <- 
               upd_weights()[,"Updated Weights"]
+            
+            # we also want to include specific ZCTAs
+            z_enter <- unlist(strsplit(input$custom_mwi_zips, "\n"))
+            z_enter <- unique(str_pad(z_enter, 5, pad = "0"))
+            
+            # if zip codes, change to ZCTAs
+            if (input$custom_mwi_zip_choice){
+              z_enter <- zip_to_zcta[z_enter]
+            }
+            
+            z_enter <- z_enter[!is.na(z_enter)]
+            
             custom_data <- list()
           }
         }
@@ -2566,7 +2613,8 @@ server <- function(input, output, session) {
           
           # now pass it into the pipeline file
           overall_out <- tryCatch({
-            mwi_pipeline(m_reg_custom, custom_data, run_custom = T)
+            mwi_pipeline(m_reg_custom, custom_data, run_custom = T, 
+                         z_enter = z_enter)
           }, 
           error = function(cond){
             error <- T 
