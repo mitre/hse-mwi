@@ -22,7 +22,8 @@ library(sass)
 library(shinycssloaders)
 library(shinyBS)
 library(DT)
-library(formattable)
+# library(formattable)
+library(dplyr)
 
 options(shiny.maxRequestSize=300*1024^2)
 
@@ -131,7 +132,7 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     geodat <- geopts <- list()
     for (idx in index_types){
       geodat[[idx]] <-
-        geo_join(zips, mwi[[idx]], by_sp = "GEOID", by_df = "ZCTA", how = "left")
+        left_join(zips, mwi[[idx]], by = c("GEOID" = "ZCTA"))
       
       # sort by state code and zcta
       geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
@@ -1014,13 +1015,13 @@ ui <- fluidPage(
             HTML("<center><h2>Change weights and ZIP Codes to create your own Mental Wellness Index (MWI)!</h2></center>"),
             HTML(paste0(
               "<p align = 'justify'>",
-              "Weights used in the Mental Wellness Index control the relative influence each measure has on the total MWI; higher numbers inidcate a higher influence. If you adjust the weights to 0, a measure has no influence on the MWI. You can also use this page to change the set of ZIP Codes considered in the MWI.",
+              "Weights used in the Mental Wellness Index control the relative influence each measure has on the total MWI; higher numbers inidcate a higher influence. If you adjust the weights to 0, a measure has no influence on the MWI. You can also use this page to rank a subset of ZIP Codes against each other.",
               "<br><br>",
               "To adjust the weights or change the ZIP Codes used in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
               "<ol>",
               "<li>To update weights for each measure, click the \"Adjust MWI Weights\" tab below. Then update the table as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number). Click outside of that edited entry to lock it in. Note that weights do not need to add to 100 (they will be normalized, and have georgraphy/race stratification penalties applied, when the Custom MWI is calculated).</li>",
               "<br>",
-              "<li>To update the ZIP Codes or ZCTAs considered in the MWI, click the \"Subset Zip Codes/ZCTAs\" tab below. There, you will enter the ZIP Codes you want to create the MWI for in the text box, with each ZIP Code or ZCTA on a separate line. Note that these all must be either ZIP Codes or ZCTAs -- you cannot submit a mix. Use the switch below the text box to indicate whether the entries are ZIP Codes or ZCTAs. Note: If no values are entered, all ZCTAs will be used. Entering ZCTAs is more accurate. Comparing at least 10 ZCTAs/ZIP Codes is recommended.</li>",
+              "<li>To rank a subset of ZIP Codes or ZCTAs against each other, click the \"Subset Zip Codes/ZCTAs\" tab below. There, you will enter the ZIP Codes you want to create the MWI for in the text box, with each ZIP Code or ZCTA on a separate line. Note that these all must be either ZIP Codes or ZCTAs -- you cannot submit a mix. Use the switch below the text box to indicate whether the entries are ZIP Codes or ZCTAs. Note: If no values are entered, all ZCTAs will be used. Entering ZCTAs is more accurate. Comparing at least 10 ZCTAs/ZIP Codes is recommended.</li>",
               "<br>",
               "<li>Click 'Create Custom MWI' below. This will take some time.</li>",
               "<br>",
@@ -1151,7 +1152,7 @@ ui <- fluidPage(
                 "<br>",
                 "<li> In the console window, which is in the bottom left hand corner, enter the following line and answer \"yes\" to all prompts in the console as you install these packages:</li>",
                 "<ul>",
-                "<li>install.packages('readxl', 'writexl', 'htmltools', 'shiny', 'tigris', 'leaflet', 'RColorBrewer', 'sf', 'plotly', 'ggbeeswarm', 'shinyWidgets', 'sass', 'shinycssloaders', 'shinyBS')</li>",
+                "<li>install.packages('readxl', 'writexl', 'htmltools', 'shiny', 'tigris', 'leaflet', 'RColorBrewer', 'sf', 'plotly', 'ggbeeswarm', 'shinyWidgets', 'sass', 'shinycssloaders', 'shinyBS', 'DT', 'dplyr')</li>",
                 "</ul>",
                 "<br>",
                 "<li> In the top right hand corner of the \"app.R\" window, you should see \"Run App\". Click the small downward arrow to the right of that and click \"Run External\". Then click \"Run App\".</li>",
@@ -1420,9 +1421,8 @@ server <- function(input, output, session) {
               overall_output$mwi[[idx]][,"ZCTA"]
             
             geodat[[idx]] <-
-              geo_join(overall$geodat[[idx]][geo_sub, 1:7],
-                       overall_output$mwi[[idx]], 
-                       by_sp = "GEOID", by_df = "ZCTA", how = "left")
+              left_join(overall$geodat[[idx]][geo_sub, 1:7], 
+                        overall_output$mwi[[idx]], by = c("GEOID" = "ZCTA"))
             
             # sort by state code and zcta
             geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
@@ -1507,9 +1507,8 @@ server <- function(input, output, session) {
               overall_output$mwi[[idx]][,"ZCTA"]
             
             geodat[[idx]] <-
-              geo_join(overall$geodat[[idx]][geo_sub, 1:7],
-                       overall_output$mwi[[idx]], 
-                       by_sp = "GEOID", by_df = "ZCTA", how = "left")
+              left_join(overall$geodat[[idx]][geo_sub, 1:7], 
+                        overall_output$mwi[[idx]], by = c("GEOID" = "ZCTA"))
             
             # sort by state code and zcta
             geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
@@ -2459,32 +2458,32 @@ server <- function(input, output, session) {
     
     rownames(reportcard) <- NULL
     
-    measure_formatter <- formatter(
-      "span",
-      style = x ~ icontext(
-        ifelse(x == com_sub$com_map_fill,
-               "star",
-               ""),
-        x))
-    category_formatter <- formatter(
-      "span",
-      style = x ~ style(
-        color = ifelse(x == "Healthcare Access", 
-                       meas_max_colors[2],
-                       ifelse(x == "Health Status", 
-                              meas_max_colors[3],
-                              meas_max_colors[1])
-        )
-      )
-    )
+    # measure_formatter <- formatter(
+    #   "span",
+    #   style = x ~ icontext(
+    #     ifelse(x == com_sub$com_map_fill,
+    #            "star",
+    #            ""),
+    #     x))
+    # category_formatter <- formatter(
+    #   "span",
+    #   style = x ~ style(
+    #     color = ifelse(x == "Healthcare Access", 
+    #                    meas_max_colors[2],
+    #                    ifelse(x == "Health Status", 
+    #                           meas_max_colors[3],
+    #                           meas_max_colors[1])
+    #     )
+    #   )
+    # )
     
-    
-    as.datatable(
-      formattable(reportcard, 
-                  list(Measure = measure_formatter,
-                       Category = category_formatter
-                  ),
-                  table.attr = 'style="font-size: 16px;";\"'), 
+    datatable(
+      # formattable(
+        reportcard, 
+                  # list(Measure = measure_formatter,
+                  #      Category = category_formatter
+                  # ),
+                  # table.attr = 'style="font-size: 16px;";\"'), 
       rownames = F,
       options = list(
         "pageLength" = nrow(reportcard), # show all
