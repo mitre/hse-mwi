@@ -343,19 +343,19 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
       if (nrow(info_dat_sub) > 0){
         # we'll go through each column and compute information for each
         info_dat[info_dat_sub$Numerator, "Is_Numeric"] <- 
-          sapply(level_data[[gl]][, info_dat_sub$Numerator],
+          sapply(level_data[[gl]][, info_dat_sub$Numerator, drop = F],
                  is.numeric)
         info_dat[info_dat_sub$Numerator, "Minimum"] <- 
-          sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator, drop = F], 
                  function(x){min(x, na.rm = T)})
         info_dat[info_dat_sub$Numerator, "Maximum"] <- 
-          sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator, drop = F], 
                  function(x){max(x, na.rm = T)})
         info_dat[info_dat_sub$Numerator, "Missing"] <- 
-          sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator, drop = F], 
                  function(x){sum(is.na(x))})
         info_dat[info_dat_sub$Numerator, "Number_Rows"] <- 
-          sapply(level_data[[gl]][, info_dat_sub$Numerator], 
+          sapply(level_data[[gl]][, info_dat_sub$Numerator, drop = F], 
                  function(x){sum(!is.na(x))})
         
         # output statistics about data
@@ -454,11 +454,12 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
                 c(info_dat_sub$Numerator, 
                   info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)]),
                 use_mean = T
-              )  
+              )
+            zcta_res <- zcta_res[!is.na(zcta_res$ZCTA),]
             
             zcta_10_to_20(
               zcta_res, 
-              "GEOID",
+              "ZCTA",
               c(info_dat_sub$Numerator, 
                 info_dat_sub$Denominator[!is.na(info_dat_sub$Denominator)]))
           }
@@ -466,7 +467,7 @@ mwi_pipeline <- function(m_reg_custom = m_reg, custom_data = list(),
         # add to main
         zcta_df[zcta_conversion$ZCTA, 
                 colnames(zcta_conversion)[colnames(zcta_conversion) != "ZCTA"]] <-
-          zcta_conversion[, colnames(zcta_conversion) != "ZCTA"]
+          zcta_conversion[, colnames(zcta_conversion) != "ZCTA", drop = F]
         # reupdate the rownames
         rownames(zcta_df) <- zcta_df$GEOID
         
