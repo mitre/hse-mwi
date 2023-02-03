@@ -800,7 +800,7 @@ ui <- fluidPage(
                 ),
                 actionButton(
                   "custom_data_load_st",
-                  "Upload"
+                  "Run Custom MWI"
                 ),
                 actionButton(
                   "custom_data_reset_st",
@@ -920,7 +920,7 @@ ui <- fluidPage(
                   ),
                   actionButton(
                     "custom_data_load_com",
-                    "Upload"
+                    "Run Custom MWI"
                   ),
                   actionButton(
                     "custom_data_reset_com",
