@@ -2452,7 +2452,7 @@ server <- function(input, output, session) {
       as.data.frame() %>%
       mutate(Directionality = ifelse(Directionality == -1, "Obstacle", "Asset"),
              Rank = as.numeric(round(Rank)),
-             Value = format(as.numeric(round(Value, 2)), scientific = F),
+             Value = as.numeric(format(as.numeric(round(Value, 2)), scientific = F)),
              )  %>%
       select(Measure, Rank, Value, `Measure Description`, Category, Directionality)
     
