@@ -1333,7 +1333,7 @@ server <- function(input, output, session) {
              HTML("To learn more and view MWI videos, click <b>MWI Toolkit</b> in the blue bar at the top of the page."),
             
              HTML("</center>"),
-             HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
+             HTML("<center><font size = '2'><i>Notes: This application is best viewed on a tablet or computer in full screen mode. Data updated as of January 2023.</i></font></center>"),
       )),
      
     footer = tagList(
