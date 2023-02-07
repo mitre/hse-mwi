@@ -1,7 +1,7 @@
 # Resources README
 
 Folders in "Resources" are as follows:
-- 2021_release: contains resource files used in 2021_release, if they have been updated. Not updated files remain in main folder.
+- 2021_release: contains older versions of resource files used in prior 2021 MWI release. Files without data updates remain in main folder.
 
 Files:
 - ACS_ZCTA_Total_Populations.csv: reference population size for each ZCTA, pulled from ACS 2017-2021, for both overall and Black populations.

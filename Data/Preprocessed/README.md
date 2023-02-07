@@ -3,7 +3,7 @@
 Note: all information for mappings from measure columns and files to measure names can be found in Data/Metadata.xlsx. See Data README.md for more information. All data in the Preprocessed folder is organized by data source. See Documentation folder for information on each measure.
 
 Folders in "Preprocessed" are as follows:
-- 2021_release: contains preprocessed measure files used in 2021_release, if they have been updated. Not updated files remain in main folder.
+- 2021_release: contains older versions of resource files used in prior 2021 MWI release. Files without data updates remain in main folder.
 
 Files:
 - ACS_API_Data.csv: ACS measure data (such as broadband access, unemployment), by ZCTA. Uses API_Data_Pulls/acs_data_pull.R to generate.

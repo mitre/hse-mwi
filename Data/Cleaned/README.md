@@ -3,7 +3,7 @@
 Note: all information for mappings from measure columns and files to measure names can be found in Data/Metadata.xlsx. See Data README.md for more information. See Documentation folder for information on each measure.
 
 Folders in "Cleaned" are as follows:
-- 2021_release: contains cleaned files used in 2021_release, if they have been updated. Not updated files remain in main folder.
+- 2021_release: contains older versions of resource files used in prior 2021 MWI release. Files without data updates remain in main folder.
 
 Files:
 - HSE_MWI_Data_Information.csv: Information about each measure (a modified version of the Metadata.xlsx file), also stratified by race. Includes information about missingness, total rows in data, the penalty placed for each measure, and weights for each measure aftr including the penalty.
