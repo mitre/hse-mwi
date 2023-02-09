@@ -11,14 +11,14 @@ library(dplyr)
 
 # pull data ----
 
-# ACS 5 year 2019
+# ACS 5 year 2021
 acs_data <- get_acs(
   "zcta",
   variables = c(
     "B01001_001E", # Estimate!!Total: SEX BY AGE (population)
     "B01001B_001E" # SEX BY AGE (BLACK OR AFRICAN AMERICAN ALONE)
   ), 
-  year = 2019,
+  year = 2021,
   output = "wide"
 )
 

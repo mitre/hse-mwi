@@ -11,35 +11,34 @@ library(stringr)
 cw_folder <- file.path("Data", "Resources")
 
 # load crosswalk files
-county_cw <- read.csv(file.path(cw_folder, "zcta_county_rel_10.txt"),
+county_cw <- read.csv(file.path(cw_folder, "zcta_county_rel_20.csv"),
                       colClasses = c(
                         "ZCTA5" = "character",
-                        "STATE" = "character",
-                        "COUNTY" = "character",
                         "GEOID" = "character"
                       ))
-ct_cw <- read.csv(file.path(cw_folder, "zcta_tract_rel_10.txt"),
+county_cw$STATE <- substr(county_cw$GEOID, 1, 2)
+county_cw$COUNTY <- substr(county_cw$GEOID, 3, 5)
+ct_cw <- read.csv(file.path(cw_folder, "zcta_tract_rel_20.csv"),
                   colClasses = c(
                     "ZCTA5" = "character",
-                    "STATE" = "character",
-                    "COUNTY" = "character",
-                    "TRACT" = "character",
                     "GEOID" = "character"
                   ))
-zip_cw <- read.csv(file.path(cw_folder, "Zip_to_zcta_crosswalk_2020.csv"),
+ct_cw$STATE <- substr(ct_cw$GEOID, 1, 2)
+zip_cw <- read.csv(file.path(cw_folder, "Zip_to_zcta_crosswalk_2021.csv"),
                    colClasses = c(
                      "ZIP_CODE" = "character",
                      "ZCTA" = "character"
                    ))
 # filter out territories
-territories <- c(60, 66, 72, 78)
-county_cw <- county_cw[!county_cw$STATE %in% territories,]
-ct_cw <- ct_cw[!ct_cw$STATE %in% territories,]
+territories <- as.character(c(60, 64, 66, 68, 69, 70, 72, 74, 78))
+county_cw <- county_cw[!substr(county_cw$GEOID, 1, 2) %in% territories,]
+ct_cw <- ct_cw[!substr(ct_cw$GEOID, 1, 2) %in% territories,]
 territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
 
 # also keep all unique zctas to generate a file
 all_zctas <- unique(county_cw$ZCTA5)
+all_zctas <- all_zctas[all_zctas != ""]
 
 # data quality function ----
 
@@ -126,11 +125,13 @@ county_to_zcta <- function(df, geoid_col, meas_col){
       df_sub <- df_sub[order(df_sub[,geoid_col]),]
       
       # we need to do a population weighted average -- weights are based on
-      # percentages in each zcta
+      # area percentages in each zcta
       # remove NAs
       zcta_df[z, meas_col] <- 
         sapply(meas_col, function(x){
-          weighted.mean(df_sub[,x], cty_sub$ZPOPPCT, na.rm = T)
+          weighted.mean(df_sub[,x], 
+                        cty_sub$AREALAND_PART/cty_sub$AREALAND_ZCTA5_20*100, 
+                        na.rm = T)
         })
         
     }
@@ -210,7 +211,10 @@ ct_to_zcta <- function(df, geoid_col, meas_col, use_mean = TRUE){
       zcta_df[z, meas_col] <- 
         sapply(meas_col, function(x){
           if (use_mean){
-            weighted.mean(df_sub[,x], ct_sub$ZPOPPCT, na.rm = T)
+            weighted.mean(
+              df_sub[,x],
+              ct_sub$AREALAND_PART/ct_sub$AREALAND_ZCTA5_20*100, 
+              na.rm = T)
           } else {
             sum(df_sub[,x], na.rm = T)
           }

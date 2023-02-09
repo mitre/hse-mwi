@@ -11,25 +11,25 @@ data_folder <- file.path(
 
 # choosing only 10 year counts
 selected_fn <- list.files(data_folder)
-selected_fn <- selected_fn[grepl("2010_2019", selected_fn)]
+selected_fn <- selected_fn[grepl("2011_2020", selected_fn)]
 
 # map file names to what their output names will be
 fn_colname_map <- c(
-  "cdc_wonder_alcohol_all_2010_2019_allpop.txt" = "alcoholmortality_pop",   
-  "cdc_wonder_alcohol_all_2010_2019_race.txt" = "alcoholmortality_black",
-  "cdc_wonder_drug_poisonings_all_2010_2019_allpop.txt" = "drugpoisoningmortality_pop",
-  "cdc_wonder_drug_poisonings_all_2010_2019_race.txt"  = "drugpoisoningmortality_black",
-  "cdc_wonder_suicide_all_2010_2019_allpop.txt"  = "suicidemortality_pop",      
-  "cdc_wonder_suicide_all_2010_2019_race.txt"  = "suicidemortality_black"
+  "cdc_wonder_alcohol_all_2011_2020_allpop.txt" = "alcoholmortality_pop",   
+  "cdc_wonder_alcohol_all_2011_2020_race.txt" = "alcoholmortality_black",
+  "cdc_wonder_drug_poisonings_all_2011_2020_allpop.txt" = "drugpoisoningmortality_pop",
+  "cdc_wonder_drug_poisonings_all_2011_2020_race.txt"  = "drugpoisoningmortality_black",
+  "cdc_wonder_suicide_all_2011_2020_allpop.txt"  = "suicidemortality_pop",      
+  "cdc_wonder_suicide_all_2011_2020_race.txt"  = "suicidemortality_black"
 )
 
 fn_colname_denom_map <- c(
-  "cdc_wonder_alcohol_all_2010_2019_allpop.txt" = "alcoholmortality_denom_pop",   
-  "cdc_wonder_alcohol_all_2010_2019_race.txt" = "alcoholmortality_denom_black",
-  "cdc_wonder_drug_poisonings_all_2010_2019_allpop.txt" = "drugpoisoningmortality_denom_pop",
-  "cdc_wonder_drug_poisonings_all_2010_2019_race.txt"  = "drugpoisoningmortality_denom_black",
-  "cdc_wonder_suicide_all_2010_2019_allpop.txt"  = "suicidemortality_denom_pop",      
-  "cdc_wonder_suicide_all_2010_2019_race.txt"  = "suicidemortality_denom_black"
+  "cdc_wonder_alcohol_all_2011_2020_allpop.txt" = "alcoholmortality_denom_pop",   
+  "cdc_wonder_alcohol_all_2011_2020_race.txt" = "alcoholmortality_denom_black",
+  "cdc_wonder_drug_poisonings_all_2011_2020_allpop.txt" = "drugpoisoningmortality_denom_pop",
+  "cdc_wonder_drug_poisonings_all_2011_2020_race.txt"  = "drugpoisoningmortality_denom_black",
+  "cdc_wonder_suicide_all_2011_2020_allpop.txt"  = "suicidemortality_denom_pop",      
+  "cdc_wonder_suicide_all_2011_2020_race.txt"  = "suicidemortality_denom_black"
 )
 
 # adding county and county code to start

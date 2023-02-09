@@ -22,6 +22,8 @@ library(sass)
 library(shinycssloaders)
 library(shinyBS)
 library(DT)
+# library(formattable)
+library(dplyr)
 
 options(shiny.maxRequestSize=300*1024^2)
 
@@ -108,8 +110,7 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     }
   }
   
-  if (!app_start | 
-      (app_start &
+  if ((app_start &
        !"HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
        list.files(file.path(data_folder, "Cleaned")))){
     
@@ -121,8 +122,9 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     
     # get zip code data
     # NOTE: cb = T will download a generalized file
-    zips <- zctas(cb = T, year = 2019)
-    zips <- zips[zips$GEOID10 %in% mwi$pop$ZCTA,]
+    zips <- zctas(cb = T, year = 2020)
+    colnames(zips)[colnames(zips) == "GEOID20"] <- "GEOID"
+    zips <- zips[zips$GEOID %in% mwi$pop$ZCTA,]
     zips <- st_transform(zips, crs = "+proj=longlat +datum=WGS84")
     
     # create the geo data for leaflet
@@ -130,11 +132,11 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
     geodat <- geopts <- list()
     for (idx in index_types){
       geodat[[idx]] <-
-        geo_join(zips, mwi[[idx]], by_sp = "GEOID10", by_df = "ZCTA", how = "left")
+        left_join(zips, mwi[[idx]], by = c("GEOID" = "ZCTA"))
       
       # sort by state code and zcta
       geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
-                                           geodat[[idx]]$GEOID10),]
+                                           geodat[[idx]]$GEOID),]
       
       # convert to points for US visualization -- ignore warnings
       geopts[[idx]] <- st_centroid(geodat[[idx]])
@@ -147,24 +149,38 @@ app_preprocess <- function(m_reg, info_df, mwi, app_start = T){
            file = file.path(data_folder, 
                             "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
     }
-  } else {
+  } else if ("HSE_MWI_ZCTA_full_shapefile_US.RData" %in% 
+              list.files(file.path(data_folder, "Cleaned"))){
+    # this will exist for the pipeline as well -- can only be done if started
+    
     # load geodat data (should be much faster)
     load(file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_full_shapefile_US.RData"))
   }
   
   # get available zctas -- both will have the same
-  avail_zctas <- geodat[["pop"]]$GEOID10
-  names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID10, 
+  avail_zctas <- geodat[["pop"]]$GEOID
+  names(avail_zctas) <- paste0(geodat[["pop"]]$GEOID, 
                                " (State: ", geodat[["pop"]]$STATE_NAME, ")")
   
-  return(list(
-    meas_col_to_type = meas_col_to_type,
-    avail_measures = avail_measures,
-    measure_to_names = measure_to_names,
-    avail_meas_list = avail_meas_list,
-    geodat = geodat,
-    geopts = geopts
-  ))
+  # if we're running a custom pipeline, we're not going to save the geo data, 
+  # it's very big and it's already in the app
+  if (app_start){
+    return(list(
+      meas_col_to_type = meas_col_to_type,
+      avail_measures = avail_measures,
+      measure_to_names = measure_to_names,
+      avail_meas_list = avail_meas_list,
+      geodat = geodat,
+      geopts = geopts
+    ))
+  } else {
+    return(list(
+      meas_col_to_type = meas_col_to_type,
+      avail_measures = avail_measures,
+      measure_to_names = measure_to_names,
+      avail_meas_list = avail_meas_list
+    ))
+  }
   
 }
 
@@ -196,29 +212,61 @@ info_df <- read.csv(
 )
 rownames(info_df) <- info_df$Numerator
 
+# load mapped measure data excat values
+meas_df <- read.csv(
+  file.path(data_folder, "Cleaned", "HSE_MWI_ZCTA_Converted_Measures.csv"),
+  colClasses = c("GEOID" = "character")
+)
+meas_df <- meas_df[meas_df$GEOID != "",]
+rownames(meas_df) <- meas_df$GEOID
+
 # load zip codes to zcta
 zip_cw <- read.csv(
-  file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2020.csv"),
+  file.path(data_folder, "Resources", "Zip_to_zcta_crosswalk_2021.csv"),
   colClasses = c(
     "ZIP_CODE" = "character",
     "ZCTA" = "character"
   ))
 territories <- c("AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI")
 zip_cw <- zip_cw[!zip_cw$STATE %in% territories,]
+# we need to align these ZIP codes to ZCTAs in 2020 (in future)
+# NOTE: in future, it may be a good idea to get the map between zip and ZCTA2020
+# proper -- the code below is an attempt to do that, but did not work. since
+# most did not change wily, the legacy version should work mostly fine.
+# zcta_rel <- read.csv(file.path(data_folder, "Resources",
+#                                "tab20_zcta510_zcta520_natl.txt"),
+#                      colClasses = c(
+#                        "GEOID_ZCTA5_20" = "character",
+#                        "GEOID_ZCTA5_10" = "character"
+#                      ),
+#                      sep = "|")
+# # get rid of zctas with no relationship between each other
+# zcta_rel <- zcta_rel[zcta_rel$GEOID_ZCTA5_10 != "" & 
+#                        zcta_rel$GEOID_ZCTA5_20 != "",]
+# zcta_rel <- zcta_rel[order(zcta_rel$GEOID_ZCTA5_10),]
+# zcta_rel$perc_land <- zcta_rel$AREALAND_PART/zcta_rel$AREALAND_ZCTA5_20
+# # chose zcta to zip code with the largest area in 2020
+# zcta_most <- aggregate(perc_land ~ GEOID_ZCTA5_10, zcta_rel, FUN = which.max)
+# zcta_most$GEOID_ZCTA5_20 <- zcta_rel$GEOID_ZCTA5_20[which(!duplicated(zcta_most$GEOID_ZCTA5_10))+zcta_most$perc_land-1]
+# rownames(zcta_most) <- zcta_most$GEOID_ZCTA5_10
+# # keep the old, map to the new
+# zip_cw$ZCTA10 <- zip_cw$ZCTA
+# zip_cw$ZCTA <- zcta_most[zip_cw$ZCTA, "GEOID_ZCTA5_20"]
+
 zip_to_zcta <- setNames(zip_cw$ZCTA, zip_cw$ZIP_CODE)
 zcta_to_zip <- aggregate(ZIP_CODE ~ ZCTA, data = zip_cw, 
                          FUN = function(x){paste(x, collapse = ", ")})
 zcta_to_zip <- setNames(zcta_to_zip$ZIP_CODE, zcta_to_zip$ZCTA)
 
-# load county cw for zcta state county mapping
-county_cw <- read.csv(
-  file.path(data_folder, "Resources", "zcta_county_rel_10.txt"),
-  colClasses = c(
-    "ZCTA5" = "character",
-    "STATE" = "character",
-    "COUNTY" = "character",
-    "GEOID" = "character"
-  ))
+# load crosswalk files
+county_cw <- read.csv(file.path(data_folder, "Resources",
+                                "zcta_county_rel_20.csv"),
+                      colClasses = c(
+                        "ZCTA5" = "character",
+                        "GEOID" = "character"
+                      ))
+county_cw$STATE <- substr(county_cw$GEOID, 1, 2)
+county_cw$COUNTY <- substr(county_cw$GEOID, 3, 5)
 # collapse so that there's one zcta for every row (states get collapsed by pipe)
 cty_cw <- 
   aggregate(STATE ~ ZCTA5, data = county_cw, 
@@ -345,6 +393,7 @@ meas_min_colors["Mental Wellness Index"] <-
 overall <- app_preprocess(m_reg, info_df, mwi, app_start = T)
 # add other specific data
 overall[["m_reg"]] <- m_reg
+overall[["meas_df"]] <- meas_df
 overall[["info_dat"]] <- info_df
 overall[["no_dir_perc_meas_df"]] <- no_dir_perc_meas_df
 
@@ -362,16 +411,16 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                      fill_opacity = .7,
                      add_poly = F, us_proxy = NA, zcta_choose = NA){
   # subset map for easy plotting
-  gd_map <- geodat[,c(fill, "GEOID10", "STATE", "STATE_NAME", "geometry")]
+  gd_map <- geodat[,c(fill, "GEOID", "STATE", "STATE_NAME", "geometry")]
   colnames(gd_map)[1] <- "Fill"
   if (fill != "Mental_Wellness_Index"){
     # replace data with no directionality data
-    gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID10, fill]
+    gd_map$Fill <- ol$no_dir_perc_meas_df[gd_map$GEOID, fill]
   }
-  gd_map[, colnames(all_pop_df)[-c(1:2)]] <- all_pop_df[gd_map$GEOID10, -c(1:2)]
+  gd_map[, colnames(all_pop_df)[-c(1:2)]] <- all_pop_df[gd_map$GEOID, -c(1:2)]
   
   # get rid of empty polygons
-  gd_map <- gd_map[!is.na(gd_map$GEOID10),]
+  gd_map <- gd_map[!is.na(gd_map$GEOID),]
   
   # create palette
   pal <- colorNumeric(
@@ -400,8 +449,8 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
   labels <- 
     paste0(
       "State: ", gd_map$STATE_NAME, "<br>",
-      "ZCTA: ", gd_map$GEOID10, "<br>", 
-      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID10]), "<br>", 
+      "ZCTA: ", gd_map$GEOID, "<br>", 
+      "ZIP Code: ", unname(zcta_to_zip[gd_map$GEOID]), "<br>", 
       "Population: ", as.data.frame(gd_map)[, paste0("total_",idx)], 
       # " (", trunc(as.data.frame(gd_map)[, paste0("perc_",idx)]), "%)",
       "<br>",
@@ -413,7 +462,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
     if (!is_com){
       unname(st_bbox(geodat))
     } else { # community focuses on ZCTA
-      unname(st_bbox(geodat[geodat$GEOID10 == zcta_choose,]))
+      unname(st_bbox(geodat[geodat$GEOID == zcta_choose,]))
     }
   
   if (!add_poly){
@@ -428,7 +477,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                       color = "#b2aeae",
                       dashArray = "",
                       fillOpacity = fill_opacity,
-                      layerId = ~GEOID10,
+                      layerId = ~GEOID,
                       highlight = highlightOptions(weight = 2,
                                                    color = "#666",
                                                    dashArray = "",
@@ -461,7 +510,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                            color = ~pal(Fill),
                            dashArray = "",
                            fillOpacity = fill_opacity,
-                           layerId = ~GEOID10,
+                           layerId = ~GEOID,
                            label = labels,
                            radius = 5) %>%
           addLegend(pal = pal_wo_na,
@@ -485,7 +534,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
     
     # if it's a community, we also want to focus on it
     if (is_com){
-      zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
+      zcta_select <- gd_map[gd_map$GEOID == zcta_choose,]
       mp <- mp %>% 
         addPolygons(
           data = zcta_select,
@@ -501,11 +550,11 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                                        dashArray = "",
                                        fillOpacity = 0.7,
                                        bringToFront = T),
-          label = labels[gd_map$GEOID10 == zcta_choose]
+          label = labels[gd_map$GEOID == zcta_choose]
         )
     }
   } else {
-    zcta_select <- gd_map[gd_map$GEOID10 == zcta_choose,]
+    zcta_select <- gd_map[gd_map$GEOID == zcta_choose,]
     mp <- 
       if (!is_all){
         us_proxy %>% 
@@ -524,7 +573,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
                                          dashArray = "",
                                          fillOpacity = 0.7,
                                          bringToFront = T),
-            label = labels[gd_map$GEOID10 == zcta_choose]
+            label = labels[gd_map$GEOID == zcta_choose]
           )
       } else {
         us_proxy %>% 
@@ -537,7 +586,7 @@ plot_map <- function(fill, geodat, idx, ol, is_all = F, is_com = F,
             dashArray = "",
             fillOpacity = 1,
             layerId = "remove_me",
-            label = labels[gd_map$GEOID10 == zcta_choose],
+            label = labels[gd_map$GEOID == zcta_choose],
             radius = 7)
       }
   }
@@ -751,7 +800,7 @@ ui <- fluidPage(
                 ),
                 actionButton(
                   "custom_data_load_st",
-                  "Upload"
+                  "Run Custom MWI"
                 ),
                 actionButton(
                   "custom_data_reset_st",
@@ -815,7 +864,7 @@ ui <- fluidPage(
                 HTML(paste0(
                   "<font size = '2'>",
 
-                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
+                  "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
 
                   "</font>"
                 ))
@@ -826,7 +875,7 @@ ui <- fluidPage(
       )
     ),
     
-    # explore communities ----
+    # explore ZIP codes ----
     tabPanel(
       title = div("Explore ZIP Codes", class="explore"),
       class = "explore-panel",
@@ -871,7 +920,7 @@ ui <- fluidPage(
                   ),
                   actionButton(
                     "custom_data_load_com",
-                    "Upload"
+                    "Run Custom MWI"
                   ),
                   actionButton(
                     "custom_data_reset_com",
@@ -898,36 +947,54 @@ ui <- fluidPage(
         ),
         mainPanel(
           width = 9,
-          column(
-            width = 8,
-            uiOutput("com_map_legend"),
-            HTML("<br>"),
-            withSpinner(leafletOutput("com_map", height = 850),
-                        type = 8, color = "#005B94", hide.ui = F)
-          ),
-          column(
-            width = 4,
-            bsCollapse(
-              multiple = T,
-              open = c("ZCTA Measure Results", "Selected Measure Interpretation", "About Selected Measure"),
-              bsCollapsePanel(
-                "Selected Measure Interpretation",
-                uiOutput("com_map_expl")
+          tabsetPanel(
+            tabPanel(
+              "Explore ZCTA Maps",
+              p(),
+              column(
+                width = 8,
+                uiOutput("com_map_legend"),
+                HTML("<br>"),
+                withSpinner(leafletOutput("com_map", height = 850),
+                            type = 8, color = "#005B94", hide.ui = F)
               ),
-              bsCollapsePanel(
-                "About Selected Measure",
-                uiOutput("data_info_com"),
-                HTML(paste0(
-                  "<font size = '2'>",
-
-                  "For more information on data and overall methodology, please see the `MWI Toolkit` page.",
-
-                  "</font>"
-                ))
-              ),
-              bsCollapsePanel(
-                "ZCTA Measure Results",
-                uiOutput("com_map_report_card")
+              column(
+                width = 4,
+                bsCollapse(
+                  multiple = T,
+                  open = c("ZCTA Measure Results", "Selected Measure Interpretation", "About Selected Measure"),
+                  bsCollapsePanel(
+                    "Selected Measure Interpretation",
+                    uiOutput("com_map_expl")
+                  ),
+                  bsCollapsePanel(
+                    "About Selected Measure",
+                    uiOutput("data_info_com"),
+                    HTML(paste0(
+                      "<font size = '2'>",
+                      "For more information on data and overall methodology, please see the \"MWI Toolkit\" page.",
+                      "</font>"
+                    ))
+                  ),
+                  bsCollapsePanel(
+                    "ZCTA Measure Results",
+                    uiOutput("com_map_report_card")
+                  )
+                )
+              )
+            ),
+            tabPanel(
+              "Explore ZCTA Measures",
+              p(),
+              bsCollapse(
+                open = c("ZCTA Measure Results"),
+                bsCollapsePanel(
+                  "ZCTA Measure Results",
+                  HTML("<p><i>Measures have ranks from 0 to 100. Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> to mental wellness, based on their respective directionality. Measure value corrsponds to the exact value in the data, corresponding to the measure description. For more information, please see `MWI Measures and Data` in the MWI Toolkit.</i></p>"),
+                  uiOutput("com_report_card_table_mwi"),
+                  HTML("<p></p>"),
+                  DTOutput("com_report_card_table")
+                )
               )
             )
           )
@@ -940,19 +1007,21 @@ ui <- fluidPage(
     navbarMenu(
       "Create Your Own MWI",
       tabPanel(
-        title = div("Adjust MWI Weights", class = "explore"),
+        title = div("Adjust MWI Weights and ZIP Codes", class = "explore"),
         fluidRow(
           column(width = 2),
           column(
             width = 8,
-            HTML("<center><h2>Change weights to create your own Mental Wellness Index (MWI)!</h2></center>"),
+            HTML("<center><h2>Change weights and ZIP Codes to create your own Mental Wellness Index (MWI)!</h2></center>"),
             HTML(paste0(
               "<p align = 'justify'>",
-              "Weights used in the Mental Wellness Index control the relative influence each measure has on the total MWI; higher numbers inidcate a higher influence. If you adjust the weights to 0, a measure has no influence on the MWI.",
+              "Weights used in the Mental Wellness Index control the relative influence each measure has on the total MWI; higher numbers inidcate a higher influence. If you adjust the weights to 0, a measure has no influence on the MWI. You can also use this page to rank a subset of ZIP Codes against each other.",
               "<br><br>",
-              "To adjust the weights in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
+              "To adjust the weights or change the ZIP Codes used in the Mental Wellness Index, follow the instructions below. If you want to add your own data to the MWI, go to the \"Add Local Data to MWI\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it.",
               "<ol>",
-              "<li>Update weights for each measure in the table below as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number). Click outside of that edited entry to lock it in. Note that weights do not need to add to 100 (they will be normalized, and have georgraphy/race stratification penalties applied, when the Custom MWI is calculated).</li>",
+              "<li>To update weights for each measure, click the \"Adjust MWI Weights\" tab below. Then update the table as desired by doubleclicking the 'Updated Weights' column, then editing the measure to the desired amount (0 or a positive number). Click outside of that edited entry to lock it in. Note that weights do not need to add to 100 (they will be normalized, and have georgraphy/race stratification penalties applied, when the Custom MWI is calculated).</li>",
+              "<br>",
+              "<li>To rank a subset of ZIP Codes or ZCTAs against each other, click the \"Subset Zip Codes/ZCTAs\" tab below. There, you will enter the ZIP Codes you want to create the MWI for in the text box, with each ZIP Code or ZCTA on a separate line. Note that these all must be either ZIP Codes or ZCTAs -- you cannot submit a mix. Use the switch below the text box to indicate whether the entries are ZIP Codes or ZCTAs. Note: If no values are entered, all ZCTAs will be used. Entering ZCTAs is more accurate. Comparing at least 10 ZCTAs/ZIP Codes is recommended.</li>",
               "<br>",
               "<li>Click 'Create Custom MWI' below. This will take some time.</li>",
               "<br>",
@@ -961,18 +1030,40 @@ ui <- fluidPage(
               "<li>To view your MWI, click the 'Custom MWI Upload' box under 'Explore States' or 'Explore ZIP Codes' and upload the downloaded '.RData' file. Once the file is fully loaded, click 'Upload' to see your Custom MWI results.</li>",
               "</ol>",
               "</p>"
-              )),
-            tagList(
-              hr(),
-              HTML("<center>"),
-              DTOutput("custom_mwi_weights"),
-              HTML("<br><br>"),
-              actionButton("custom_mwi_go_weights", "Create Custom MWI"),
-              downloadButton("download_custom_mwi_weights", "Download Custom MWI"),
-              HTML("<br><br>"),
-              verbatimTextOutput("custom_error_weights"),
-              HTML("</center>")
-            )
+            )),
+            hr(),
+            HTML("<center>"),
+            tabsetPanel(
+              tabPanel(
+                "Adjust MWI Weights",
+                DTOutput("custom_mwi_weights")
+              ),
+              tabPanel(
+                "Subset Zip Codes/ZCTAs",
+                br(),
+                textAreaInput(
+                  "custom_mwi_zips",
+                  "Enter ZIP Codes or ZCTAs to subset the MWI to (line separated):",
+                  placeholder = "12345\n10034\n19567\n...",
+                  height = "200px",
+                  width = "400px"
+                ),
+                switchInput(
+                  "custom_mwi_zip_choice",
+                  onLabel = "ZIP Code",
+                  offLabel = "ZCTA",
+                  value = T, # zips shown
+                  onStatus = "secondary",
+                  offStatus = "secondary"
+                )
+              )
+            ),
+            HTML("<br><br>"),
+            actionButton("custom_mwi_go_weights", "Create Custom MWI"),
+            downloadButton("download_custom_mwi_weights", "Download Custom MWI"),
+            HTML("<br><br>"),
+            verbatimTextOutput("custom_error_weights"),
+            HTML("</center>")
           ),
           column(width = 2)
         )
@@ -1061,7 +1152,7 @@ ui <- fluidPage(
                 "<br>",
                 "<li> In the console window, which is in the bottom left hand corner, enter the following line and answer \"yes\" to all prompts in the console as you install these packages:</li>",
                 "<ul>",
-                "<li>install.packages('readxl', 'writexl', 'htmltools', 'shiny', 'tigris', 'leaflet', 'RColorBrewer', 'sf', 'plotly', 'ggbeeswarm', 'shinyWidgets', 'sass', 'shinycssloaders', 'shinyBS')</li>",
+                "<li>install.packages('readxl', 'writexl', 'htmltools', 'shiny', 'tigris', 'leaflet', 'RColorBrewer', 'sf', 'plotly', 'ggbeeswarm', 'shinyWidgets', 'sass', 'shinycssloaders', 'shinyBS', 'DT', 'dplyr')</li>",
                 "</ul>",
                 "<br>",
                 "<li> In the top right hand corner of the \"app.R\" window, you should see \"Run App\". Click the small downward arrow to the right of that and click \"Run External\". Then click \"Run App\".</li>",
@@ -1196,25 +1287,25 @@ server <- function(input, output, session) {
     "ZCTA" = "23936", 
     "geodat" = overall$geodat[["pop"]][ # community -- within +/- .5
       st_coordinates(overall$geopts$pop)[,1] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] - 1 &
         st_coordinates(overall$geopts$pop)[,1] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] + 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] + 1 &
         st_coordinates(overall$geopts$pop)[,2] >=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] - 1 &
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] - 1 &
         st_coordinates(overall$geopts$pop)[,2] <=
-        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] + 1 
+        st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] + 1 
       ,],
     "mwi" = overall$mwi[["pop"]][# community -- within +/- .5
       overall$mwi[["pop"]]$ZCTA %in% 
-        overall$geodat[["pop"]]$GEOID10[
+        overall$geodat[["pop"]]$GEOID[
           st_coordinates(overall$geopts$pop)[,1] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] - 1 &
             st_coordinates(overall$geopts$pop)[,1] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[1] + 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[1] + 1 &
             st_coordinates(overall$geopts$pop)[,2] >=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] - 1 &
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] - 1 &
             st_coordinates(overall$geopts$pop)[,2] <=
-            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID10 == "23936",])[2] + 1 
+            st_coordinates(overall$geopts$pop[overall$geopts$pop$GEOID == "23936",])[2] + 1 
         ]
       ,],
     "com_map_fill" = "Mental_Wellness_Index"
@@ -1242,7 +1333,7 @@ server <- function(input, output, session) {
              HTML("To learn more and view MWI videos, click <b>MWI Toolkit</b> in the blue bar at the top of the page."),
             
              HTML("</center>"),
-             HTML("<center><font size = '2'><i>Note: This application is best viewed on a tablet or computer in full screen mode.</i></font></center>"),
+             HTML("<center><font size = '2'><i>Notes: This application is best viewed on a tablet or computer in full screen mode. Data updated as of January 2023.</i></font></center>"),
       )),
      
     footer = tagList(
@@ -1289,18 +1380,18 @@ server <- function(input, output, session) {
     # community boundary
     # community -- within +/- .5
     com_log <- st_coordinates(ol$geopts$pop)[,1] >=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
       st_coordinates(ol$geopts$pop)[,1] <=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
       st_coordinates(ol$geopts$pop)[,2] >=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
       st_coordinates(ol$geopts$pop)[,2] <=
-      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+      st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
     
     com_sub$geodat <- ol$geodat[["pop"]][com_log,]
     com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
       ol$mwi[["pop"]]$ZCTA %in% 
-        ol$geodat[["pop"]]$GEOID10[com_log],]
+        ol$geodat[["pop"]]$GEOID[com_log],]
     
     removeModal()
   })
@@ -1322,6 +1413,29 @@ server <- function(input, output, session) {
             ol[[ov]] <- overall_output[[ov]]
           }
           
+          # add geo data from previously loaded data --- this takes a bit, but 
+          # is worth it
+          geodat <- geopts <- list()
+          for (idx in index_types){
+            geo_sub <- st_drop_geometry(overall$geodat[[idx]])[, "GEOID"] %in%
+              overall_output$mwi[[idx]][,"ZCTA"]
+            
+            geodat[[idx]] <-
+              left_join(overall$geodat[[idx]][geo_sub, 1:7], 
+                        overall_output$mwi[[idx]], by = c("GEOID" = "ZCTA"))
+            
+            # sort by state code and zcta
+            geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
+                                                 geodat[[idx]]$GEOID),]
+            
+            # convert to points for US visualization -- ignore warnings
+            geopts[[idx]] <- st_centroid(geodat[[idx]])
+          }
+          
+          ol[["geodat"]] <- geodat
+          ol[["geopts"]] <- geopts
+          
+          
           # update available states
           updateSelectInput(
             session = session,
@@ -1349,25 +1463,25 @@ server <- function(input, output, session) {
           com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
           com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
             ,]
           com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
             ol$mwi[["pop"]]$ZCTA %in% 
-              ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+              ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
                 st_coordinates(ol$geopts$pop)[,1] >=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
                   st_coordinates(ol$geopts$pop)[,1] <=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
                   st_coordinates(ol$geopts$pop)[,2] >=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
                   st_coordinates(ol$geopts$pop)[,2] <=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
               ],]
         }
       })
@@ -1385,6 +1499,28 @@ server <- function(input, output, session) {
             ol[[ov]] <- overall_output[[ov]]
           }
           
+          # add geo data from previously loaded data --- this takes a bit, but 
+          # is worth it
+          geodat <- geopts <- list()
+          for (idx in index_types){
+            geo_sub <- st_drop_geometry(overall$geodat[[idx]])[, "GEOID"] %in%
+              overall_output$mwi[[idx]][,"ZCTA"]
+            
+            geodat[[idx]] <-
+              left_join(overall$geodat[[idx]][geo_sub, 1:7], 
+                        overall_output$mwi[[idx]], by = c("GEOID" = "ZCTA"))
+            
+            # sort by state code and zcta
+            geodat[[idx]] <- geodat[[idx]][order(geodat[[idx]]$STATE,
+                                                 geodat[[idx]]$GEOID),]
+            
+            # convert to points for US visualization -- ignore warnings
+            geopts[[idx]] <- st_centroid(geodat[[idx]])
+          }
+          
+          ol[["geodat"]] <- geodat
+          ol[["geopts"]] <- geopts
+          
           # update available states
           updateSelectInput(
             session = session,
@@ -1412,25 +1548,25 @@ server <- function(input, output, session) {
           com_sub$ZCTA <- ol$mwi$pop$ZCTA[1]
           com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
             ,]
           com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
             ol$mwi[["pop"]]$ZCTA %in% 
-              ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+              ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
                 st_coordinates(ol$geopts$pop)[,1] >=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
                   st_coordinates(ol$geopts$pop)[,1] <=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
                   st_coordinates(ol$geopts$pop)[,2] >=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
                   st_coordinates(ol$geopts$pop)[,2] <=
-                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+                  st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
               ],]
         }
       })
@@ -1470,25 +1606,25 @@ server <- function(input, output, session) {
       com_sub$ZCTA <- "23936"
       com_sub$geodat <- ol$geodat[["pop"]][ # community -- within +/- .5
         st_coordinates(ol$geopts$pop)[,1] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
           st_coordinates(ol$geopts$pop)[,1] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
           st_coordinates(ol$geopts$pop)[,2] >=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
           st_coordinates(ol$geopts$pop)[,2] <=
-          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+          st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
         ,]
       com_sub$mwi <- ol$mwi[["pop"]][# community -- within +/- .5
         ol$mwi[["pop"]]$ZCTA %in% 
-          ol$geodat[["pop"]]$GEOID10[ # community -- within +/- .5
+          ol$geodat[["pop"]]$GEOID[ # community -- within +/- .5
             st_coordinates(ol$geopts$pop)[,1] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] - 1 &
               st_coordinates(ol$geopts$pop)[,1] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[1] + 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[1] + 1 &
               st_coordinates(ol$geopts$pop)[,2] >=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] - 1 &
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] - 1 &
               st_coordinates(ol$geopts$pop)[,2] <=
-              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])[2] + 1 
+              st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])[2] + 1 
           ],]
     }
   })
@@ -1633,7 +1769,7 @@ server <- function(input, output, session) {
         nchar(input$zip_choose) == 5 &
         !grepl("\\D", input$zip_choose) & # only numbers
         input$zip_choose %in% names(zip_to_zcta) & # a valid zcta
-        zip_to_zcta[input$zip_choose] %in% st_sub$geodat$GEOID10 # in the state
+        zip_to_zcta[input$zip_choose] %in% st_sub$geodat$GEOID # in the state
     ){
       focus_info$hl <- T
       focus_info$ZCTA <- unname(zip_to_zcta[input$zip_choose])
@@ -1712,7 +1848,7 @@ server <- function(input, output, session) {
       # get coordinates to know the total
       all_coord <- st_coordinates(ol$geopts[[idx]])
       zcta_coord <- 
-        st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID10 == com_sub$ZCTA,])
+        st_coordinates(ol$geopts$pop[ol$geopts$pop$GEOID == com_sub$ZCTA,])
       
       # get surrounding community
       zcta_log <- all_coord[,1] >=
@@ -1738,7 +1874,7 @@ server <- function(input, output, session) {
       # get within coordinates
       com_sub$geodat <- ol$geodat[[idx]][zcta_log,]
       com_sub$mwi <- ol$mwi[[idx]][ol$mwi[[idx]]$ZCTA %in% 
-                                  ol$geodat[[idx]]$GEOID10[zcta_log],]
+                                  ol$geodat[[idx]]$GEOID[zcta_log],]
       
       com_sub$com_map_fill <- 
         if (com_sub$idx == "pop" & grepl("*_black$", input$com_map_fill)){
@@ -1910,7 +2046,7 @@ server <- function(input, output, session) {
           "<i>",
           ifelse(
             dir_val == -1, 
-            "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+            "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
             ""
           ),
           "</i>",
@@ -2045,7 +2181,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
               ""
             ),
             "</i>",
@@ -2070,7 +2206,7 @@ server <- function(input, output, session) {
             ". ",
             ifelse(
               dir_val == -1, 
-              "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+              "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
               ""
             ),
             "</i>",
@@ -2081,7 +2217,7 @@ server <- function(input, output, session) {
       }
     })
   })
-  # output plots and information: community view ----
+  # output plots and information: ZIP code view ----
   
   output$data_info_com <- renderUI({
     withProgress(message = "Rendering data information", {
@@ -2116,6 +2252,7 @@ server <- function(input, output, session) {
     })
   })
   
+  # community map
   output$com_map <- renderLeaflet({
     withProgress(message = "Rendering map", {
       plot_map(com_sub$com_map_fill, com_sub$geodat,
@@ -2124,7 +2261,7 @@ server <- function(input, output, session) {
     })
   })
   
-  # put an explanation
+  # put an community map explanation
   output$com_map_expl <- renderUI({
     withProgress(message = "Rendering map explanation", {
       full_name <- ol$measure_to_names[[com_sub$idx]][com_sub$com_map_fill]
@@ -2207,7 +2344,7 @@ server <- function(input, output, session) {
               ". ",
               ifelse(
                 dir_val == -1, 
-                "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+                "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
                 ""
               ),
               "</i>",
@@ -2239,7 +2376,7 @@ server <- function(input, output, session) {
                 ". ",
                 ifelse(
                   dir_val == -1, 
-                  "Note: These measure values were included in the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness. ",
+                  "Note: Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. This measure was designated as an obstacle when calculating the MWI. ",
                   ""
                 ),
                 "</i>",
@@ -2263,6 +2400,98 @@ server <- function(input, output, session) {
     })
   })
   
+  # above the "table" version, add text for the MWI
+  output$com_report_card_table_mwi <- renderUI({
+    mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
+    
+    dn <- "Mental Wellness Index"
+    mc <- meas_max_colors[dn]
+    text_mwi <- paste0(
+      "<b><font size = '3'>",
+      html_color(
+        ifelse(trunc(mwi_zcta[1, "Mental_Wellness_Index"]) >= 50,
+               mc, meas_min_colors[dn]),
+        dn),
+      ifelse(dn == "Mental Wellness Index", 
+             paste0(": ", trunc(mwi_zcta[1, "Mental_Wellness_Index"])),
+             ""),
+      "</b></font>",
+      "<br>"
+    )
+    
+    HTML(paste0(
+      "<p><b><font size = '3'>",
+      "ZCTA: ", com_sub$ZCTA,
+      "</b></font></p>",
+      text_mwi))
+  })
+  
+  # put a "report card" for the community (in TABLE format)
+  output$com_report_card_table <- renderDataTable({
+    
+    # Create Report Card Table
+    reportcard <- ol$m_reg[,c("Measure", "Measure Description", "Category", "Directionality")]
+    
+    # Add column of measure values based on selected ZCTA and index type (Pop/Black)
+    Rank <- t(ol$no_dir_perc_meas_df[com_sub$ZCTA,
+                                     ol$avail_measures[[com_sub$idx]][-1]])
+    colnames(Rank) <- "Rank"
+    rownames(Rank) <- gsub("_pop$", "", rownames(Rank))
+    
+    # similarly, add the values
+    val <- t(ol$meas_df[com_sub$ZCTA,
+                        ol$avail_measures[[com_sub$idx]][-1]])
+    colnames(val) <- "Value"
+    rownames(val) <- gsub("_pop$", "", rownames(val))
+    
+    # add values to report card
+    reportcard[rownames(val), "Value"] <- val
+    reportcard <- reportcard[!is.na(reportcard$Measure),]
+    
+    reportcard <- merge(reportcard, Rank, by = "row.names",sort = FALSE) %>%
+      as.data.frame() %>%
+      mutate(Directionality = ifelse(Directionality == -1, "Obstacle", "Asset"),
+             Rank = as.numeric(round(Rank)),
+             Value = as.numeric(format(as.numeric(round(Value, 2)), scientific = F)),
+             )  %>%
+      select(Measure, Rank, Value, `Measure Description`, Category, Directionality)
+    
+    rownames(reportcard) <- NULL
+    
+    # measure_formatter <- formatter(
+    #   "span",
+    #   style = x ~ icontext(
+    #     ifelse(x == com_sub$com_map_fill,
+    #            "star",
+    #            ""),
+    #     x))
+    # category_formatter <- formatter(
+    #   "span",
+    #   style = x ~ style(
+    #     color = ifelse(x == "Healthcare Access", 
+    #                    meas_max_colors[2],
+    #                    ifelse(x == "Health Status", 
+    #                           meas_max_colors[3],
+    #                           meas_max_colors[1])
+    #     )
+    #   )
+    # )
+    
+    datatable(
+      # formattable(
+        reportcard, 
+                  # list(Measure = measure_formatter,
+                  #      Category = category_formatter
+                  # ),
+                  # table.attr = 'style="font-size: 16px;";\"'), 
+      rownames = F,
+      options = list(
+        "pageLength" = nrow(reportcard), # show all
+        columnDefs = list(list(width = c('250px'), targets = c(4))) # wrap column descriptions
+      )
+    )
+  })
+
   # put a "report card" for the community
   output$com_map_report_card <- renderUI({
     mwi_zcta <- com_sub$mwi[com_sub$mwi$ZCTA == com_sub$ZCTA, , drop = F]
@@ -2335,7 +2564,7 @@ server <- function(input, output, session) {
       text_mwi,
       "<hr/>",
       "<font size = '3'><b>Measure Rankings:</b></font>",
-      "<i><p>Range from 0 to 100. Measure values with * were included with the opposite orientation when calculating the MWI. All measures are oriented so that higher values in the MWI indicate more assets supporting mental wellness.</p></i>",
+      "<i><p>Range from 0 to 100. Measures with a higher rank (closer to 100) indicate more community-level <b>assets</b> or <b>obstacles</b> (indicated with *) to mental wellness, based on their respective directionality. See \"Explore ZCTA Measures\" for an interactive table with measure values.</p></i>",
       "<p></p>",
       text_meas,
       
@@ -2436,6 +2665,9 @@ server <- function(input, output, session) {
           }
         }
         
+        # for a subset list
+        z_enter <- c()
+        
         # for custom data
         if (!error){
           if (press != "weights"){
@@ -2480,6 +2712,18 @@ server <- function(input, output, session) {
             m_reg_custom <- m_reg
             m_reg_custom[rownames(upd_weights()), "Weights"] <- 
               upd_weights()[,"Updated Weights"]
+            
+            # we also want to include specific ZCTAs
+            z_enter <- unlist(strsplit(input$custom_mwi_zips, "\n"))
+            z_enter <- unique(str_pad(z_enter, 5, pad = "0"))
+            
+            # if zip codes, change to ZCTAs
+            if (input$custom_mwi_zip_choice){
+              z_enter <- zip_to_zcta[z_enter]
+            }
+            
+            z_enter <- z_enter[!is.na(z_enter)]
+            
             custom_data <- list()
           }
         }
@@ -2489,7 +2733,8 @@ server <- function(input, output, session) {
           
           # now pass it into the pipeline file
           overall_out <- tryCatch({
-            mwi_pipeline(m_reg_custom, custom_data, run_custom = T)
+            mwi_pipeline(m_reg_custom, custom_data, run_custom = T, 
+                         z_enter = z_enter)
           }, 
           error = function(cond){
             error <- T 
