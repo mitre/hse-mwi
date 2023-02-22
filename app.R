@@ -678,7 +678,7 @@ plot_bee_distr <- function(fill, st, mwi, idx, ol, is_all = F, hl = F, zcta_hl =
             "ZIP Code: ", unname(zcta_to_zip[zcta]), "<br>", 
             full_name, ": ", trunc(val)
           )),
-          groupOnX = T, alpha = bee.df$focus_alpha)
+          dodge.width = NULL, alpha = bee.df$focus_alpha)
       } else {
         geom_violin(
           fill = meas_colors_pal[[ol$meas_col_to_type[ol$measure_to_names[[idx]][fill]]]](3)[2],
