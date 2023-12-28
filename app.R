@@ -792,6 +792,7 @@ ui <- fluidPage(
               tagList(
                 HTML("<font size = '2'><p>"),
                 "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab. Note that data uploaded to this application is not kept -- it is deleted once you leave the page. However, if you would like to keep your data on your computer while viewing the MWI, please see the \"Add Local Data to MWI on Your Computer\" section.",
+                HTML("<i>NOTE: file upload is currently experiencing issues on the website. In the meantime, you can explore your custom MWI on your local computer by following steps 1 - 7 on the \"Add Local Data to Mental Wellness Index (MWI) On Your Computer\" page under \"Create Your Own MWI\".</i>"),
                 HTML("<p></font>"),
                 fileInput(
                   "custom_data_st",
@@ -912,6 +913,7 @@ ui <- fluidPage(
                 tagList(
                   HTML("<font size = '2'><p>"),
                   "To create the necessary custom Mental Wellness Index file, please see the \"Create Your Own MWI\" tab. Note that data uploaded to this application is not kept -- it is deleted once you leave the page. However, if you would like to keep your data on your computer while viewing the MWI, please see the \"Add Local Data to MWI on Your Computer\" section.",
+                  HTML("<i>NOTE: file upload is currently experiencing issues on the website. In the meantime, you can explore your custom MWI on your local computer by following steps 1 - 7 on the \"Add Local Data to Mental Wellness Index (MWI) On Your Computer\" page under \"Create Your Own MWI\".</i>"),
                   HTML("</p></font>"),
                   fileInput(
                     "custom_data_com",
@@ -1078,6 +1080,7 @@ ui <- fluidPage(
             HTML(paste0(
               "<p align = 'justify'>",
               "To create your own Mental Wellness Index with your own local data, follow the instructions below to create your own MWI for your community below by adjusting weights and adding your own data and metadata. If you only want to adjust the weights in the MWI, go to the \"Adjust MWI Weights\" section. Note that data uploaded to this application is not kept -- it is deleted once you leave the page, including any processing done to it. However, if you would like to keep your data on your computer while creating the MWI, please see the \"Add Local Data to MWI on Your Computer\" section.",
+              "<i>NOTE: file upload is currently experiencing issues on the website. In the meantime, you can explore your custom MWI on your local computer by following steps 1 - 7 on the \"Add Local Data to Mental Wellness Index (MWI) On Your Computer\" page under \"Create Your Own MWI\".</i>",
               "<ol>",
               "<li> Put each of your datasets in a CSV (comma separated value) format, with one column corresponding to the geographical ID of the data, a column corresponding to the numerator of the data, and another column corresponding to the denominator (if needed).</li>",
               "<ul>",
@@ -1185,6 +1188,7 @@ ui <- fluidPage(
               "</ul>",
               "<br>",
               "<li>Upload your Metadata.xlsx and custom data files (if using) and click 'Create Custom MWI' below. Select multiple files by pressing ctrl/cmd and then clicking on each file in the file explorer box. Note: Do not have files open while uploading. This will take some time, depending on the amount of measures included.</li>",
+              "<i>NOTE: file upload is currently experiencing issues on the website. In the meantime, you can explore your custom MWI on your local computer by following steps 1 - 7 on the \"Add Local Data to Mental Wellness Index (MWI) On Your Computer\" page under \"Create Your Own MWI\".</i>",
               "<br>",
               "<li>Once the custom MWI creation is complete, click 'Download Custom MWI' to download an .RData file with all of the needed information to view your MWI in this tool. <b>Note: if you navigate away from this page, all processing and data will be lost! Nothing is stored within this application.</b></li>",
               "<br>",
